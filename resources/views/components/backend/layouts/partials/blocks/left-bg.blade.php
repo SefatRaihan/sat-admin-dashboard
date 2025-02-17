@@ -1,0 +1,1 @@
+<img src="{{ asset($bg) }}" alt="login-background-img" class="w-100  vh-100"  />
