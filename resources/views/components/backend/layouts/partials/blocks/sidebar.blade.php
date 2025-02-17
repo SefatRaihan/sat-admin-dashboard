@@ -145,9 +145,9 @@
 
             </ul>
 
-            <ul class="nav nav-sidebar" data-nav-type="accordion" style="position: fixed; bottom:0;">
+            <ul class="nav nav-sidebar" data-nav-type="accordion" style="">
 
-                <hr class="ml-2" style="border-top:1px solid #65416B; width:178%">
+                <hr class="ml-2" style="border-top:1px solid #65416B; width:90%">
 
                 <li class="nav-item">
                     <a href="{{ route('logout') }}" title="Employee" class="nav-link legitRipple m-0 ml-2" onclick="event.preventDefault(); this.closest('form').submit();">
