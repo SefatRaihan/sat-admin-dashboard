@@ -28,7 +28,10 @@
                     <section>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="d-flex align-items-center justify-content-center" style="height: 40px; width:40px; border-radius:20px;">
+                                <div class="">
+                                    <div>
+                                        <img src="{{ asset('image/profile.jpeg') }}" alt="" style="height: 116px; width:116px; border-radius:50%;">
+                                    </div>
                                     <img src="{{ asset('image/icon/upload.png') }}" alt="">
                                 </div>
                             </div>
