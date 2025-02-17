@@ -9,14 +9,11 @@
                 </div>
 
                 <div class="header-elements d-none">
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-end">
 
-                        <a href="#" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2" style="border:1px solid #e6e8ed">
-                            Preview
-                        </a>
-                        <a href="#" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white" style="background-color:#732066">
-                            Save
-                        </a>
+                        <div class="d-flex align-items-center justify-content-center" style="height: 40px; width:40px; border:1px solid #EAECF0; border-radius:20px; background-color: #F9FAFB">
+                            <img src="{{ asset('image/icon/notification-2.png') }}" alt="">
+                        </div>
                         
                     </div>
                 </div>
@@ -31,7 +28,9 @@
                     <section>
                         <div class="row">
                             <div class="col-md-6">
-
+                                <div class="d-flex align-items-center justify-content-center" style="height: 40px; width:40px; border-radius:20px;">
+                                    <img src="{{ asset('image/icon/upload.png') }}" alt="">
+                                </div>
                             </div>
                             <div class="col-md-6 text-right">
                                 <a href="#" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 5px .875rem !important; font-size:10px; border-radius:8px">
