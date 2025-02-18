@@ -78,7 +78,7 @@
                         <span>Manage Questions</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Questions</span></a></li>
+                        <li class="nav-item"><a href="{{ route('question.index') }}" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Questions</span></a></li>
                         <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
                     </ul>
                 </li>
