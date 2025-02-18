@@ -1,11 +1,13 @@
 <x-backend.layouts.master>
 
     <x-backend.layouts.partials.blocks.contentwrapper 
-        :headerTitle="'Notification'"
-        :prependContent="'
-            <a href=\'/notification\' class=\'btn btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
-                Notification List
+        :headerTitle="'
+            <a href=\'\notification\' class=\'text-dark\'>
+                <i class=\'fa-solid fa-angle-left mr-2\'></i> Notification
             </a>
+        '"
+        :prependContent="'
+            
         '">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
