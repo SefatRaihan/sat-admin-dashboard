@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleNavItemController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,6 +61,8 @@ Route::middleware(['auth','web'])->group(function () {
     Route::get('/users-excel', [UserController::class, 'excel'])->name('users.excel');
     Route::get('/users-pdf', [UserController::class, 'pdf'])->name('users.pdf');
     Route::resource('generals', GeneralController::class);
+
+    Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
 });
 
 

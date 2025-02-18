@@ -110,6 +110,30 @@
         body {
             background-color: #fffcff;
         }
+
+        .notification-badge {
+            position: absolute;
+            top: 7px;
+            right: 8px;
+            width: 10px;
+            height: 10px;
+            background-color: #D92D20;
+            border-radius: 50%;
+            border: 1px solid white;
+        }
+
+        input {
+            border-radius: 8px !important;
+        }
+
+        input[readonly] {
+            background-color: #F9FAFB !important;
+            border: 1px solid #EAECF0;
+            color: #333;
+            cursor: not-allowed;
+            border-bottom: 0px solid !important;
+        }
+
     </style>
     <!-- Tagify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
