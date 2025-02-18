@@ -10,6 +10,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MakeModelController;
 use App\Http\Controllers\RoleNavItemController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackageGenerateController;
 
 /*

@@ -22,7 +22,7 @@
 
             <div class="navbar-brand navbar-brand-md">
                 <a href="index.html" class="d-inline-block">
-                   <a href="#" class="p-0 m-0 pr-1 navbar-nav-link d-none d-md-block ml-4 legitRipple justify-content-between align-items-center" style="display: flex !important">
+                   <a href="profile" class="p-0 m-0 pr-1 navbar-nav-link d-none d-md-block ml-4 legitRipple justify-content-between align-items-center" style="display: flex !important">
                       <span class="d-flex">
                          @if (isset($general->logo))
                             <img src="{{ asset('storage/' . ($general->logo)) }}" alt="Avatar" style="border-radius:50%; height: 40px">
