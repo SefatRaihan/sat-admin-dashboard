@@ -30,7 +30,7 @@
                                     </div>                                
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <button type="submit" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 5px .875rem !important; font-size:10px; border-radius:8px">
+                                    <button type="submit" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 5px .875rem !important; border-radius:8px">
                                         Save Changes
                                     </button>
                                 </div>

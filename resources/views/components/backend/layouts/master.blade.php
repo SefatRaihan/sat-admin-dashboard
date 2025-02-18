@@ -104,7 +104,8 @@
         }
 
         .btn {
-            padding: 11px .875rem !important;
+            /* padding: 11px .875rem !important; */
+            text-transform: capitalize !important;
         }
 
         body {
@@ -126,6 +127,10 @@
             border-radius: 8px !important;
         }
 
+        textarea {
+            border-radius: 8px !important;
+        }
+
         input[readonly] {
             background-color: #F9FAFB !important;
             border: 1px solid #EAECF0;
@@ -134,6 +139,22 @@
             border-bottom: 0px solid !important;
         }
 
+        .select2-selection--single {
+            padding: 0.5rem;
+            border: 1px solid #ddd !important;
+            border-radius: 8px !important;;
+        }
+        .rotated {
+            display: flex;
+            flex-direction: column; /* আইকন দুটি উপর-নিচ থাকবে */
+            align-items: center; /* কেন্দ্রবিন্দুতে রাখবে */
+            margin-top: 4px;
+            margin-right: 6px;
+        }
+
+        .rotated i {
+            font-size: 6px; /* উভয় আইকনের সমান আকার */
+        }
     </style>
     <!-- Tagify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
@@ -162,7 +183,7 @@
     <x-backend.layouts.libs.js />
     <script>
         $(document).ready(function () {
-            $('select').select2();
+            // $('select').select2();
         });
     </script>
     <script src="https://cdn.tiny.cloud/1/3dymgiuzyi2o390gh5jgcv47chk7fkpd04eci1k99gdwoai7/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>

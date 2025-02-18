@@ -10,6 +10,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleNavItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RoleManagementController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,7 +50,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth','web'])->group(function () {
 
-    Route::resource('roles', RoleController::class);
+    // Route::resource('roles', RoleController::class);
     Route::resource('navitems', NavItemController::class);
     Route::resource('rolenavitems', RoleNavItemController::class);
 
@@ -63,6 +64,10 @@ Route::middleware(['auth','web'])->group(function () {
     Route::resource('generals', GeneralController::class);
 
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
+    Route::get('/notification/create', [NotificationController::class, 'create'])->name('notification.create');
+
+    Route::resource('roles', RoleManagementController::class);
+
 });
 
 

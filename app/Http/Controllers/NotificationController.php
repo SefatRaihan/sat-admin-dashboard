@@ -10,4 +10,9 @@ class NotificationController extends Controller
     {
         return view('backend.notifications.index');
     }
+
+    public function create()
+    {
+        return view('backend.notifications.create');
+    }
 }

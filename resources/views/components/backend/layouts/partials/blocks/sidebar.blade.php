@@ -22,7 +22,7 @@
 
             <div class="navbar-brand navbar-brand-md">
                 <a href="index.html" class="d-inline-block">
-                   <a href="profile" class="p-0 m-0 pr-1 navbar-nav-link d-none d-md-block ml-4 legitRipple justify-content-between align-items-center" style="display: flex !important">
+                   <a href="/profile" class="p-0 m-0 pr-1 navbar-nav-link d-none d-md-block ml-4 legitRipple justify-content-between align-items-center" style="display: flex !important">
                       <span class="d-flex">
                          @if (isset($general->logo))
                             <img src="{{ asset('storage/' . ($general->logo)) }}" alt="Avatar" style="border-radius:50%; height: 40px">
@@ -52,7 +52,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="/" title="Send Notifications" class="nav-link legitRipple m-0 ml-2 mr-2">
+                    <a href="/notification" title="Send Notifications" class="nav-link legitRipple m-0 ml-2 mr-2">
                         <img src="{{ asset('image/icon/notification.png') }}" alt="" class="mr-3" style="width: 16px; height: 16px;">
                         <span>
                             Send Notifications
@@ -68,7 +68,10 @@
                         <span>Manage Members</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        {{-- <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Question Bank</span></a></li> --}}
+                        <li class="nav-item"><a href="" title="All Student" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Student</span></a></li>
+                        <li class="nav-item"><a href="" title="All Supervisor" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Supervisor</span></a></li>
+                        <li class="nav-item"><a href="" title="Manage Audiences" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Manage Audiences</span></a></li>
+                        <li class="nav-item"><a href="/roles" title="Manage Roles" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Manage Roles</span></a></li>
                     </ul>
                 </li>
 
@@ -78,8 +81,8 @@
                         <span>Manage Questions</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Questions</span></a></li>
-                        <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
+                        <li class="nav-item"><a href="" title="All Questions" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Questions</span></a></li>
+                        <li class="nav-item"><a href="" title="All Question Exams" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
                     </ul>
                 </li>
 

@@ -428,7 +428,14 @@
             disabledText: '',
             delimiterText: ', ',
             templates: {
-                button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"><span class="multiselect-selected-text"></span></button>',
+                button: '<button type="button" class="multiselect d-flex dropdown-toggle" data-toggle="dropdown"> \
+                    <span class="rotated"> \
+                        <i class="fa-solid fa-angle-up"></i> \
+                        <i class="fa-solid fa-chevron-down"></i> \
+                    </span> \
+                    <span class="multiselect-selected-text"></span> \
+                </button>',
+
                 ul: '<div class="multiselect-container dropdown-menu"></div>',
                 filter: '<div class="multiselect-item multiselect-filter"><div class="input-group"><input class="form-control multiselect-search" type="text"><i class="icon-search4"></i></div></div>',
                 filterClearBtn: '<span class="input-group-append"><button class="btn btn-light btn-icon multiselect-clear-filter" type="button"><i class="icon-cross2"></i></button></span>',
