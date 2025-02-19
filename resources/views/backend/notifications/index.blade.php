@@ -145,7 +145,22 @@
                 border-top-color: transparent;
                 border-radius: 0;
             }
+            .multiselect.btn{
+                padding: 8px .875rem !important;
+            }
+            .multiselect-container {
+                max-height: 280px;
+                overflow-y: auto;
+                width: 200px;
+            }
 
+            .dropdown-item.active {
+                background-color: #575756 !important;
+                padding: 0px;
+                margin: 0px;
+                border-radius: 0px;
+            }
+            
             .remove-btn {
                 width: 36px;
                 height: 36px;
@@ -156,9 +171,6 @@
                 background-color: #fff;
             }
 
-            .multiselect.btn{
-                padding: 8px .875rem !important;
-            }
             input[type='checkbox'] {
                 width: 20px;
                 height: 20px;
@@ -190,18 +202,6 @@
                 background-color: #F1E9F0 !important;
             }
 
-            .multiselect-container {
-                max-height: 280px;
-                overflow-y: auto;
-                width: 200px;
-            }
-
-            .dropdown-item.active {
-                background-color: #575756 !important;
-                padding: 0px;
-                margin: 0px;
-                border-radius: 0px;
-            }
         </style>
     @endpush
     @push('js')

@@ -14,9 +14,9 @@
             </h2>
             <p style="color: #475467; font-size:16px">{{ $message }}</p>
             <a href="{{ $buttonRoute }}" 
-               class="btn text-default ml-2 text-white" 
-               style="background-color:#732066; font-size: 12px; border-radius: 8px;">
-                <i class="fas fa-plus" style="font-size: 12px;"></i> {{ $buttonText }}
+               class="btn text-white px-4 py-2 flex items-center justify-center mx-auto"
+               style="background-color:#732066; font-size: 12px; border-radius: 8px; width: max-content;">
+                <i class="fas fa-plus text-xs mr-1"></i> {{ $buttonText }}
             </a>
         </div>
     </div>
@@ -27,7 +27,11 @@
         .text-section {
             position: absolute;
             top: 54%;
-            left: 38%;
+            /* left: 38%; */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
         }
     </style>
 @endpush
