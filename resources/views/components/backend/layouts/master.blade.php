@@ -127,6 +127,10 @@
             border-radius: 8px !important;
         }
 
+        select {
+            border-radius: 8px !important;
+        }
+
         textarea {
             border-radius: 8px !important;
         }
