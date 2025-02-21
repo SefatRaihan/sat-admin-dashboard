@@ -4,7 +4,7 @@
             <div class="page-title p-3 d-flex">
                 <h4>
                     <span class="font-weight-semibold header-title">
-                        {{ $headerTitle ?? 'Default Title' }}
+                        {!! $headerTitle ?? 'Default Title' !!}  
                     </span>
                 </h4>
                 <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
