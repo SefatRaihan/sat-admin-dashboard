@@ -68,7 +68,7 @@
                         <span>Manage Members</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <li class="nav-item"><a href="" title="All Student" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Student</span></a></li>
+                        <li class="nav-item"><a href="/students" title="All Student" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Student</span></a></li>
                         <li class="nav-item"><a href="/supervisors" title="All Supervisor" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Supervisor</span></a></li>
                         <li class="nav-item"><a href="" title="Manage Audiences" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Manage Audiences</span></a></li>
                         <li class="nav-item"><a href="/roles" title="Manage Roles" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Manage Roles</span></a></li>
