@@ -36,7 +36,7 @@ var DropzoneUploader = function() {
             paramName: "file", // The name that will be used to transfer the file
             maxFilesize: 1, // MB
             maxFiles: 1,
-            dictDefaultMessage: 'Drop file to upload <span>or CLICK</span>',
+            dictDefaultMessage: '<span class="d-flex justify-content-center"><span style="color:#521749">Click to upload </span> <span class="ml-1"> or drag and drop</span></span>',
             autoProcessQueue: false,
             init: function() {
                 this.on('addedfile', function(file){

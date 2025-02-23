@@ -11,6 +11,7 @@ use App\Http\Controllers\RoleNavItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoleManagementController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
 
@@ -69,6 +70,7 @@ Route::middleware(['auth','web'])->group(function () {
 
     Route::resource('roles', RoleManagementController::class);
     Route::resource('supervisors', SupervisorController::class);
+    Route::resource('students', StudentController::class);
 
 });
 

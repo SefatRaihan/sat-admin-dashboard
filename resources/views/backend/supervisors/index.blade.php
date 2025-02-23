@@ -62,7 +62,7 @@
                             <label for="">Block Status</label>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-check">
+                                    <div class="form-check custom-radio">
                                         <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="Block">
                                         <label class="form-check-label" for="exampleRadios1">
                                             Block
@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-check">
+                                    <div class="form-check custom-radio">
                                         <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="Unblock">
                                         <label class="form-check-label" for="exampleRadios2">
                                           Unblock
@@ -96,9 +96,10 @@
                     <input type="text" class="form-control search__input" placeholder="Search Notification">
                 </div>
 
-                <div>
-                    <!-- Options with divider -->
-                    <div class="form-group">
+                <div class="d-flex">
+                    <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
+
+                    <div class="form-group mb-0">
                         <select class="form-control multiselect" multiple="multiple" data-fouc>
                             <option value="All">All</option>
                             <option value="Unread">Unread</option>
@@ -108,7 +109,6 @@
                             <option value="Oldest">Oldest</option>
                         </select>
                     </div>
-                    <!-- /options with divider -->
                 </div>
             </div>
             <div class="card-body p-0 m-0">
@@ -166,6 +166,84 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" id="taskSidebarOverlay"></div>
+    <div class="floating-sidebar" id="taskSidebar">
+        <div class="filter">
+            <div class="sidebar-header">
+                <div>
+                    <h4 style="font-size: 18px;" class="p-0 m-0">Filters</h4>
+                    <p class="p-0 m-0" style="color: #475467">Apply filters to table data.</p>
+                </div>
+                <button type="button" class="close-btn" id="closeSidebar">&times;</button>
+            </div>
+            <div class="sidebar-content">
+                <div class="task-form">
+                    <form class="form-section">
+                        <div class="p-3">
+                            <div>
+                                <h6><b>Role:</b> All Result</h6>
+                                <div class="form-check status-radio">
+                                        <input type="checkbox" name="status" id="website-management" value="Website Management" checked>
+                                        <label class="form-check-label" for="website-management">
+                                            Website Management
+                                        </label>
+                                  </div>
+                                  <div class="form-check status-radio">
+                                        <input type="checkbox" name="status" id="ux-writer" value="UX Writer">
+                                        <label class="form-check-label" for="ux-writer">
+                                            UX Writer
+                                        </label>
+                                  </div>
+                                  <div class="form-check status-radio">
+                                        <input type="checkbox" name="status" id="ui-designer" value="UI Designer">
+                                        <label class="form-check-label" for="ui-designer">
+                                            UI Designer
+                                        </label>
+                                  </div>
+                                  <div class="form-check status-radio">
+                                        <input type="checkbox" name="status" id="data-analyst" value="Data Analyst">
+                                        <label class="form-check-label" for="data-analyst">
+                                            Data Analyst
+                                        </label>
+                                </div>
+                                <div class="form-check status-radio">
+                                    <input type="checkbox" name="status" id="social-media-manager" value="Social Media Manager">
+                                    <label class="form-check-label" for="social-media-manager">
+                                        Social Media Manager
+                                    </label>
+                                </div>
+                                <div class="form-check status-radio">
+                                    <input type="checkbox" name="status" id="admin" value="Admin">
+                                    <label class="form-check-label" for="admin">
+                                        Admin
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <h6><b>Status:</b> All Result</h6>
+                                <div class="form-check custom-checkbox">
+                                    <input type="checkbox" id="blocked">
+                                    <label class="form-check-label" for="blocked">Blocked</label>
+                                </div>
+                                <div class="form-check custom-checkbox">
+                                    <input type="checkbox" id="unblocked">
+                                    <label class="form-check-label" for="unblocked">Unblocked</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-top fixed-bottom-buttons">
+                            <div class="d-flex justify-content-between p-3">
+                                <button type="button" class="btn" style="background-color:#691D5E ;border-radius: 8px; color:#fff; width:50%">Apply Filters</button>
+                                <button type="button" class="btn btn-outline-dark ml-2" style="border: 1px solid #D0D5DD; border-radius: 8px; width:50%">Reset All</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -284,7 +362,7 @@
             }
 
             /* Change background and border when checked */
-            .form-check-input:checked ~ .form-check {
+            .custom-radio .form-check-input:checked ~ .form-check {
                 background-color: #F1E9F0; /* Light purple */
                 border-color: #A16A99; /* Darker purple */
             }
@@ -316,7 +394,7 @@
                 cursor: pointer;
             }
 
-            .form-check-label::before {
+            .custom-radio .form-check-label::before {
                 content: "";
                 position: absolute;
                 left: -30px;
@@ -331,19 +409,19 @@
             }
 
             /* Custom radio circle when checked */
-            .form-check-input:checked + .form-check-label::before {
+            .custom-radio .form-check-input:checked + .form-check-label::before {
                 border-color: #732066;  /* Outer border color */
                 background-color: #732066;
                 box-shadow: 0 0 0 2px white, 0 0 0 4px #732066; /* White gap (2px) and outer blue border (2px) */
             }
 
-            .form-check-input:checked ~ .form-check-label {
+            .custom-radio .form-check-input:checked ~ .form-check-label {
                 color: #344054;
                 font-weight: 500;
             }
 
             /* Change parent background when checked */
-            .form-check:has(.form-check-input:checked) {
+            ..custom-radio:has(.form-check-input:checked) {
                 background-color: #F1E9F0; /* Light purple */
                 border-color: #A16A99; /* Darker purple */
             }
@@ -394,6 +472,81 @@
                 border-bottom: 1px solid #ddd;
                 display: none;
             }
+            .fixed-bottom-buttons {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%; /* Full width of parent */
+                background-color: #fff;
+                border-top: 1px solid #D0D5DD;
+            }
+        </style>
+        <style>
+            .floating-sidebar {
+                position: fixed;
+                top: 0;
+                right: -400px;
+                width: 400px;
+                height: 100%;
+                background-color: #fff;
+                box-: -2px 0 5px rgba(0, 0, 0, 0.2);
+                transition: right 0.3s ease-in-out;
+                z-index: 1050;
+                overflow-y: auto;
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1040;
+            }
+
+            .sidebar-header {
+                padding: 18px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .floating-sidebar.open {
+                right: 0;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .close-btn {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .task-form .form-control {
+                border: 1px solid #ddd !important;
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+
+            .task-form .select2-selection--single {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+
+            .task-form .select2-selection--single .select2-selection__arrow:after {
+                right: 7px !important;
+            }
+
+            .task-form .select2-container {
+                border: 1px solid #ddd;
+            }
+
         </style>
     @endpush
     @push('js')
@@ -446,6 +599,22 @@
 
             // Initial check on page load
             toggleDeleteButton();
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
+                    $('#taskSidebar').removeClass('open');
+                    $('#taskSidebarOverlay').removeClass('active');
+                    $('#boardHiddenInputSection').html('');
+                });
+            });
+            function filter(button) {
+                const filter = $('.filter');
+                filter.show();
+                $('#taskSidebar').addClass('open');
+                $('#taskSidebarOverlay').addClass('active');
+            }
+
         </script>
     @endpush
 
