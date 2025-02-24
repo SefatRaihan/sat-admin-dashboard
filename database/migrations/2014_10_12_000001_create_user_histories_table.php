@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('user_histories', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique()->index();
+            $table->uuid('uuid')->index();
+            $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('active_role_id')->nullable()->index();
             $table->string('first_name')->index();
             $table->string('last_name')->index();
             $table->string('full_name')->index();
-            $table->string('email')->unique()->index();
-            $table->string('phone')->unique()->index();
+            $table->string('email')->index();
+            $table->string('phone')->index();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_active')->default(true)->index();
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->softDeletes();
             $table->rememberToken();
+			$table->string('action', 100);
             $table->timestamps();
         });
     }
@@ -37,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('user_histories');
     }
 };

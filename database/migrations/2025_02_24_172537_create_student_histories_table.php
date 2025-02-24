@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nav_item_role', function (Blueprint $table) {
+        Schema::create('student_histories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('role_id')->nullable();
-            $table->unsignedBigInteger('nav_item_id')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nav_item_role');
+        Schema::dropIfExists('student_histories');
     }
 };

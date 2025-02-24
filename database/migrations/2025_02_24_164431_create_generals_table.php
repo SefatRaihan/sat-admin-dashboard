@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('generals', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique()->index();
             $table->string('logo')->nullable();
             $table->string('favicon_icon')->nullable();
             $table->string('title')->nullable();

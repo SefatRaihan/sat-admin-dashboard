@@ -2,28 +2,32 @@
 
 namespace App\Models;
 
+use App\Traits\Historiable;
+use App\Traits\UserTrackable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Role extends Model
 {
-    use HasFactory, SoftDeletes;
-    protected $guarded = [];
+    use HasFactory, SoftDeletes, Historiable, UserTrackable;
+    
+    protected $guarded = ['id'];
+    
+
+    /**
+    * Get the route key for the model.
+    *
+    * @return string
+    */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     public function users()
     {
         return $this->hasMany(User::class);
-    }
-
-    public function roleNavItems()
-    {
-        return $this->hasMany(RoleNavItem::class, 'nav_item_role');
-    }
-
-    public function navItems()
-    {
-        return $this->belongsToMany(NavItem::class, 'nav_item_role', 'role_id', 'nav_item_id');
     }
 
 }
