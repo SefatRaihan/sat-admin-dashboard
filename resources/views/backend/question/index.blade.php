@@ -14,15 +14,18 @@
         ';
     @endphp
 
-    <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'Profile'" :prependContent="$prependHtml">
+    <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'All Question'" :prependContent="$prependHtml">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
-    {{-- <x-backend.layouts.partials.blocks.empty-state 
+    <x-backend.layouts.partials.blocks.empty-state 
         title="You have not created any Question yet" 
         message="Let’s create a new question"
         buttonText="Add Question"
-        buttonRoute="/button/create"
-        /> --}}
+        buttonText="Add Question"
+        data-toggle="modal" 
+        data-target="#questionModal" 
+        {{-- buttonRoute="/button/create" --}}
+        />
 
     <div class="modal fade modal-dialog modal-dialog-scrollable" id="questionModal" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -92,66 +95,58 @@
                                     <input type="radio" name="question_type" value="Quant"> Quant
                                 </label>
                             </div>
-
-                            {{-- Buttons --}}
-                            <div class="d-flex justify-content-end mt-4">
-                                <button type="button" class="btn back-btn btn-outline-secondary mr-2">Cancel</button>
-                                <button type="button" class="btn next-step">Next</button>
-                            </div>
                         </div>
 
                         {{-- Placeholder for future steps --}}
                         <div class="step step-2 d-none">
-                            <h5>Step 2 Content</h5>
+                            <h5>Step 2 Provide the verbal Question</h5>
                             <div id="editor-container">
                                 <div class="editor mb-3"></div>
-                                <button type="button" class="btn btn-sm btn-secondary mt-2 add-option"
-                                    data-question="1">
-                                    + Add Option
-                                </button>
                             </div>
-                            <div class="d-flex justify-content-end mt-4 ">
-                                <button type="button" class="btn back-btn prev-step mr-2">Back</button>
-                                <button type="button" class="btn next-step">Next</button>
-                            </div>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
+                                data-question="1">
+                                + Add Question
+                            </button>
                         </div>
 
                         <div class="step step-3 d-none">
-                            <h5>Step 3 Content</h5>
+                            <h5>Step 3 Provide the verbal Question</h5>
                             <div id="editor-container">
                                 <div class="editor mb-3"></div>
-                                <button type="button" class="btn btn-sm btn-secondary mt-2 add-option"
-                                    data-question="1">
-                                    + Add Option
-                                </button>
                             </div>
-                            <div class="d-flex justify-content-end mt-4 ">
-                                <button type="button" class="btn back-btn prev-step mr-2">Back</button>
-                                <button type="button" class="btn next-step">Next</button>
-                            </div>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
+                                data-question="1">
+                                + Add Question
+                            </button>
                         </div>
 
                         <div class="step step-4 d-none">
-                            <h5>Step 4 Content</h5>
+                            <h5>Step 4 Provide the verbal Question</h5>
                             <div id="editor-container">
                                 <div class="editor mb-3"></div>
-                                <button type="button" class="btn btn-sm btn-secondary mt-2 add-option"
-                                    data-question="1">
-                                    + Add Option
-                                </button>
                             </div>
-                            <div class="d-flex justify-content-between mt-4 ">
-                                <button type="button" class="btn new-question float-left">Save & Create
-                                    Another</button>
-                                <div>
-                                    <button type="button" class="btn back-btn float-end prev-step mr-2">Back</button>
-                                    <button type="submit" class="btn float-end"
-                                        style="background:#691D5E; color: #EAECF0;  border-radius: 8px;">Save
-                                        Question</button>
-                                </div>
-                            </div>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
+                                data-question="1">
+                                + Add Question
+                            </button>
                         </div>
                     </form>
+                </div>
+                <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                        <!-- Left side: Placeholder wrapper to maintain spacing -->
+                        <div class="left-placeholder">
+                            <button type="button" class="btn new-question d-none">Save & Create Another</button>
+                        </div>
+                
+                        <!-- Right side: Navigation buttons -->
+                        <div class="d-flex">
+                            <button type="button" class="btn back-btn btn-outline-secondary cancel mr-2">Cancel</button>
+                            <button type="button" class="btn back-btn btn-outline-secondary prev-step mr-2 d-none">Back</button>
+                            <button type="button" class="btn next-step">Next</button>
+                            <button type="submit" class="btn save-question d-none" style="background:#691D5E; color: #EAECF0; border-radius: 8px;">Save Question</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,6 +155,10 @@
     @push('css')
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
         <style>
+
+            input[type="radio"] {
+                accent-color: #691D5E;
+            }
             .new-question {
                 border: 1px solid #691D5E;
                 background: #FFFFFF;
@@ -253,15 +252,38 @@
         <script>
             $(document).ready(function() {
                 let currentStep = 1;
-                let questionCount = 0;
+                let questionCount = 1; 
+                const totalSteps = $(".step").length;
+
+                initializeQuill(".editor")
+
+                function updateButtons() {
+                    if (currentStep === 1) {
+                        $(".cancel").removeClass("d-none"); // Show "Cancel"
+                        $(".prev-step").addClass("d-none"); // Hide "Back"
+                    } else {
+                        $(".cancel").addClass("d-none"); // Hide "Cancel"
+                        $(".prev-step").removeClass("d-none"); // Show "Back"
+                    }
+
+                    if (currentStep === totalSteps) {
+                        $(".new-question").removeClass("d-none"); // show "Next" on last step
+                        $(".next-step").addClass("d-none"); // Hide "Next" on last step
+                        $(".save-question").removeClass("d-none"); // Show "Save"
+                    } else {
+                        $(".new-question").addClass("d-none"); // Hide "Next" on last step
+                        $(".next-step").removeClass("d-none"); // Show "Next"
+                        $(".save-question").addClass("d-none"); // Hide "Save" before last step
+                    }
+                }
 
                 function showStep(step) {
                     $(".step").addClass("d-none");
                     $(".step-" + step).removeClass("d-none");
 
+                    // Step progress indicator
                     $(".step-circle").removeClass("active completed");
                     $(".step-line").css("background", "#D0D5DD");
-
                     $(".step-circle i").addClass("d-none");
                     $(".step-circle .circle-count").removeClass("d-none");
 
@@ -269,33 +291,36 @@
                         $(".step-circle[data-step=" + i + "]").addClass("completed");
                         $(".step-circle[data-step=" + i + "] i").removeClass("d-none");
                         $(".step-circle[data-step=" + i + "] .circle-count").addClass("d-none");
-                        $(".step-circle[data-step=" + i + "]").parent().next(".step-group").find(".step-line").css(
-                            "background", "#12B76A");
+                        $(".step-circle[data-step=" + i + "]").parent().next(".step-group").find(".step-line").css("background", "#12B76A");
                     }
 
                     $(".step-circle[data-step=" + step + "]").addClass("active");
 
-                    initializeQuill();
+                    initializeQuill(); // Reinitialize Quill editor if needed
+
+                    updateButtons(); // Ensure button visibility updates
                 }
 
-                $(".next-step").click(function() {
-                    if (currentStep < 4) {
+                $(".next-step").click(function () {
+                    if (currentStep < totalSteps) {
                         currentStep++;
                         showStep(currentStep);
                     }
                 });
 
-                $(".prev-step").click(function() {
+                $(".prev-step").click(function () {
                     if (currentStep > 1) {
                         currentStep--;
                         showStep(currentStep);
                     }
                 });
 
+                $(".cancel").click(function () {
+                    $("#questionModal").modal("hide"); // Hide modal on cancel (replace ID)
+                });
 
-
-                function initializeQuill() {
-                    $(".editor").each(function() {
+                function initializeQuill(selector) {
+                    $(selector).each(function() {
                         if (!$(this).hasClass("ql-container")) {
                             new Quill(this, {
                                 modules: {
@@ -346,126 +371,83 @@
                         }
                     });
                 }
+         // Create new option HTML
+                    // <div id="${newQuestionId}" class="editor"></div>
+                // Event Listener for Adding Options
+                $(document).on("click", ".add-question", function() {
+                    questionCount++; // Increment the option counter
+                    let questionNum = $(this).data("question");
+                    let newQuestionId = "question-" + questionCount;
+                    let optionContainerId = `option-container-${questionCount}`;
 
-
-                $("#add-new-editor").click(function() {
-                    questionCount++;
-                    let questionId = "question-" + questionCount;
-                    let option1Id = "option-" + questionCount + "-1";
-                    let option2Id = "option-" + questionCount + "-2";
-
+           
                     let newQuestionHtml = `
-                        <div class="question-block mb-3 mt-3">
-                            <h5>Question ${questionCount}</h5>
-                            <div id="${questionId}" class="editor"></div>
-                            <button type="button" class="btn btn-sm btn-danger remove-question" float-right data-question="${questionCount}">
-                                ✖ Remove Question
-                            </button>
+                    
+                        <div class="question-block mb-4" id="${newQuestionId}">
+                            <h5>${questionCount-1}. Write Question & Provide Options</h5>
+                            <div class="option-block mt-2" id="${newQuestionId}">
+    
+                                <div class="parent-editor mb-3" id="parent-editor-${newQuestionId}"></div>
+                                
+                                <div class="option-container" id="${optionContainerId}">
+                                    <!-- Options will be appended here -->
+                                </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary btn-sm mt-2 add-option" data-question="${questionCount}">
+                                    + Add Option
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger remove-question mt-2" data-question="${questionCount}">
+                                    ✖ Remove Question
+                                </button>
                         </div>
-                        `;
+                    `;
+                    $(this).before(newQuestionHtml);
 
-                    $("#editor-container").append(newQuestionHtml);
+                    initializeQuill(`#parent-editor-${questionCount}`);
+
+                    addOption(questionCount);
                 });
 
-                // Function to dynamically add more options under a question
+                // Function to Add New Option
+                function addOption(questionNum) {
+                    let optionCount = $(`#option-container-${questionNum} .child-editor`).length + 1;
+                    let newOptionId = `option-${questionNum}-${optionCount}`;
+                    
+                    let newOptionHtml = `
+                        <div>
+                            <div class="child-option mb-2" id="${newOptionId}">
+                                <div class="child-editor mb-2" id="editor-${newOptionId}"></div>
+                                <button type="button" class="btn btn-danger btn-sm remove-option" data-option="${newOptionId}">
+                                    ✖ Remove Option
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Append the Option before the "+ Add Option" button
+                    $(`#option-container-${questionNum}`).append(newOptionHtml);
+                    
+                    // Initialize Quill for the Option (Child Editor)
+                    initializeQuill(`#editor-${newOptionId}`);
+                }
+
+                // Event Listener for Adding New Options
                 $(document).on("click", ".add-option", function() {
                     let questionNum = $(this).data("question");
-                    let optionCount = $(this).siblings(".editor").length + 1;
-                    let newOptionId = `option-${questionNum}-${optionCount}`;
-
-                    let newOptionHtml = `<div id="${newOptionId}" class="editor mt-1"></div>`;
-                    $(this).before(newOptionHtml); // Add before the "+ Add Option" button
-
-                    initializeQuill("#" + newOptionId);
+                    addOption(questionNum);
                 });
 
-                // Initialize the first question and its options on page load
-                // initializeQuill(".editor");
-
-
-
-
-
-                // function initializeQuill(selector) {
-                //     new Quill(selector, {
-                //         modules: {
-                //             toolbar: [
-                //                 ['bold', 'italic', 'underline', 'strike'],
-                //                 ['blockquote', 'code-block'],
-                //                 ['link', 'image', 'video', 'formula'],
-                //                 [{ 'header': 1 }, { 'header': 2 }],
-                //                 [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                //                 [{ 'script': 'sub' }, { 'script': 'super' }],
-                //                 [{ 'direction': 'rtl' }],
-                //                 [{ 'size': ['small', false, 'large', 'huge'] }],
-                //                 [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                //                 [{ 'color': [] }, { 'background': [] }],
-                //                 [{ 'font': [] }],
-                //                 [{ 'align': [] }]
-                //             ]
-                //         },
-                //         placeholder: 'Type here...',
-                //         theme: 'snow'
-                //     });
-                // }
-
-                // // Function to add a new question block
-                // $("#add-new-editor").click(function () {
-                //     questionCount++;
-                //     let questionId = `question-${questionCount}`;
-
-                //     let newQuestionHtml = `
-        //         <div class="question-block mt-3 p-3 border rounded">
-        //             <h5>Question ${questionCount}</h5>
-        //             <div id="${questionId}" class="editor"></div>
-
-        //             <h6 class="mt-2">Options:</h6>
-        //             <div class="options-container" data-question="${questionCount}"></div>
-
-        //             <button type="button" class="btn btn-sm btn-primary add-option" data-question="${questionCount}">
-        //                 + Add Option
-        //             </button>
-        //             <button type="button" class="btn btn-sm btn-danger remove-question" data-question="${questionCount}">
-        //                 ✖ Remove Question
-        //             </button>
-        //         </div>
-        //     `;
-
-                //     $("#editor-container").append(newQuestionHtml);
-
-                //     // Initialize Quill for the new question editor
-                //     initializeQuill(`#${questionId}`);
-                // });
-
-                // // Function to dynamically add more options under a question
-                // $(document).on("click", ".add-option", function () {
-                //     let questionNum = $(this).data("question");
-                //     let optionCount = $(`.options-container[data-question="${questionNum}"] .editor`).length + 1;
-                //     let newOptionId = `option-${questionNum}-${optionCount}`;
-
-                //     let newOptionHtml = `
-        //         <div class="d-flex align-items-center mt-2 option-item">
-        //             <div id="${newOptionId}" class="editor flex-grow-1"></div>
-        //             <button type="button" class="btn btn-sm btn-danger remove-option ms-2">✖</button>
-        //         </div>
-        //     `;
-
-                //     $(`.options-container[data-question="${questionNum}"]`).append(newOptionHtml);
-
-                //     // Initialize Quill for the new option editor
-                //     initializeQuill(`#${newOptionId}`);
-                // });
-
-                // Function to remove a question block
+                //Event Listener for Removing Question
+                $(document).on("click", ".remove-option", function() {
+                    let optionId = $(this).data("option");
+                    $(`#${optionId}`).remove();
+                });
+                
+                // Event Listener for Removing a Question
                 $(document).on("click", ".remove-question", function() {
                     let questionNum = $(this).data("question");
-                    $(this).closest(".question-block").remove();
+                    $(`#question-${questionNum}`).remove(); 
                 });
-
-                // // Function to remove an option
-                // $(document).on("click", ".remove-option", function () {
-                //     $(this).closest(".option-item").remove();
-                // });
 
                 showStep(currentStep);
 
