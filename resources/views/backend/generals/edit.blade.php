@@ -2,32 +2,29 @@
     <x-slot name="page_title">
         Generals
     </x-slot>
-    <x-slot name="breadcrumb">
-        <x-backend.layouts.elements.breadcrumb>
-            <x-slot name="pageHeader">
-                Generals
-            </x-slot>
-            <x-slot name="add">
-            </x-slot>
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" style="text-decoration: none; color:#6c757d">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('generals.index') }}" style="text-decoration: none; color:#6c757d">Generals</a></li>
-            <li class="breadcrumb-item active">Edit</li>
-        </x-backend.layouts.elements.breadcrumb>
-    </x-slot>
+
+    <x-backend.layouts.partials.blocks.contentwrapper 
+        :headerTitle="'Generals'"
+        :prependContent="'
+            <a href=\'/generals\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
+                <i class=\'fas fa-list\' style=\'font-size: 12px; margin-right: 5px; margin-top: 5px;\'></i> List
+            </a>
+        '">
+    </x-backend.layouts.partials.blocks.contentwrapper>
 
     <div class="card mb-4">
-        <div class="card-header bg-success text-white">
+        <div class="card-header text-white" style="background-color: #3F1239;">
             <div class="d-flex justify-general-between">
-                <span><i class="fas fa-table me-1"></i>General Edit</span>
+                <span><i class="fas fa-table me-1"></i> General Edit</span>
             </div>
         </div>
         <div class="card-body">
             <x-backend.layouts.elements.errors :errors="$errors"/>
-            <form action="{{ route('generals.update', ['general' => $general->id]) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('generals.update', ['general' => $general->uuid]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('patch')
 
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-md-4 mb-2">
                         <div class="form-group">
                             <label for="logo">Logo</label>
@@ -60,12 +57,9 @@
                 </div>
 
                 <div class="mt-4 mb-0 d-flex justify-general-end">
-                    <button onclick="return confirm('Are you sure want to update?')" type="submit" class="btn btn-success">Update</button>
+                    <button onclick="return confirm('Are you sure want to update?')" type="submit" class="btn btn-color">Update</button>
                 </div>
             </form>
-        </div>
-        <div class="card-footer text-center text-muted">
-            <a class="btn btn-success text-white btn-sm" href="{{ route('generals.index') }}" role="button" style="border-radius: 50%"><i class="fas fa-list"></i></a>
         </div>
     </div>
 

@@ -14,6 +14,8 @@ class Role extends Model
     
     protected $guarded = ['id'];
     
+    protected $table = 'roles';
+
 
     /**
     * Get the route key for the model.

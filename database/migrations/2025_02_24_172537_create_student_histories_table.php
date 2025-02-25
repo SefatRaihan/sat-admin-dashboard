@@ -13,6 +13,21 @@ return new class extends Migration
     {
         Schema::create('student_histories', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index();
+            $table->unsignedBigInteger('student_id')->nullable()->index();
+            $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->string('name')->index();
+            $table->string('email')->index();
+            $table->string('phone')->index();
+            $table->enum('gender', ['male', 'female', 'other'])->index();
+            $table->date('date_of_birth');
+            $table->string('audience')->nullable();
+            $table->string('image')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
+			$table->string('action', 100);
             $table->timestamps();
         });
     }

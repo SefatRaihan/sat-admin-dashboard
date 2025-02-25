@@ -159,6 +159,18 @@
         .rotated i {
             font-size: 6px; /* উভয় আইকনের সমান আকার */
         }
+
+        .btn-group-sm>.btn, .btn-sm {
+            padding: .375rem .575rem;
+            font-size: .75rem;
+            line-height: 1.6667;
+            border-radius: .125rem;
+        }
+
+        .btn-color {
+            background-color: #3F1239;
+            color: #fff;
+        }
     </style>
     <!-- Tagify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">

@@ -13,6 +13,20 @@ return new class extends Migration
     {
         Schema::create('supervisor_histories', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index();
+            $table->unsignedBigInteger('supervisor_id')->nullable()->index();
+            $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->string('name')->index();
+            $table->string('email')->index();
+            $table->string('phone')->index();
+            $table->unsignedBigInteger('role_id');
+            $table->string('role_name')->nullable();
+            $table->string('status')->default('unblock');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
+			$table->string('action', 100);
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ class General extends Model
     
     protected $guarded = ['id'];
     
+    protected $table = 'generals';
 
     /**
     * Get the route key for the model.
