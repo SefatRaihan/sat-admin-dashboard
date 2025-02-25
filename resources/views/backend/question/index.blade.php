@@ -2,14 +2,14 @@
     @php
         $prependHtml = '
             <div class="d-flex align-items-center justify-content-center" style="margin-right: 10px">
-                <button type="button"style="padding: 5px 15px; border:2px solid #D0D5DD; border-radius:10px; background-color: #FFFFFF; color:#344054; font-size: 1.2rem">
+                <button type="button"style="padding: 5px 15px; border:2px solid #D0D5DD; border-radius:10px; background-color: #FFFFFF; color:#344054; font-size: 12px">
                     <i class="fa-solid fa-cloud-arrow-up"></i> Upload Question
                 </button>
             </div>
             <div class="d-flex align-items-center justify-content-center" style="margin-right: 10px">
-                <button type="button" data-toggle="modal" data-target="#questionModal" id="add-question" style="padding: 5px 15px; border:2px solid #691D5E; border-radius:10px; background-color: #691D5E; color:#EAECF0; font-size: 1.2rem">
-                    <i class="fa-solid fa-plus"></i> Add Question
-                </button>
+                <a href=\'/students/create\' data-toggle=\'modal\' data-target=\'#questionModal\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
+                    <i class=\'fas fa-plus\' style=\'font-size: 12px; margin-right: 5px; margin-top: 5px;\'></i> Add Question
+                </a>
             </div>
         ';
     @endphp
@@ -27,130 +27,129 @@
         {{-- buttonRoute="/button/create" --}}
         />
 
-    <div class="modal fade modal-dialog modal-dialog-scrollable" id="questionModal" tabindex="-1"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div style="background: #F9FAFB;  border-bottom:1px solid #D0D5DD ">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+        <div class="modal fade" id="questionModal" tabindex="-1" role="dialog" aria-labelledby="questionModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="border-radius: 24px; height:100%">
+                    <div style="background: #F9FAFB;  border-bottom:1px solid #D0D5DD ">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <h4 class="text-center font-weight-bold">Create a Question</h4>
+                        <p class="text-center text-muted">Step 1: Select Audience & Question Type</p>
+                        <div class="d-flex justify-content-center align-items-center mb-4 step-container">
+                            <div class="step-group">
+                                <div class="step-circle active" data-step="1"><i class="fa-solid fa-check d-none"></i><span
+                                        class="circle-count">1</span></div>
+                            </div>
+                            <div class="step-group">
+                                <div class="step-line"></div>
+                                <div class="step-circle m-0" data-step="2"><i class="fa-solid fa-check d-none"></i><span
+                                        class="circle-count">2</span></div>
+                            </div>
+                            <div class="step-group">
+                                <div class="step-line"></div>
+                                <div class="step-circle m-0" data-step="3"><i class="fa-solid fa-check d-none"></i><span
+                                        class="circle-count">3</span></div>
+                            </div>
+                            <div class="step-group">
+                                <div class="step-line"></div>
+                                <div class="step-circle m-0" data-step="4"><i class="fa-solid fa-check d-none"></i><span
+                                        class="circle-count">4</span></div>
+                            </div>
+                        </div>
+    
                     </div>
-                    <h4 class="text-center font-weight-bold">Create a Question</h4>
-                    <p class="text-center text-muted">Step 1: Select Audience & Question Type</p>
-                    <div class="d-flex justify-content-center align-items-center mb-4 step-container">
-                        <div class="step-group">
-                            <div class="step-circle active" data-step="1"><i class="fa-solid fa-check d-none"></i><span
-                                    class="circle-count">1</span></div>
-                        </div>
-                        <div class="step-group">
-                            <div class="step-line"></div>
-                            <div class="step-circle m-0" data-step="2"><i class="fa-solid fa-check d-none"></i><span
-                                    class="circle-count">2</span></div>
-                        </div>
-                        <div class="step-group">
-                            <div class="step-line"></div>
-                            <div class="step-circle m-0" data-step="3"><i class="fa-solid fa-check d-none"></i><span
-                                    class="circle-count">3</span></div>
-                        </div>
-                        <div class="step-group">
-                            <div class="step-line"></div>
-                            <div class="step-circle m-0" data-step="4"><i class="fa-solid fa-check d-none"></i><span
-                                    class="circle-count">4</span></div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-body">
-                    {{-- Form Start --}}
-                    <form id="questionForm">
-                        <div class="step step-1">
-                            <h5>1. Select the Audience</h5>
-                            <div class="row">
-                                <div class="col-md-6 row">
-                                    <label class="radio-container col-md-12">
-                                        <input type="radio" name="audience" value="High School" checked> High School
+                    <div class="modal-body">
+                        {{-- Form Start --}}
+                        <form id="questionForm">
+                            <div class="step step-1">
+                                <h5>1. Select the Audience</h5>
+                                <div class="row">
+                                    <div class="col-md-6 row">
+                                        <label class="radio-container col-md-12">
+                                            <input type="radio" name="audience" value="High School" checked> High School
+                                        </label>
+                                        <label class="radio-container col-md-12">
+                                            <input type="radio" name="audience" value="Graduation"> Graduation
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6 row">
+                                        <label class="radio-container col-md-12">
+                                            <input type="radio" name="audience" value="College"> College
+                                        </label>
+                                        <label class="radio-container col-md-12">
+                                            <input type="radio" name="audience" value="SAT 2"> SAT 2
+                                        </label>
+                                    </div>
+                                </div>
+    
+                                <h5 class="mt-3">2. Select the Question Type</h5>
+                                <div class="row">
+                                    <label class="radio-container col-md-6">
+                                        <input type="radio" name="question_type" value="Verbal" checked> Verbal
                                     </label>
-                                    <label class="radio-container col-md-12">
-                                        <input type="radio" name="audience" value="Graduation"> Graduation
+                                    <label class="radio-container col-md-6">
+                                        <input type="radio" name="question_type" value="Quant"> Quant
                                     </label>
                                 </div>
-                                <div class="col-md-6 row">
-                                    <label class="radio-container col-md-12">
-                                        <input type="radio" name="audience" value="College"> College
-                                    </label>
-                                    <label class="radio-container col-md-12">
-                                        <input type="radio" name="audience" value="SAT 2"> SAT 2
-                                    </label>
+                            </div>
+    
+                            {{-- Placeholder for future steps --}}
+                            <div class="step step-2 d-none">
+                                <h5>Step 2 Provide the verbal Question</h5>
+                                <div id="editor-container">
+                                    <div class="editor mb-3"></div>
                                 </div>
+                                <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
+                                    data-question="1">
+                                    + Add Question
+                                </button>
                             </div>
-
-                            <h5 class="mt-3">2. Select the Question Type</h5>
-                            <div class="row">
-                                <label class="radio-container col-md-6">
-                                    <input type="radio" name="question_type" value="Verbal" checked> Verbal
-                                </label>
-                                <label class="radio-container col-md-6">
-                                    <input type="radio" name="question_type" value="Quant"> Quant
-                                </label>
+    
+                            <div class="step step-3 d-none">
+                                <h5>Step 3 Provide the verbal Question</h5>
+                                <div id="editor-container">
+                                    <div class="editor mb-3"></div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
+                                    data-question="1">
+                                    + Add Question
+                                </button>
                             </div>
-                        </div>
-
-                        {{-- Placeholder for future steps --}}
-                        <div class="step step-2 d-none">
-                            <h5>Step 2 Provide the verbal Question</h5>
-                            <div id="editor-container">
-                                <div class="editor mb-3"></div>
+    
+                            <div class="step step-4 d-none">
+                                <h5>Step 4 Provide the verbal Question</h5>
+                                <div id="editor-container">
+                                    <div class="editor mb-3"></div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
+                                    data-question="1">
+                                    + Add Question
+                                </button>
                             </div>
-                            <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
-                                data-question="1">
-                                + Add Question
-                            </button>
-                        </div>
-
-                        <div class="step step-3 d-none">
-                            <h5>Step 3 Provide the verbal Question</h5>
-                            <div id="editor-container">
-                                <div class="editor mb-3"></div>
+                        </form>
+                    </div>
+                    <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <!-- Left side: Placeholder wrapper to maintain spacing -->
+                            <div class="left-placeholder">
+                                <button type="button" class="btn new-question d-none">Save & Create Another</button>
                             </div>
-                            <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
-                                data-question="1">
-                                + Add Question
-                            </button>
-                        </div>
-
-                        <div class="step step-4 d-none">
-                            <h5>Step 4 Provide the verbal Question</h5>
-                            <div id="editor-container">
-                                <div class="editor mb-3"></div>
+                    
+                            <!-- Right side: Navigation buttons -->
+                            <div class="d-flex">
+                                <button type="button" class="btn back-btn btn-outline-secondary cancel mr-2">Cancel</button>
+                                <button type="button" class="btn back-btn btn-outline-secondary prev-step mr-2 d-none">Back</button>
+                                <button type="button" class="btn next-step">Next</button>
+                                <button type="submit" class="btn save-question d-none" style="background:#691D5E; color: #EAECF0; border-radius: 8px;">Save Question</button>
                             </div>
-                            <button type="button" class="btn btn-sm btn-secondary mt-2 add-question"
-                                data-question="1">
-                                + Add Question
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                        <!-- Left side: Placeholder wrapper to maintain spacing -->
-                        <div class="left-placeholder">
-                            <button type="button" class="btn new-question d-none">Save & Create Another</button>
-                        </div>
-                
-                        <!-- Right side: Navigation buttons -->
-                        <div class="d-flex">
-                            <button type="button" class="btn back-btn btn-outline-secondary cancel mr-2">Cancel</button>
-                            <button type="button" class="btn back-btn btn-outline-secondary prev-step mr-2 d-none">Back</button>
-                            <button type="button" class="btn next-step">Next</button>
-                            <button type="submit" class="btn save-question d-none" style="background:#691D5E; color: #EAECF0; border-radius: 8px;">Save Question</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
     @push('css')
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">

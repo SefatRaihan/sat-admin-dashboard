@@ -199,6 +199,9 @@
             left: 15px !important;
             width: 1.5625em !important;
         }
+        .content-wrapper {
+            overflow: hidden;
+        }
     </style>
     <!-- Tagify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
