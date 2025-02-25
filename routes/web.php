@@ -1,19 +1,20 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\GeneralController;
-use App\Http\Controllers\MakeModelController;
-use App\Http\Controllers\NavItemController;
-use App\Http\Controllers\PackageGenerateController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\RoleNavItemController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoleManagementController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\NavItemController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MakeModelController;
+use App\Http\Controllers\RoleNavItemController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PackageGenerateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,7 @@ Route::middleware(['auth','web'])->group(function () {
     Route::get('/users-excel', [UserController::class, 'excel'])->name('users.excel');
     Route::get('/users-pdf', [UserController::class, 'pdf'])->name('users.pdf');
     Route::resource('generals', GeneralController::class);
+    Route::resource('question', QuestionController::class);
 
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
     Route::get('/notification/create', [NotificationController::class, 'create'])->name('notification.create');

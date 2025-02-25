@@ -16,7 +16,7 @@
     <!-- Sidebar content -->
     <div class="sidebar-content">
 
-        
+
         <!-- Main navigation -->
         <div class="card card-sidebar-mobile">
 
@@ -40,8 +40,8 @@
              </div>
 
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                
-            
+
+
                 <li class="nav-item">
                     <a href="/" title="Overview" class="nav-link legitRipple m-0 ml-2 mr-2">
                         <img src="{{ asset('image/icon/overview.png') }}" alt="" class="mr-3" style="width: 16px; height: 16px;">
@@ -81,8 +81,8 @@
                         <span>Manage Questions</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <li class="nav-item"><a href="" title="All Questions" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Questions</span></a></li>
-                        <li class="nav-item"><a href="" title="All Question Exams" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
+                        <li class="nav-item"><a href="{{ route('question.index') }}" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Questions</span></a></li>
+                        <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
                     </ul>
                 </li>
 
@@ -162,7 +162,7 @@
                 </li>
             </ul>
 
-            
+
 
 
         </div>
