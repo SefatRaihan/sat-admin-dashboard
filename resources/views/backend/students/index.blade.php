@@ -3,7 +3,7 @@
     <x-backend.layouts.partials.blocks.contentwrapper 
         :headerTitle="'All Students'"
         :prependContent="'
-            <a href=\'/students/create\' data-toggle=\'modal\' data-target=\'#exampleModalCenter\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
+            <a href=\'/students/create\' data-toggle=\'modal\' data-target=\'#studentCreateModelCenter\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
                 <i class=\'fas fa-plus\' style=\'font-size: 12px; margin-right: 5px; margin-top: 5px;\'></i> Add Student
             </a>
         '">
@@ -17,119 +17,138 @@
     /> --}}
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="border-radius: 24px; height:100%">
-                    <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                        <h5 class="" id="exampleModalLongTitle"><b>Add Student</b></h5>
-                        <p>Enter the necessary details to add a student</p>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12 mt-2">
-                                <label for="">Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="Enter Name">
-                            </div>
-                            <div class="col-md-6 mt-2">
-                                <label for="">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="Enter Email">
-                            </div>
-                            <div class="col-md-6 mt-2">
-                                <label for="">Phone</label>
-                                <input type="text" name="phone" class="form-control" placeholder="Enter Phone">
-                            </div>
-                            <div class="col-md-6 mt-2">
-                                <label for="">Gender</label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="gender" id="male" value="Male">
-                                            <label class="form-check-label" for="male">
-                                                Male
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="gender" id="female" value="Female">
-                                            <label class="form-check-label" for="female">
-                                            Female
-                                            </label>
-                                        </div>
+    <div class="modal fade" id="studentCreateModelCenter" tabindex="-1" role="dialog" aria-labelledby="studentCreateModelCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content student-create-section" style="border-radius: 24px; height:100%">
+                <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
+                    <h5 class="" id="exampleModalLongTitle"><b>Add Student</b></h5>
+                    <p>Enter the necessary details to add a student</p>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <label for="">Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Enter Name">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="Enter Email">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Phone</label>
+                            <input type="text" name="phone" class="form-control" placeholder="Enter Phone">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Gender</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                                        <label class="form-check-label" for="male">
+                                            Male
+                                        </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 mt-2">
-                                <label for="">Date of Birth</label>
-                                <input type="date" name="date_of_birth" class="form-control" placeholder="">
-                            </div>
-                            <div class="col-md-6 mt-2">
-                                <x-input-label for="password" :value="__('Password')" />
-                                <div class="position-relative">
-                                    <x-text-input id="password" name="password" type="password"  class="form-control mt-1 block w-full pr-10" autocomplete="password" />
-                                    <span class="toggle-password" toggle="#password">
-                                        <i class="fas fa-eye"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mt-2">
-                                <x-input-label for="confirm_password" :value="__('Confirm Password')" />
-                                <div class="position-relative">
-                                    <x-text-input id="confirm_password" name="confirm_password" type="password"  class="form-control mt-1 block w-full pr-10" autocomplete="password" />
-                                    <span class="toggle-password" toggle="#confirm_password">
-                                        <i class="fas fa-eye"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mt-2">
-                                <label for="">Audience</label>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="high-school" value="High School">
-                                            <label class="form-check-label" for="high-school">
-                                                High School
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="college" value="College">
-                                            <label class="form-check-label" for="college">
-                                            College
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="graduate" value="Graduate">
-                                            <label class="form-check-label" for="graduate">
-                                                Graduate
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="sat-2" value="SAt 2">
-                                            <label class="form-check-label" for="sat-2">
-                                            SAt 2
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <x-input-label for="photo" :value="__('Photo')" />
-                                        <form action="#" class="dropzone" id="dropzone_single"></form>
+                                <div class="col-md-6">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                        <label class="form-check-label" for="female">
+                                        Female
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer border-top pt-3">
-                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Add Student</button>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Date of Birth</label>
+                            <input type="date" name="date_of_birth" class="form-control" placeholder="">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <x-input-label for="password" :value="__('Password')" />
+                            <div class="position-relative">
+                                <x-text-input id="password" name="password" type="password"  class="form-control mt-1 block w-full pr-10" autocomplete="password" />
+                                <span class="toggle-password" toggle="#password">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <x-input-label for="confirm_password" :value="__('Confirm Password')" />
+                            <div class="position-relative">
+                                <x-text-input id="confirm_password" name="confirm_password" type="password"  class="form-control mt-1 block w-full pr-10" autocomplete="password" />
+                                <span class="toggle-password" toggle="#confirm_password">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                            <label for="">Audience</label>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="audience" id="high-school" value="high-school">
+                                        <label class="form-check-label" for="high-school">
+                                            High School
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="audience" id="college" value="college">
+                                        <label class="form-check-label" for="college">
+                                        College
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="audience" id="graduate" value="graduate">
+                                        <label class="form-check-label" for="graduate">
+                                            Graduate
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="audience" id="sat-2" value="sat-2">
+                                        <label class="form-check-label" for="sat-2">
+                                        SAt 2
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <x-input-label for="photo" :value="__('Photo')" />
+                                    {{-- <form action="#" class="dropzone" id="dropzone_single"></form> --}}
+                                    <div class="photosection" ondragover="allowDrop(event)" ondrop="dropImage(event)">
+                                        <!-- Profile Image Preview -->
+                                        <img id="previewImage" src="">
+                                    
+                                        <!-- Upload Area -->
+                                        <label for="profileImage" style="cursor: pointer; position: relative;">
+                                            <div class="upload-icon">
+                                                <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
+                                            </div>
+                                            <h5 style="font-size: 14px;">
+                                                <span style="color: #521749">Click to upload</span> 
+                                                <span style="color: #475467"> or drag and drop</span>
+                                            </h5>
+                                        </label>
+                                    
+                                        <!-- Hidden File Input -->
+                                        <input type="file" id="profileImage" name="profile_image" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="modal-footer border-top pt-3">
+                    <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn save-student" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Add Student</button>
+                </div>
             </div>
+        </div>
     </div>
 
     <div class="modal fade" id="messageModalCenter" tabindex="-1" role="dialog" aria-labelledby="messageModalCenterTitle" aria-hidden="true">
@@ -512,13 +531,6 @@
     
 
     @push('css')
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/uploaders/dropzone.min.js"></script>
-	    <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/uploader_dropzone.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_checkboxes_radios.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switch.min.js"></script>
-            <!-- Theme JS files -->
         <style>
 
             .nav-tabs {
@@ -881,15 +893,64 @@
                 border: 1px solid #ddd;
             }
 
+            .upload-icon {
+                position: absolute;
+                bottom: 50px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 40px;
+                border: 1px solid #EAECF0;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .photosection {
+                height: 120px;
+                border: 1px solid #EAECF0;
+                border-radius: 8px;
+                align-items: end;
+                display: flex;
+                justify-content: center;
+            }
+
+            .toggle-password {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                font-size: 16px;
+                color: #888;
+            }
+
+            .toggle-password:hover {
+                color: #333;
+            }
+
+            #previewImage {
+                height: 104px;
+                position: absolute;
+                top: 24%;
+                left: 17px;
+            }
         </style>
     @endpush
     @push('js')
     	<!-- Theme JS files -->
+        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/uploaders/dropzone.min.js"></script>
+	    <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/uploader_dropzone.js"></script>
+        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_checkboxes_radios.js"></script>
+        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
+        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switch.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script>
+        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
         <!-- /theme JS files -->
 
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 document.querySelectorAll(".toggle-password").forEach(function(element) {
@@ -949,7 +1010,170 @@
                 $('#taskSidebarOverlay').addClass('active');
             }
 
+            // Allow drop
+            function allowDrop(event) {
+                event.preventDefault();
+                document.querySelector('.photosection').classList.add('dragover');
+            }
+
+            // Remove dragover style on leave
+            document.querySelector('.photosection').addEventListener('dragleave', function () {
+                this.classList.remove('dragover');
+            });
+
+            // Handle dropped image
+            function dropImage(event) {
+                event.preventDefault();
+                document.querySelector('.photosection').classList.remove('dragover');
+                const file = event.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    previewFile(file);
+                }
+            }
+
+            // Handle click upload
+            function previewImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    previewFile(file);
+                }
+            }
+
+            // Preview image
+            function previewFile(file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('previewImage');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
         </script>
+        
+        <script>
+            $(document).ready(function () {
+                $(document).on('click', '.save-student', function () {
+                    let $button = $(this);
+                    $button.prop('disabled', true).html('Processing...');
+        
+                    let formData = new FormData();
+        
+                    // Collect form data
+                    const name = $('input[name="name"]').val();
+                    const email = $('input[name="email"]').val();
+                    const phone = $('input[name="phone"]').val();
+                    const gender = $('input[name="gender"]:checked').val();
+                    const dob = $('input[name="date_of_birth"]').val();
+                    const password = $('input[name="password"]').val();
+                    const confirmPassword = $('input[name="confirm_password"]').val();
+                    const audience = $('input[name="audience"]:checked').val();
+                    const photo = $('#profileImage')[0].files ? $('#profileImage')[0].files[0] : null;
+        
+                    // Validate required fields
+                    if (!name || !email || !phone || !gender || !dob || !password || !confirmPassword || !audience) {
+                        let missingFields = [];
+        
+                        if (!name) missingFields.push('Name');
+                        if (!email) missingFields.push('Email');
+                        if (!phone) missingFields.push('Phone');
+                        if (!gender) missingFields.push('Gender');
+                        if (!dob) missingFields.push('Date of Birth');
+                        if (!password) missingFields.push('Password');
+                        if (!confirmPassword) missingFields.push('Confirm Password');
+                        if (!audience) missingFields.push('Audience');
+        
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Missing Fields',
+                            html: 'Please fill in the following fields:<br><strong>' + missingFields.join(', ') + '</strong>',
+                        });
+                        $button.prop('disabled', false).html('Save'); // Re-enable button
+                        return;
+                    }
+        
+                    // Validate password match
+                    if (password !== confirmPassword) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Password Mismatch',
+                            text: 'Password and Confirm Password do not match.',
+                        });
+                        $button.prop('disabled', false).html('Save'); // Re-enable button
+                        return;
+                    }
+        
+                    // Append data to FormData
+                    formData.append('_token', $('meta[name="csrf-token"]').attr('content')); // CSRF token
+                    formData.append('name', name);
+                    formData.append('email', email);
+                    formData.append('phone', phone);
+                    formData.append('gender', gender);
+                    formData.append('date_of_birth', dob);
+                    formData.append('password', password);
+                    formData.append('password_confirmation', confirmPassword);
+                    formData.append('audience', audience);
+        
+                    if (photo) {
+                        formData.append('photo', photo);
+                    }
+        
+                    // AJAX Request
+                    $.ajax({
+                        url: '/api/students',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.status) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Student Added',
+                                    text: response.message,
+                                }).then(() => {
+                                    $('#studentCreateModelCenter').modal('hide');
+                                    $('#studentCreateModelCenter').find('input, textarea').val('');
+                                    $('input[type="radio"]').prop('checked', false);
+                                    $('#previewImage').attr('src', '');
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.error || 'Something went wrong!',
+                                });
+                            }
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                let errorMsg = '';
+                                $.each(errors, function (key, value) {
+                                    errorMsg += value[0] + '<br>';
+                                });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: errorMsg,
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Unexpected Error',
+                                    text: 'An unexpected error occurred. Please try again.',
+                                });
+                            }
+                        },
+                        complete: function () {
+                            $button.prop('disabled', false).html('Save'); // Re-enable button after request completes
+                        }
+                    });
+                });
+            });
+        </script>
+        
+        
     @endpush
 
 </x-backend.layouts.master>

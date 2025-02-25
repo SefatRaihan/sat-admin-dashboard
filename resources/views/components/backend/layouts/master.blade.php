@@ -171,6 +171,34 @@
             background-color: #3F1239;
             color: #fff;
         }
+        .swal2-icon.swal2-warning:before {
+            content: "";
+        }
+        .swal2-icon.swal2-error:before {
+            content: "";
+        }
+        .swal2-icon.swal2-success:before {
+            content: "";
+        }
+        .swal2-icon.swal2-warning {
+            font-size: 11px;
+        }
+        .swal2-icon.swal2-error {
+            font-size: 11px;
+        }
+        .swal2-icon.swal2-success {
+            font-size: 11px;
+        }
+        .swal2-icon.swal2-success [class^="swal2-success-line"][class$="tip"] {
+            height: 0 !important;
+            border-right: 0.25rem solid #a5dc86 !important;
+            border-top: 0.25rem solid #a5dc86 !important;
+        }
+        .swal2-icon.swal2-success [class^=swal2-success-line][class$=tip] {
+            top: 41px !important;
+            left: 15px !important;
+            width: 1.5625em !important;
+        }
     </style>
     <!-- Tagify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
@@ -216,6 +244,7 @@
         toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist checklist outdent indent | removeformat | code table help'
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Tagify JS -->
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>

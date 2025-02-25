@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('uuid')->index();
             $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('active_role_id')->nullable()->index();
-            $table->string('first_name')->index();
-            $table->string('last_name')->index();
+            $table->string('first_name')->index()->nullable();
+            $table->string('last_name')->index()->nullable();
             $table->string('full_name')->index();
             $table->string('email')->index();
             $table->string('phone')->index();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true)->index();
             $table->string('ip_address', 45)->nullable();
             $table->timestamp('last_login')->nullable()->index();
-            $table->string('image')->nullable();
+            $table->string('profile_image')->nullable();
             $table->softDeletes();
             $table->rememberToken();
 			$table->string('action', 100);

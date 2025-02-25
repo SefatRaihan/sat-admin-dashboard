@@ -1,6 +1,13 @@
 <x-backend.layouts.master>
 
-    <x-slot name="page_title">
+    <x-backend.layouts.partials.blocks.contentwrapper 
+        :headerTitle="'Dashboard'"
+        :prependContent="'
+            
+        '">
+    </x-backend.layouts.partials.blocks.contentwrapper>
+
+    {{-- <x-slot name="page_title">
         Dashboard
     </x-slot>
 
@@ -265,7 +272,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> --}}
 
 
 

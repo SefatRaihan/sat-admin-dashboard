@@ -11,23 +11,54 @@
             <div class="p-3 sm:p-8 bg-white sm:rounded-lg" style="border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                 <div class="max-w-xl">
                     <section>
-                        <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+                        <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
                             @csrf
                             @method('patch')
+                            <div>
+                                @if(session('error'))
+                                    <div class="bg-danger-300 border border-danger-400 text-danger-800 px-4 py-3 mb-2 rounded relative" role="alert">
+                                        <strong class="font-bold">Error:</strong>
+                                        <span class="block sm:inline">{{ session('error') }}</span>
+                                    </div>
+                                @endif
+
+                                @if(session('status'))
+                                    <div class="bg-success-300 border border-success-400 text-success-800 px-4 py-3 mb-2 rounded relative" role="alert">
+                                        <strong class="font-bold">Success:</strong>
+                                        <span class="block sm:inline">{{ session('status') }}</span>
+                                    </div>
+                                @endif
+
+                                @if($errors->any())
+                                    <div class="bg-warning-300 border border-warning-400 text-warning-800 px-4 py-3 mb-2 rounded relative" role="alert">
+                                        <strong class="font-bold">Validation Errors:</strong>
+                                        <ul class="mt-2 list-disc list-inside">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="position-relative d-inline-block">
                                         <!-- Profile Image -->
-                                        <div>
-                                            <img src="{{ asset('image/profile.jpeg') }}" alt="" 
-                                                style="height: 116px; width:116px; border-radius:50%;">
-                                        </div>
-                                        
-                                        <!-- Upload Icon (Bottom-Right) -->
-                                        <div class="upload-icon">
-                                            <img src="{{ asset('image/icon/upload.png') }}" alt="" style="width: 16.67px; height: 15px;">
-                                        </div>
-                                    </div>                                
+                                        <label for="profileImage" style="cursor: pointer; position: relative;">
+                                            <img src="{{ $user->profile_image ? asset('uploads/profile_images/' . $user->profile_image) : asset('image/profile.jpeg') }}" 
+                                                 alt="Profile Image" 
+                                                 style="height: 116px; width:116px; border-radius:50%; object-fit: cover;">
+                                            
+                                            <!-- Upload Icon -->
+                                            <div class="upload-icon" style="position: absolute; bottom: 5px; right: 5px;">
+                                                <img src="{{ asset('image/icon/upload.png') }}" alt="Upload Icon" 
+                                                     style="width: 16.67px; height: 15px;">
+                                            </div>
+                                        </label>
+                                
+                                        <!-- Hidden File Input -->
+                                        <input type="file" id="profileImage" name="profile_image" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                                    </div>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <button type="submit" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 5px .875rem !important; border-radius:8px">
@@ -38,9 +69,9 @@
                     
                             <div class="row mt-3">
                                 <div class="col-md-6">
-                                    <x-input-label for="fast_name" :value="__('First Name')" />
-                                    <x-text-input id="fast_name" name="fast_name" type="text" class="form-control mt-1 block w-full" :value="old('fast_name', $user->fast_name)" required autofocus autocomplete="name" />
-                                    <x-input-error class="mt-2" :messages="$errors->get('fast_name')" />
+                                    <x-input-label for="first_name" :value="__('First Name')" />
+                                    <x-text-input id="first_name" name="first_name" type="text" class="form-control mt-1 block w-full" :value="old('first_name', $user->first_name)" required/>
+                                    <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
                                 </div>
                                 <div class="col-md-6">
                                     <x-input-label for="last_name" :value="__('Last Name')" />
@@ -49,9 +80,8 @@
                                 </div>
                                 <div class="col-md-6 mt-2">
                                     <x-input-label for="email" :value="__('Email')" />
-                                    <x-text-input id="email" name="email" type="email" class="form-control mt-1 block w-full" :value="old('email', $user->email)" required readonly autocomplete="username" />
+                                    <x-text-input id="email" name="email" type="email" class="form-control mt-1 block w-full" :value="old('email', $user->email)" required readonly/>
                                     <x-input-error class="mt-2" :messages="$errors->get('email')" />
-                        
                                     @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                                         <div>
                                             <p class="text-sm mt-2 text-gray-800">
@@ -72,7 +102,7 @@
                                 </div>
                                 <div class="col-md-6 mt-2">
                                     <x-input-label for="phone" :value="__('Phone')" />
-                                    <x-text-input id="phone" name="phone" type="text" class="form-control mt-1 block w-full" :value="old('phone', $user->phone)" required />
+                                    <x-text-input id="phone" name="phone" type="text" class="form-control mt-1 block w-full" :value="old('phone', $user->phone)" required/>
                                     <x-input-error class="mt-2" :messages="$errors->get('phone')" />
                                 </div>
                                 <div class="col-md-6 mt-2">
@@ -99,18 +129,6 @@
                                     <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                                 </div>
                                 
-                            </div>
-                    
-                            <div class="flex items-center gap-4 mt-4">
-                                @if (session('status') === 'profile-updated')
-                                    <p
-                                        x-data="{ show: true }"
-                                        x-show="show"
-                                        x-transition
-                                        x-init="setTimeout(() => show = false, 2000)"
-                                        class="text-sm text-gray-600"
-                                    >{{ __('Saved.') }}</p>
-                                @endif
                             </div>
                         </form>
                     </section>
@@ -173,8 +191,22 @@
                 });
             });
         });
-        </script>
-        
+    </script>
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const reader = new FileReader();
+    
+            reader.onload = function () {
+                const img = document.querySelector('label[for="profileImage"] img');
+                img.src = reader.result;
+            };
+    
+            if (input.files[0]) {
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
     @endpush
 
 </x-backend.layouts.master>
