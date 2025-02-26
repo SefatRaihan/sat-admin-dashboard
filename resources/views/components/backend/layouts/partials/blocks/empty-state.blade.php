@@ -5,7 +5,7 @@
     'buttonRoute' => '#',
 ])
 
-<div class="flex flex-col items-center align-content-center justify-center min-h-screen" style="height: 90vh">
+<div class="flex flex-col items-center align-content-center justify-center min-h-screen" style="height: 80vh">
     <div class="text-center" style="position: relative">
         <img src="{{ asset('image/loading.png') }}" alt="Loading Image" class="mb-4" style="opacity: 0.4">
         <div class="text-section">

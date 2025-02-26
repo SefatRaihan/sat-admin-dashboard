@@ -16,8 +16,6 @@
         buttonRoute="/students/create"
     /> --}}
 
-
-
     <!-- Modal -->
     <div class="modal fade" id="studentCreateModelCenter" tabindex="-1" role="dialog" aria-labelledby="studentCreateModelCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -82,23 +80,6 @@
                                     <i class="fas fa-eye"></i>
                                 </span>
                             </div>
-                        </div>
-                        <div class="col-md-6 mt-2">
-                            <label for="">Package</label>
-                            <select name="package"  class="form-control">
-                                <option value="">Please Select</option>
-                                <option value="super-man">Super Man</option>
-                                <option value="avenger">Avenger</option>
-                                <option value="gladiator">Gladiator</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mt-2">
-                            <label for="">Duration</label>
-                            <select name="duraion"  class="form-control">
-                                <option value="">Please Select</option>
-                                <option value="monthly">Monthly</option>
-                                <option value="annual">Annual</option>
-                            </select>                        
                         </div>
                         <div class="col-md-12 mt-2">
                             <label for="">Audience</label>
@@ -346,7 +327,7 @@
         <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
             <div class="card-header border-bottom d-flex justify-content-between">
                 <div>
-                    <input type="text" id="search" class="form-control search__input" placeholder="Search Notification" style="padding-left: 35px">
+                    <input type="text" class="form-control search__input" placeholder="Search Notification">
                 </div>
 
                 <div class="d-flex">
@@ -364,9 +345,8 @@
                     </div>
                 </div>
             </div>
-    
-            <div class="card-body table-responsive">
-                <table class="table datatable-basic" id="studentsTable" role="grid" aria-describedby="DataTables_Table_0_info">
+            <div class="card-body p-0 m-0 table-responsive">
+                <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                     <thead>
                         <tr>
                             <th colspan="10">
@@ -386,53 +366,52 @@
                                 </div>
                             </th>
                         </tr>
-                        <tr class="bg-light">
-                            <th><input type="checkbox" id="selectAll"></th>
-                            <th>Student</th>
-                            <th>Phone No.</th>
-                            <th>Date of Birth</th>
-                            <th>Gender</th>
-                            <th>Audience</th>
-                            <th>Package</th>
-                            <th>Duration</th>
-                            <th>Status</th>
-                            <th class="text-center">Action</th>
+                        <tr class="bg-light" role="row">
+                            <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
+                            <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Notification: activate to sort column descending">Student</th>
+                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Phone No.</th>
+                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date of Birth</th>
+                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Gender</th>
+                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Audience</th>
+                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Package</th>
+                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Duration</th>
+                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Status</th>
+                            <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="studentsBody">
-                        <!-- AJAX Loaded Content -->
+                    <tbody>
+                        <tr class="custom-row" data-toggle="modal" data-target="#detailModalCenter">
+                            <td><input type="checkbox" class="row-checkbox"></td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <a href="#" class="btn bg-secondary rounded-round btn-icon btn-sm">
+                                            <span class="letter-icon"></span>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="text-default font-weight-semibold letter-icon-title">Hassan Ali</a>
+                                        <div class="text-muted font-size-sm">ali@gmail.com </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>1111111</td>
+                            <td>22 Jan, 2012</td>
+                            <td>Male</td>
+                            <td>High School</td>
+                            <td><span class="badge badge-flat badge-pill" style="border: 1px solid #3E4784; color:#3E4784"><b>Super man</b></span></td>
+                            <td>Monthly</td>
+                            <td>
+                                <div class="form-check form-check-switchery p-0 m-0">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input-switchery" checked data-fouc>
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="text-center"><button class="btn edit-btn"><i class="far fa-edit"></i> Edit</button></td>
+                        </tr>
                     </tbody>
                 </table>
-                <!-- Empty State -->
-                <div id="emptyState" class="text-center d-none">
-                    <p class="mt-3">No student found.</p>
-                </div>
-                <div>
-                    <div class="d-flex justify-content-center justify-content-sm-between align-items-center text-center flex-wrap gap-2 showing-wrap">
-                        <form method="GET" class="d-flex align-items-center">
-                            <label for="per_page" class="fs-13 fw-medium mr-2 mt-1">Showing:</label>
-                            <select name="per_page" id="per_page" class="form-select form-select-sm w-auto mr-2" onchange="fetchStudents(1)" style="border:1px solid #D0D5DD; padding:5px">
-                                @foreach([5, 10, 20, 50, 100] as $size)
-                                    <option value="{{ $size }}" {{ request('per_page', 10) == $size ? 'selected' : '' }}>
-                                        {{ $size }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </form>
-                    
-                        <div class="d-flex align-items-center">
-                            <span class="fs-13 fw-medium me-2" id="paginationInfo">
-                                <!-- Pagination info will be dynamically updated here -->
-                            </span>
-                            <div id="pagination">
-                                <!-- Pagination buttons will be dynamically updated here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Pagination -->
-    
-                
             </div>
         </div>
     </div>
@@ -449,7 +428,7 @@
             </div>
             <div class="sidebar-content">
                 <div class="task-form">
-                    <form class="form-section filter-form-section">
+                    <form class="form-section">
                         <div class="p-3">
                             <div class="d-flex justify-content-between">
                                 <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
@@ -457,31 +436,31 @@
                             </div>
                             <div class="mt-1 mb-2 d-flex justify-content-between">
                                 <div style="width: 49%">
-                                    <input type="date" class="form-control" name="create_from">
+                                    <input type="date" class="form-control" name="craeted_at">
                                 </div>
                                 <div style="align-items: center; display: flex; width:1%">
                                     -
                                 </div>
                                 <div style="width: 49%">
-                                    <input type="date" class="form-control" name="create_to">
+                                    <input type="date" class="form-control" name="craeted_at">
                                 </div>
                             </div>
                             <div>
                                 <h6><b>Status:</b> All Result</h6>
                                 <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="all" value="all" checked>
+                                    <input class="form-check-input" type="radio" name="status" id="all" value="All" checked>
                                     <label class="form-check-label" for="all">
                                       All
                                     </label>
                                   </div>
                                   <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="activeonly" value="active">
+                                    <input class="form-check-input" type="radio" name="status" id="activeonly" value="Active only">
                                     <label class="form-check-label" for="activeonly">
                                         Active only
                                     </label>
                                   </div>
                                   <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="inactiveonly" value="inactive">
+                                    <input class="form-check-input" type="radio" name="status" id="inactiveonly" value="Inactive only">
                                     <label class="form-check-label" for="inactiveonly">
                                         Inactive only
                                     </label>
@@ -501,37 +480,37 @@
                             <div class="mt-2">
                                 <h6><b>Package Type:</b> All Result</h6>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="super-man" name="package">
+                                    <input type="checkbox" id="super-man">
                                     <label class="form-check-label" for="super-man"><span class="badge badge-flat badge-pill" style="border: 1px solid #3E4784; color:#3E4784"><b>Super man</b></span></label>
                                 </div>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="avenger"  name="package">
+                                    <input type="checkbox" id="avenger">
                                     <label class="form-check-label" for="avenger"><span class="badge badge-flat badge-pill" style="border: 1px solid #D9D6FE; color:#5925DC; background-color:#F4F3FF"><b>Avenger</b></span></label>
                                 </div>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="gladiator"  name="package">
+                                    <input type="checkbox" id="gladiator">
                                     <label class="form-check-label" for="gladiator"><span class="badge badge-flat badge-pill" style="border: 1px solid #B2DDFF; color:#175CD3; background-color:#EFF8FF"><b>Gladiator</b></span></label>
                                 </div>
                             </div>
                             <div class="mt-2">
                                 <h6><b>Package Duration:</b> All Result</h6>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="monthly" name="duration">
+                                    <input type="checkbox" id="monthly">
                                     <label class="form-check-label" for="monthly">Monthly</label>
                                 </div>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="annual"  name="duration">
+                                    <input type="checkbox" id="annual">
                                     <label class="form-check-label" for="annual">Annual</label>
                                 </div>
                             </div>
                             <div class="mt-2">
                                 <h6><b>Gender:</b> All Result</h6>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="male" name="gender">
+                                    <input type="checkbox" id="male">
                                     <label class="form-check-label" for="male">Male</label>
                                 </div>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="female" name="gender">
+                                    <input type="checkbox" id="female">
                                     <label class="form-check-label" for="female">Female</label>
                                 </div>
                             </div>
@@ -539,8 +518,8 @@
 
                         <div class="border-top fixed-bottom-buttons">
                             <div class="d-flex justify-content-between p-3">
-                                <button type="button" class="btn filter-submit-btn" style="background-color:#691D5E ;border-radius: 8px; color:#fff; width:50%">Apply Filters</button>
-                                <button type="button" class="btn btn-outline-dark ml-2 reset-filter" style="border: 1px solid #D0D5DD; border-radius: 8px; width:50%">Reset All</button>
+                                <button type="button" class="btn" style="background-color:#691D5E ;border-radius: 8px; color:#fff; width:50%">Apply Filters</button>
+                                <button type="button" class="btn btn-outline-dark ml-2" style="border: 1px solid #D0D5DD; border-radius: 8px; width:50%">Reset All</button>
                             </div>
                         </div>
                     </form>
@@ -549,6 +528,7 @@
         </div>
     </div>
 
+    
 
     @push('css')
         <style>
@@ -957,67 +937,6 @@
                 left: 17px;
             }
         </style>
-        <style>
-            .switch {
-                position: relative;
-                display: inline-block;
-                width: 50px;
-                height: 23px;
-            }
-    
-            .switch input { 
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-    
-            .slider {
-                position: absolute;
-                cursor: pointer;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: #ccc;
-                -webkit-transition: .4s;
-                transition: .4s;
-            }
-    
-            .slider:before {
-                position: absolute;
-                content: "";
-                height: 16px;
-                width: 16px;
-                left: 4px;
-                bottom: 4px;
-                background-color: white;
-                -webkit-transition: .4s;
-                transition: .4s;
-            }
-    
-            input:checked + .slider {
-                background-color: #2196F3;
-            }
-    
-            input:focus + .slider {
-                box-shadow: 0 0 1px #2196F3;
-            }
-    
-            input:checked + .slider:before {
-                -webkit-transform: translateX(26px);
-                -ms-transform: translateX(26px);
-                transform: translateX(26px);
-            }
-    
-            /* Rounded sliders */
-            .slider.round {
-                border-radius: 34px;
-            }
-    
-            .slider.round:before {
-                border-radius: 50%;
-            }
-        </style>
     @endpush
     @push('js')
     	<!-- Theme JS files -->
@@ -1146,23 +1065,19 @@
                     const phone = $('input[name="phone"]').val();
                     const gender = $('input[name="gender"]:checked').val();
                     const dob = $('input[name="date_of_birth"]').val();
-                    const package = $('input[name="package"]').val();
-                    const duration = $('input[name="duration"]').val();
                     const password = $('input[name="password"]').val();
                     const confirmPassword = $('input[name="confirm_password"]').val();
                     const audience = $('input[name="audience"]:checked').val();
                     const photo = $('#profileImage')[0].files ? $('#profileImage')[0].files[0] : null;
         
                     // Validate required fields
-                    if (!name || !email || !phone || !gender || !dob || !password || !confirmPassword || !audience || !package || !duration) {
+                    if (!name || !email || !phone || !gender || !dob || !password || !confirmPassword || !audience) {
                         let missingFields = [];
         
                         if (!name) missingFields.push('Name');
                         if (!email) missingFields.push('Email');
                         if (!phone) missingFields.push('Phone');
                         if (!gender) missingFields.push('Gender');
-                        if (!package) missingFields.push('Package');
-                        if (!duration) missingFields.push('Duration');
                         if (!dob) missingFields.push('Date of Birth');
                         if (!password) missingFields.push('Password');
                         if (!confirmPassword) missingFields.push('Confirm Password');
@@ -1257,157 +1172,8 @@
                 });
             });
         </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                fetchStudents(1); // Initial Load
-
-                // Search on Enter key
-                document.getElementById('search').addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') fetchStudents(1);
-                });
-
-                // Per page change
-                document.getElementById('per_page').addEventListener('change', () => fetchStudents(1));
-
-                // Apply filters on form submit
-                document.querySelector('.filter-submit-btn').addEventListener('click', () => fetchStudents(1));
-
-                // Reset filters
-                document.querySelector('.reset-filter').addEventListener('click', () => {
-                    document.querySelector('input[name="create_from"]').value = '';
-                    document.querySelector('input[name="create_to"]').value = '';
-                    document.querySelector('input[name="status"][value="all"]').checked = true;
-                    document.querySelectorAll('input[name="package"]').forEach(el => el.checked = false);
-                    document.querySelectorAll('input[name="duration"]').forEach(el => el.checked = false);
-                    document.querySelectorAll('input[name="gender"]').forEach(el => el.checked = false);
-                    fetchStudents(1);
-                });
-            });
-
-            function fetchStudents(page = 1) {
-                const search = document.getElementById('search').value;
-                const perPage = document.getElementById('per_page').value;
-
-                // Get filter values from the form
-                const createFrom = document.querySelector('input[name="create_from"]').value;
-                const createTo = document.querySelector('input[name="create_to"]').value;
-                const status = document.querySelector('input[name="status"]:checked').value;
-                const package = Array.from(document.querySelectorAll('input[name="package"]:checked')).map(el => el.id);
-                const duration = Array.from(document.querySelectorAll('input[name="duration"]:checked')).map(el => el.id);
-                const gender = Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(el => el.id);
-
-                // Construct the URL with filter parameters
-                const url = `/api/students?search=${search}&per_page=${perPage}&page=${page}` +
-                    `&create_from=${createFrom}&create_to=${createTo}` +
-                    `&status=${status}` +
-                    `&package=${package.join(',')}` +
-                    `&duration=${duration.join(',')}` +
-                    `&gender=${gender.join(',')}`;
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        const tbody = document.getElementById('studentsBody');
-                        tbody.innerHTML = '';
-
-                        if (data.data.length === 0) {
-                            document.getElementById('emptyState').classList.remove('d-none');
-                            document.getElementById('studentsTable').classList.add('d-none');
-                            document.getElementById('pagination').classList.add('d-none');
-                        } else {
-                            document.getElementById('emptyState').classList.add('d-none');
-                            document.getElementById('studentsTable').classList.remove('d-none');
-                            document.getElementById('pagination').classList.remove('d-none');
-
-                            data.data.forEach(student => {
-                                tbody.innerHTML += `
-                                    <tr>
-                                        <td><input type="checkbox" class="row-checkbox"></td>
-                                        <td data-toggle="modal" data-target="#detailModalCenter">
-                                            <div class="d-flex align-items-center">
-                                                <div class="mr-3">
-                                                    <a href="#" class="btn rounded-round btn-icon btn-sm" style="border: 1px solid #ddd;">
-                                                        <img src="${student.photo_url}" alt="${student.name}" class="rounded-circle" width="40" height="40">
-                                                    </a>
-                                                </div>
-                                                <div>
-                                                    <a href="#" class="text-default font-weight-semibold letter-icon-title">${student.name}</a>
-                                                    <div class="text-muted font-size-sm">${student.email}</div>
-                                                </div>
-                                            </div>  
-                                        </td>
-                                        <td data-toggle="modal" data-target="#detailModalCenter">${student.phone}</td>
-                                        <td>${student.date_of_birth}</td>
-                                        <td class="text-capitalize">${student.gender}</td>
-                                        <td class="text-capitalize">${student.audience}</td>
-                                        <td class="text-capitalize" data-toggle="modal" data-target="#detailModalCenter">
-                                            <span class="badge badge-flat badge-pill" style="border: 1px solid #3E4784; color:#3E4784"><b>${student.package}</b></span>
-                                        </td>
-                                        <td class="text-capitalize" data-toggle="modal" data-target="#detailModalCenter">${student.duration}</td>
-                                        <td>${student.status_switch}</td>
-                                        <td class="text-center">
-                                            <a href="/students/${student.id}/edit" class="btn btn-sm"><i class="far fa-edit"></i> Edit</a>
-                                        </td>
-                                    </tr>
-                                `;
-                            });
-
-                            // Update Pagination Info
-                            document.getElementById('paginationInfo').innerHTML = `
-                                ${data.from} - ${data.to} of ${data.total}
-                            `;
-
-                            // Render Pagination Buttons
-                            renderPagination(data);
-                            document.querySelectorAll(".row-checkbox").forEach(checkbox => {
-                                checkbox.addEventListener("change", function() {
-                                    this.closest("tr").classList.toggle("selected", this.checked);
-                                    toggleDeleteButton();
-                                });
-                            });
-
-                            document.getElementById("selectAll").addEventListener("change", function() {
-                                let isChecked = this.checked;
-                                document.querySelectorAll(".row-checkbox").forEach(checkbox => {
-                                    checkbox.checked = isChecked;
-                                    checkbox.closest("tr").classList.toggle("selected", isChecked);
-                                });
-                                toggleDeleteButton();
-                            });
-                        }
-                    });
-            }
-
-            function renderPagination(data) {
-                const pagination = document.getElementById('pagination');
-                pagination.innerHTML = '';
-
-                if (data.last_page > 1) {
-                    for (let i = 1; i <= data.last_page; i++) {
-                        pagination.innerHTML += `
-                            <button class="btn btn-sm ${i === data.current_page ? 'btn-primary' : 'btn-light'}" onclick="fetchStudents(${i})">${i}</button>
-                        `;
-                    }
-                }
-            }
-        </script>
-        <script>
-            (function($){
-                $(document).ready(()=>{
-                    $(document).change(function(event){
-                        let
-                            el = event.target,
-                            sectionRow = $(el).closest('.section-row');
-
-                            if($(el).is(":checked")){
-                                $(sectionRow).find('.value-of-checkbox').val(1);
-                            }else{
-                                $(sectionRow).find('.value-of-checkbox').val(0);
-                            }
-                    });
-                    
-                });
-            })(jQuery)
-        </script>
+        
+        
     @endpush
+
 </x-backend.layouts.master>

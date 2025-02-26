@@ -31,15 +31,68 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::latest()->get();
-
-        return response()->json([
-            'status' => true,
-            'data' => $students
-        ], 200);
+        $query = Student::query();
+    
+        // Search filter
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+    
+        // Date range filter
+        if ($request->filled('create_from') && $request->filled('create_to')) {
+            $query->whereBetween('created_at', [$request->create_from, $request->create_to]);
+        }
+    
+        // Status filter
+        if ($request->filled('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+    
+        // Package filter
+        if ($request->filled('package')) {
+            $packages = explode(',', $request->package);
+            $query->whereIn('package', $packages);
+        }
+    
+        // Duration filter
+        if ($request->filled('duration')) {
+            $durations = explode(',', $request->duration);
+            $query->whereIn('duration', $durations);
+        }
+    
+        // Gender filter
+        if ($request->filled('gender')) {
+            $genders = explode(',', $request->gender);
+            $query->whereIn('gender', $genders);
+        }
+    
+        // Sorting
+        if ($request->filled('sort')) {
+            $sort = $request->sort == 'Oldest' ? 'asc' : 'desc';
+            $query->orderBy('created_at', $sort);
+        }
+    
+        $students = $query->paginate($request->input('per_page', 10));
+    
+        $students->getCollection()->transform(function ($student) {
+            $student->photo_url = $student->image 
+                ? asset('storage/' . $student->image) 
+                : asset('images/default-avatar.png'); // Fallback Image
+    
+            // Add status switch component
+            $student->status_switch = view('components.backend.layouts.elements.switch', [
+                'name' => "status_{$student->id}",
+                'checked' => $student->status == 'active' ? 1 : 0,
+            ])->render();
+    
+            return $student;
+        });
+    
+        return response()->json($students);
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -103,6 +156,8 @@ class StudentController extends Controller
                 'phone'         => $request->phone,
                 'gender'        => $request->gender,
                 'date_of_birth' => $request->date_of_birth,
+                'package'       => $request->package,
+                'duration'      => $request->duration,
                 'audience'      => $request->audience,
                 'image'         => $photoPath,
             ]);

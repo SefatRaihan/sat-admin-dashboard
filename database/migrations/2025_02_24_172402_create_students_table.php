@@ -22,6 +22,9 @@ return new class extends Migration
             $table->date('date_of_birth');
             $table->string('audience')->nullable();
             $table->string('image')->nullable();
+            $table->string('status')->default('active');
+            $table->string('package')->default('super-man');
+            $table->string('duration')->default('monthly');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
