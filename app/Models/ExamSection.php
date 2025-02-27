@@ -66,10 +66,10 @@ class ExamSection extends Model
     }
 
     /**
-     * Relationship: A section has many questions.
+     * Many-to-Many Relationship: Questions associated with this section.
      */
     public function questions()
     {
-        return $this->hasMany(ExamQuestion::class, 'section_id');
+        return $this->belongsToMany(ExamQuestion::class, 'section_question_pivot', 'section_id', 'question_id');
     }
 }

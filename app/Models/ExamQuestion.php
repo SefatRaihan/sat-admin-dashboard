@@ -24,8 +24,6 @@ class ExamQuestion extends Model
      */
     protected $fillable = [
         'uuid',
-        'exam_id',
-        'section_id',
         'question_text',
         'question_type',
         'options',
@@ -53,19 +51,19 @@ class ExamQuestion extends Model
     ];
 
     /**
-     * Get the exam associated with the question.
+     * Many-to-Many Relationship: Exams associated with this question.
      */
-    public function exam()
+    public function exams()
     {
-        return $this->belongsTo(Exam::class, 'exam_id');
+        return $this->belongsToMany(Exam::class, 'exam_question_pivot', 'question_id', 'exam_id');
     }
 
     /**
-     * Get the section associated with the question.
+     * Many-to-Many Relationship: Sections associated with this question.
      */
-    public function section()
+    public function sections()
     {
-        return $this->belongsTo(ExamSection::class, 'section_id');
+        return $this->belongsToMany(ExamSection::class, 'section_question_pivot', 'question_id', 'section_id');
     }
 
     /**

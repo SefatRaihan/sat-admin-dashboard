@@ -65,6 +65,14 @@ class Exam extends Model
     }
 
     /**
+     * Many-to-Many Relationship: Get all questions associated with this exam.
+     */
+    public function questions()
+    {
+        return $this->belongsToMany(ExamQuestion::class, 'exam_question_pivot', 'exam_id', 'question_id');
+    }
+
+    /**
      * Scope a query to only include published exams.
      */
     public function scopePublished($query)

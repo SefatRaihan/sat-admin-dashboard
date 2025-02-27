@@ -15,16 +15,14 @@ return new class extends Migration
             // Primary Key
             $table->uuid('question_id')->primary();
 
-            // Foreign Key: Links question to a section
-            $table->foreignId('exam_id')->constrained('exams')->onDelete('cascade');
-            $table->foreignId('section_id')->constrained('exam_sections')->onDelete('cascade');
+            // Remove exam_id and section_id since questions are independent
 
             // Question Details
             $table->text('question_text');
             $table->enum('question_type', ['MCQ', 'Fill-in-the-Blank', 'Paragraph'])->default('MCQ');
             $table->json('options')->nullable()->comment('Stores possible answers for MCQs');
             $table->string('correct_answer', 255);
-            $table->enum('difficulty', ['Easy', 'Medium', 'Hard'])->default('Medium');
+            $table->enum('difficulty', ['Easy', 'Medium', 'Hard', 'Very Hard'])->default('Medium');
             $table->json('tags')->nullable()->comment('Tags for categorization');
             $table->text('explanation')->nullable();
             $table->integer('version_number')->default(1)->comment('Tracks updates to questions');
@@ -34,8 +32,8 @@ return new class extends Migration
             $table->json('images')->nullable()->comment('Stores multiple image URLs');
             $table->json('videos')->nullable()->comment('Stores multiple video URLs');
 
-            // Tracking Users
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            // Tracking Users (On user delete, question is not deleted)
+            $table->foreignId('created_by')->constrained('users')->onDelete('restrict');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
 
             // Soft Deletes & Timestamps
@@ -43,7 +41,6 @@ return new class extends Migration
             $table->timestamps();
 
             // Indexing for Performance
-            $table->index(['section_id'], 'idx_section_id');
             $table->index(['difficulty'], 'idx_difficulty');
             $table->index(['deleted_at'], 'idx_deleted_at');
             $table->index(['language_code'], 'idx_language_code');
