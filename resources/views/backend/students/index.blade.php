@@ -9,12 +9,14 @@
         '">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
-    {{-- <x-backend.layouts.partials.blocks.empty-state 
+    <div class="d-none" id="studentNullList">
+        <x-backend.layouts.partials.blocks.empty-state 
         title="You haven't added any students yet." 
         message="Start building your student list."
         buttonText="Add Student"
-        buttonRoute="/students/create"
-    /> --}}
+        buttonRoute="#studentCreateModelCenter"
+    />
+    </div>
 
 
 
@@ -94,7 +96,7 @@
                         </div>
                         <div class="col-md-6 mt-2">
                             <label for="">Duration</label>
-                            <select name="duraion"  class="form-control">
+                            <select name="duration"  class="form-control">
                                 <option value="">Please Select</option>
                                 <option value="monthly">Monthly</option>
                                 <option value="annual">Annual</option>
@@ -174,29 +176,29 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content" style="border-radius: 24px; height:100%">
                 <div class="modal-header text-left" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Send Notification</h5>
+                    <h5 class="modal-title">Send Notification</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                  </div>
+                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mt-2">
-                            <label for="">Notification Title</label>
-                            <input type="text" name="notification_title" class="form-control" placeholder="Enter Title">
+                            <label for="notification_title">Notification Title</label>
+                            <input type="text" id="notification_title" class="form-control" placeholder="Enter Title">
                         </div>
                         <div class="col-md-12 mt-2">
-                            <label for="">Description</label>
-                            <textarea name="description" id="" cols="30" rows="5" class="form-control" placeholder="Enter a description"></textarea>
+                            <label for="description">Description</label>
+                            <textarea id="description" cols="30" rows="5" class="form-control" placeholder="Enter a description"></textarea>
                         </div>
                         <div class="col-md-12 mt-2">
-                            <label for="">Time schedule</label>
+                            <label for="date">Time Schedule</label>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <input type="date" name="date" class="form-control" placeholder="">
+                                    <input type="date" id="date" class="form-control">
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="time" name="time" class="form-control" placeholder="">
+                                    <input type="time" id="time" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -204,11 +206,12 @@
                 </div>
                 <div class="modal-footer border-top pt-3">
                     <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Send Notification</button>
+                    <button type="button" class="btn student-send-notification" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Send Notification</button>
                 </div>
             </div>
         </div>
     </div>
+    
 
     <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog" aria-labelledby="detailModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -342,7 +345,7 @@
         </div>
     </div>
 
-    <div>
+    <div id="studentList">
         <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
             <div class="card-header border-bottom d-flex justify-content-between">
                 <div>
@@ -376,11 +379,11 @@
                                     </div>
                                     <div class="delete-btn d-none">
                                         <button class="btn"><img src="{{ asset('image/icon/disable.png') }}" alt=""></button>
-                                        <button class="btn"><img src="{{ asset('image/icon/download.png') }}" alt=""></button>
-                                        <button class="btn text-danger"><i class="fas fa-trash-alt"></i></button>
+                                        <button class="btn student-excel-download"><img src="{{ asset('image/icon/download.png') }}" alt=""></button>
+                                        <button class="btn text-danger student-delete"><i class="fas fa-trash-alt"></i></button>
 
 
-                                        <button class="btn text-warning">Make 1 Inactive</button>
+                                        <button class="btn text-warning student-deactive">Make 1 Inactive</button>
                                         <button class="btn send-notification-btn" data-toggle="modal" data-target="#messageModalCenter" style="background-color:#691D5E ;border-radius: 8px; color:#fff"><img src="{{ asset('image/icon/message.png') }}" alt=""> <span class="ml-2">Send Notification</span></button>
                                     </div>
                                 </div>
@@ -1131,132 +1134,6 @@
                 reader.readAsDataURL(file);
             }
         </script>
-        
-        <script>
-            $(document).ready(function () {
-                $(document).on('click', '.save-student', function () {
-                    let $button = $(this);
-                    $button.prop('disabled', true).html('Processing...');
-        
-                    let formData = new FormData();
-        
-                    // Collect form data
-                    const name = $('input[name="name"]').val();
-                    const email = $('input[name="email"]').val();
-                    const phone = $('input[name="phone"]').val();
-                    const gender = $('input[name="gender"]:checked').val();
-                    const dob = $('input[name="date_of_birth"]').val();
-                    const package = $('input[name="package"]').val();
-                    const duration = $('input[name="duration"]').val();
-                    const password = $('input[name="password"]').val();
-                    const confirmPassword = $('input[name="confirm_password"]').val();
-                    const audience = $('input[name="audience"]:checked').val();
-                    const photo = $('#profileImage')[0].files ? $('#profileImage')[0].files[0] : null;
-        
-                    // Validate required fields
-                    if (!name || !email || !phone || !gender || !dob || !password || !confirmPassword || !audience || !package || !duration) {
-                        let missingFields = [];
-        
-                        if (!name) missingFields.push('Name');
-                        if (!email) missingFields.push('Email');
-                        if (!phone) missingFields.push('Phone');
-                        if (!gender) missingFields.push('Gender');
-                        if (!package) missingFields.push('Package');
-                        if (!duration) missingFields.push('Duration');
-                        if (!dob) missingFields.push('Date of Birth');
-                        if (!password) missingFields.push('Password');
-                        if (!confirmPassword) missingFields.push('Confirm Password');
-                        if (!audience) missingFields.push('Audience');
-        
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Missing Fields',
-                            html: 'Please fill in the following fields:<br><strong>' + missingFields.join(', ') + '</strong>',
-                        });
-                        $button.prop('disabled', false).html('Save'); // Re-enable button
-                        return;
-                    }
-        
-                    // Validate password match
-                    if (password !== confirmPassword) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Password Mismatch',
-                            text: 'Password and Confirm Password do not match.',
-                        });
-                        $button.prop('disabled', false).html('Save'); // Re-enable button
-                        return;
-                    }
-        
-                    // Append data to FormData
-                    formData.append('_token', $('meta[name="csrf-token"]').attr('content')); // CSRF token
-                    formData.append('name', name);
-                    formData.append('email', email);
-                    formData.append('phone', phone);
-                    formData.append('gender', gender);
-                    formData.append('date_of_birth', dob);
-                    formData.append('password', password);
-                    formData.append('password_confirmation', confirmPassword);
-                    formData.append('audience', audience);
-        
-                    if (photo) {
-                        formData.append('photo', photo);
-                    }
-        
-                    // AJAX Request
-                    $.ajax({
-                        url: '/api/students',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function (response) {
-                            if (response.status) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Student Added',
-                                    text: response.message,
-                                }).then(() => {
-                                    $('#studentCreateModelCenter').modal('hide');
-                                    $('#studentCreateModelCenter').find('input, textarea').val('');
-                                    $('input[type="radio"]').prop('checked', false);
-                                    $('#previewImage').attr('src', '');
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: response.error || 'Something went wrong!',
-                                });
-                            }
-                        },
-                        error: function (xhr) {
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                let errorMsg = '';
-                                $.each(errors, function (key, value) {
-                                    errorMsg += value[0] + '<br>';
-                                });
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Validation Error',
-                                    html: errorMsg,
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Unexpected Error',
-                                    text: 'An unexpected error occurred. Please try again.',
-                                });
-                            }
-                        },
-                        complete: function () {
-                            $button.prop('disabled', false).html('Save'); // Re-enable button after request completes
-                        }
-                    });
-                });
-            });
-        </script>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 fetchStudents(1); // Initial Load
@@ -1311,6 +1188,8 @@
                         tbody.innerHTML = '';
 
                         if (data.data.length === 0) {
+                            document.getElementById('studentNullList').classList.remove('d-none');
+                            document.getElementById('studentList').classList.add('d-none');
                             document.getElementById('emptyState').classList.remove('d-none');
                             document.getElementById('studentsTable').classList.add('d-none');
                             document.getElementById('pagination').classList.add('d-none');
@@ -1318,16 +1197,21 @@
                             document.getElementById('emptyState').classList.add('d-none');
                             document.getElementById('studentsTable').classList.remove('d-none');
                             document.getElementById('pagination').classList.remove('d-none');
+                            document.getElementById('studentNullList').classList.add('d-none');
+                            document.getElementById('studentList').classList.remove('d-none');
 
                             data.data.forEach(student => {
+                                const firstWord = student.name.trim().split(/\s+/)[0];
+                                const firstLetter = firstWord.replace(/\W/g, '').charAt(0);
+                                
                                 tbody.innerHTML += `
                                     <tr>
-                                        <td><input type="checkbox" class="row-checkbox"></td>
+                                        <td><input type="checkbox" class="row-checkbox student-row" value="${student.uuid}"></td>
                                         <td data-toggle="modal" data-target="#detailModalCenter">
                                             <div class="d-flex align-items-center">
                                                 <div class="mr-3">
                                                     <a href="#" class="btn rounded-round btn-icon btn-sm" style="border: 1px solid #ddd;">
-                                                        <img src="${student.photo_url}" alt="${student.name}" class="rounded-circle" width="40" height="40">
+                                                        <img src="${student.photo_url}" alt="${firstLetter}" class="rounded-circle" width="40" height="40">
                                                     </a>
                                                 </div>
                                                 <div>
@@ -1392,6 +1276,145 @@
             }
         </script>
         <script>
+            $(document).ready(function () {
+                $(document).on('click', '.save-student', function () {
+                    let $button = $(this);
+                    $button.prop('disabled', true).html('Processing...');
+        
+                    let formData = new FormData();
+        
+                    // Collect form data
+                    const name = $('input[name="name"]').val();
+                    const email = $('input[name="email"]').val();
+                    const phone = $('input[name="phone"]').val();
+                    const gender = $('input[name="gender"]:checked').val();
+                    const dob = $('input[name="date_of_birth"]').val();
+                    const package = $('select[name="package"]').val();
+                    const duration = $('select[name="duration"]').val();
+                    const password = $('input[name="password"]').val();
+                    const confirmPassword = $('input[name="confirm_password"]').val();
+                    const audience = $('input[name="audience"]:checked').val();
+                    const photo = $('#profileImage')[0].files ? $('#profileImage')[0].files[0] : null;
+        
+                    // Validate required fields
+                    if (!name || !email || !phone || !gender || !dob || !password || !confirmPassword || !audience || !package || !duration) {
+                        let missingFields = [];
+        
+                        if (!name) missingFields.push('Name');
+                        if (!email) missingFields.push('Email');
+                        if (!phone) missingFields.push('Phone');
+                        if (!gender) missingFields.push('Gender');
+                        if (!package) missingFields.push('Package');
+                        if (!duration) missingFields.push('Duration');
+                        if (!dob) missingFields.push('Date of Birth');
+                        if (!password) missingFields.push('Password');
+                        if (!confirmPassword) missingFields.push('Confirm Password');
+                        if (!audience) missingFields.push('Audience');
+        
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Missing Fields',
+                            html: 'Please fill in the following fields:<br><strong>' + missingFields.join(', ') + '</strong>',
+                        });
+                        $button.prop('disabled', false).html('Save'); // Re-enable button
+                        return;
+                    }
+        
+                    // Validate password match
+                    if (password !== confirmPassword) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Password Mismatch',
+                            text: 'Password and Confirm Password do not match.',
+                        });
+                        $button.prop('disabled', false).html('Save'); // Re-enable button
+                        return;
+                    }
+        
+                    // Append data to FormData
+                    formData.append('_token', $('meta[name="csrf-token"]').attr('content')); // CSRF token
+                    formData.append('name', name);
+                    formData.append('email', email);
+                    formData.append('phone', phone);
+                    formData.append('gender', gender);
+                    formData.append('date_of_birth', dob);
+                    formData.append('password', password);
+                    formData.append('password_confirmation', confirmPassword);
+                    formData.append('audience', audience);
+                    formData.append('package', package);
+                    formData.append('duration', duration);
+        
+                    if (photo) {
+                        formData.append('photo', photo);
+                    }
+        
+                    // AJAX Request
+                    $.ajax({
+                        url: '/api/students',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.status) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Student Added',
+                                    text: response.message,
+                                }).then(() => {
+                                    $('#studentCreateModelCenter').modal('hide');
+                                    fetchStudents(1);
+
+                                    // Text input এবং textarea ফাঁকা করা
+                                    $('#studentCreateModelCenter').find('input[name="name"], input[name="email"], input[name="password"], input[name="confirm_password"], input[name="phone"],input[name="date_of_birth"], select[name="package"], select[name="duration"]').val('');
+                                    $('#profileImage').val('');
+                                    // Radio এবং Checkbox Uncheck করা
+                                    $('#studentCreateModelCenter').find('input[name="gender"], input[name="audience"]').prop('checked', false);
+
+                                    // Select ফিল্ডের প্রথম অপশন সিলেক্ট করা
+                                    $('#studentCreateModelCenter').find('select').each(function () {
+                                        $(this).prop('selectedIndex', 0);
+                                    });
+
+                                    // Image preview reset করা
+                                    $('#previewImage').attr('src', '');
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.error || 'Something went wrong!',
+                                });
+                            }
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                let errorMsg = '';
+                                $.each(errors, function (key, value) {
+                                    errorMsg += value[0] + '<br>';
+                                });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: errorMsg,
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Unexpected Error',
+                                    text: 'An unexpected error occurred. Please try again.',
+                                });
+                            }
+                        },
+                        complete: function () {
+                            $button.prop('disabled', false).html('Save'); // Re-enable button after request completes
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
             (function($){
                 $(document).ready(()=>{
                     $(document).change(function(event){
@@ -1409,5 +1432,177 @@
                 });
             })(jQuery)
         </script>
+
+        <script>
+            $(document).ready(function () {
+                function getSelectedStudents() {
+                    return $(".row-checkbox:checked").map(function () {
+                        return $(this).val();
+                    }).get();
+                }
+
+                function toggleActionButtons() {
+                    let selectedStudents = getSelectedStudents();
+                    if (selectedStudents.length > 0) {
+                        $(".delete-btn").removeClass("d-none");
+                    } else {
+                        $(".delete-btn").addClass("d-none");
+                    }
+                }
+
+                // Checkbox selection logic
+                $(document).on("change", ".row-checkbox, #selectAll", function () {
+                    toggleActionButtons();
+                });
+
+                // Download Excel
+                $(".student-excel-download").click(function () {
+                    let selectedStudents = getSelectedStudents();
+                    if (selectedStudents.length === 0) {
+                        Swal.fire("Warning", "Please select at least one student.", "warning");
+                        return;
+                    }
+
+                    let url = `/api/students/export/${selectedStudents.join(",")}`;
+                    window.location.href = url;
+                });
+
+                // Delete Students
+                $(".student-delete").click(function () {
+                    let selectedStudents = getSelectedStudents();
+                    if (selectedStudents.length === 0) {
+                        Swal.fire("Warning", "Please select at least one student.", "warning");
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "/api/students-delete",
+                                type: "POST",
+                                data: {
+                                    students: selectedStudents,
+                                    _token: "{{ csrf_token() }}"
+                                },
+                                success: function (response) {
+                                    Swal.fire("Deleted!", "Students deleted successfully.", "success");
+                                    fetchStudents(1);
+                                },
+                                error: function () {
+                                    Swal.fire("Error", "Failed to delete students.", "error");
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // Deactivate Students
+                $(".student-deactive").click(function () {
+                    let selectedStudents = getSelectedStudents();
+                    if (selectedStudents.length === 0) {
+                        Swal.fire("Warning", "Please select at least one student.", "warning");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "/api/students/deactivate",
+                        type: "POST",
+                        data: {
+                            students: selectedStudents,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function (response) {
+                            Swal.fire("Success", "Students deactivated successfully.", "success");
+                            fetchStudents(1);
+                        },
+                        error: function () {
+                            Swal.fire("Error", "Failed to deactivate students.", "error");
+                        }
+                    });
+                });
+
+                // Send Notification
+                $(".student-send-notification").click(function () {
+                    let selectedStudents = getSelectedStudents();
+                    let title = $("#notification_title").val().trim();
+                    let description = $("#description").val().trim();
+                    let date = $("#date").val();
+                    let time = $("#time").val();
+
+                    if (selectedStudents.length === 0) {
+                        Swal.fire("Warning", "Please select at least one student.", "warning");
+                        return;
+                    }
+
+                    if (!title || !description || !date || !time) {
+                        Swal.fire("Warning", "All fields are required.", "warning");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "/api/students/send-notification",
+                        type: "POST",
+                        data: {
+                            students: selectedStudents,
+                            title: title,
+                            description: description,
+                            date: date,
+                            time: time,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function (response) {
+                            Swal.fire("Success", "Notification sent successfully.", "success");
+                            $("#messageModalCenter").modal("hide");
+                            $("#notification_title").val("");
+                            $("#description").val("");
+                            $("#date").val("");
+                            $("#time").val("");
+                            $(".row-checkbox").prop("checked", false);
+                        },
+                        error: function () {
+                            Swal.fire("Error", "Failed to send notification.", "error");
+                        }
+                    });
+                });
+
+                $(document).on('change', '.status-switch', function() {
+                    let checkbox = $(this);
+                    let status = checkbox.is(':checked') ? 'active' : 'inactive'; // চেক থাকলে 'active', না থাকলে 'inactive'
+                    let studentId = checkbox.attr('data-id'); // data-id থেকে student ID নিচ্ছে
+
+                    $.ajax({
+                        url: '/api/students/update-status', // Laravel route
+                        type: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'), // CSRF টোকেন
+                            id: studentId,
+                            status: status
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                alert('Status updated successfully!');
+                            } else {
+                                alert('Failed to update status.');
+                                checkbox.prop('checked', !checkbox.is(':checked')); // ব্যর্থ হলে আগের অবস্থায় ফিরিয়ে দেবে
+                            }
+                        },
+                        error: function() {
+                            alert('Something went wrong!');
+                            checkbox.prop('checked', !checkbox.is(':checked'));
+                        }
+                    });
+                });
+
+            });
+        </script>
+       
     @endpush
 </x-backend.layouts.master>

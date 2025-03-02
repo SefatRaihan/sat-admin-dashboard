@@ -13,6 +13,10 @@ use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\StudentsExport;
+use App\Models\StudentNotification;
+use Illuminate\Support\Facades\Notification;
 
 class StudentController extends Controller
 {
@@ -74,7 +78,7 @@ class StudentController extends Controller
             $query->orderBy('created_at', $sort);
         }
     
-        $students = $query->paginate($request->input('per_page', 10));
+        $students = $query->latest()->paginate($request->input('per_page', 10));
     
         $students->getCollection()->transform(function ($student) {
             $student->photo_url = $student->image 
@@ -109,6 +113,8 @@ class StudentController extends Controller
             'date_of_birth' => 'required|date',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'audience' => 'required|string',
+            'package' => 'required|string',
+            'duration' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
         ]);
@@ -227,6 +233,7 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         try {
+
             $student->delete();
 
             return response()->json([
@@ -240,5 +247,86 @@ class StudentController extends Controller
         }
     }
 
-//another methods
+    public function delete(Request $request)
+    {
+        Student::whereIn('uuid', $request->students)->delete();
+        return response()->json(['message' => 'Students deleted successfully']);
+    }
+
+    public function deactivate(Request $request)
+    {
+        Student::whereIn('uuid', $request->students)->update(['status' => 'inactive']);
+        return response()->json(['message' => 'Students deactivated successfully']);
+    }
+
+    // public function sendNotification(Request $request)
+    // {
+    //     $students = Student::whereIn('uuid', $request->students)->get();
+    //     foreach ($students as $student) {
+    //         Notification::send($student, new StudentNotification("New notification"));
+    //     }
+    //     return response()->json(['message' => 'Notification sent successfully']);
+    // }
+
+    public function sendNotification(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'students' => 'required|array|min:1',
+            'students.*' => 'exists:students,id',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'date' => 'required|date',
+            'time' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Multiple students-এর জন্য নোটিফিকেশন তৈরি করা হবে
+        foreach ($request->students as $studentId) {
+            StudentNotification::create([
+                'student_id' => $studentId,
+                'title' => $request->title,
+                'description' => $request->description,
+                'schedule_date' => $request->date,
+                'schedule_time' => $request->time,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Notification sent successfully!',
+        ]);
+    }
+
+    public function exportExcel($students)
+    {
+
+        if (empty($students)) {
+            return response()->json(['error' => 'No students selected'], 400);
+        }
+
+        return Excel::download(new StudentsExport($students), 'students.xlsx');
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $student = Student::find($request->id);
+        
+        if (!$student) {
+            return response()->json(['success' => false, 'message' => 'Student not found']);
+        }
+    
+        $student->status = $request->status;
+        $student->save();
+    
+        return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+    }
+    
+
+    //another methods
 }

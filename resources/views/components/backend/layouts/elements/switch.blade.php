@@ -3,13 +3,13 @@
         @if (isset($checked) && $checked == 1)
             <label class="switch">
                 <input type="hidden" class="value-of-checkbox" name="{{$name}}" value="1" /> <!-- to send a value event if the box is unchecked -->
-                <input type="checkbox" class="check-toggle" value="1" checked>
+                <input type="checkbox" class="check-toggle status-switch" value="1" checked>
                 <span class="slider round"></span>
             </label>
         @else
             <label class="switch">
                 <input type="hidden" class="value-of-checkbox" name="{{$name}}" value="0" />
-                <input type="checkbox" class="check-toggle" value="1">
+                <input type="checkbox" class="check-toggle status-switch" value="1">
                 <span class="slider round"></span>
             </label>
         @endif

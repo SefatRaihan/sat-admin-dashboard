@@ -195,8 +195,8 @@
             border-top: 0.25rem solid #a5dc86 !important;
         }
         .swal2-icon.swal2-success [class^=swal2-success-line][class$=tip] {
-            top: 41px !important;
-            left: 15px !important;
+            top: 28px !important;
+            left: 10px !important;
             width: 1.5625em !important;
         }
         .content-wrapper {

@@ -17,8 +17,8 @@ return new class extends Migration
 
             // Foreign Keys: Links to an exam attempt and a question
             $table->uuid('attempt_id');
-            $table->foreign('attempt_id')->references('id')->on('exam_attempts')->onDelete('cascade');
-            $table->foreignId('question_id')->constrained('exam_questions')->onDelete('cascade');
+            // $table->foreign('attempt_id')->references('id')->on('exam_attempts')->onDelete('cascade');
+            // $table->foreignId('question_id')->constrained('exam_questions')->onDelete('cascade');
 
             // Answer Details
             $table->string('student_answer', 255)->nullable()->comment('User-submitted answer');
@@ -35,7 +35,7 @@ return new class extends Migration
 
             // Indexing for Optimization
             $table->index(['attempt_id'], 'idx_attempt_id');
-            $table->index(['question_id'], 'idx_question_id');
+            // $table->index(['question_id'], 'idx_question_id');
             $table->index(['is_correct'], 'idx_is_correct');
             $table->index(['deleted_at'], 'idx_deleted_at');
         });

@@ -74,6 +74,7 @@ Route::middleware(['auth','web'])->group(function () {
     Route::resource('roles', RoleManagementController::class);
     Route::resource('supervisors', SupervisorController::class);
     Route::resource('students', StudentController::class);
+
     Route::resource('exams', ExamController::class);
 
 });
