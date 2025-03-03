@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique()->index();
             $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('name')->index();
+            $table->string('student_code')->index();
             $table->string('email')->unique()->index();
             $table->string('phone')->index();
             $table->enum('gender', ['male', 'female', 'other'])->index();

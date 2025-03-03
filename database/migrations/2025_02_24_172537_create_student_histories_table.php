@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->index();
             $table->unsignedBigInteger('student_id')->nullable()->index();
             $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->string('student_code')->index();
             $table->string('name')->index();
             $table->string('email')->index();
             $table->string('phone')->index();

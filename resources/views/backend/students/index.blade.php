@@ -20,7 +20,7 @@
 
 
 
-    <!-- Modal -->
+    <!-- Create Modal -->
     <div class="modal fade" id="studentCreateModelCenter" tabindex="-1" role="dialog" aria-labelledby="studentCreateModelCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content student-create-section" style="border-radius: 24px; height:100%">
@@ -172,6 +172,141 @@
         </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div class="modal fade" id="studentEditModelCenter" tabindex="-1" role="dialog" aria-labelledby="studentEditModelCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content student-edit-section" style="border-radius: 24px; height:100%">
+                <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
+                    <h5 class="" id="exampleModalLongTitle"><b>Edit Student</b></h5>
+                    <p>Enter the necessary details to edit a student</p>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" name="student_uuid" id="student_uuid">
+                        <div class="col-md-12 mt-2">
+                            <label for="">Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Enter Name">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="Enter Email">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Phone</label>
+                            <input type="text" name="phone" class="form-control" placeholder="Enter Phone">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Gender</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                                        <label class="form-check-label" for="male">
+                                            Male
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                        <label class="form-check-label" for="female">
+                                        Female
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Date of Birth</label>
+                            <input type="date" name="date_of_birth" class="form-control" placeholder="">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Package</label>
+                            <select name="package"  class="form-control">
+                                <option value="">Please Select</option>
+                                <option value="super-man">Super Man</option>
+                                <option value="avenger">Avenger</option>
+                                <option value="gladiator">Gladiator</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label for="">Duration</label>
+                            <select name="duration"  class="form-control">
+                                <option value="">Please Select</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="annual">Annual</option>
+                            </select>                        
+                        </div>
+                        <div class="col-md-12 mt-2">
+                            <label for="">Audience</label>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="audience" id="high-school" value="high-school">
+                                        <label class="form-check-label" for="high-school">
+                                            High School
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="audience" id="college" value="college">
+                                        <label class="form-check-label" for="college">
+                                        College
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="audience" id="graduate" value="graduate">
+                                        <label class="form-check-label" for="graduate">
+                                            Graduate
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="audience" id="sat-2" value="sat-2">
+                                        <label class="form-check-label" for="sat-2">
+                                        SAt 2
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <x-input-label for="photo" :value="__('Photo')" />
+                                    {{-- <form action="#" class="dropzone" id="dropzone_single"></form> --}}
+                                    <div class="editPhotosection" ondragover="editAllowDrop(event)" ondrop="editDropImage(event)">
+                                        <!-- Profile Image Preview -->
+                                        <img id="editPreviewImage" src="">
+                                    
+                                        <!-- Upload Area -->
+                                        <label for="editProfileImage" style="cursor: pointer; position: relative;">
+                                            <div class="upload-icon">
+                                                <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
+                                            </div>
+                                            <h5 style="font-size: 14px;">
+                                                <span style="color: #521749">Click to upload</span> 
+                                                <span style="color: #475467"> or drag and drop</span>
+                                            </h5>
+                                        </label>
+                                    
+                                        <!-- Hidden File Input -->
+                                        <input type="file" id="editProfileImage" name="profile_image" accept="image/*" style="display: none;" onchange="editPreviewImage(event)">
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top pt-3">
+                    <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn update-student" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Edit Student</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="messageModalCenter" tabindex="-1" role="dialog" aria-labelledby="messageModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content" style="border-radius: 24px; height:100%">
@@ -214,10 +349,10 @@
     
 
     <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog" aria-labelledby="detailModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 60%">
             <div class="modal-content" style="border-radius: 24px; height:100%">
                 <div class="modal-header text-left" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                    <h5 class="modal-title" id="exampleModalLongTitle">StudentID <span>#SID6386</span></h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">StudentID <span id="studentCode">#SID6386</span></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -226,7 +361,7 @@
                     <div>
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
-                              <a class="nav-link active" id="question-tab" data-toggle="tab" href="#question" role="tab" aria-controls="question" aria-selected="true">Question</a>
+                              <a class="nav-link active" id="student-tab" data-toggle="tab" href="#student" role="tab" aria-controls="student" aria-selected="true">Student</a>
                             </li>
                             <li class="nav-item">
                               <a class="nav-link" id="performance-tab" data-toggle="tab" href="#performance" role="tab" aria-controls="performance" aria-selected="false">Performance</a>
@@ -242,37 +377,37 @@
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="question" role="tabpanel" aria-labelledby="question-tab">
+                            <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
                                 <div>
                                     <h4>Student Details</h4>
                                     <table class="table table-striped custom-table" style="border: 1px solid #EAECF0">
                                         <tr>
                                             <td style="width: 25%">Name</td>
-                                            <td class="font-weight-bold" style="width: 25%">: Addul Hakim</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentName">: Addul Hakim</td>
 
                                             <td style="width: 25%">Date of Birth</td>
-                                            <td class="font-weight-bold" style="width: 25%">: 22-Jan-24</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentDob">: 22-Jan-24</td>
                                         </tr>
 
                                         <tr>
                                             <td style="width: 25%">Email</td>
-                                            <td class="font-weight-bold" style="width: 25%">: a.hakim@email.com</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="StudentEmail">: a.hakim@email.com</td>
 
                                             <td style="width: 25%">Audience Type</td>
-                                            <td class="font-weight-bold" style="width: 25%">: Hi School</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentAudience">: Hi School</td>
                                         </tr>
 
                                         <tr>
                                             <td style="width: 25%">Gender</td>
-                                            <td class="font-weight-bold" style="width: 25%">: Male</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentGender">: Male</td>
 
                                             <td style="width: 25%">Active Status</td>
-                                            <td class="font-weight-bold" style="width: 25%">: Active</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentStatus">: Active</td>
                                         </tr>
 
                                         <tr>
                                             <td style="width: 25%">Phone Number</td>
-                                            <td class="font-weight-bold" style="width: 25%">: +96657647535</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentPhone">: +96657647535</td>
 
                                             <td style="width: 25%">-</td>
                                             <td class="font-weight-bold" style="width: 25%">: -</td>
@@ -337,8 +472,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-between border-top pt-3">
-                    <button type="button" class="btn" style="border: 1px solid #D0D5DD; border-radius: 8px;">Edit Student</button>
+                <div class="modal-footer d-flex justify-content-end border-top pt-3">
+                    {{-- <button type="button" class="btn" style="border: 1px solid #D0D5DD; border-radius: 8px;">Edit Student</button> --}}
                     <button type="button" class="btn btn-outline-dark" style="background-color:#691D5E ;border-radius: 8px; color:#fff"  data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -939,6 +1074,15 @@
                 justify-content: center;
             }
 
+            .editPhotosection {
+                height: 120px;
+                border: 1px solid #EAECF0;
+                border-radius: 8px;
+                align-items: end;
+                display: flex;
+                justify-content: center;
+            }
+
             .toggle-password {
                 position: absolute;
                 right: 10px;
@@ -1127,7 +1271,51 @@
             function previewFile(file) {
                 const reader = new FileReader();
                 reader.onload = function (e) {
+                    console.log('in');
+                    
                     const preview = document.getElementById('previewImage');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            //edit
+            // Allow drop
+            function editAllowDrop(event) {
+                event.preventDefault();
+                
+                document.querySelector('.editPhotosection').classList.add('dragover');
+            }
+
+            // Remove dragover style on leave
+            document.querySelector('.editPhotosection').addEventListener('dragleave', function () {
+                this.classList.remove('dragover');
+            });
+
+            // Handle dropped image
+            function editDropImage(event) {
+                event.preventDefault();
+                document.querySelector('.editPhotosection').classList.remove('dragover');
+                const file = event.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    editPreviewFile(file);
+                }
+            }
+
+            // Handle click upload
+            function editPreviewImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    editPreviewFile(file);
+                }
+            }
+
+            // Preview image
+            function editPreviewFile(file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('editPreviewImage');
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                 };
@@ -1207,7 +1395,7 @@
                                 tbody.innerHTML += `
                                     <tr>
                                         <td><input type="checkbox" class="row-checkbox student-row" value="${student.uuid}"></td>
-                                        <td data-toggle="modal" data-target="#detailModalCenter">
+                                        <td class="openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">
                                             <div class="d-flex align-items-center">
                                                 <div class="mr-3">
                                                     <a href="#" class="btn rounded-round btn-icon btn-sm" style="border: 1px solid #ddd;">
@@ -1220,17 +1408,19 @@
                                                 </div>
                                             </div>  
                                         </td>
-                                        <td data-toggle="modal" data-target="#detailModalCenter">${student.phone}</td>
-                                        <td>${student.date_of_birth}</td>
-                                        <td class="text-capitalize">${student.gender}</td>
-                                        <td class="text-capitalize">${student.audience}</td>
-                                        <td class="text-capitalize" data-toggle="modal" data-target="#detailModalCenter">
+                                        <td class="openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">${student.phone}</td>
+                                        <td class="openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">${student.date_of_birth}</td>
+                                        <td class="text-capitalize openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">${student.gender}</td>
+                                        <td class="text-capitalize openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">${student.audience}</td>
+                                        <td class="text-capitalize openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">
                                             <span class="badge badge-flat badge-pill" style="border: 1px solid #3E4784; color:#3E4784"><b>${student.package}</b></span>
                                         </td>
-                                        <td class="text-capitalize" data-toggle="modal" data-target="#detailModalCenter">${student.duration}</td>
+                                        <td class="text-capitalize openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">${student.duration}</td>
                                         <td>${student.status_switch}</td>
                                         <td class="text-center">
-                                            <a href="/students/${student.id}/edit" class="btn btn-sm"><i class="far fa-edit"></i> Edit</a>
+                                            <button data-uuid="${student.uuid}" class="btn btn-sm edit-student-btn"  data-toggle="modal" data-target="#studentEditModelCenter">
+                                                <i class="far fa-edit"></i> Edit
+                                            </button>
                                         </td>
                                     </tr>
                                 `;
@@ -1276,6 +1466,16 @@
             }
         </script>
         <script>
+            function formatDate(dateString) {
+                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const date = new Date(dateString);
+                
+                let day = date.getDate().toString().padStart(2, "0"); // 22
+                let month = months[date.getMonth()]; // Jan
+                let year = date.getFullYear().toString().slice(-2); // 24
+
+                return `${day}-${month}-${year}`;
+            }
             $(document).ready(function () {
                 $(document).on('click', '.save-student', function () {
                     let $button = $(this);
@@ -1284,17 +1484,17 @@
                     let formData = new FormData();
         
                     // Collect form data
-                    const name = $('input[name="name"]').val();
-                    const email = $('input[name="email"]').val();
-                    const phone = $('input[name="phone"]').val();
-                    const gender = $('input[name="gender"]:checked').val();
-                    const dob = $('input[name="date_of_birth"]').val();
-                    const package = $('select[name="package"]').val();
-                    const duration = $('select[name="duration"]').val();
-                    const password = $('input[name="password"]').val();
-                    const confirmPassword = $('input[name="confirm_password"]').val();
-                    const audience = $('input[name="audience"]:checked').val();
-                    const photo = $('#profileImage')[0].files ? $('#profileImage')[0].files[0] : null;
+                    const name = $('.student-create-section').find('input[name="name"]').val();
+                    const email = $('.student-create-section').find('input[name="email"]').val();
+                    const phone = $('.student-create-section').find('input[name="phone"]').val();
+                    const gender = $('.student-create-section').find('input[name="gender"]:checked').val();
+                    const dob = $('.student-create-section').find('input[name="date_of_birth"]').val();
+                    const package = $('.student-create-section').find('select[name="package"]').val();
+                    const duration = $('.student-create-section').find('select[name="duration"]').val();
+                    const password = $('.student-create-section').find('input[name="password"]').val();
+                    const confirmPassword = $('.student-create-section').find('input[name="confirm_password"]').val();
+                    const audience = $('.student-create-section').find('input[name="audience"]:checked').val();
+                    const photo = $('.student-create-section').find('#profileImage')[0].files ? $('#profileImage')[0].files[0] : null;
         
                     // Validate required fields
                     if (!name || !email || !phone || !gender || !dob || !password || !confirmPassword || !audience || !package || !duration) {
@@ -1365,18 +1565,15 @@
                                     $('#studentCreateModelCenter').modal('hide');
                                     fetchStudents(1);
 
-                                    // Text input এবং textarea ফাঁকা করা
                                     $('#studentCreateModelCenter').find('input[name="name"], input[name="email"], input[name="password"], input[name="confirm_password"], input[name="phone"],input[name="date_of_birth"], select[name="package"], select[name="duration"]').val('');
                                     $('#profileImage').val('');
-                                    // Radio এবং Checkbox Uncheck করা
+
                                     $('#studentCreateModelCenter').find('input[name="gender"], input[name="audience"]').prop('checked', false);
 
-                                    // Select ফিল্ডের প্রথম অপশন সিলেক্ট করা
                                     $('#studentCreateModelCenter').find('select').each(function () {
                                         $(this).prop('selectedIndex', 0);
                                     });
 
-                                    // Image preview reset করা
                                     $('#previewImage').attr('src', '');
                                 });
                             } else {
@@ -1412,6 +1609,205 @@
                         }
                     });
                 });
+
+                $(document).on('click', '.edit-student-btn', function () {
+                    let uuid = $(this).data("uuid");
+        
+                    $.ajax({
+                        url: "/api/students/" + uuid,  // Adjust the route as per your Laravel API
+                        type: "GET",
+                        success: function (response) {
+                            // Populate modal fields with fetched data
+                            $("input[name='student_uuid']").val(response.data.uuid);
+                            $("input[name='name']").val(response.data.name);
+                            $("input[name='email']").val(response.data.email);
+                            $("input[name='phone']").val(response.data.phone);
+                            $("input[name='date_of_birth']").val(response.data.date_of_birth);
+                            
+                            // Set gender radio button
+                            $("input[name='gender'][value='" + response.data.gender + "']").prop("checked", true);
+                            
+                            // Set audience radio button
+                            $("input[name='audience'][value='" + response.data.audience + "']").prop("checked", true);
+        
+                            // Set package and duration dropdowns
+                            $("select[name='package']").val(response.data.package);
+                            $("select[name='duration']").val(response.data.duration);
+        
+                            // Profile Image Preview
+                            if (response.data.profile_image) {
+                                $("#editPreviewImage").attr("src", response.data.profile_image);
+                            }
+                        },
+                        error: function () {
+                            alert("Failed to fetch student details!");
+                        }
+                    });
+                });
+
+                $(document).on('click', '.update-student', function () {
+                    let $button = $(this);
+                    $button.prop('disabled', true).html('Processing...');
+        
+                    let formData = new FormData();
+        
+                    // Collect form data
+                    
+                    const student_uuid = $('.student-edit-section').find('input[name="student_uuid"]').val();
+                    const name = $('.student-edit-section').find('input[name="name"]').val();
+                    const email = $('.student-edit-section').find('input[name="email"]').val();
+                    const phone = $('.student-edit-section').find('input[name="phone"]').val();
+                    const gender = $('.student-edit-section').find('input[name="gender"]:checked').val();
+                    const dob = $('.student-edit-section').find('input[name="date_of_birth"]').val();
+                    const package = $('.student-edit-section').find('select[name="package"]').val();
+                    const duration = $('.student-edit-section').find('select[name="duration"]').val();
+                    const audience = $('.student-edit-section').find('input[name="audience"]:checked').val();
+                    const photo = $('#editProfileImage')[0].files ? $('#editProfileImage')[0].files[0] : null;
+        
+                    // Validate required fields
+                    if (!name || !email || !phone || !gender || !dob || !audience || !package || !duration) {
+                        let missingFields = [];
+        
+                        if (!name) missingFields.push('Name');
+                        if (!email) missingFields.push('Email');
+                        if (!phone) missingFields.push('Phone');
+                        if (!gender) missingFields.push('Gender');
+                        if (!package) missingFields.push('Package');
+                        if (!duration) missingFields.push('Duration');
+                        if (!dob) missingFields.push('Date of Birth');
+                        if (!audience) missingFields.push('Audience');
+        
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Missing Fields',
+                            html: 'Please fill in the following fields:<br><strong>' + missingFields.join(', ') + '</strong>',
+                        });
+                        $button.prop('disabled', false).html('Save'); // Re-enable button
+                        return;
+                    }
+        
+                    // Append data to FormData
+                    formData.append('_token', $('meta[name="csrf-token"]').attr('content')); // CSRF token
+                    formData.append('name', name);
+                    formData.append('email', email);
+                    formData.append('phone', phone);
+                    formData.append('gender', gender);
+                    formData.append('date_of_birth', dob);
+                    formData.append('audience', audience);
+                    formData.append('package', package);
+                    formData.append('duration', duration);
+        
+                    if (photo) {
+                        formData.append('photo', photo);
+                    }
+        
+                    // AJAX Request
+                    $.ajax({
+                        url: `/api/students/${student_uuid}/update`,
+                        type: 'post',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Student Update',
+                                    text: response.message,
+                                }).then(() => {
+                                    $('#studentEditModelCenter').modal('hide');
+                                    fetchStudents(1);
+
+                                    $('#studentEditModelCenter').find('input[name="name"], input[name="email"], input[name="password"], input[name="confirm_password"], input[name="phone"],input[name="date_of_birth"], select[name="package"], select[name="duration"]').val('');
+                                    $('#editProfileImage').val('');
+
+                                    $('#studentEditModelCenter').find('input[name="gender"], input[name="audience"]').prop('checked', false);
+
+                                    $('#studentEditModelCenter').find('select').each(function () {
+                                        $(this).prop('selectedIndex', 0);
+                                    });
+
+                                    $('#editPreviewImage').attr('src', '');
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.error || 'Something went wrong!',
+                                });
+                            }
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                let errorMsg = '';
+                                $.each(errors, function (key, value) {
+                                    errorMsg += value[0] + '<br>';
+                                });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: errorMsg,
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Unexpected Error',
+                                    text: 'An unexpected error occurred. Please try again.',
+                                });
+                            }
+                        },
+                        complete: function () {
+                            $button.prop('disabled', false).html('Save'); // Re-enable button after request completes
+                        }
+                    });
+                });
+
+                $(document).on("click", ".openDetailModal", function () {
+                    var studentUuid = $(this).data("uuid"); // Button er data-id theke Student ID pabo
+
+                    $.ajax({
+                        url: `/api/students/${studentUuid}`, // Backend route jekhane data fetch hobe
+                        type: "GET",
+                        success: function (response) {
+                            // Modal er ID update
+                            $("#studentCode").text("#" + response.data.student_code);
+
+                            // Student details update
+                            $("#studentName").text(": " + response.data.name);
+                            $("#studentDob").text(": " + formatDate(response.data.date_of_birth));
+                            $("#StudentEmail").text(": " + response.data.email);
+                            $("#studentAudience").text(": " + response.data.audience);
+                            $("#studentGender").text(": " + response.data.gender);
+                            $("#studentStatus").text(": " + response.data.status);
+                            $("#studentPhone").text(": " + response.data.phone);
+
+                            // Performance table update (Example)
+                            // var performanceTable = "";
+                            // response.performance.forEach(function (exam) {
+                            //     performanceTable += `
+                            //         <tr class="custom-row">
+                            //             <td>${exam.course}</td>
+                            //             <td>${exam.date}</td>
+                            //             <td>${exam.section || "Not found"}</td>
+                            //             <td>${exam.score}</td>
+                            //             <td>${exam.percentage}%</td>
+                            //         </tr>`;
+                            // });
+                            // $("#DataTables_Table_0 tbody").html(performanceTable);
+
+                            // Modal show
+                            $("#detailModalCenter").modal("show");
+                        },
+                        error: function () {
+                            alert("Failed to fetch student details.");
+                        },
+                    });
+});
+
             });
         </script>
         <script>
@@ -1575,27 +1971,27 @@
 
                 $(document).on('change', '.status-switch', function() {
                     let checkbox = $(this);
-                    let status = checkbox.is(':checked') ? 'active' : 'inactive'; // চেক থাকলে 'active', না থাকলে 'inactive'
-                    let studentId = checkbox.attr('data-id'); // data-id থেকে student ID নিচ্ছে
-
+                    let status = checkbox.is(':checked') ? 'active' : 'inactive';
+                    let studentUuid = checkbox.closest('tr').find('.student-row').val();
+                    
                     $.ajax({
-                        url: '/api/students/update-status', // Laravel route
+                        url: '/api/students/update-status',
                         type: 'POST',
                         data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'), // CSRF টোকেন
-                            id: studentId,
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            uuid: studentUuid,
                             status: status
                         },
                         success: function(response) {
                             if (response.success) {
-                                alert('Status updated successfully!');
+                                Swal.fire("Success", "Status updated successfully!", "success");
                             } else {
-                                alert('Failed to update status.');
-                                checkbox.prop('checked', !checkbox.is(':checked')); // ব্যর্থ হলে আগের অবস্থায় ফিরিয়ে দেবে
+                                Swal.fire("Error", "Failed to update status.", "error");
+                                checkbox.prop('checked', !checkbox.is(':checked'));
                             }
                         },
                         error: function() {
-                            alert('Something went wrong!');
+                            Swal.fire("Error", "Something went wrong!", "error");
                             checkbox.prop('checked', !checkbox.is(':checked'));
                         }
                     });

@@ -83,11 +83,12 @@ class StudentController extends Controller
         $students->getCollection()->transform(function ($student) {
             $student->photo_url = $student->image 
                 ? asset('storage/' . $student->image) 
-                : asset('images/default-avatar.png'); // Fallback Image
+                : asset('image/default-avatar.png'); // Fallback Image
     
             // Add status switch component
             $student->status_switch = view('components.backend.layouts.elements.switch', [
                 'name' => "status_{$student->id}",
+                'data-uuid' => "{$student->uuid}",
                 'checked' => $student->status == 'active' ? 1 : 0,
             ])->render();
     
@@ -152,10 +153,23 @@ class StudentController extends Controller
                 'last_login'        => now(),
                 'profile_image'     => $photoPath,
             ]);
+
+            $latestStudent = Student::latest('id')->first();
+
+            if ($latestStudent && preg_match('/SID(\d+)/', $latestStudent->student_code, $matches)) {
+                $nextCoded = (int)$matches[1] + 1; // Extract numeric part and increment
+            } else {
+                $nextCoded = 1; // Start from 1 if no student exists
+            }
+            
+            // Format student_code as SID0001, SID0002, etc.
+            $studentCode = 'SID' . str_pad($nextCoded, 4, '0', STR_PAD_LEFT);
+            
     
             // Create Student
             $student = Student::create([
                 'uuid'          => Str::uuid(),
+                'student_code'  => $studentCode, 
                 'user_id'       => $user->id,
                 'name'          => $request->name,
                 'email'         => $request->email,
@@ -207,10 +221,50 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, $uuid)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'gender' => 'required|in:male,female',
+            'date_of_birth' => 'required|date',
+            'audience' => 'required|string',
+            'package' => 'required|string',
+            'duration' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+    
+        DB::beginTransaction(); // Start Transaction
+
         try {
-            $student->update($request->all());
+            $student = Student::where('uuid', $uuid)->first();
+
+            $photoPath = null;
+            if ($request->hasFile('photo')) {
+                $photoPath = $request->file('photo')->store('student_photos', 'public');
+            }
+
+            $student->update([
+                'name'          => $request->name,
+                'email'         => $request->email,
+                'phone'         => $request->phone,
+                'gender'        => $request->gender,
+                'date_of_birth' => $request->date_of_birth,
+                'package'       => $request->package,
+                'duration'      => $request->duration,
+                'audience'      => $request->audience,
+                'image'         => $photoPath
+            ]);
+
+            DB::commit(); // Commit Transaction
+
             //handle relationship update
             return response()->json([
                 'status' => true,
@@ -218,8 +272,11 @@ class StudentController extends Controller
                 'data' => $student
             ], 200);
         } catch (\Exception | QueryException $e) {
+            DB::rollBack(); // Rollback on Error
+    
             return response()->json([
-                'error' => config('app.env') == 'production' ? __('Somethings Went Wrong') : $e->getMessage()
+                'status' => false,
+                'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
             ], 500);
         }
     }
@@ -315,7 +372,7 @@ class StudentController extends Controller
 
     public function updateStatus(Request $request)
     {
-        $student = Student::find($request->id);
+        $student = Student::where('uuid', $request->uuid)->first();
         
         if (!$student) {
             return response()->json(['success' => false, 'message' => 'Student not found']);
