@@ -14,7 +14,7 @@
     <!-- /sidebar mobile toggler -->
 
     <!-- Sidebar content -->
-    <div class="sidebar-content">
+    <div class="sidebar-content p-0">
 
 
         <!-- Main navigation -->

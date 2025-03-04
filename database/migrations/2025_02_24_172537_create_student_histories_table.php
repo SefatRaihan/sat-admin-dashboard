@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->index();
             $table->unsignedBigInteger('student_id')->nullable()->index();
             $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->string('student_code')->index();
             $table->string('name')->index();
             $table->string('email')->index();
             $table->string('phone')->index();
@@ -23,6 +24,9 @@ return new class extends Migration
             $table->date('date_of_birth');
             $table->string('audience')->nullable();
             $table->string('image')->nullable();
+            $table->string('package')->default('super-man');
+            $table->string('duration')->default('monthly');
+            $table->string('status')->default('active');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

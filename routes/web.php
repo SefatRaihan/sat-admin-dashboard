@@ -11,6 +11,7 @@ use App\Http\Controllers\NavItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\MakeModelController;
 use App\Http\Controllers\RoleNavItemController;
 use App\Http\Controllers\NotificationController;
@@ -73,6 +74,8 @@ Route::middleware(['auth','web'])->group(function () {
     Route::resource('roles', RoleManagementController::class);
     Route::resource('supervisors', SupervisorController::class);
     Route::resource('students', StudentController::class);
+
+    Route::resource('exams', ExamController::class);
 
 });
 

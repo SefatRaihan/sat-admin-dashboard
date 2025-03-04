@@ -24,5 +24,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['api', 'auth', 'web'], 'as' => 'api.'], function () {
     Route::get('get-role-navitems-with-selected/{id}', [RoleNavItemApiController::class,'getnavitemWithSelected']);
     Route::post('/profile/update', [ProfileController::class, 'update']);
+    Route::post('/students/{uuid}/update', [StudentController::class, 'update']);
     Route::resource('students', StudentController::class);
+    Route::post('/students-delete', [StudentController::class, 'delete']);
+    Route::post('/students/deactivate', [StudentController::class, 'deactivate']);
+    Route::post('/students/send-notification', [StudentController::class, 'sendNotification']);
+    Route::get('/students/export/{ids}', [StudentController::class, 'exportExcel']);
+    Route::post('/students/update-status', [StudentController::class, 'updateStatus']);
 });
