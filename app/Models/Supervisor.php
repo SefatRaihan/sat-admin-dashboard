@@ -8,14 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Role extends Model
+class Supervisor extends Model
 {
     use HasFactory, SoftDeletes, Historiable, UserTrackable;
     
     protected $guarded = ['id'];
     
-    protected $table = 'roles';
-
+    protected $table = 'supervisors';
 
     /**
     * Get the route key for the model.
@@ -25,15 +24,5 @@ class Role extends Model
     public function getRouteKeyName()
     {
         return 'uuid';
-    }
-
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
-
-    public function permissions()
-    {
-        return $this->hasMany(RolePermission::class);
     }
 }

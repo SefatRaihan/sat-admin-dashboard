@@ -47,4 +47,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'active_role_id');
     }
+
+    public function hasPermission($permission)
+    {
+        if ($this->active_role_id == 1) {
+            return true; // Super admin has all permissions
+        }
+
+        return $this->role->permissions->contains('name', $permission);
+    }
 }

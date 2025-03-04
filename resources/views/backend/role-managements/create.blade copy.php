@@ -14,8 +14,7 @@
 <div>
     <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
         <div class="card-body">
-            <form action="{{ route('roles.store') }}" method="POST">
-                @csrf
+            <form action="">
                 <div class="text-right">
                     <button type="submit" class="btn ml-2 text-white" style="background-color:#732066;  border-radius:8px">
                         Submit
@@ -25,39 +24,54 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label for="">Role Name</label>
-                        <input type="text" class="form-control role-name" name="name" value="">
+                        <input type="text" class="form-control role-name" value="">
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mt-3">
                     <div>
-                        <h4><b>Features <span id="totalSelected">(0 Selected)</span></b></h4>
+                        <h4><b>Features (7 Selected)</b></h4>
                     </div>
                     <div>
-                        <input type="checkbox" class="all-checkbox all-select" id="select-all">  <span style="color: #121926; font-size:16px">All Permissions</span>
+                        <input type="checkbox" class="all-checkbox all-select" checked>  <span style="color: #121926; font-size:16px">All Permissions</span>
                     </div>
                 </div>
 
                 <div class="row mt-2">
-                    @foreach($controllers as $controller => $methods)
                     <div class="col-md-6">
                         <div class="card" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                             <div class="card-header" style="background-color: #EAECF0">
-                                <input type="checkbox" class="checkbox controller-select" data-controller="{{ $controller }}">
-                                <b style="color: #121926; font-size:16px">{{ $controller }}</b>
+                                <input type="checkbox" class="checkbox individual-all-select" checked>  <span style="color: #121926; font-size:16px">General Setting</span>
                             </div>
                             <div class="card-body pt-3 table-responsive" style="height:300px">
-                                @foreach($methods as $method)
-                                    <div class="form-check">
-                                        <input type="checkbox" name="permissions[{{ $controller }}][]" value="{{ $method }}" class="form-check-input method-select checkbox" data-controller="{{ $controller }}">
-                                        <label class="form-check-label" style="color: #121926; font-size:16px">{{ $method }}</label>
-                                    </div>
-                                @endforeach
+                                <p class="mb-3"><input type="checkbox" class="checkbox" checked>  <span style="color: #121926; font-size:16px">Users</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox" checked>  <span style="color: #121926; font-size:16px">View user complaints</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox" checked>  <span style="color: #121926; font-size:16px">Add User</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox" checked>  <span style="color: #121926; font-size:16px">Delete User</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox" checked>  <span style="color: #121926; font-size:16px">Add Member Page</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox" checked>  <span style="color: #121926; font-size:16px">Block user</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox" checked>  <span style="color: #121926; font-size:16px">Supervisors</span></p>
+
                             </div>
                         </div>
                     </div>
-                    @endforeach
 
-                    
+                    <div class="col-md-6">
+                        <div class="card" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                            <div class="card-header" style="background-color: #EAECF0">
+                                <input type="checkbox" class="checkbox individual-all-select">  <span style="color: #121926; font-size:16px">Notification</span>
+                            </div>
+                            <div class="card-body pt-3 table-responsive" style="height:300px">
+                                <p class="mb-3"><input type="checkbox" class="checkbox">  <span style="color: #121926; font-size:16px">Users</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox">  <span style="color: #121926; font-size:16px">View user complaints</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox">  <span style="color: #121926; font-size:16px">Add User</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox" checked>  <span style="color: #121926; font-size:16px">Delete User</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox">  <span style="color: #121926; font-size:16px">Add Member Page</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox">  <span style="color: #121926; font-size:16px">Block user</span></p>
+                                <p class="mb-3"><input type="checkbox" class="checkbox">  <span style="color: #121926; font-size:16px">Supervisors</span></p>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -125,41 +139,6 @@
 @endpush
 
 @push('js')
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const checkboxes = document.querySelectorAll(".method-select");
-    const totalSelectedSpan = document.getElementById("totalSelected");
-
-    function updateTotalSelected() {
-        const selectedCount = document.querySelectorAll(".method-select:checked").length;
-        totalSelectedSpan.textContent = `(${selectedCount} Selected)`;
-    }
-
-    // সব মেথডের চেকবক্সের জন্য ইভেন্ট লিসেনার যোগ করা
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", updateTotalSelected);
-    });
-
-    // "Select All" চেকবক্সের জন্য ইভেন্ট
-    document.getElementById("select-all").addEventListener("change", function () {
-        checkboxes.forEach(el => el.checked = this.checked);
-        updateTotalSelected();
-    });
-
-    // কন্ট্রোলার সিলেকশনের জন্য ইভেন্ট
-    document.querySelectorAll(".controller-select").forEach(controllerCheckbox => {
-        controllerCheckbox.addEventListener("change", function () {
-            let controller = this.getAttribute("data-controller");
-            document.querySelectorAll(`.method-select[data-controller="${controller}"]`).forEach(el => el.checked = this.checked);
-            updateTotalSelected();
-        });
-    });
-
-    // পেজ লোড হওয়ার সময় আপডেট করা
-    updateTotalSelected();
-});
-
-</script>
 @endpush
 
 

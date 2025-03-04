@@ -86,4 +86,33 @@ class RoleController extends Controller
         $pdf = PDF::loadView('backend.roles.pdf', compact('role'));
         return $pdf->download('roles.pdf');
     }
+
+    public function saveRole(Request $request)
+    {
+        $roleName = $request->input('roleName');
+        $permissions = $request->input('permissions');
+
+        DB::beginTransaction();
+        try {
+            $roleId = DB::table('roles')->insertGetId([
+                'name' => $roleName
+            ]);
+
+            foreach ($permissions as $permissionName) {
+                $permission = DB::table('permissions')->where('name', $permissionName)->first();
+                if ($permission) {
+                    DB::table('role_permissions')->insert([
+                        'role_id' => $roleId,
+                        'permission_id' => $permission->id
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+        }
+    }
 }

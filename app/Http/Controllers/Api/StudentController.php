@@ -53,7 +53,20 @@ class StudentController extends Controller
         if ($request->filled('status') && $request->status != 'all') {
             $query->where('status', $request->status);
         }
-    
+
+        // Audience type filter
+        if ($request->filled('audience_type')) {
+            $audiences = explode(',', $request->audience_type);
+
+            if (in_array('All-SAT-2', $audiences)) {
+                $query->orWhere('audience', 'sate-2');
+            }
+
+            if (in_array('All-SAT-1', $audiences)) {
+                $query->orWhereIn('audience', ['high-school', 'graduate', 'college']);
+            }
+        }
+
         // Package filter
         if ($request->filled('package')) {
             $packages = explode(',', $request->package);
@@ -94,8 +107,14 @@ class StudentController extends Controller
     
             return $student;
         });
+
+        $totalStudent = Student::count();
     
-        return response()->json($students);
+        return response()->json([
+            'students' => $students,
+            'totalStudent' => $totalStudent
+        ]);
+        
     }
     
 
@@ -329,7 +348,7 @@ class StudentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'students' => 'required|array|min:1',
-            'students.*' => 'exists:students,id',
+            'students.*' => 'exists:students,uuid',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'date' => 'required|date',
@@ -346,11 +365,12 @@ class StudentController extends Controller
         // Multiple students-এর জন্য নোটিফিকেশন তৈরি করা হবে
         foreach ($request->students as $studentId) {
             StudentNotification::create([
+                'uuid'              => Str::uuid(),
                 'student_id' => $studentId,
                 'title' => $request->title,
                 'description' => $request->description,
-                'schedule_date' => $request->date,
-                'schedule_time' => $request->time,
+                'date' => $request->date,
+                'time' => $request->time,
             ]);
         }
 

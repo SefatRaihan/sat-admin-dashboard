@@ -12,6 +12,13 @@ use Illuminate\Database\QueryException;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check.permission:UserController,index')->only('index');
+        $this->middleware('check.permission:UserController,show')->only('show');
+        // Add more methods as needed
+    }
+
     public function index()
     {
         try{

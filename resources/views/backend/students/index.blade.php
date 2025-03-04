@@ -200,7 +200,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                                        <input class="form-check-input" type="radio" name="gender" value="male">
                                         <label class="form-check-label" for="male">
                                             Male
                                         </label>
@@ -208,7 +208,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                        <input class="form-check-input" type="radio" name="gender" value="female">
                                         <label class="form-check-label" for="female">
                                         Female
                                         </label>
@@ -510,7 +510,7 @@
                             <th colspan="10">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h5 class="mb-0 p-0"><b>1 Supervisor</b></h5>
+                                        <h5 class="mb-0 p-0"><b><span id="totalStudent">1</span> Student</b></h5>
                                     </div>
                                     <div class="delete-btn d-none">
                                         <button class="btn"><img src="{{ asset('image/icon/disable.png') }}" alt=""></button>
@@ -628,11 +628,11 @@
                             <div class="mt-2">
                                 <h6><b>Audience & Type:</b> All Result</h6>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="All-SAT-1">
+                                    <input type="checkbox" name="audience_type" id="All-SAT-1" value="sate-1">
                                     <label class="form-check-label" for="All-SAT-1">All SAT 1</label>
                                 </div>
                                 <div class="form-check custom-checkbox">
-                                    <input type="checkbox" id="All-SAT-2">
+                                    <input type="checkbox" name="audience_type" id="All-SAT-2" value="sate-2">
                                     <label class="form-check-label" for="All-SAT-2">All SAT 2</label>
                                 </div>
                             </div>
@@ -1174,7 +1174,6 @@
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switch.min.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
         <!-- /theme JS files -->
@@ -1223,8 +1222,15 @@
             // Initial check on page load
             toggleDeleteButton();
         </script>
+
+        <!-- /Photo, Filter -->
         <script>
             $(document).ready(function () {
+
+                $(".custom-radio").click(function() {
+                    $(this).find("input[type='radio']").prop("checked", true);
+                });
+
                 $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
                     $('#taskSidebar').removeClass('open');
                     $('#taskSidebarOverlay').removeClass('active');
@@ -1322,6 +1328,8 @@
                 reader.readAsDataURL(file);
             }
         </script>
+
+        <!-- /Fetch Data -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 fetchStudents(1); // Initial Load
@@ -1338,10 +1346,12 @@
                 document.querySelector('.filter-submit-btn').addEventListener('click', () => fetchStudents(1));
 
                 // Reset filters
+                
                 document.querySelector('.reset-filter').addEventListener('click', () => {
                     document.querySelector('input[name="create_from"]').value = '';
                     document.querySelector('input[name="create_to"]').value = '';
                     document.querySelector('input[name="status"][value="all"]').checked = true;
+                    document.querySelectorAll('input[name="audience_type"]').forEach(el => el.checked = false);
                     document.querySelectorAll('input[name="package"]').forEach(el => el.checked = false);
                     document.querySelectorAll('input[name="duration"]').forEach(el => el.checked = false);
                     document.querySelectorAll('input[name="gender"]').forEach(el => el.checked = false);
@@ -1357,6 +1367,7 @@
                 const createFrom = document.querySelector('input[name="create_from"]').value;
                 const createTo = document.querySelector('input[name="create_to"]').value;
                 const status = document.querySelector('input[name="status"]:checked').value;
+                const audienceType = Array.from(document.querySelectorAll('input[name="audience_type"]:checked')).map(el => el.id);
                 const package = Array.from(document.querySelectorAll('input[name="package"]:checked')).map(el => el.id);
                 const duration = Array.from(document.querySelectorAll('input[name="duration"]:checked')).map(el => el.id);
                 const gender = Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(el => el.id);
@@ -1365,6 +1376,7 @@
                 const url = `/api/students?search=${search}&per_page=${perPage}&page=${page}` +
                     `&create_from=${createFrom}&create_to=${createTo}` +
                     `&status=${status}` +
+                    `&audience_type=${audienceType.join(',')}` +
                     `&package=${package.join(',')}` +
                     `&duration=${duration.join(',')}` +
                     `&gender=${gender.join(',')}`;
@@ -1374,8 +1386,10 @@
                     .then(data => {
                         const tbody = document.getElementById('studentsBody');
                         tbody.innerHTML = '';
+                        console.log(data);
+                        
 
-                        if (data.data.length === 0) {
+                        if (data.students.data.length === 0) {
                             document.getElementById('studentNullList').classList.remove('d-none');
                             document.getElementById('studentList').classList.add('d-none');
                             document.getElementById('emptyState').classList.remove('d-none');
@@ -1388,7 +1402,9 @@
                             document.getElementById('studentNullList').classList.add('d-none');
                             document.getElementById('studentList').classList.remove('d-none');
 
-                            data.data.forEach(student => {
+                            $('#totalStudent').text(data.totalStudent);
+
+                            data.students.data.forEach(student => {
                                 const firstWord = student.name.trim().split(/\s+/)[0];
                                 const firstLetter = firstWord.replace(/\W/g, '').charAt(0);
                                 
@@ -1428,11 +1444,11 @@
 
                             // Update Pagination Info
                             document.getElementById('paginationInfo').innerHTML = `
-                                ${data.from} - ${data.to} of ${data.total}
+                                ${data.students.from} - ${data.students.to} of ${data.students.total}
                             `;
 
                             // Render Pagination Buttons
-                            renderPagination(data);
+                            renderPagination(data.students);
                             document.querySelectorAll(".row-checkbox").forEach(checkbox => {
                                 checkbox.addEventListener("change", function() {
                                     this.closest("tr").classList.toggle("selected", this.checked);
@@ -1465,6 +1481,8 @@
                 }
             }
         </script>
+
+        <!-- /Craete, Edit, Update -->
         <script>
             function formatDate(dateString) {
                 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -1618,25 +1636,25 @@
                         type: "GET",
                         success: function (response) {
                             // Populate modal fields with fetched data
-                            $("input[name='student_uuid']").val(response.data.uuid);
-                            $("input[name='name']").val(response.data.name);
-                            $("input[name='email']").val(response.data.email);
-                            $("input[name='phone']").val(response.data.phone);
-                            $("input[name='date_of_birth']").val(response.data.date_of_birth);
+                            $('.student-edit-section').find("input[name='student_uuid']").val(response.data.uuid);
+                            $('.student-edit-section').find("input[name='name']").val(response.data.name);
+                            $('.student-edit-section').find("input[name='email']").val(response.data.email);
+                            $('.student-edit-section').find("input[name='phone']").val(response.data.phone);
+                            $('.student-edit-section').find("input[name='date_of_birth']").val(response.data.date_of_birth);
                             
                             // Set gender radio button
-                            $("input[name='gender'][value='" + response.data.gender + "']").prop("checked", true);
+                            $('.student-edit-section').find("input[name='gender'][value='" + response.data.gender + "']").prop("checked", true);
                             
                             // Set audience radio button
-                            $("input[name='audience'][value='" + response.data.audience + "']").prop("checked", true);
+                            $('.student-edit-section').find("input[name='audience'][value='" + response.data.audience + "']").prop("checked", true);
         
                             // Set package and duration dropdowns
-                            $("select[name='package']").val(response.data.package);
-                            $("select[name='duration']").val(response.data.duration);
+                            $('.student-edit-section').find("select[name='package']").val(response.data.package);
+                            $('.student-edit-section').find("select[name='duration']").val(response.data.duration);
         
                             // Profile Image Preview
                             if (response.data.profile_image) {
-                                $("#editPreviewImage").attr("src", response.data.profile_image);
+                                $('.student-edit-section').find("#editPreviewImage").attr("src", response.data.profile_image);
                             }
                         },
                         error: function () {
@@ -1806,29 +1824,12 @@
                             alert("Failed to fetch student details.");
                         },
                     });
-});
+                });
 
             });
         </script>
-        <script>
-            (function($){
-                $(document).ready(()=>{
-                    $(document).change(function(event){
-                        let
-                            el = event.target,
-                            sectionRow = $(el).closest('.section-row');
 
-                            if($(el).is(":checked")){
-                                $(sectionRow).find('.value-of-checkbox').val(1);
-                            }else{
-                                $(sectionRow).find('.value-of-checkbox').val(0);
-                            }
-                    });
-                    
-                });
-            })(jQuery)
-        </script>
-
+        <!-- /Delete Notification Status Deactive -->
         <script>
             $(document).ready(function () {
                 function getSelectedStudents() {
@@ -1998,6 +1999,25 @@
                 });
 
             });
+        </script>
+
+        <script>
+            (function($){
+                $(document).ready(()=>{
+                    $(document).change(function(event){
+                        let
+                            el = event.target,
+                            sectionRow = $(el).closest('.section-row');
+
+                            if($(el).is(":checked")){
+                                $(sectionRow).find('.value-of-checkbox').val(1);
+                            }else{
+                                $(sectionRow).find('.value-of-checkbox').val(0);
+                            }
+                    });
+                    
+                });
+            })(jQuery)
         </script>
        
     @endpush

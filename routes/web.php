@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified', 'check.permission'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware(['auth','web'])->group(function () {
+Route::middleware(['auth','web', 'check.permission'])->group(function () {
 
     // Route::resource('roles', RoleController::class);
     Route::resource('navitems', NavItemController::class);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\SupervisorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,4 +32,8 @@ Route::group(['middleware' => ['api', 'auth', 'web'], 'as' => 'api.'], function 
     Route::post('/students/send-notification', [StudentController::class, 'sendNotification']);
     Route::get('/students/export/{ids}', [StudentController::class, 'exportExcel']);
     Route::post('/students/update-status', [StudentController::class, 'updateStatus']);
+
+    Route::resource('supervisors', SupervisorController::class);
+    Route::post('/supervisors/{uuid}/update', [SupervisorController::class, 'update']);
+    Route::post('/supervisors-delete', [SupervisorController::class, 'delete']);
 });
