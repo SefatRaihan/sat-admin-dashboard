@@ -92,7 +92,7 @@
                         <span>Manage Tests</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <li class="nav-item"><a href="{{ route('exams.index') }}" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>ALl Exam</span></a></li>
+                        <li class="nav-item"><a href="{{ route('exams.index') }}" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Exam</span></a></li>
                     </ul>
                 </li>
 
