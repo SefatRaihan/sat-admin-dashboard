@@ -81,8 +81,8 @@
                         <span>Manage Questions</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <li class="nav-item"><a href="{{ route('question.index') }}" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Questions</span></a></li>
-                        <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
+                        <li class="nav-item"><a href="{{ route('question.index') }}" title="All Question" class="nav-link legitRipple m-0 ml-2 mr-2 active"><span>All Questions</span></a></li>
+                        <li class="nav-item"><a href="" title="All Question Exam" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
                     </ul>
                 </li>
 
@@ -92,7 +92,7 @@
                         <span>Manage Tests</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        {{-- <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Question Bank</span></a></li> --}}
+                        <li class="nav-item"><a href="{{ route('exams.index') }}" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>ALl Exam</span></a></li>
                     </ul>
                 </li>
 
@@ -101,9 +101,9 @@
                         <img src="{{ asset('image/icon/manage-package.png') }}" alt="" class="mr-3" style="width: 16px; height: 16px;">
                         <span>Manage Packages</span>
                     </a>
-                    <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        {{-- <li class="nav-item"><a href="" title="Users" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Question Bank</span></a></li> --}}
-                    </ul>
+                    {{-- <ul class="nav nav-group-sub" data-submenu-title="Authorization">
+                        <li class="nav-item"><a href="{{ route('exam.index') }}" title="All Exam" class="nav-link legitRipple m-0 ml-2 mr-2"><span>ALl Exam</span></a></li>
+                    </ul> --}}
                 </li>
 
                 <li class="nav-item nav-item-submenu parent-nav-item-submenu">

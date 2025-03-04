@@ -27,6 +27,7 @@
         data-target="#questionModal"
         buttonRoute="/button/create"
         /> --}}
+        
     <section>
 
         <div>
@@ -120,7 +121,7 @@
                     </div>
                     <button type="button" class="close-btn" id="closeSidebar">&times;</button>
                 </div>
-                <div class="sidebar-content">
+                <div class="filter-sidebar-content">
                     <div class="task-form">
                         <div class="p-3 ">
                             <div class="d-flex justify-content-between">
@@ -933,11 +934,11 @@
                 display: flex;
                 flex-direction: column;
             }
-            .sidebar-content {
+            .filter-sidebar-content {
                 flex-grow: 1;
                 height: calc(100vh - 60px - 60px);
                 overflow-y: auto;
-                padding: 15px;
+                padding-left: 15px;
                 padding-bottom: 60px;
             }
             .sidebar-overlay {
@@ -964,7 +965,7 @@
             }
 
             .sidebar-overlay.active {
-                display: block;
+                display: block; 
             }
             
             /* filter sidebar every dropdown start */
