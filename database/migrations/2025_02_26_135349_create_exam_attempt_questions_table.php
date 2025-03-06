@@ -12,32 +12,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_attempt_questions', function (Blueprint $table) {
-            // Primary Key
-            $table->uuid('id')->primary();
+            $table->id(); // BIGINT Auto-incrementing Primary Key
+            $table->unsignedBigInteger('exam_attempt_id')->index();
+            $table->unsignedBigInteger('question_id')->index();
+            $table->text('student_answer')->nullable(); // Stores student's response
+            $table->boolean('is_correct')->nullable(); // Nullable to allow later processing
 
-            // Foreign Keys: Links to an exam attempt and a question
-            $table->uuid('attempt_id');
-            $table->foreign('attempt_id')->references('id')->on('exam_attempts')->onDelete('cascade');
-            $table->foreignId('question_id')->constrained('exam_questions')->onDelete('cascade');
+            // Foreign key references
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
 
-            // Answer Details
-            $table->string('student_answer', 255)->nullable()->comment('User-submitted answer');
-            $table->boolean('is_correct')->default(false)->comment('Indicates if the answer was correct');
-            $table->integer('time_spent')->unsigned()->nullable()->comment('Time spent on the question in seconds');
-
-            // Media Support
-            $table->json('image_urls')->nullable()->comment('Stores multiple image URLs');
-            $table->json('video_urls')->nullable()->comment('Stores multiple video URLs');
-
-            // Soft Deletes & Timestamps
             $table->softDeletes();
             $table->timestamps();
 
-            // Indexing for Optimization
-            $table->index(['attempt_id'], 'idx_attempt_id');
-            $table->index(['question_id'], 'idx_question_id');
-            $table->index(['is_correct'], 'idx_is_correct');
-            $table->index(['deleted_at'], 'idx_deleted_at');
+            // Foreign key constraints
+            $table->foreign('exam_attempt_id')->references('id')->on('exam_attempts')->onDelete('cascade');
+            $table->foreign('question_id')->references('id')->on('exam_questions')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

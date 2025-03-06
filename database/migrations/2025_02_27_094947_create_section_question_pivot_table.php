@@ -12,21 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('section_question_pivot', function (Blueprint $table) {
-            // Primary Key
-            $table->uuid('id')->primary();
-            
-            // Foreign Keys
             $table->unsignedBigInteger('section_id');
-            $table->uuid('question_id');
-            
-            // Constraints
+            $table->unsignedBigInteger('question_id'); // Changed from UUID to BIGINT
+
+            // Composite primary key to prevent duplicates
+            $table->primary(['section_id', 'question_id']);
+
+            // Foreign key constraints
             $table->foreign('section_id')->references('id')->on('exam_sections')->onDelete('cascade');
-            $table->foreign('question_id')->references('question_id')->on('exam_questions')->onDelete('cascade');
-            
-            // Unique Constraint to prevent duplicate questions in the same section
-            $table->unique(['section_id', 'question_id']);
-            
-            // Timestamps
+            $table->foreign('question_id')->references('id')->on('exam_questions')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

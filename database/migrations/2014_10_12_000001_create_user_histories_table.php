@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->index();
             $table->unsignedBigInteger('user_id')->nullable()->index();
-            $table->string('active_role_id')->nullable()->index();
+            $table->unsignedBigInteger('active_role_id')->nullable()->index();
             $table->string('first_name')->index()->nullable();
             $table->string('last_name')->index()->nullable();
             $table->string('full_name')->index();
@@ -28,9 +28,12 @@ return new class extends Migration
             $table->timestamp('last_login')->nullable()->index();
             $table->string('profile_image')->nullable();
             $table->softDeletes();
-            $table->rememberToken();
-			$table->string('action', 100);
+            $table->string('action', 100);
             $table->timestamps();
+
+            // Foreign key constraints
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('active_role_id')->references('id')->on('roles')->onDelete('set null');
         });
     }
 

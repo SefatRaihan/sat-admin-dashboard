@@ -19,12 +19,21 @@ return new class extends Migration
             $table->string('slug')->index();
             $table->text('description')->nullable();
             $table->boolean('is_supervisor_role')->default(false);
+            
+            // Foreign key references
             $table->unsignedBigInteger('created_by')->nullable();
-			$table->unsignedBigInteger('updated_by')->nullable();
-			$table->unsignedBigInteger('deleted_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            
+            $table->string('action', 100);
             $table->softDeletes();
-			$table->string('action', 100);
             $table->timestamps();
+
+            // Foreign key constraints
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

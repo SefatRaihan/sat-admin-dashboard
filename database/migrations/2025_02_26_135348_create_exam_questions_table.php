@@ -12,11 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_questions', function (Blueprint $table) {
-            // Primary Key
-            $table->uuid('question_id')->primary();
-
-            // Remove exam_id and section_id since questions are independent
-
+            // Change question_id from UUID to BIGINT (Auto-incrementing ID)
+            $table->id(); // This replaces the previous UUID-based primary key
+            
             // Question Details
             $table->text('question_text');
             $table->enum('question_type', ['MCQ', 'Fill-in-the-Blank', 'Paragraph'])->default('MCQ');

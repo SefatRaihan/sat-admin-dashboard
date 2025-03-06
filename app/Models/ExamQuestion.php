@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Support\Str;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -89,4 +90,28 @@ class ExamQuestion extends Model
     {
         return $query->where('difficulty', $level);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($question) {
+            // Ensure question_type is one of the allowed types
+            if (!in_array($question->question_type, ['MCQ', 'Fill-in-the-Blank', 'Paragraph'])) {
+                throw new \InvalidArgumentException("Invalid question type: {$question->question_type}");
+            }
+
+            // Ensure difficulty level is valid
+            if (!in_array($question->difficulty, ['Easy', 'Medium', 'Hard', 'Very Hard'])) {
+                throw new \InvalidArgumentException("Invalid difficulty level: {$question->difficulty}");
+            }
+        });
+
+        static::creating(function ($question) {
+            if (empty($question->question_id)) {
+                $question->question_id = (string) Str::uuid(); // ✅ Auto-generate question_id
+            }
+        });
+    }
+
 }

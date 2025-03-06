@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique()->index();
-            $table->string('active_role_id')->nullable()->index();
+            $table->unsignedBigInteger('active_role_id')->nullable()->index(); // Fixed: Now references roles.id
             $table->string('first_name')->index()->nullable();
             $table->string('last_name')->index()->nullable();
             $table->string('full_name')->index();
@@ -29,6 +29,9 @@ return new class extends Migration
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
+
+            // Foreign key constraints
+            $table->foreign('active_role_id')->references('id')->on('roles')->onDelete('set null');
         });
     }
 
