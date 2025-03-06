@@ -9,72 +9,81 @@
         '">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
-    {{-- <x-backend.layouts.partials.blocks.empty-state 
-        title="You have not created any Role yet" 
-        message="Let’s create a role now"
-        buttonText="Create Role"
-        buttonRoute="/roles/create"
-    /> --}}
+    @if ($roles->isEmpty())
+        <x-backend.layouts.partials.blocks.empty-state 
+            title="You have not created any Role yet" 
+            message="Let’s create a role now"
+            buttonText="Create Role"
+            buttonRoute="/roles/create"
+        />
+    @else
+        <div>
+            <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                <div class="card-header border-bottom d-flex justify-content-between">
+                    <div>
+                        <input type="text" class="form-control search__input" placeholder="Search Role">
+                    </div>
+                </div>
+                <div class="card-body p-0 m-0">
+                    <table class="table datatable-basic dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr>
+                                <th colspan="6">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="mb-0 p-0"><b>{{ $roles->total() }} Role{{ $roles->total() != 1 ? 's' : '' }}</b></h5>
+                                        </div>
+                                        <div class="delete-btn d-none">
+                                            <button class="btn role-delete text-danger"><i class="fas fa-trash-alt"></i></button>
+                                            <span>|</span>
+                                            <button class="btn role-active ml-2 mr-3" style="color: #079455">Active</button>
+                                            <button class="btn role-deactive" style="color: #DC6803">Inactive</button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr class="bg-light" role="row">
+                                <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
+                                <th>Role Name</th>
+                                <th>Feature Permission</th>
+                                <th>Supervisor</th>
+                                <th>Status</th>
+                                <th class="text-center" style="width: 100px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($roles as $role)  
+                            <tr class="custom-row">
+                                <td><input type="checkbox" class="row-checkbox" value="{{ $role->uuid }}"></td>
+                                <td>{{ $role->name }}</td>
+                                <td>{{ $role->permissions_count }}</td>
+                                <td>{{ $role->supervisor_users_count }}</td>
+                                <td>
+                                    <div class="form-check form-check-switchery">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input-switchery status-switch" 
+                                                   data-fouc {{ $role->status == 'active' ? 'checked' : '' }} 
+                                                   data-role-uuid="{{ $role->uuid }}">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td><a href="{{ route('roles.edit', $role->id) }}" class="btn edit-btn"><i class="far fa-edit"></i> Edit</a></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-    <div>
-        <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-            <div class="card-header border-bottom d-flex justify-content-between">
-                <div>
-                    <input type="text" class="form-control search__input" placeholder="Search Notification">
+                    <div class="p-2 d-flex justify-content-end" style="border-top:1px solid #ddd">
+                        {{ $roles->links() }}
+                    </div>
                 </div>
             </div>
-            <div class="card-body p-0 m-0">
-                <table class="table datatable-basic dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
-                    <thead>
-                        <tr>
-                            <th colspan="6">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <h5 class="mb-0 p-0"><b>5 Role</b></h5>
-                                    </div>
-                                    <div class="delete-btn d-none">
-                                        <button class="btn text-danger"><i class="fas fa-trash-alt"></i></button>
-                                        <span>|</span>
-
-                                        <span class="ml-2 mr-3" style="color: #079455">Make 1 Active</span>
-                                        <span style="color: #DC6803">Make 1 Inacitve</span>
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                        <tr class="bg-light" role="row">
-                            <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
-                            <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Notification: activate to sort column descending">Role Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Feature Permission</th>
-                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Supervisor</th>
-                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Status</th>
-                            <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 100px;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="custom-row">
-                            <td><input type="checkbox" class="row-checkbox"></td>
-                            <td>Website Management</td>
-                            <td>232</td>
-                            <td>28</td>
-                            <td>
-                                <div class="form-check form-check-switchery">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input-switchery" checked data-fouc>
-                                    </label>
-                                </div>
-                            </td>
-                            <td><button class="btn edit-btn"><i class="far fa-edit"></i> Edit</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
-    </div>
+    @endif
 
     @push('css')
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_checkboxes_radios.js"></script>
-            <!-- Theme JS files -->
+        <!-- Theme JS files -->
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switch.min.js"></script>
@@ -106,12 +115,12 @@
                 background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
                 background-repeat: no-repeat;
                 background-size: 18px 18px;
-                background-position: 10px center; /* Adjusted to position the icon to the left */
+                background-position: 10px center;
                 border-radius: 50px;
                 transition: all 250ms ease-in-out;
                 backface-visibility: hidden;
                 transform-style: preserve-3d;
-                padding-left: 36px; /* Ensures the placeholder doesn't overlap with the icon */
+                padding-left: 36px;
             }
             .search__input::placeholder {
                 padding-left: 30px;
@@ -120,23 +129,21 @@
                 width: 20px;
                 height: 20px;
                 border: 1px solid #D0D5DD !important;
-                appearance: none; /* Removes default checkbox styling */
+                appearance: none;
                 background-color: white;
                 cursor: pointer;
-                border-radius: 4px !important; /* Optional: for rounded corners */
+                border-radius: 4px !important;
             }
 
-            /* Checked state */
             input[type='checkbox']:checked {
-                background-color: #3F1239; /* Change the background color when checked */
+                background-color: #3F1239;
                 position: relative;
             }
 
-            /* Adding a custom checkmark */
             input[type='checkbox']:checked::after {
-                content: '✓'; /* Unicode checkmark */
+                content: '✓';
                 font-size: 12px;
-                color: white; /* Checkmark color */
+                color: white;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -153,9 +160,22 @@
             }
         </style>
     @endpush
+
     @push('js')
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
+            // Show SweetAlert if there's a success message in the session
+            @if (session('success'))
+                Swal.fire({
+                    title: "Success",
+                    text: "{{ session('success') }}",
+                    icon: "success",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "OK"
+                });
+            @endif
+
             function toggleDeleteButton() {
                 let anyChecked = document.querySelectorAll(".row-checkbox:checked").length > 0;
                 document.querySelector(".delete-btn").classList.toggle("d-none", !anyChecked);
@@ -179,6 +199,167 @@
 
             // Initial check on page load
             toggleDeleteButton();
+        </script>
+
+        <!-- /Delete Notification Status Deactive -->
+        <script>
+            $(document).ready(function () {
+                function getSelectedRoles() {
+                    return $(".row-checkbox:checked").map(function () {
+                        return $(this).val();
+                    }).get();
+                }
+
+                function toggleActionButtons() {
+                    let selectedRoles = getSelectedRoles();
+                    if (selectedRoles.length > 0) {
+                        $(".delete-btn").removeClass("d-none");
+                    } else {
+                        $(".delete-btn").addClass("d-none");
+                    }
+                }
+
+                // Checkbox selection logic
+                $(document).on("change", ".row-checkbox, #selectAll", function () {
+                    toggleActionButtons();
+                });
+
+                // Delete Roles
+                $(".role-delete").click(function () {
+                    let selectedRoles = getSelectedRoles();
+                    if (selectedRoles.length === 0) {
+                        Swal.fire("Warning", "Please select at least one role.", "warning");
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "/api/roles-delete",
+                                type: "POST",
+                                data: {
+                                    roles: selectedRoles,
+                                    _token: "{{ csrf_token() }}"
+                                },
+                                success: function (response) {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "Roles deleted successfully.",
+                                        icon: "success",
+                                        confirmButtonColor: "#3085d6",
+                                        confirmButtonText: "OK"
+                                    }).then(() => {
+                                        window.location.reload(); // Reload the page after the alert
+                                    });
+                                },
+                                error: function () {
+                                    Swal.fire("Error", "Failed to delete role.", "error");
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // Deactivate Roles
+                $(".role-deactive").click(function () {
+                    let selectedRoles = getSelectedRoles();
+                    if (selectedRoles.length === 0) {
+                        Swal.fire("Warning", "Please select at least one role.", "warning");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "/api/roles/deactivate",
+                        type: "POST",
+                        data: {
+                            roles: selectedRoles,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function (response) {
+                            Swal.fire({
+                                title: "Success",
+                                text: "Roles deactivated successfully.",
+                                icon: "success",
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "OK"
+                            }).then(() => {
+                                window.location.reload(); // Reload the page after the alert
+                            });
+                        },
+                        error: function () {
+                            Swal.fire("Error", "Failed to deactivate role.", "error");
+                        }
+                    });
+                });
+
+                // Activate Roles
+                $(".role-active").click(function () {
+                    let selectedRoles = getSelectedRoles();
+                    if (selectedRoles.length === 0) {
+                        Swal.fire("Warning", "Please select at least one role.", "warning");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "/api/roles/activate",
+                        type: "POST",
+                        data: {
+                            roles: selectedRoles,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function (response) {
+                            Swal.fire({
+                                title: "Success",
+                                text: "Roles activated successfully.",
+                                icon: "success",
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "OK"
+                            }).then(() => {
+                                window.location.reload(); // Reload the page after the alert
+                            });
+                        },
+                        error: function () {
+                            Swal.fire("Error", "Failed to activate role.", "error");
+                        }
+                    });
+                });
+
+                // Status Switch Update
+                $(document).on('change', '.status-switch', function() {
+                    let checkbox = $(this);
+                    let status = checkbox.is(':checked') ? 'active' : 'inactive';
+                    let roleUuid = checkbox.data('role-uuid');
+                    
+                    $.ajax({
+                        url: '/api/roles/update-status',
+                        type: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            uuid: roleUuid,
+                            status: status
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                            } else {
+                                Swal.fire("Error", "Failed to update status.", "error");
+                                checkbox.prop('checked', !checkbox.is(':checked'));
+                            }
+                        },
+                        error: function() {
+                            Swal.fire("Error", "Something went wrong!", "error");
+                            checkbox.prop('checked', !checkbox.is(':checked'));
+                        }
+                    });
+                });
+            });
         </script>
     @endpush
 

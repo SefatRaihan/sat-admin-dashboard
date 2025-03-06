@@ -135,18 +135,15 @@ document.addEventListener("DOMContentLoaded", function () {
         totalSelectedSpan.textContent = `(${selectedCount} Selected)`;
     }
 
-    // সব মেথডের চেকবক্সের জন্য ইভেন্ট লিসেনার যোগ করা
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener("change", updateTotalSelected);
     });
 
-    // "Select All" চেকবক্সের জন্য ইভেন্ট
     document.getElementById("select-all").addEventListener("change", function () {
         checkboxes.forEach(el => el.checked = this.checked);
         updateTotalSelected();
     });
 
-    // কন্ট্রোলার সিলেকশনের জন্য ইভেন্ট
     document.querySelectorAll(".controller-select").forEach(controllerCheckbox => {
         controllerCheckbox.addEventListener("change", function () {
             let controller = this.getAttribute("data-controller");
@@ -155,7 +152,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // পেজ লোড হওয়ার সময় আপডেট করা
     updateTotalSelected();
 });
 

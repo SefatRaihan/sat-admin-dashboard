@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug')->unique()->index();
             $table->text('description')->nullable();
             $table->boolean('is_supervisor_role')->default(false);
+            $table->string('status')->default('active');
             $table->unsignedBigInteger('created_by')->nullable();
 			$table->unsignedBigInteger('updated_by')->nullable();
 			$table->unsignedBigInteger('deleted_by')->nullable();

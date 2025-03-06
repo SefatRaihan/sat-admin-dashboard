@@ -29,11 +29,17 @@ class Role extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'active_role_id');
     }
 
     public function permissions()
     {
         return $this->hasMany(RolePermission::class);
     }
+
+    public function supervisorUsers()
+    {
+        return $this->hasMany(User::class, 'active_role_id')->where('active_role_id', 2);
+    }
+    
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('description');
             $table->date('date');
             $table->time('time');
+            $table->boolean('status')->default(false);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

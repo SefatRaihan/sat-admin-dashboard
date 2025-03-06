@@ -25,4 +25,9 @@ class StudentNotification extends Model
     {
         return 'uuid';
     }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 }

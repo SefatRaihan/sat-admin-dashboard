@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\SupervisorController;
+use App\Http\Controllers\Api\RoleManagementController;
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,4 +38,12 @@ Route::group(['middleware' => ['api', 'auth', 'web'], 'as' => 'api.'], function 
     Route::resource('supervisors', SupervisorController::class);
     Route::post('/supervisors/{uuid}/update', [SupervisorController::class, 'update']);
     Route::post('/supervisors-delete', [SupervisorController::class, 'delete']);
+
+    Route::post('/roles-delete', [RoleManagementController::class, 'delete']);
+    Route::post('/roles/activate', [RoleManagementController::class, 'activate']);
+    Route::post('/roles/deactivate', [RoleManagementController::class, 'deactivate']);
+    Route::post('/roles/update-status', [RoleManagementController::class, 'updateStatus']);
+
+    Route::post('/notifications-delete', [NotificationController::class, 'delete']);
+
 });

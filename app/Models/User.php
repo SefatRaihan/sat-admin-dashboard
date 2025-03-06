@@ -56,4 +56,14 @@ class User extends Authenticatable
 
         return $this->role->permissions->contains('name', $permission);
     }
+
+    public function supervisor()
+    {
+        return $this->hasOne(Supervisor::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
 }

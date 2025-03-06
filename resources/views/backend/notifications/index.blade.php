@@ -39,10 +39,10 @@
                             <th colspan="4">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h5 class="mb-0 p-0"><b>103 Notification</b></h5>
+                                        <h5 class="mb-0 p-0"><b>{{ $notifications->total() }} Notification{{ $notifications->total() != 1 ? 's' : '' }}</b></h5>
                                     </div>
                                     <div class="delete-btn d-none">
-                                        <button class="btn text-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+                                        <button class="btn text-danger notification-delete"><i class="fas fa-trash-alt"></i> Delete</button>
                                     </div>
                                 </div>
                             </th>
@@ -55,26 +55,25 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($notifications as $notification)
                         <tr class="custom-row">
-                            <td><input type="checkbox" class="row-checkbox"></td>
-                            <td>New Subscription - Mohammed</td>
-                            <td>29 January 2025</td>
-                            <td><button class="btn remove-btn btn-sm"><i class="fa-solid fa-xmark"></i></button></td>
+                            <td><input type="checkbox" class="row-checkbox" value="{{ $notification->id }}"></td>
+                            <td>{{ $notification->data['message'] }} - {{ $notification->notifiable->full_name }}</td>
+                            <td>{{ $notification->created_at->format('d M y') }}</td>
+                            <td>
+                                <form action="{{ route('notification.destroy', $notification->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this notification?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn remove-btn btn-sm"><i class="fa-solid fa-xmark"></i></button>
+                                </form>
+                            </td>
                         </tr>
-                        <tr class="custom-row">
-                            <td><input type="checkbox" class="row-checkbox"></td>
-                            <td>New Subscription - Ahmed</td>
-                            <td>29 January 2025</td>
-                            <td><button class="btn remove-btn btn-sm"><i class="fa-solid fa-xmark"></i></button></td>
-                        </tr>
-                        <tr class="custom-row">
-                            <td><input type="checkbox" class="row-checkbox"></td>
-                            <td>New Subscription - Ali</td>
-                            <td>29 January 2025</td>
-                            <td><button class="btn remove-btn btn-sm"><i class="fa-solid fa-xmark"></i></button></td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
+                <div class="p-2 d-flex justify-content-end" style="border-top:1px solid #ddd">
+                    {{ $notifications->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -206,7 +205,28 @@
     @endpush
     @push('js')
     <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Show SweetAlert if there's a success message in the session
+        @if (session('success'))
+            Swal.fire({
+                title: "Success",
+                text: "{{ session('success') }}",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                title: "Error",
+                text: "{{ session('error') }}",
+                icon: "error",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            });
+        @endif
         function toggleDeleteButton() {
             let anyChecked = document.querySelectorAll(".row-checkbox:checked").length > 0;
             document.querySelector(".delete-btn").classList.toggle("d-none", !anyChecked);
@@ -231,7 +251,75 @@
         // Initial check on page load
         toggleDeleteButton();
     </script>
-    
+
+    <!-- /Delete -->
+    <script>
+        $(document).ready(function () {
+            function getSelectedNotifications() {
+                return $(".row-checkbox:checked").map(function () {
+                    return $(this).val();
+                }).get();
+            }
+
+            function toggleActionButtons() {
+                let selectedNotifications = getSelectedNotifications();
+                if (selectedNotifications.length > 0) {
+                    $(".delete-btn").removeClass("d-none");
+                } else {
+                    $(".delete-btn").addClass("d-none");
+                }
+            }
+
+            // Checkbox selection logic
+            $(document).on("change", ".row-checkbox, #selectAll", function () {
+                toggleActionButtons();
+            });
+
+            // Delete Notifications
+            $(".notification-delete").click(function () {
+                let selectedNotifications = getSelectedNotifications();
+                if (selectedNotifications.length === 0) {
+                    Swal.fire("Warning", "Please select at least one notification.", "warning");
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/api/notifications-delete",
+                            type: "POST",
+                            data: {
+                                notifications: selectedNotifications,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Notifications deleted successfully.",
+                                    icon: "success",
+                                    confirmButtonColor: "#3085d6",
+                                    confirmButtonText: "OK"
+                                }).then(() => {
+                                    window.location.reload(); // Reload the page after the alert
+                                });
+                            },
+                            error: function () {
+                                Swal.fire("Error", "Failed to delete role.", "error");
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
     @endpush
 
 </x-backend.layouts.master>

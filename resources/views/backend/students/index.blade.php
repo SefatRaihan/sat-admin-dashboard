@@ -518,7 +518,7 @@
                                         <button class="btn text-danger student-delete"><i class="fas fa-trash-alt"></i></button>
 
 
-                                        <button class="btn text-warning student-deactive">Make 1 Inactive</button>
+                                        <button class="btn text-warning student-deactive">Inactive</button>
                                         <button class="btn send-notification-btn" data-toggle="modal" data-target="#messageModalCenter" style="background-color:#691D5E ;border-radius: 8px; color:#fff"><img src="{{ asset('image/icon/message.png') }}" alt=""> <span class="ml-2">Send Notification</span></button>
                                     </div>
                                 </div>

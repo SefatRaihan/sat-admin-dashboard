@@ -23,60 +23,74 @@
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="send-notification" role="tabpanel" aria-labelledby="send-notification-tab">
-                    <form action="">
-                        <div>
-                            <label for="">The Message in Arabic</label>
-                            <textarea name="description" class="form-control" cols="30" rows="6" placeholder="Enter a description"></textarea>
-                        </div>
-
-                        <div class="mt-3">
-                            <label for="">Destination Category</label>
-                            <select name="category" class="form-control">
-                                <option value="" disabled>Select the destination category.</option>
-                                <option value="all-members">All Members</option>
-                                <option value="active-users">Active Users</option>
-                                <option value="inactive-users">Inactive Users</option>
-                                <option value="blocked-users">Blocked Users</option>
-                                <option value="unblocked-users">Unblocked Users</option>
-                                <option value="supervisors">Supervisors</option>
-                            </select>
-                        </div>
-
-                        <div class="d-flex justify-content-end mt-4">
-                            <button type="submit" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px">
-                                Send notification
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="tab-pane fade" id="send-sms" role="tabpanel" aria-labelledby="send-sms-tab">
-                    <form action="">
-                        <div>
-                            <label for="">Message Text</label>
-                            <textarea name="description" class="form-control" cols="30" rows="6" placeholder="Enter a description"></textarea>
-                        </div>
-
-                        <div class="mt-3">
-                            <label for="">Destination Category</label>
-                            <select name="category" class="form-control">
-                                <option value="" disabled>Select the destination category.</option>
-                                <option value="all-members">All Members</option>
-                                <option value="active-users">Active Users</option>
-                                <option value="inactive-users">Inactive Users</option>
-                                <option value="blocked-users">Blocked Users</option>
-                                <option value="unblocked-users">Unblocked Users</option>
-                                <option value="supervisors">Supervisors</option>
-                            </select>
-                        </div>
-
-                        <div class="d-flex justify-content-end mt-4">
-                            <button type="submit" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px">
-                                Send SMS
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="tab-pane fade show active" id="send-notification" role="tabpanel" aria-labelledby="send-notification-tab">
+                        <form action="{{ route('notification.send') }}" method="POST">
+                            @csrf
+                            <div>
+                                <label for="description">Message Text</label>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" cols="30" rows="6" placeholder="Enter a description">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                    
+                            <div class="mt-3">
+                                <label for="category">Destination Category</label>
+                                <select name="category" class="form-control @error('category') is-invalid @enderror">
+                                    <option value="" disabled>Select the destination category</option>
+                                    <option value="all-members">All Members</option>
+                                    <option value="active-users">Active Users</option>
+                                    <option value="inactive-users">Inactive Users</option>
+                                    <option value="blocked-users">Blocked Users</option>
+                                    <option value="unblocked-users">Unblocked Users</option>
+                                    <option value="supervisors">Supervisors</option>
+                                </select>
+                                @error('category')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                    
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="submit" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px">
+                                    Send notification
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="send-sms" role="tabpanel" aria-labelledby="send-sms-tab">
+                        <form action="{{ route('notification.sms') }}" method="POST">
+                            @csrf
+                            <div>
+                                <label for="description">Message Text</label>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" cols="30" rows="6" placeholder="Enter a description">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                    
+                            <div class="mt-3">
+                                <label for="category">Destination Category</label>
+                                <select name="category" class="form-control @error('category') is-invalid @enderror">
+                                    <option value="" disabled>Select the destination category</option>
+                                    <option value="all-members">All Members</option>
+                                    <option value="active-users">Active Users</option>
+                                    <option value="inactive-users">Inactive Users</option>
+                                    <option value="blocked-users">Blocked Users</option>
+                                    <option value="unblocked-users">Unblocked Users</option>
+                                    <option value="supervisors">Supervisors</option>
+                                </select>
+                                @error('category')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                    
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="submit" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px">
+                                    Send SMS
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
