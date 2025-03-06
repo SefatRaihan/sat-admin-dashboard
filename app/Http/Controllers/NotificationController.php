@@ -5,11 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Notifications\SendCustomNotification;
-use App\Services\SmsService;
+// use App\Services\SmsService;
 use App\Models\Notification;
 
 class NotificationController extends Controller
 {
+    // protected $smsService;
+
+    // public function __construct(SmsService $smsService)
+    // {
+    //     $this->smsService = $smsService;
+    // }
+
     public function index()
     {
         $notifications = Notification::latest()->paginate(10);
@@ -19,13 +26,6 @@ class NotificationController extends Controller
     public function create()
     {
         return view('backend.notifications.create');
-    }
-
-    protected $smsService;
-
-    public function __construct(SmsService $smsService)
-    {
-        $this->smsService = $smsService;
     }
 
     public function sendNotification(Request $request)
