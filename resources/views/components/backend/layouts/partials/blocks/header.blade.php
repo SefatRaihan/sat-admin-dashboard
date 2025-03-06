@@ -15,7 +15,7 @@
                      <img src="{{ asset('image/user-icon.png') }}" alt="Avatar" style="border-radius:50%; height: 40px">
                   @endif
                   <div class="ml-3">
-                     <p class="text-white m-0 p-0" style="font-size:16px !important">Karim Mansouri</p>
+                     <p class="text-white m-0 p-0" style="font-size:16px !important">{{ auth()->user()->full_name ?? '' }}</p>
                      <p class="text-white p-0 m-0" style="font-size:12px !important">Karim</p>
                   </div>
                </span>

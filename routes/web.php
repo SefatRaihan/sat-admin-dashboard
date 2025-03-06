@@ -80,7 +80,14 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
 
     Route::resource('exams', ExamController::class);
 
-
+    Route::get('/mark-as-read/{id}', function ($id) {
+        $notification = auth()->user()->notifications()->find($id);
+        if ($notification) {
+            $notification->markAsRead();
+        }
+        return redirect()->back();
+    })->name('markAsRead');
+    
 });
 
 

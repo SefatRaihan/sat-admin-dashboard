@@ -27,11 +27,11 @@
                          @if (isset($general->logo))
                             <img src="{{ asset('storage/' . ($general->logo)) }}" alt="Avatar" style="border-radius:50%; height: 40px">
                             @else
-                            <img src="{{ asset('image/user-icon.png') }}" alt="Avatar" style="border-radius:50%; height: 40px">
+                            <img src="{{ auth()->user()->profile_image ? asset('uploads/profile_images/' . auth()->user()->profile_image) : asset('image/profile.jpeg') }}" alt="Avatar" style="height: 40px; width:40px; border-radius:50%; object-fit: cover;">
                          @endif
                          <div class="ml-3">
-                            <p class="text-white m-0 p-0" style="font-size:16px !important">Karim Mansouri</p>
-                            <p class="text-white p-0 m-0" style="font-size:12px !important">Karim</p>
+                            <p class="text-white m-0 p-0" style="font-size:16px !important">{{ auth()->user()->full_name }}</p>
+                            <p class="text-white p-0 m-0" style="font-size:12px !important">{{ auth()->user()->role->name }}</p>
                          </div>
                       </span>
                       {{-- <i class="fa-solid fa-angles-left text-white" style="font-size:16px !important"></i> --}}
@@ -153,13 +153,17 @@
                 <hr class="ml-2" style="border-top:1px solid #65416B; width:90%">
 
                 <li class="nav-item">
-                    <a href="{{ route('logout') }}" title="Employee" class="nav-link legitRipple m-0 ml-2" onclick="event.preventDefault(); this.closest('form').submit();">
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                    
+                    <a href="{{ route('logout') }}" title="Employee" class="nav-link legitRipple m-0 ml-2"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <img src="{{ asset('image/icon/logout.png') }}" alt="" class="mr-3" style="width: 16px; height: 16px;">
-                        <span>
-                            Log out
-                        </span>
+                        <span>Log out</span>
                     </a>
                 </li>
+                
             </ul>
 
 
