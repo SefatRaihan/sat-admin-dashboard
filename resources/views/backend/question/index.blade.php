@@ -385,7 +385,7 @@
                                             <p class="pt-0 mt-0">The Lorem ipsum text is derived from sections 1.10.32 and 1.10.33 of Cicero's De finibus bonorum et malorum.</p>
                                         </div>
                                         <div class="mt-3"><h5><strong><strong>Options:</strong></h5></div>
-                                        <div id="option-show-in-view"class="row mt-2" style="margin-left: 3px">
+                                        {{-- <div id="option-show-in-view"class="row mt-2" style="margin-left: 3px">
                                             <div class="col-md-6">
                                                 <div class="form-check mb-2">
                                                     <input type="radio" name="audience" value="High School" class="form-check-input sat_1" id="high_school">
@@ -414,7 +414,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab">
@@ -560,7 +560,7 @@
                                     <div class="col-md-12 row" style="margin-left: 3px">
                                         <div class="form-check col-md-6 mb-2">
                                             <input type="radio" class="form-check-input" name="question_type" value="Verbal" id="verbal">
-                                            <label class="radio-container form-check-label" for="=verbal">
+                                            <label class="radio-container form-check-label" for="verbal">
                                                 Verbal
                                             </label>
                                         </div>
@@ -679,14 +679,14 @@
                             <div class="row" style="margin-left: 3px">
                                 <div class="col-md-12 row" style="margin-left: 3px">
                                     <div class="form-check col-md-6 mb-2">
-                                        <input type="radio" class="form-check-input" name="question_type" value="Verbal" id="verbal">
-                                        <label class="radio-container form-check-label" for="=verbal">
+                                        <input type="radio" class="form-check-input" name="question_type" value="1" id="is_active">
+                                        <label class="radio-container form-check-label" for="is_active">
                                             Make it Active
                                         </label>
                                     </div>
                                     <div class="form-check col-md-6 mb-2">
-                                        <input type="radio" class="form-check-input" name="question_type" value="Quant" id="quant">
-                                        <label class="radio-container form-check-label" for="quant">
+                                        <input type="radio" class="form-check-input" name="question_type" value="2" id="is_inactive">
+                                        <label class="radio-container form-check-label" for="is_inactive">
                                             Keep Inactive for now
                                         </label>
                                     </div>
@@ -1433,12 +1433,12 @@
         <script>
             $(document).ready(function() {
 
-                $(".sat_1").change(function () {
+                $(".sat_2").change(function () {
                     $("#sat_type_2").removeClass("d-none");
                     $("#sat_type_1").addClass("d-none");
                 });
 
-                $(".sat_2").change(function () {
+                $(".sat_1").change(function () {
                     $("#sat_type_1").removeClass("d-none");
                     $("#sat_type_2").addClass("d-none");
                 });
