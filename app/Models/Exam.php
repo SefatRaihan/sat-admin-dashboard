@@ -23,18 +23,16 @@ class Exam extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid',
-        'name',
-        'audience',
-        'total_questions',
-        'total_duration',
-        'has_time_gaps',
-        'retake_cooldown',
-        'result_processing',
-        'status',
-        'created_by',
-        'updated_by',
+        'uuid',          // ✅ Ensure this is auto-generated in the controller
+        'title',         // ✅ This is correct
+        'description',   // ✅ Nullable field
+        'scheduled_at',  // ✅ Make sure this exists in the migration
+        'duration',      // ✅ Make sure this exists in the migration
+        'created_by',    // ✅ Foreign key reference
+        'updated_by',    // ✅ Foreign key reference
+        'deleted_by',    // ✅ Add this since it exists in migration (important for soft deletes)
     ];
+    
 
     /**
      * The attributes that should be cast to native types.

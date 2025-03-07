@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\MainQuestionController;
+use App\Http\Controllers\Api\ExamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -61,3 +62,14 @@ Route::patch('/questions/{id}/toggle-status', [MainQuestionController::class, 't
 // 📌 Get related exams and sections for a question
 Route::get('/questions/{id}/relations', [MainQuestionController::class, 'getRelations']);
 
+
+
+/*
+|--------------------------------------------------------------------------
+| API Routes for Exams
+|--------------------------------------------------------------------------
+*/
+
+
+
+Route::apiResource('/exams', ExamController::class);
