@@ -1,6 +1,5 @@
 <x-backend.layouts.master>
-
-    <x-backend.layouts.partials.blocks.contentwrapper 
+    <x-backend.layouts.partials.keys.contentwrapper 
         :headerTitle="'
             <a href=\'\roles\' class=\'text-dark\'>
                 <i class=\'fa-solid fa-angle-left mr-2\'></i> Create Exam : Add Question to Section 1
@@ -15,10 +14,8 @@
                 </ul>
             </div>
         '"
-        :prependContent="'
-            
-        '">
-    </x-backend.layouts.partials.blocks.contentwrapper>
+        :prependContent="''">
+    </x-backend.layouts.partials.keys.contentwrapper>
 
     <div>
         <div class="row">
@@ -27,6 +24,7 @@
                     <div>
                         <input type="text" id="search" class="form-control search__input" placeholder="Search Notification" style="padding-left: 35px">
                     </div>
+    
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
                         <div class="form-group mb-0">
@@ -74,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="exam-section" class="row exam-question-section" style="padding: 8px; min-height:100px"></div>
+                <div id="exam-section" class="row exam-question-section" style="padding: 15px;"></div>
             </div>
         </div>
     </div>
@@ -142,20 +140,13 @@
             }
             .question-card {
                 transition: all 0.5s ease;
-                cursor: move;
-                background-color: transparent !important; /* Ensure parent is transparent */
             }
-            /* When dragging, enforce transparency */
-            .question-card.dragging {
-                background-color: transparent !important;
-                opacity: 0.8; /* Optional: slight opacity to indicate dragging */
+            .move-animation {
+                animation: moveToRight 0.5s ease forwards;
             }
-            .question-card .card {
-                background-color: #F2F4F7; /* Default background for card */
-                transition: all 0.5s ease;
-            }
-            .question-card.dragging .card {
-                background-color: transparent !important; /* Transparent when dragging */
+            @keyframes moveToRight {
+                0% { transform: translateX(0); opacity: 1; }
+                100% { transform: translateX(100px); opacity: 0; }
             }
             .exam-question-section .card {
                 border-left: 3px solid #22C55E;
@@ -167,10 +158,18 @@
             .exam-question-section .question-checkbox {
                 display: none;
             }
+            .exam-question-section .question-card {
+                margin-bottom: 15px;
+            }
+
+            .question-card {
+                z-index: 200;
+            }
         </style>
     @endpush
 
     @push('js')
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/uploaders/dropzone.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/uploader_dropzone.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_checkboxes_radios.js"></script>
@@ -182,20 +181,18 @@
                 // Initial question card generation
                 function createQuestionCard(id) {
                     return `
-                        <div class="col-md-4 p-2 question-card" data-id="${id}" draggable="true" style="border-radius:8px; background-color:transparent !important">
-                            <div class="card card-body m-0" style="border-left:3px solid #F79009; background-color:#F2F4F7; border-radius:8px">
+                        <div class="col-md-4 question-card" data-id="${id}" draggable="true">
+                            <div class="card card-body" style="border-left:3px solid #F79009; background-color:#F2F4F7; border-radius:8px">
                                 <input type="hidden" class="question-id" value="${id}">
-                                <div class="question-card-header">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <ul class="p-0" style="display: flex; gap:20px; color:#475467">
-                                                <li style="list-style: none">Hi School</li>
-                                                <li>Verbal</li>
-                                                <li>Details</li>
-                                            </ul>
-                                        </div>
-                                        <input type="checkbox" class="question-checkbox">
+                                <div class="question-card-header d-flex justify-content-between">
+                                    <div>
+                                        <ul class="p-0" style="display: flex; gap:20px; color:#475467">
+                                            <li style="list-style: none">Hi School</li>
+                                            <li>Verbal</li>
+                                            <li>Details</li>
+                                        </ul>
                                     </div>
+                                    <input type="checkbox" class="question-checkbox">
                                 </div>
                                 <p class="question-title">A car accelerates uniformly from rest to a velocity of 30 m/s in 10 s. What is the car’s acceleration?</p>
                                 <div class="question-card-footer">
@@ -209,87 +206,96 @@
                         </div>
                     `;
                 }
-    
+
                 // Generate initial 10 cards
                 for (let i = 0; i < 10; i++) {
                     $('#question-container').append(createQuestionCard(i));
                 }
-    
-                // Drag and Drop functionality
-                let draggedCard = null;
-    
-                // Handle drag start
-                $(document).on('dragstart', '.question-card', function(e) {
-                    draggedCard = this;
-                    $(this).addClass('dragging');
-                    e.originalEvent.dataTransfer.effectAllowed = 'move';
+
+                // Initialize draggable for question cards
+                function initializeDraggable($element) {
+                    $element.draggable({
+                        revert: 'invalid',
+                        helper: 'clone',
+                        start: function(event, ui) {
+                            $(this).addClass('dragging');
+                        },
+                        stop: function(event, ui) {
+                            $(this).removeClass('dragging');
+                        }
+                    });
+                }
+
+                // Make initial question cards draggable
+                $('.question-card').each(function() {
+                    initializeDraggable($(this));
                 });
-    
-                // Handle drag end
-                $(document).on('dragend', '.question-card', function() {
-                    $(this).removeClass('dragging');
-                    draggedCard = null;
-                });
-    
-                // Exam section drag events
-                const $examSection = $('#exam-section');
-                
-                $examSection.on('dragover', function(e) {
-                    e.preventDefault();
-                    $(this).addClass('drag-over');
-                    e.originalEvent.dataTransfer.dropEffect = 'move';
-                });
-    
-                $examSection.on('dragleave', function() {
-                    $(this).removeClass('drag-over');
-                });
-    
-                $examSection.on('drop', function(e) {
-                    e.preventDefault();
-                    $(this).removeClass('drag-over');
-    
-                    if (draggedCard) {
-                        const $card = $(draggedCard);
-                        // Modify card for exam section
-                        $card.find('.question-card-header').addClass('d-none');
-                        $card.find('.question-card-footer').addClass('d-none');
-                        $card.removeClass('col-md-4');
-                        $card.addClass('col-md-12');
-                        
-                        // Add to exam section
+
+                // Make exam section droppable
+                $('#exam-section').droppable({
+                    accept: '.question-card',
+                    drop: function(event, ui) {
+                        const $card = $(ui.draggable).clone();
+                        modifyCardForExamSection($card);
                         $(this).append($card);
+                        $(ui.draggable).remove();
+                        updateQuestionCount();
                     }
                 });
-    
-                // Question container drag events (for dragging back)
-                const $questionContainer = $('#question-container');
-    
-                $questionContainer.on('dragover', function(e) {
-                    e.preventDefault();
-                    $(this).addClass('drag-over');
-                    e.originalEvent.dataTransfer.dropEffect = 'move';
-                });
-    
-                $questionContainer.on('dragleave', function() {
-                    $(this).removeClass('drag-over');
-                });
-    
-                $questionContainer.on('drop', function(e) {
-                    e.preventDefault();
-                    $(this).removeClass('drag-over');
-    
-                    if (draggedCard) {
-                        const $card = $(draggedCard);
-                        // Restore card for question section
-                        $card.find('.question-card-header').removeClass('d-none');
-                        $card.find('.question-card-footer').removeClass('d-none');
-                        $card.removeClass('col-md-12');
-                        $card.addClass('col-md-4');
-                        
-                        // Add back to question container
+
+                // Make question container droppable
+                $('#question-container').droppable({
+                    accept: '.question-card',
+                    drop: function(event, ui) {
+                        const $card = $(ui.draggable).clone();
+                        modifyCardForQuestionContainer($card);
                         $(this).prepend($card);
+                        $(ui.draggable).remove();
+                        updateQuestionCount();
                     }
                 });
+
+                // Checkbox click handler
+                $(document).on('change', '.question-checkbox', function() {
+                    const $card = $(this).closest('.question-card');
+                    if (this.checked) {
+                        $card.addClass('move-animation');
+                        setTimeout(() => {
+                            const $clone = $card.clone();
+                            modifyCardForExamSection($clone);
+                            $('#exam-section').append($clone);
+                            $card.remove();
+                            updateQuestionCount();
+                        }, 500);
+                    }
+                });
+
+                // Function to modify card for exam section
+                function modifyCardForExamSection($card) {
+                    $card.find('.question-card-header').addClass('d-none');
+                    $card.find('.question-card-footer').addClass('d-none');
+                    $card.removeClass('col-md-4');
+                    $card.addClass('col-md-12');
+                    $card.find('.question-checkbox').prop('checked', false);
+                    initializeDraggable($card); // Make it draggable again
+                }
+
+                // Function to modify card for question container
+                function modifyCardForQuestionContainer($card) {
+                    $card.find('.question-card-header').removeClass('d-none');
+                    $card.find('.question-card-footer').removeClass('d-none');
+                    $card.removeClass('col-md-12');
+                    $card.addClass('col-md-4');
+                    initializeDraggable($card); // Make it draggable again
+                }
+
+                // Function to update question counts
+                function updateQuestionCount() {
+                    const examCount = $('#exam-section .question-card').length;
+                    const questionCount = $('#question-container .question-card').length;
+                    $('.exam-question-count').text(examCount);
+                    $('#totalQuestion').text(questionCount);
+                }
             });
         </script>
     @endpush
