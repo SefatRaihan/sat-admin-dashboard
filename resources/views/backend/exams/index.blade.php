@@ -21,6 +21,8 @@
         data-target="#examModal" 
     />
 
+    {{-- Create Modal --}}
+    <section>
         <div class="modal fade" id="examModal" tabindex="-1" role="dialog" aria-labelledby="examModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document" style="width:60%">
                 <div class="modal-content" style="border-radius: 24px; height:100%">
@@ -43,18 +45,18 @@
                             <div class="row">
                                 <div class="col-md-6 row">
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input type="radio" name="audience" value="High School" checked> High School
+                                        <input class="sat_1" type="radio" name="audience" value="High School" checked> High School
                                     </label>
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input type="radio" name="audience" value="Graduation"> Graduation
+                                        <input class="sat_1" type="radio" name="audience" value="Graduation"> Graduation
                                     </label>
                                 </div>
                                 <div class="col-md-6 row">
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input type="radio" name="audience" value="College"> College
+                                        <input class="sat_1" type="radio" name="audience" value="College"> College
                                     </label>
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input type="radio" name="audience" value="SAT 2"> SAT 2
+                                        <input class="sat_2" type="radio" name="audience" value="SAT 2"> SAT 2
                                     </label>
                                 </div>
                             </div>
@@ -64,30 +66,30 @@
                             <div class="row">
                                 <div class="col-md-6 row">
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input type="radio" name="audience" value="1 Section" checked> 1 Section
+                                        <input type="radio" name="section" value="1 Section" checked> 1 Section
                                     </label>
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input type="radio" name="audience" value="2 Sections"> 2 Sections
+                                        <input type="radio" name="section" value="2 Sections"> 2 Sections
                                     </label>
                                 </div>
                                 <div class="col-md-6 row">
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input type="radio" name="audience" value="2 Sections"> 3 Sections
+                                        <input type="radio" name="section" value="2 Sections"> 3 Sections
                                     </label>
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input type="radio" name="audience" value="2 Sections"> 4 Sections
+                                        <input type="radio" name="section" value="2 Sections"> 4 Sections
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <label class="label-header" for="">4. Provide details for : Section 1</label>
-                            <div style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
+                            <div id="sat_type_1" class="" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
                                 <label for="">Section Type</label>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="verbal" value="verbal">
+                                            <input class="form-check-input" type="radio" name="sat_type_1" id="verbal" value="verbal">
                                             <label class="form-check-label" for="verbal">
                                                 Verbal
                                             </label>
@@ -95,7 +97,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="quant" value="quant">
+                                            <input class="form-check-input" type="radio" name="sat_type_1" id="quant" value="quant">
                                             <label class="form-check-label" for="quant">
                                             Quant
                                             </label>
@@ -103,7 +105,74 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="mixed" value="mixed">
+                                            <input class="form-check-input" type="radio" name="sat_type_1" id="mixed" value="mixed">
+                                            <label class="form-check-label" for="mixed">
+                                                Mixed
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label class="label-header" for="">Name of the Section</label>
+                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
+                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-header" for="">Set Duration (minutes)</label>
+                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="sat_type_2" class="d-none" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
+                                <label for="">Section Type</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-check custom-radio">
+                                            <input class="form-check-input" type="radio" name="sat_type_2" id="physics" value="physics">
+                                            <label class="form-check-label" for="physics">
+                                                Physics
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check custom-radio">
+                                            <input class="form-check-input" type="radio" name="sat_type_2" id="chemistry" value="chemistry">
+                                            <label class="form-check-label" for="chemistry">
+                                                Chemistry
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check custom-radio">
+                                            <input class="form-check-input" type="radio" name="sat_type_2" id="biology" value="biology">
+                                            <label class="form-check-label" for="biology">
+                                                Biology
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-2">
+                                        <div class="form-check custom-radio">
+                                            <input class="form-check-input" type="radio" name="sat_type_2" id="math" value="math">
+                                            <label class="form-check-label" for="math">
+                                                Math
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-2">
+                                        <div class="form-check custom-radio">
+                                            <input class="form-check-input" type="radio" name="sat_type_2" id="mixed" value="mixed">
                                             <label class="form-check-label" for="mixed">
                                                 Mixed
                                             </label>
@@ -141,24 +210,24 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="verbal" value="verbal">
-                                            <label class="form-check-label" for="verbal">
+                                            <input class="form-check-input" type="radio" name="section_2" id="section_2_verbal" value="verbal">
+                                            <label class="form-check-label" for="section_2_verbal">
                                                 Verbal
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="quant" value="quant">
-                                            <label class="form-check-label" for="quant">
-                                            Quant
+                                            <input class="form-check-input" type="radio" name="section_2" id="section_2_quant" value="quant">
+                                            <label class="form-check-label" for="section_2_quant">
+                                                Quant
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
+                                            <input class="form-check-input" type="radio" name="section_2" id="section_2_mixed" value="mixed">
+                                            <label class="form-check-label" for="section_2_mixed">
                                                 Mixed
                                             </label>
                                         </div>
@@ -203,11 +272,12 @@
                     </div>
                     <div class="modal-footer border-top pt-3">
                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <a href="/exams/create" class="btn save-student" style="background-color:#F1E9F0 ;border-radius: 8px; color:#BF98B9">Proceed to Add Questions</a>
+                        <a href="/exams/create" class="btn save-student" style="background-color:#691D5E ;border-radius: 8px; color:#D0D5DD">Proceed to Add Questions</a>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
     @push('css')
         <style>
@@ -688,4 +758,19 @@
         </style>
     @endpush
 
+    @push('js')
+        <script>
+            $(document).ready(function() {
+                $(".sat_2").change(function () {
+                    $("#sat_type_2").removeClass("d-none");
+                    $("#sat_type_1").addClass("d-none");
+                });
+    
+                $(".sat_1").change(function () {
+                    $("#sat_type_1").removeClass("d-none");
+                    $("#sat_type_2").addClass("d-none");
+                });
+            });
+        </script>
+    @endpush
 </x-backend.layouts.master>

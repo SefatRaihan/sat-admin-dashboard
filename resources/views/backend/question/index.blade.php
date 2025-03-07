@@ -27,6 +27,7 @@
         data-target="#questionModal"
         buttonRoute="/button/create"
         /> --}}
+        
     <section>
 
         <div>
@@ -65,11 +66,8 @@
                                         <div class="delete-btn d-none">
                                             <button class="btn"><img src="{{ asset('image/icon/download.png') }}" alt=""></button>
                                             <button class="btn text-danger"><i class="fas fa-trash-alt"></i></button>
-
                                             <button class="btn text-success"><strong>Make 1 Active</strong></button>
                                             <button class="btn text-warning"><strong>Make 1 Inactive</strong></button>
-
-                                            {{-- <button class="btn send-notification-btn" data-toggle="modal" data-target="#messageModalCenter" style="background-color:#691D5E ;border-radius: 8px; color:#fff"><img src="{{ asset('image/icon/message.png') }}" alt=""> <span class="ml-2">Send Notification</span></button> --}}
                                         </div>
                                     </div>
                                 </th>
@@ -123,221 +121,217 @@
                     </div>
                     <button type="button" class="close-btn" id="closeSidebar">&times;</button>
                 </div>
-                <div class="sidebar-content">
+                <div class="filter-sidebar-content">
                     <div class="task-form">
-                        <form class="form-section">
-                            <div class="p-3 ">
+                        <div class="p-3 ">
+                            <div class="d-flex justify-content-between">
+                                <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
+                                <button class="reset-slider"><u>Reset</u></button>
+                            </div>
+                            <div class="mt-1 mb-2 d-flex justify-content-between">
+                                <div style="width: 49%">
+                                    <input type="date" class="form-control" name="crated_start_at">
+                                </div>
+                                <div style="align-items: center; display: flex; width:1%">
+                                    -
+                                </div>
+                                <div style="width: 49%">
+                                    <input type="date" class="form-control" name="crated_end_at">
+                                </div>
+                            </div>
+                            <div id="filter-status">
                                 <div class="d-flex justify-content-between">
-                                    <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
+                                    <h6><b>Status:</b> Active Only</h6>
                                     <button class="reset-slider"><u>Reset</u></button>
                                 </div>
-                                <div class="mt-1 mb-2 d-flex justify-content-between">
-                                    <div style="width: 49%">
-                                        <input type="date" class="form-control" name="crated_start_at">
-                                    </div>
-                                    <div style="align-items: center; display: flex; width:1%">
-                                        -
-                                    </div>
-                                    <div style="width: 49%">
-                                        <input type="date" class="form-control" name="crated_end_at">
-                                    </div>
+                                <div class="form-check status-radio">
+                                    <input class="form-check-input" type="radio" name="status" id="all" value="All" checked>
+                                    <label class="form-check-label" for="all">
+                                        All
+                                    </label>
                                 </div>
-                                <div id="filter-status">
-                                    <div class="d-flex justify-content-between">
-                                        <h6><b>Status:</b> Active Only</h6>
-                                        <button class="reset-slider"><u>Reset</u></button>
-                                    </div>
-                                    <div class="form-check status-radio">
-                                        <input class="form-check-input" type="radio" name="status" id="all" value="All" checked>
-                                        <label class="form-check-label" for="all">
-                                            All
-                                        </label>
-                                    </div>
-                                    <div class="form-check status-radio">
-                                        <input class="form-check-input" type="radio" name="status" id="activeonly" value="Active only">
-                                        <label class="form-check-label" for="activeonly">
-                                            Active only
-                                        </label>
-                                    </div>
-                                    <div class="form-check status-radio">
-                                        <input class="form-check-input" type="radio" name="status" id="inactiveonly" value="Inactive only">
-                                        <label class="form-check-label" for="inactiveonly">
-                                            Inactive only
-                                        </label>
-                                    </div>
+                                <div class="form-check status-radio">
+                                    <input class="form-check-input" type="radio" name="status" id="activeonly" value="Active only">
+                                    <label class="form-check-label" for="activeonly">
+                                        Active only
+                                    </label>
                                 </div>
-                                <div class="mt-2">
-                                    <div class="d-flex justify-content-between">
-                                        <h6><b>Audience & Type:</b> All Result</h6>
-                                        <button class="reset-slider"><u>Reset</u></button>
-                                    </div>
-                                    <div id="all_sat_type_1">
-                                        <div class="filter-group">
-                                            <div class="form-check">
-                                                <input class="form-check-input toggle-parent" type="checkbox" id="allSet1Toggle">
-                                                <label class="form-check-label" for="allSet1Toggle">
-                                                    All SAT 1
-                                                </label>
-                                                <span class="toggle-icon" data-target="allSet1"><i class="fas fa-chevron-down"></i></span>
-                                            </div>
-                                            <div class="nested-options collapse" id="allSet1">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="exam1">
-                                                    <label class="form-check-label" for="exam1">Hight School : Verbal</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="exam2">
-                                                    <label class="form-check-label" for="exam2">Hight School : Quant</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="exam3">
-                                                    <label class="form-check-label" for="exam3">College : Verbal</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="exam3">
-                                                    <label class="form-check-label" for="exam3">College : Verbal</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="exam3">
-                                                    <label class="form-check-label" for="exam3">Graduate : Verbal</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="exam3">
-                                                    <label class="form-check-label" for="exam3">Graduate : Quant</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="all_sat_type_2">
-                                        <div class="filter-group">
-                                            <div class="form-check">
-                                                <input class="form-check-input toggle-parent" type="checkbox" id="allSet2Toggle">
-                                                <label class="form-check-label" for="allSet2Toggle">
-                                                    All SAT 2
-                                                </label>
-                                                <span class="toggle-icon" data-target="allSet2"><i class="fas fa-chevron-down"></i></span>
-                                            </div>
-                                            <div class="nested-options collapse" id="allSet2">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="exam1">
-                                                    <label class="form-check-label" for="exam1">Verbal</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="exam2">
-                                                    <label class="form-check-label" for="exam2">Quant</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="form-check status-radio">
+                                    <input class="form-check-input" type="radio" name="status" id="inactiveonly" value="Inactive only">
+                                    <label class="form-check-label" for="inactiveonly">
+                                        Inactive only
+                                    </label>
                                 </div>
-
-                                <div class="mt-2">
-                                    <div class="d-flex justify-content-between">
-                                        <h6><b>Exam Appearance:</b> 2 Selected</h6>
-                                        <button class="reset-slider"><u>Reset</u></button>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="text" class="form-control search_input w-100" placeholder="Search Questions">
-                                    </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="d-flex justify-content-between">
+                                    <h6><b>Audience & Type:</b> All Result</h6>
+                                    <button class="reset-slider"><u>Reset</u></button>
+                                </div>
+                                <div id="all_sat_type_1">
                                     <div class="filter-group">
                                         <div class="form-check">
-                                            <input class="form-check-input toggle-parent" type="checkbox" id="highSchoolToggle">
-                                            <label class="form-check-label" for="highSchoolToggle">
-                                                View all High School Exams
+                                            <input class="form-check-input toggle-parent" type="checkbox" id="allSet1Toggle">
+                                            <label class="form-check-label" for="allSet1Toggle">
+                                                All SAT 1
                                             </label>
-                                            <span class="toggle-icon" data-target="highSchoolOptions"><i class="fas fa-chevron-down"></i></span>
+                                            <span class="toggle-icon" data-target="allSet1"><i class="fas fa-chevron-down"></i></span>
                                         </div>
-                                        <div class="nested-options collapse" id="highSchoolOptions">
+                                        <div class="nested-options collapse" id="allSet1">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam1">
-                                                <label class="form-check-label" for="exam1">High School Verbal Exam 1</label>
+                                                <label class="form-check-label" for="exam1">Hight School : Verbal</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam2">
-                                                <label class="form-check-label" for="exam2">High School Verbal Exam 2</label>
+                                                <label class="form-check-label" for="exam2">Hight School : Quant</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam3">
-                                                <label class="form-check-label" for="exam3">High School Verbal Exam 3</label>
+                                                <label class="form-check-label" for="exam3">College : Verbal</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="exam3">
+                                                <label class="form-check-label" for="exam3">College : Verbal</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="exam3">
+                                                <label class="form-check-label" for="exam3">Graduate : Verbal</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="exam3">
+                                                <label class="form-check-label" for="exam3">Graduate : Quant</label>
                                             </div>
                                         </div>
                                     </div>
-                                    
+                                </div>
+                                <div id="all_sat_type_2">
                                     <div class="filter-group">
                                         <div class="form-check">
-                                            <input class="form-check-input toggle-parent" type="checkbox" id="collegeToggle">
-                                            <label class="form-check-label" for="collegeToggle">
-                                                View all College Exams
+                                            <input class="form-check-input toggle-parent" type="checkbox" id="allSet2Toggle">
+                                            <label class="form-check-label" for="allSet2Toggle">
+                                                All SAT 2
                                             </label>
-                                            <span class="toggle-icon" data-target="collegeOptions"><i class="fas fa-chevron-down"></i></span>
+                                            <span class="toggle-icon" data-target="allSet2"><i class="fas fa-chevron-down"></i></span>
                                         </div>
-                                        <div class="nested-options collapse" id="collegeOptions">
+                                        <div class="nested-options collapse" id="allSet2">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="college1">
-                                                <label class="form-check-label" for="college1">College Verbal Exam</label>
+                                                <input class="form-check-input" type="checkbox" id="exam1">
+                                                <label class="form-check-label" for="exam1">Verbal</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="college2">
-                                                <label class="form-check-label" for="college2">College Quant Exam</label>
+                                                <input class="form-check-input" type="checkbox" id="exam2">
+                                                <label class="form-check-label" for="exam2">Quant</label>
                                             </div>
                                         </div>
-                                    </div>                                    
-                                </div>
-                                <div class="mt-2">
-                                    <div class="d-flex justify-content-between">
-                                        <h6><b>Exam Appearance:</b> 2 Selected</h6>
-                                        <button class="reset-slider"><u>Reset</u></button>
-                                    </div>
-                                    <div class="form-check custom-checkbox d-flex justify-center">
-                                        <input type="checkbox" id="super-man">
-                                        <label class="form-check-label pl-1" for="super-man"><span class="badge badge-pill badge-easy"><b>Easy</b></span></label>
-                                    </div>
-                                    <div class="form-check custom-checkbox d-flex justify-center">
-                                        <input type="checkbox"  id="avenger">
-                                        <label class="form-check-label pl-1" for="avenger"><span class="badge badge-pill badge-medium"><b>Medium</b></span></label>
-                                    </div>
-                                    <div class="form-check custom-checkbox d-flex justify-center">
-                                        <input type="checkbox"  id="gladiator">
-                                        <label class="form-check-label pl-1" for="gladiator"><span class="badge badge-pill badge-hard"><b>Hard</b></span></label>
-                                    </div>
-                                    <div class="form-check custom-checkbox d-flex justify-center">
-                                        <input type="checkbox"  id="gladiator">
-                                        <label class="form-check-label pl-1" for="gladiator"><span class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
                                     </div>
                                 </div>
-                                <div class="mt-2">
-                                    <div class="slider-container">
-                                        <div class="slider-header">
-                                            <span>Average Time:</span>
-                                            <span id="slider-value">1m 00s - 2m 00s</span>
-                                            <button class="reset-slider" id="reset-slider">Reset</button>
+                            </div>
+                            <div class="mt-2">
+                                <div class="d-flex justify-content-between">
+                                    <h6><b>Exam Appearance:</b> 2 Selected</h6>
+                                    <button class="reset-slider"><u>Reset</u></button>
+                                </div>
+                                <div class="mb-1">
+                                    <input type="text" class="form-control search_input w-100" placeholder="Search Questions">
+                                </div>
+                                <div class="filter-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input toggle-parent" type="checkbox" id="highSchoolToggle">
+                                        <label class="form-check-label" for="highSchoolToggle">
+                                            View all High School Exams
+                                        </label>
+                                        <span class="toggle-icon" data-target="highSchoolOptions"><i class="fas fa-chevron-down"></i></span>
+                                    </div>
+                                    <div class="nested-options collapse" id="highSchoolOptions">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="exam1">
+                                            <label class="form-check-label" for="exam1">High School Verbal Exam 1</label>
                                         </div>
-                                        <div class="range-slider">
-                                            <input type="range" min="1" max="120" value="1" id="min-range">
-                                            <input type="range" min="1" max="120" value="120" id="max-range">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="exam2">
+                                            <label class="form-check-label" for="exam2">High School Verbal Exam 2</label>
                                         </div>
-                                        <div class="slider-labels">
-                                            <span id="min-label">1m 00s</span>
-                                            <span id="max-label">2m 00s</span>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="exam3">
+                                            <label class="form-check-label" for="exam3">High School Verbal Exam 3</label>
                                         </div>
                                     </div>
-                                    
                                 </div>
-                                <div class="mt-2">
-                                    <h6><b>Created By:</b></h6>
-                                    <div class="form-check custom-checkbox d-flex justify-center">
-                                        <input type="checkbox"  id="monthly">
-                                        <label class="form-check-label pl-1" for="monthly">Admin</label>
+                                
+                                <div class="filter-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input toggle-parent" type="checkbox" id="collegeToggle">
+                                        <label class="form-check-label" for="collegeToggle">
+                                            View all College Exams
+                                        </label>
+                                        <span class="toggle-icon" data-target="collegeOptions"><i class="fas fa-chevron-down"></i></span>
                                     </div>
-                                    <div class="form-check custom-checkbox d-flex justify-center">
-                                        <input type="checkbox"  id="annual">
-                                        <label class="form-check-label pl-1" for="annual">Sefat</label>
+                                    <div class="nested-options collapse" id="collegeOptions">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="college1">
+                                            <label class="form-check-label" for="college1">College Verbal Exam</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="college2">
+                                            <label class="form-check-label" for="college2">College Quant Exam</label>
+                                        </div>
+                                    </div>
+                                </div>                                    
+                            </div>
+                            <div class="mt-2">
+                                <div class="d-flex justify-content-between">
+                                    <h6><b>Exam Appearance:</b> 2 Selected</h6>
+                                    <button class="reset-slider"><u>Reset</u></button>
+                                </div>
+                                <div class="form-check custom-checkbox d-flex justify-center">
+                                    <input type="checkbox" id="super-man">
+                                    <label class="form-check-label pl-1" for="super-man"><span class="badge badge-pill badge-easy"><b>Easy</b></span></label>
+                                </div>
+                                <div class="form-check custom-checkbox d-flex justify-center">
+                                    <input type="checkbox"  id="avenger">
+                                    <label class="form-check-label pl-1" for="avenger"><span class="badge badge-pill badge-medium"><b>Medium</b></span></label>
+                                </div>
+                                <div class="form-check custom-checkbox d-flex justify-center">
+                                    <input type="checkbox"  id="gladiator">
+                                    <label class="form-check-label pl-1" for="gladiator"><span class="badge badge-pill badge-hard"><b>Hard</b></span></label>
+                                </div>
+                                <div class="form-check custom-checkbox d-flex justify-center">
+                                    <input type="checkbox"  id="gladiator">
+                                    <label class="form-check-label pl-1" for="gladiator"><span class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="slider-container">
+                                    <div class="slider-header">
+                                        <span>Average Time:</span>
+                                        <span id="slider-value">1m 00s - 2m 00s</span>
+                                        <button class="reset-slider" id="reset-slider">Reset</button>
+                                    </div>
+                                    <div class="range-slider">
+                                        <input type="range" min="1" max="120" value="1" id="min-range">
+                                        <input type="range" min="1" max="120" value="120" id="max-range">
+                                    </div>
+                                    <div class="slider-labels">
+                                        <span id="min-label">1m 00s</span>
+                                        <span id="max-label">2m 00s</span>
                                     </div>
                                 </div>
-
+                                
+                            </div>
+                            <div class="mt-2">
+                                <h6><b>Created By:</b></h6>
+                                <div class="form-check custom-checkbox d-flex justify-center">
+                                    <input type="checkbox"  id="monthly">
+                                    <label class="form-check-label pl-1" for="monthly">Admin</label>
+                                </div>
+                                <div class="form-check custom-checkbox d-flex justify-center">
+                                    <input type="checkbox"  id="annual">
+                                    <label class="form-check-label pl-1" for="annual">Sefat</label>
+                                </div>
                             </div>
 
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <div class="border-top fixed-bottom-buttons">
@@ -361,125 +355,6 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                    {{-- <div class="modal-body">
-                        <div>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                  <a class="nav-link active" id="question-tab" data-toggle="tab" href="#question" role="tab" aria-controls="question" aria-selected="true">Question</a>
-                                </li>
-                                <li class="nav-item">
-                                  <a class="nav-link" id="performance-tab" data-toggle="tab" href="#explanation" role="tab" aria-controls="performance" aria-selected="false">Explanation</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#wallet" role="tab" aria-controls="wallet" aria-selected="true">Details</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="ratings-tab" data-toggle="tab" href="#ratings" role="tab" aria-controls="ratings" aria-selected="false">Analytics</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="test-result-tab" data-toggle="tab" href="#test-result" role="tab" aria-controls="test-result" aria-selected="false">Feedbacks</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="question" role="tabpanel" aria-labelledby="question-tab">
-                                    <div>
-                                        <div id="question-show-card" style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB">
-                                            Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les 
-                                            <p class="mb-0 mt-1">
-                                                <strong>Question:</strong>
-                                            </p>
-                                            <p class="pt-0 mt-0">The Lorem ipsum text is derived from sections 1.10.32 and 1.10.33 of Cicero's De finibus bonorum et malorum.</p>
-                                        </div>
-                                        <div class="mt-3"><h5><strong><strong>Options:</strong></h5></div>
-                                        <div id="option-show-in-view"class="row mt-2" style="margin-left: 3px">
-                                            <div class="col-md-6">
-                                                <div class="form-check mb-2">
-                                                    <input type="radio" name="audience" value="High School" class="form-check-input sat_1" id="high_school">
-                                                    <label class="radio-container form-check-label" for="high_school" >
-                                                        High School
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="radio" name="audience" value="Graduation" class="form-check-input sat_1" id="graduation">
-                                                    <label class="radio-container form-check-label" for="graduation">
-                                                        Graduation
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-check mb-2">
-                                                    <input type="radio" name="audience" value="College" class="form-check-input sat_1" id="college">
-                                                    <label class="radio-container form-check-label" for="college">
-                                                        College
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="radio" name="audience" value="SAT 2" class="form-check-input sat_2" id="sat_2">
-                                                    <label class="radio-container form-check-label" for="sat_2">
-                                                        SAT 2
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab">
-                                    <div>
-                                        <h4>Appearing Exams</h4>
-                                        <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
-                                            <thead>
-                                                <tr class="bg-light" role="row">
-                                                    <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Notification: activate to sort column descending">Course</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Test/Section</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Score</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">%</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="custom-row">
-                                                    <td>Chemistry</td>
-                                                    <td>27-09-25</td>
-                                                    <td>Not found</td>
-                                                    <td>45.9</td>
-                                                    <td>100%</td>
-                                                </tr>
-                                                <tr class="custom-row">
-                                                    <td>Chemistry</td>
-                                                    <td>27-09-25</td>
-                                                    <td>Not found</td>
-                                                    <td>45.9</td>
-                                                    <td>100%</td>
-                                                </tr>
-                                                <tr class="custom-row">
-                                                    <td>Chemistry</td>
-                                                    <td>27-09-25</td>
-                                                    <td>Not found</td>
-                                                    <td>45.9</td>
-                                                    <td>100%</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
-                                    <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
-                                        <p><b>Waiting for content</b></p>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="ratings" role="tabpanel" aria-labelledby="ratings-tab">
-                                    <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
-                                        <p><b>Waiting for content</b></p>
-                                    </div>   
-                                </div>
-                                <div class="tab-pane fade" id="test-result" role="tabpanel" aria-labelledby="test-result-tab">
-                                    <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
-                                        <p><b>Waiting for content</b></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="modal-body">
                         <div>
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -510,7 +385,7 @@
                                             <p class="pt-0 mt-0">The Lorem ipsum text is derived from sections 1.10.32 and 1.10.33 of Cicero's De finibus bonorum et malorum.</p>
                                         </div>
                                         <div class="mt-3"><h5><strong><strong>Options:</strong></h5></div>
-                                        <div id="option-show-in-view"class="row mt-2" style="margin-left: 3px">
+                                        {{-- <div id="option-show-in-view"class="row mt-2" style="margin-left: 3px">
                                             <div class="col-md-6">
                                                 <div class="form-check mb-2">
                                                     <input type="radio" name="audience" value="High School" class="form-check-input sat_1" id="high_school">
@@ -539,7 +414,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab">
@@ -646,180 +521,178 @@
                     </div>
                     <div class="modal-body" style="padding: 10px 40px">
                         {{-- Form Start --}}
-                        <form id="questionForm">
-                            <div class="step step-1">
-                                <h5><strong>1. Select the Audience</strong></h5>
-                                <div class="row" style="margin-left: 3px">
-                                    <div class="col-md-6">
-                                        <div class="form-check mb-2">
-                                            <input type="radio" name="audience" value="High School" class="form-check-input sat_1" id="high_school">
-                                            <label class="radio-container form-check-label" for="high_school" >
-                                                High School
-                                            </label>
-                                        </div>
-                                        <div class="form-check mb-2">
-                                            <input type="radio" name="audience" value="Graduation" class="form-check-input sat_1" id="graduation">
-                                            <label class="radio-container form-check-label" for="graduation">
-                                                Graduation
-                                            </label>
-                                        </div>
+                        <div class="step step-1">
+                            <h5><strong>1. Select the Audience</strong></h5>
+                            <div class="row" style="margin-left: 3px">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="audience" value="High School" class="form-check-input sat_1" id="high_school">
+                                        <label class="radio-container form-check-label" for="high_school" >
+                                            High School
+                                        </label>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check mb-2">
-                                            <input type="radio" name="audience" value="College" class="form-check-input sat_1" id="college">
-                                            <label class="radio-container form-check-label" for="college">
-                                                College
-                                            </label>
-                                        </div>
-                                        <div class="form-check mb-2">
-                                            <input type="radio" name="audience" value="SAT 2" class="form-check-input sat_2" id="sat_2">
-                                            <label class="radio-container form-check-label" for="sat_2">
-                                                SAT 2
-                                            </label>
-                                        </div>
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="audience" value="Graduation" class="form-check-input sat_1" id="graduation">
+                                        <label class="radio-container form-check-label" for="graduation">
+                                            Graduation
+                                        </label>
                                     </div>
                                 </div>
-
-                               <div id="sat_type_1" class="d-none">
-                                    <h5 class="mt-3"><strong>2. Select the Question Type</strong></h5>
-                                    <div class="row" style="margin-left: 3px">
-                                        <div class="col-md-12 row" style="margin-left: 3px">
-                                            <div class="form-check col-md-6 mb-2">
-                                                <input type="radio" class="form-check-input" name="question_type" value="Verbal" id="verbal">
-                                                <label class="radio-container form-check-label" for="=verbal">
-                                                    Verbal
-                                                </label>
-                                            </div>
-                                            <div class="form-check col-md-6 mb-2">
-                                                <input type="radio" class="form-check-input" name="question_type" value="Quant" id="quant">
-                                                <label class="radio-container form-check-label" for="quant">
-                                                    Quant
-                                                </label>
-                                            </div>
-                                        </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="audience" value="College" class="form-check-input sat_1" id="college">
+                                        <label class="radio-container form-check-label" for="college">
+                                            College
+                                        </label>
                                     </div>
-                               </div>
-                               <div id="sat_type_2" class="d-none">
-                                    <h5 class="mt-3"><strong>2. Select the Question Subject</strong></h5>
-                                    <div class="row" style="margin-left: 3px">
-                                        <div class="col-md-6">
-                                            <div class="form-check mb-2">
-                                                <input type="radio" name="subjects" value="Physics" class="form-check-input" id="physics">
-                                                <label class="form-check-label radio-container" for="physics">
-                                                    Physics
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input type="radio" name="subjects" value="Chemistry" class="form-check-input" id="chemistry">
-                                                <label class="form-check-label radio-container" for="chemistry">
-                                                    Chemistry
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-check mb-2">
-                                                <input type="radio" name="subjects" value="Biology" class="form-check-input" id="biology">
-                                                <label class="form-check-label radio-container" for="biology">
-                                                    Biology
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input type="radio" name="subjects" value="Math" class="form-check-input" id="math">
-                                                <label class="form-check-label radio-container" for="math">
-                                                    Math
-                                                </label>
-                                            </div>
-                                        </div>
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="audience" value="SAT 2" class="form-check-input sat_2" id="sat_2">
+                                        <label class="radio-container form-check-label" for="sat_2">
+                                            SAT 2
+                                        </label>
                                     </div>
-                               </div>
-                            </div>
-
-                            {{-- Placeholder for future steps --}}
-                            <div class="step step-2 d-none">
-                                <div>
-                                    <h5><strong>3. Provide the verbal Context*</strong></h5>
-                                    <div id="editor-container">
-                                        <div class="editor mb-3" id="context"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h5><strong>4. Write Question & Provide Options*</strong></h5>
-                                    <div id="editor-container">
-                                        <div class="editor mb-3" id="mcq_question"></div>
-                                    </div>
-                                    <div class="option-block mt-2 " id="option-container" style="margin-left: 3px">
-
-                                    </div>
-                                    <a type="button" class="mt-2 add-options" style="color: #691D5E">
-                                        <b>+ Add Option</b>
-                                    </a>
                                 </div>
                             </div>
 
-                            <div class="step step-3 d-none">
-                                <div id="question-container" style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB"></div>
-                                <div class="mt-3"><h5><strong>5. Select the Right Answer</h5></div>
-                                <div id="show-options"class="row mt-2" style="margin-left: 3px"></div>
-                                <div>
-                                    <h5 class="mt-3"><strong>6. How difficult is this Question?</strong></h5>
-                                </div>
-                                <div class="row" style="margin-left: 3px">
-                                    <div class="col-md-6">
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="difficulty" id="easy">
-                                            <label class="form-check-label" for="easy">
-                                                <span class="badge badge-pill badge-easy">Easy</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="difficulty" id="hard">
-                                            <label class="form-check-label" for="hard">
-                                                <span class="badge badge-pill badge-hard">Hard</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="difficulty" id="medium">
-                                            <label class="form-check-label" for="medium">
-                                                <span class="badge badge-pill badge-medium">Medium</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="difficulty" id="very-hard">
-                                            <label class="form-check-label" for="very-hard">
-                                                <span class="badge badge-pill badge-very-hard">Very Hard</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="step step-4 d-none">
-                                <h5><strong>7. Provide the Explanation</strong></h5>
-                                <div id="editor-container">
-                                    <div class="editor mb-3"></div>
-                                </div>
-                                <h5 class="mt-3"><strong>8. Want to Active this Question upon saving</strong></h5>
+                            <div id="sat_type_1" class="d-none">
+                                <h5 class="mt-3"><strong>2. Select the Question Type</strong></h5>
                                 <div class="row" style="margin-left: 3px">
                                     <div class="col-md-12 row" style="margin-left: 3px">
                                         <div class="form-check col-md-6 mb-2">
                                             <input type="radio" class="form-check-input" name="question_type" value="Verbal" id="verbal">
-                                            <label class="radio-container form-check-label" for="=verbal">
-                                                Make it Active
+                                            <label class="radio-container form-check-label" for="verbal">
+                                                Verbal
                                             </label>
                                         </div>
                                         <div class="form-check col-md-6 mb-2">
                                             <input type="radio" class="form-check-input" name="question_type" value="Quant" id="quant">
                                             <label class="radio-container form-check-label" for="quant">
-                                                Keep Inactive for now
+                                                Quant
                                             </label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                            <div id="sat_type_2" class="d-none">
+                                <h5 class="mt-3"><strong>2. Select the Question Subject</strong></h5>
+                                <div class="row" style="margin-left: 3px">
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            <input type="radio" name="subjects" value="Physics" class="form-check-input" id="physics">
+                                            <label class="form-check-label radio-container" for="physics">
+                                                Physics
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input type="radio" name="subjects" value="Chemistry" class="form-check-input" id="chemistry">
+                                            <label class="form-check-label radio-container" for="chemistry">
+                                                Chemistry
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            <input type="radio" name="subjects" value="Biology" class="form-check-input" id="biology">
+                                            <label class="form-check-label radio-container" for="biology">
+                                                Biology
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input type="radio" name="subjects" value="Math" class="form-check-input" id="math">
+                                            <label class="form-check-label radio-container" for="math">
+                                                Math
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Placeholder for future steps --}}
+                        <div class="step step-2 d-none">
+                            <div>
+                                <h5><strong>3. Provide the verbal Context*</strong></h5>
+                                <div id="editor-container">
+                                    <div class="editor mb-3" id="context"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h5><strong>4. Write Question & Provide Options*</strong></h5>
+                                <div id="editor-container">
+                                    <div class="editor mb-3" id="mcq_question"></div>
+                                </div>
+                                <div class="option-block mt-2 " id="option-container" style="margin-left: 3px">
+
+                                </div>
+                                <a type="button" class="mt-2 add-options" style="color: #691D5E">
+                                    <b>+ Add Option</b>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="step step-3 d-none">
+                            <div id="question-container" style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB"></div>
+                            <div class="mt-3"><h5><strong>5. Select the Right Answer</h5></div>
+                            <div id="show-options"class="row mt-2" style="margin-left: 3px"></div>
+                            <div>
+                                <h5 class="mt-3"><strong>6. How difficult is this Question?</strong></h5>
+                            </div>
+                            <div class="row" style="margin-left: 3px">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="easy">
+                                        <label class="form-check-label" for="easy">
+                                            <span class="badge badge-pill badge-easy">Easy</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="hard">
+                                        <label class="form-check-label" for="hard">
+                                            <span class="badge badge-pill badge-hard">Hard</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="medium">
+                                        <label class="form-check-label" for="medium">
+                                            <span class="badge badge-pill badge-medium">Medium</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="very-hard">
+                                        <label class="form-check-label" for="very-hard">
+                                            <span class="badge badge-pill badge-very-hard">Very Hard</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="step step-4 d-none">
+                            <h5><strong>7. Provide the Explanation</strong></h5>
+                            <div id="editor-container">
+                                <div class="editor mb-3"></div>
+                            </div>
+                            <h5 class="mt-3"><strong>8. Want to Active this Question upon saving</strong></h5>
+                            <div class="row" style="margin-left: 3px">
+                                <div class="col-md-12 row" style="margin-left: 3px">
+                                    <div class="form-check col-md-6 mb-2">
+                                        <input type="radio" class="form-check-input" name="question_type" value="1" id="is_active">
+                                        <label class="radio-container form-check-label" for="is_active">
+                                            Make it Active
+                                        </label>
+                                    </div>
+                                    <div class="form-check col-md-6 mb-2">
+                                        <input type="radio" class="form-check-input" name="question_type" value="2" id="is_inactive">
+                                        <label class="radio-container form-check-label" for="is_inactive">
+                                            Keep Inactive for now
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
                         <div class="d-flex w-100 justify-content-between align-items-center">
@@ -1061,11 +934,11 @@
                 display: flex;
                 flex-direction: column;
             }
-            .sidebar-content {
+            .filter-sidebar-content {
                 flex-grow: 1;
                 height: calc(100vh - 60px - 60px);
                 overflow-y: auto;
-                padding: 15px;
+                padding-left: 15px;
                 padding-bottom: 60px;
             }
             .sidebar-overlay {
@@ -1092,7 +965,7 @@
             }
 
             .sidebar-overlay.active {
-                display: block;
+                display: block; 
             }
             
             /* filter sidebar every dropdown start */
@@ -1560,12 +1433,12 @@
         <script>
             $(document).ready(function() {
 
-                $(".sat_1").change(function () {
+                $(".sat_2").change(function () {
                     $("#sat_type_2").removeClass("d-none");
                     $("#sat_type_1").addClass("d-none");
                 });
 
-                $(".sat_2").change(function () {
+                $(".sat_1").change(function () {
                     $("#sat_type_1").removeClass("d-none");
                     $("#sat_type_2").addClass("d-none");
                 });
@@ -1696,87 +1569,6 @@
                         }
                     });
                 }
-
-         // Create new option HTML
-                    // <div id="${newQuestionId}" class="editor"></div>
-                // Event Listener for Adding Options
-                // $(document).on("click", ".add-question", function() {
-                //     questionCount++; // Increment the option counter
-                //     let questionNum = $(this).data("question");
-                //     let newQuestionId = "question-" + questionCount;
-                //     let optionContainerId = `option-container-${questionCount}`;
-
-
-                //     let newQuestionHtml = `
-
-                //         <div class="question-block mb-4" id="${newQuestionId}">
-                //             <h5>${questionCount-1}. Write Question & Provide Options</h5>
-                //             <div class="option-block mt-2" id="${newQuestionId}">
-
-                //                 <div class="parent-editor mb-3" id="parent-editor-${newQuestionId}"></div>
-
-                //                 <div class="option-container" id="${optionContainerId}">
-                //                     <!-- Options will be appended here -->
-                //                 </div>
-                //                 </div>
-                //                 <button type="button" class="btn btn-secondary btn-sm mt-2 add-option" data-question="${questionCount}">
-                //                     + Add Option
-                //                 </button>
-                //                 <button type="button" class="btn btn-sm btn-danger remove-question mt-2" data-question="${questionCount}">
-                //                     ✖ Remove Question
-                //                 </button>
-                //         </div>
-                //     `;
-                //     $(this).before(newQuestionHtml);
-
-                //     initializeQuill(`#parent-editor-${questionCount}`);
-
-                //     addOption(questionCount);
-                // });
-
-                // // Function to Add New Option
-                // function addOption(questionNum) {
-                //     let optionCount = $(`#option-container-${questionNum} .child-editor`).length + 1;
-                //     let newOptionId = `option-${questionNum}-${optionCount}`;
-
-                //     let newOptionHtml = `
-                //         <div>
-                //             <div class="child-option mb-2" id="${newOptionId}">
-                //                 <div class="child-editor mb-2" id="editor-${newOptionId}"></div>
-                //                 <button type="button" class="btn btn-danger btn-sm remove-option" data-option="${newOptionId}">
-                //                     ✖ Remove Option
-                //                 </button>
-                //             </div>
-                //         </div>
-                //     `;
-
-                //     // Append the Option before the "+ Add Option" button
-                //     $(`#option-container-${questionNum}`).append(newOptionHtml);
-
-                //     // Initialize Quill for the Option (Child Editor)
-                //     initializeQuill(`#editor-${newOptionId}`);
-                // }
-
-                // // Event Listener for Adding New Options
-                // $(document).on("click", ".add-option", function() {
-                //     let questionNum = $(this).data("question");
-                //     addOption(questionNum);
-                // });
-
-                // //Event Listener for Removing Question
-                // $(document).on("click", ".remove-option", function() {
-                //     let optionId = $(this).data("option");
-                //     $(`#${optionId}`).remove();
-                // });
-
-                // // Event Listener for Removing a Question
-                // $(document).on("click", ".remove-question", function() {
-                //     let questionNum = $(this).data("question");
-                //     $(`#question-${questionNum}`).remove();
-                // });
-
-
-
 
                 $(document).on("click", ".add-options", function () {
                     optionCount++;
