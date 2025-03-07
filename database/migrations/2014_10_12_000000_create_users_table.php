@@ -31,7 +31,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Foreign key constraints
-            $table->foreign('active_role_id')->references('id')->on('roles')->onDelete('set null');
+            //$table->foreign('active_role_id')->references('id')->on('roles')->onDelete('set null');
         });
     }
 

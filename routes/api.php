@@ -36,24 +36,28 @@ Route::group(['middleware' => ['api', 'auth', 'web'], 'as' => 'api.'], function 
 |--------------------------------------------------------------------------
 */
 
-// Get all questions (with optional filters)
+// 📌 Get all questions (supports filtering & pagination)
 Route::get('/questions', [MainQuestionController::class, 'index']);
 
-// Create a new question
+// 📌 Create a new question
 Route::post('/questions', [MainQuestionController::class, 'store']);
 
-// Get a specific question by ID (with related exams and sections)
+// 📌 Get a specific question by ID (with related exams & sections)
 Route::get('/questions/{id}', [MainQuestionController::class, 'show']);
 
-// Update a question
+// 📌 Update a question
 Route::put('/questions/{id}', [MainQuestionController::class, 'update']);
 
-// Delete a question (soft delete)
+// 📌 Soft delete a question
 Route::delete('/questions/{id}', [MainQuestionController::class, 'destroy']);
 
-// Restore a soft-deleted question
+// 📌 Restore a soft-deleted question
 Route::post('/questions/{id}/restore', [MainQuestionController::class, 'restore']);
 
-// Get related exams and sections for a question
+// 📌 Toggle question status (active <-> inactive)
+Route::patch('/questions/{id}/toggle-status', [MainQuestionController::class, 'toggleStatus']);
+
+
+// 📌 Get related exams and sections for a question
 Route::get('/questions/{id}/relations', [MainQuestionController::class, 'getRelations']);
 

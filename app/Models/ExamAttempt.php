@@ -15,8 +15,8 @@ class ExamAttempt extends Model
 
     protected $table = 'exam_attempts';
     protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'id',
@@ -89,18 +89,41 @@ class ExamAttempt extends Model
      * Auto-submit overdue attempts based on exam duration + extra time.
      */
     public static function autoSubmitOverdueAttempts()
-    {
-        $expiredAttempts = self::where('status', 'in_progress')
-            ->whereRaw("TIMESTAMPDIFF(SECOND, start_time, NOW()) > remaining_time")
-            ->get();
+{
+    // Get current time
+    $now = now();
 
-        foreach ($expiredAttempts as $attempt) {
-            DB::transaction(function () use ($attempt) {
-                $attempt->update(['status' => 'expired', 'end_time' => now()]);
-                Log::info('Auto-submitted expired exam attempt', ['attempt_id' => $attempt->id]);
-            });
-        }
+    // Fetch overdue attempts where start_time + remaining_time < current time
+    $expiredAttempts = self::where('status', 'in_progress')
+        ->whereNotNull('start_time')
+        ->whereNotNull('remaining_time')
+        ->whereRaw('? >= DATE_ADD(start_time, INTERVAL remaining_time SECOND)', [$now])
+        ->get();
+
+    if ($expiredAttempts->isNotEmpty()) {
+        DB::transaction(function () use ($expiredAttempts, $now) {
+            foreach ($expiredAttempts as $attempt) {
+                $attempt->update([
+                    'status' => 'expired',
+                    'end_time' => $now,
+                ]);
+
+                Log::info('Auto-submitted expired exam attempt', [
+                    'attempt_id' => $attempt->id,
+                    'user_id' => $attempt->user_id,
+                    'exam_id' => $attempt->exam_id,
+                    'expired_at' => $now,
+                ]);
+            }
+        });
+
+        Log::info('Auto-submitted overdue exam attempts', [
+            'total_attempts' => $expiredAttempts->count()
+        ]);
     }
+}
+
+
 
     /**
      * Event listeners for logging

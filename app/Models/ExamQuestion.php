@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Support\Str;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,9 +22,13 @@ class ExamQuestion extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid',
+        'question_title',
+        'question_description',
         'question_text',
         'question_type',
+        'audience',
+        'sat_type',
+        'sat_question_type',
         'options',
         'correct_answer',
         'difficulty',
@@ -34,6 +36,7 @@ class ExamQuestion extends Model
         'explanation',
         'images',
         'videos',
+        'status',
         'created_by',
         'updated_by',
     ];
@@ -49,6 +52,7 @@ class ExamQuestion extends Model
         'images' => 'array',
         'videos' => 'array',
         'difficulty' => 'string',
+        'status' => 'string',
     ];
 
     /**
@@ -91,27 +95,16 @@ class ExamQuestion extends Model
         return $query->where('difficulty', $level);
     }
 
-    protected static function boot()
+    /**
+     * Scope a query to filter questions by status.
+     */
+    public function scopeActive($query)
     {
-        parent::boot();
-
-        static::saving(function ($question) {
-            // Ensure question_type is one of the allowed types
-            if (!in_array($question->question_type, ['MCQ', 'Fill-in-the-Blank', 'Paragraph'])) {
-                throw new \InvalidArgumentException("Invalid question type: {$question->question_type}");
-            }
-
-            // Ensure difficulty level is valid
-            if (!in_array($question->difficulty, ['Easy', 'Medium', 'Hard', 'Very Hard'])) {
-                throw new \InvalidArgumentException("Invalid difficulty level: {$question->difficulty}");
-            }
-        });
-
-        static::creating(function ($question) {
-            if (empty($question->question_id)) {
-                $question->question_id = (string) Str::uuid(); // ✅ Auto-generate question_id
-            }
-        });
+        return $query->where('status', 'active');
     }
 
+    public function scopeInactive($query)
+    {
+        return $query->where('status', 'inactive');
+    }
 }

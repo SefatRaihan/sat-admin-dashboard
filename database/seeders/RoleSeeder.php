@@ -5,32 +5,27 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use App\Models\Role;
-use App\Models\User;
 
 class RoleSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run()
     {
-        // Ensure at least one user exists before assigning created_by
-        $user = User::first() ?? User::factory()->create();
-
         $roles = [
-            ['name' => 'Admin'],
-            ['name' => 'Supervisor'],
-            ['name' => 'Student'],
+            ['id' => 1, 'name' => 'Admin', 'slug' => 'admin'],
+            ['id' => 2, 'name' => 'Student', 'slug' => 'student'],
+            ['id' => 3, 'name' => 'Adviser', 'slug' => 'adviser'],
         ];
 
         foreach ($roles as $role) {
-            Role::firstOrCreate(
-                ['name' => $role['name']], // Avoid duplicate roles
+            Role::updateOrCreate(
+                ['id' => $role['id']],
                 [
                     'uuid' => Str::uuid(),
-                    'slug' => Str::slug($role['name']),
-                    'description' => ucfirst($role['name']) . ' role',
-                    'is_supervisor_role' => $role['name'] === 'Supervisor',
-                    'created_by' => $user->id, // Assign a valid user
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'name' => $role['name'],
+                    'slug' => $role['slug'],
                 ]
             );
         }

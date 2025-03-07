@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class MainQuestionController extends Controller
 {
@@ -17,13 +18,24 @@ class MainQuestionController extends Controller
     {
         $questions = ExamQuestion::query();
 
-        // Apply filters if provided
-        if ($request->has('difficulty')) {
+        // Apply optional filters
+        if ($request->filled('difficulty')) {
             $questions->where('difficulty', $request->difficulty);
         }
-
-        if ($request->has('question_type')) {
+        if ($request->filled('question_type')) {
             $questions->where('question_type', $request->question_type);
+        }
+        if ($request->filled('audience')) {
+            $questions->where('audience', $request->audience);
+        }
+        if ($request->filled('sat_type')) {
+            $questions->where('sat_type', $request->sat_type);
+        }
+        if ($request->filled('sat_question_type')) {
+            $questions->where('sat_question_type', $request->sat_question_type);
+        }
+        if ($request->filled('status')) {
+            $questions->where('status', $request->status);
         }
 
         return response()->json($questions->paginate($request->get('per_page', 10)));
@@ -35,16 +47,22 @@ class MainQuestionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'question_title' => 'required|string|max:255',
+            'question_description' => 'nullable|string',
             'question_text' => 'required|string',
             'question_type' => ['required', Rule::in(['MCQ', 'Fill-in-the-Blank', 'Paragraph'])],
+            'audience' => ['required', Rule::in(['High School', 'College', 'Graduation', 'SAT 2'])],
+            'sat_type' => ['nullable', Rule::in(['SAT 1', 'SAT 2'])],
+            'sat_question_type' => ['nullable', Rule::in(['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])],
             'options' => 'nullable|array',
-            'correct_answer' => 'required|string',
+            'correct_answer' => 'required|string|max:255',
             'difficulty' => ['required', Rule::in(['Easy', 'Medium', 'Hard', 'Very Hard'])],
             'tags' => 'nullable|array',
             'explanation' => 'nullable|string',
             'images' => 'nullable|array',
             'videos' => 'nullable|array',
-            'created_by' => 'required|exists:users,id'
+            'status' => ['required', Rule::in(['active', 'inactive'])],
+            'created_by' => 'required|exists:users,id',
         ]);
 
         if ($validator->fails()) {
@@ -52,11 +70,14 @@ class MainQuestionController extends Controller
         }
 
         $question = ExamQuestion::create($validator->validated());
+
+        Log::info('New question created', ['question_id' => $question->id, 'created_by' => $question->created_by]);
+
         return response()->json($question, 201);
     }
 
     /**
-     * Display the specified question with its related exams and sections.
+     * Display the specified question with related exams and sections.
      */
     public function show($id)
     {
@@ -75,25 +96,34 @@ class MainQuestionController extends Controller
     {
         try {
             $question = ExamQuestion::findOrFail($id);
-            
+
             $validator = Validator::make($request->all(), [
+                'question_title' => 'sometimes|string|max:255',
+                'question_description' => 'sometimes|string|nullable',
                 'question_text' => 'sometimes|string',
                 'question_type' => ['sometimes', Rule::in(['MCQ', 'Fill-in-the-Blank', 'Paragraph'])],
+                'audience' => ['sometimes', Rule::in(['High School', 'College', 'Graduation', 'SAT 2'])],
+                'sat_type' => ['sometimes', Rule::in(['SAT 1', 'SAT 2'])],
+                'sat_question_type' => ['sometimes', Rule::in(['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])],
                 'options' => 'nullable|array',
-                'correct_answer' => 'sometimes|string',
+                'correct_answer' => 'sometimes|string|max:255',
                 'difficulty' => ['sometimes', Rule::in(['Easy', 'Medium', 'Hard', 'Very Hard'])],
                 'tags' => 'nullable|array',
                 'explanation' => 'nullable|string',
                 'images' => 'nullable|array',
                 'videos' => 'nullable|array',
-                'updated_by' => 'required|exists:users,id'
+                'status' => ['sometimes', Rule::in(['active', 'inactive'])],
+                'updated_by' => 'required|exists:users,id',
             ]);
-            
+
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
-            
+
             $question->update($validator->validated());
+
+            Log::info('Question updated', ['question_id' => $question->id, 'updated_by' => $question->updated_by]);
+
             return response()->json($question);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Question not found'], 404);
@@ -101,13 +131,16 @@ class MainQuestionController extends Controller
     }
 
     /**
-     * Remove the specified question.
+     * Remove the specified question (Soft Delete).
      */
     public function destroy($id)
     {
         try {
             $question = ExamQuestion::findOrFail($id);
             $question->delete();
+
+            Log::warning('Question deleted', ['question_id' => $question->id]);
+
             return response()->json(['message' => 'Question deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Question not found'], 404);
@@ -120,14 +153,42 @@ class MainQuestionController extends Controller
     public function restore($id)
     {
         $question = ExamQuestion::onlyTrashed()->find($id);
-        
+
         if (!$question) {
             return response()->json(['error' => 'Question not found or not deleted'], 404);
         }
 
         $question->restore();
+
+        Log::info('Question restored', ['question_id' => $question->id]);
+
         return response()->json(['message' => 'Question restored successfully', 'question' => $question]);
     }
+
+    /**
+ * Toggle the status of a question (Active ↔ Inactive)
+ */
+    public function toggleStatus($id)
+    {
+        try {
+            $question = ExamQuestion::findOrFail($id);
+
+            // Toggle status
+            $newStatus = $question->status === 'active' ? 'inactive' : 'active';
+            $question->update(['status' => $newStatus]);
+
+            Log::info('Question status toggled', ['question_id' => $question->id, 'new_status' => $newStatus]);
+
+            return response()->json([
+                'message' => "Question status updated successfully.",
+                'question_id' => $question->id,
+                'new_status' => $newStatus
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Question not found'], 404);
+        }
+    }
+
 
     /**
      * Fetch exams and sections related to a question.

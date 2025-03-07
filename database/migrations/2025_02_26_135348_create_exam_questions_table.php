@@ -12,10 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_questions', function (Blueprint $table) {
-            // Change question_id from UUID to BIGINT (Auto-incrementing ID)
-            $table->id(); // This replaces the previous UUID-based primary key
+            // Primary Key
+            $table->id(); // BIGINT Auto-incrementing ID
             
+            // Audience Selection
+            $table->enum('audience', ['High School', 'College', 'Graduation', 'SAT 2'])->default('High School')->comment('Defines the target audience for the question');
+
+            // SAT Type
+            $table->enum('sat_type', ['SAT 1', 'SAT 2'])->nullable()->comment('Defines if the question is for SAT 1 or SAT 2');
+
+            // SAT Question Type
+            $table->enum('sat_question_type', ['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])->nullable()->comment('Specifies the subject type for SAT questions');
+
             // Question Details
+            $table->string('question_title')->comment('Short title for the question');
+            $table->text('question_description')->nullable()->comment('Detailed description of the question');
             $table->text('question_text');
             $table->enum('question_type', ['MCQ', 'Fill-in-the-Blank', 'Paragraph'])->default('MCQ');
             $table->json('options')->nullable()->comment('Stores possible answers for MCQs');
@@ -25,6 +36,9 @@ return new class extends Migration
             $table->text('explanation')->nullable();
             $table->integer('version_number')->default(1)->comment('Tracks updates to questions');
             $table->string('language_code', 10)->default('en')->comment('Supports multiple languages');
+
+            // Question Status
+            $table->enum('status', ['active', 'inactive'])->default('active')->comment('Determines if the question is available for use');
 
             // Media Support
             $table->json('images')->nullable()->comment('Stores multiple image URLs');
@@ -42,6 +56,7 @@ return new class extends Migration
             $table->index(['difficulty'], 'idx_difficulty');
             $table->index(['deleted_at'], 'idx_deleted_at');
             $table->index(['language_code'], 'idx_language_code');
+            $table->index(['status'], 'idx_status');
         });
     }
 

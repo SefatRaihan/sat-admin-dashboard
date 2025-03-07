@@ -13,8 +13,9 @@ class ExamAttemptQuestion extends Model
 
     protected $table = 'exam_attempt_questions';
     protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'uuid';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
 
     protected $fillable = [
         'id',
