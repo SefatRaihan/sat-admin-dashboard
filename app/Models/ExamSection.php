@@ -32,8 +32,16 @@ class ExamSection extends Model
      * The attributes that should be mass-assignable.
      */
     protected $fillable = [
-        'id', 'exam_id', 'section_name', 'section_type', 'num_questions', 'duration'
+        'uuid',
+        'exam_id',
+        'title', // ✅ Ensure this is here
+        'description',
+        'duration',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
+    
 
     /**
      * The attributes that should be cast to native types.
@@ -43,19 +51,6 @@ class ExamSection extends Model
         'duration' => 'integer',
     ];
 
-    /**
-     * Boot function to generate a UUID before creating a new section.
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($section) {
-            if (empty($section->id)) {
-                $section->id = (string) Str::uuid();
-            }
-        });
-    }
 
     /**
      * Relationship: A section belongs to an exam.
@@ -72,4 +67,16 @@ class ExamSection extends Model
     {
         return $this->belongsToMany(ExamQuestion::class, 'section_question_pivot', 'section_id', 'question_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($section) {
+            if (empty($section->uuid)) {
+                $section->uuid = (string) Str::uuid(); // ✅ Correct field
+            }
+        });
+    }
+
 }

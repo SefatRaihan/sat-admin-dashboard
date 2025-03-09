@@ -3,10 +3,12 @@
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\ExamSectionController;
 use App\Http\Controllers\MainQuestionController;
 use App\Http\Controllers\Api\ExamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -73,3 +75,13 @@ Route::get('/questions/{id}/relations', [MainQuestionController::class, 'getRela
 
 
 Route::apiResource('/exams', ExamController::class);
+Route::post('/exams/{id}/restore', [ExamController::class, 'restore']);
+
+
+
+
+// ✅ Assign Question to Section (Drag & Drop)
+Route::post('/sections/assign-question', [ExamSectionController::class, 'assignQuestionToSection']);
+
+// ✅ Remove Question from Section (Drag Out)
+Route::post('/sections/remove-question', [ExamSectionController::class, 'removeQuestionFromSection']);

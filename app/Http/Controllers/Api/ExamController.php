@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
+use App\Models\ExamSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -36,27 +38,58 @@ class ExamController extends Controller
      * 📌 Store a newly created exam.
      */
     public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'scheduled_at' => 'nullable|date',
-            'duration' => 'required|integer|min:1',
-            'created_by' => 'nullable|exists:users,id',
+{
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'scheduled_at' => 'nullable|date',
+        'duration' => 'required|integer|min:1',
+        'num_sections' => 'nullable|integer|min:1|max:4', // Default is 1
+        'created_by' => 'required|exists:users,id',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    return DB::transaction(function () use ($request) {
+        // ✅ Ensure UUID is generated for the Exam
+        $exam = Exam::create([
+            'uuid' => Str::uuid(),  
+            'title' => $request->title,
+            'description' => $request->description,
+            'scheduled_at' => $request->scheduled_at,
+            'duration' => $request->duration,
+            'created_by' => $request->created_by,
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        // ✅ Default to 1 section if num_sections not provided
+        $numSections = $request->num_sections ?? 1;
+
+        // ✅ Create Sections (Ensuring `title` is set)
+        for ($i = 1; $i <= $numSections; $i++) {
+            ExamSection::create([
+                'uuid' => Str::uuid(),  
+                'exam_id' => $exam->id,
+                'title' => "Section $i",  // ✅ This ensures title is always set
+                'description' => null,  
+                'duration' => null,     
+                'created_by' => $request->created_by,
+            ]);
         }
 
-        // Ensure UUID is assigned
-        $examData = $validator->validated();
-        $examData['uuid'] = Str::uuid();
+        Log::info('Exam created with sections', ['exam_id' => $exam->id]);
 
-        $exam = Exam::create($examData);
+        return response()->json([
+            'message' => 'Exam created successfully with sections',
+            'exam' => $exam->load('sections'),
+        ], 201);
+    });
+}
 
-        return response()->json($exam, 201);
-    }
+
+
+
 
 
     /**
