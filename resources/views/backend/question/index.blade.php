@@ -5,7 +5,7 @@
                  <a  href="/students/upload" data-toggle="modal" data-target="#uploadQuestion" class="btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 btn-sm" style="padding: 5px 15px; border:2px solid #D0D5DD; border-radius:10px; background-color: #FFFFFF; color:#344054; font-size: 12px">
                     <i class="fa-solid fa-cloud-arrow-up mt-1 pr-1"></i> Upload Question
                 </a>
-                
+
             </div>
             <div class="d-flex align-items-center justify-content-center" style="margin-right: 10px">
                 <a href=\'/students/create\' data-toggle=\'modal\' data-target=\'#questionModal\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
@@ -27,18 +27,22 @@
         data-target="#questionModal"
         buttonRoute="/button/create"
         /> --}}
-        
+
     <section>
 
+       
         <div>
-            <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+            <div class="card"
+                style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                 <div class="card-header border-bottom d-flex justify-content-between">
                     <div>
-                        <input type="text" class="form-control search__input" placeholder="Search Questions">
+                        <input type="text" class="form-control search_input" placeholder="Search Questions">
                     </div>
 
                     <div class="d-flex">
-                        <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
+                        <button type="button" class="btn pt-0 pb-0 mr-2"
+                            style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img
+                                src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
 
                         <div class="form-group mb-0">
                             <select class="form-control multiselect" multiple="multiple" data-fouc>
@@ -55,57 +59,66 @@
                     </div>
                 </div>
                 <div class="card-body p-0 m-0 table-responsive">
-                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
-                        <thead>
-                            <tr>
-                                <th colspan="10">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h5 class="mb-0 p-0"><b>1 Question</b></h5>
-                                        </div>
-                                        <div class="delete-btn d-none">
-                                            <button class="btn"><img src="{{ asset('image/icon/download.png') }}" alt=""></button>
-                                            <button class="btn text-danger"><i class="fas fa-trash-alt"></i></button>
-                                            <button class="btn text-success"><strong>Make 1 Active</strong></button>
-                                            <button class="btn text-warning"><strong>Make 1 Inactive</strong></button>
-                                        </div>
-                                    </div>
-                                </th>
-                            </tr>
-                            <tr class="bg-light" role="row">
-                                <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
-                                <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Notification: activate to sort column descending">Question</th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Audience</th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Q. Type</th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Exam</th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Difficulty</th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Avg. Time</th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">State</th>
-                                <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="custom-row" data-toggle="modal" data-target="#detailModalCenter">
-                                <td><input type="checkbox" class="row-checkbox"></td>
-                                <td>
-                                    Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development to fill empty spaces in a layout that does not
-                                </td>
-                                <td>High School</td>
-                                <td>22 Jan, 2012</td>
-                                <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
-                                <td>High School</td>
-                                <td>Monthly</td>
-                                <td>
-                                    <div class="form-check form-check-switchery p-0 m-0">
-                                        <label class="form-check-label">
-                                            <input type="checkbox" class="form-check-input-switchery" checked data-fouc>
-                                        </label>
-                                    </div>                                  
-                                </td>
-                                <td class="text-center"><button class="btn edit-btn"><i class="far fa-edit"></i> Edit</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <!-- Filters & Pagination Controls -->
+                    <div class="d-flex justify-content-between align-items-center mt-3 p-2">
+                        <h4><strong id="total-questions"></strong></h4>
+                        <div class="delete-btn d-none">
+                            <button class="btn"><img src="{{ asset('image/icon/download.png') }}"
+                                    alt=""></button>
+                            <button class="btn text-danger"><i class="fas fa-trash-alt"></i></button>
+                            <button class="btn text-success"><strong>Make <span id="active-count"></span>
+                                    Active</strong></button>
+                            <button class="btn text-warning"><strong>Make <span id="inactive-count"></span>
+                                    Inactive</strong></button>
+                        </div>
+                    </div>
+
+                    <!-- Questions Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
+                                    <th data-column="question" class="sortable">Question</th>
+                                    <th data-column="audience" class="sortable">Audience</th>
+                                    <th data-column="question_type" class="sortable">Q. Type</th>
+                                    <th data-column="exam" class="sortable">Exam</th>
+                                    <th data-column="difficulty" class="sortable">Difficulty</th>
+                                    <th data-column="avg_time" class="sortable">Avg. Time</th>
+                                    <th data-column="created_at" class="sortable">Created</th>
+                                    <th>State</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="question-table-body">
+                                <tr>
+                                    <td colspan="9" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-between align-items-center mt-2 p-2"
+                        style="border-top: 1px solid #D0D5DD; background:#F9FAFB">
+                        <div id="pagination-info"></div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center mr-2">
+                                <span class="me-2 pr-2">Rows per page</span>
+                                <select id="rowsPerPage" class="form-control form-select-sm" style="width: 60px;">
+                                    <option value="10" selected>10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <nav>
+                                <ul class="pagination pagination-sm" id="pagination-links">
+                                    <!-- Pagination links will be inserted here -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,7 +138,8 @@
                     <div class="task-form">
                         <div class="p-3 ">
                             <div class="d-flex justify-content-between">
-                                <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
+                                <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span
+                                        style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
                                 <button class="reset-slider"><u>Reset</u></button>
                             </div>
                             <div class="mt-1 mb-2 d-flex justify-content-between">
@@ -145,19 +159,22 @@
                                     <button class="reset-slider"><u>Reset</u></button>
                                 </div>
                                 <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="all" value="All" checked>
+                                    <input class="form-check-input" type="radio" name="status" id="all"
+                                        value="All" checked>
                                     <label class="form-check-label" for="all">
                                         All
                                     </label>
                                 </div>
                                 <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="activeonly" value="Active only">
+                                    <input class="form-check-input" type="radio" name="status" id="activeonly"
+                                        value="Active only">
                                     <label class="form-check-label" for="activeonly">
                                         Active only
                                     </label>
                                 </div>
                                 <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="inactiveonly" value="Inactive only">
+                                    <input class="form-check-input" type="radio" name="status" id="inactiveonly"
+                                        value="Inactive only">
                                     <label class="form-check-label" for="inactiveonly">
                                         Inactive only
                                     </label>
@@ -171,36 +188,44 @@
                                 <div id="all_sat_type_1">
                                     <div class="filter-group">
                                         <div class="form-check">
-                                            <input class="form-check-input toggle-parent" type="checkbox" id="allSet1Toggle">
+                                            <input class="form-check-input toggle-parent" type="checkbox"
+                                                id="allSet1Toggle">
                                             <label class="form-check-label" for="allSet1Toggle">
                                                 All SAT 1
                                             </label>
-                                            <span class="toggle-icon" data-target="allSet1"><i class="fas fa-chevron-down"></i></span>
+                                            <span class="toggle-icon" data-target="allSet1"><i
+                                                    class="fas fa-chevron-down"></i></span>
                                         </div>
                                         <div class="nested-options collapse" id="allSet1">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam1">
-                                                <label class="form-check-label" for="exam1">Hight School : Verbal</label>
+                                                <label class="form-check-label" for="exam1">Hight School :
+                                                    Verbal</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam2">
-                                                <label class="form-check-label" for="exam2">Hight School : Quant</label>
+                                                <label class="form-check-label" for="exam2">Hight School :
+                                                    Quant</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam3">
-                                                <label class="form-check-label" for="exam3">College : Verbal</label>
+                                                <label class="form-check-label" for="exam3">College :
+                                                    Verbal</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam3">
-                                                <label class="form-check-label" for="exam3">College : Verbal</label>
+                                                <label class="form-check-label" for="exam3">College :
+                                                    Verbal</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam3">
-                                                <label class="form-check-label" for="exam3">Graduate : Verbal</label>
+                                                <label class="form-check-label" for="exam3">Graduate :
+                                                    Verbal</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="exam3">
-                                                <label class="form-check-label" for="exam3">Graduate : Quant</label>
+                                                <label class="form-check-label" for="exam3">Graduate :
+                                                    Quant</label>
                                             </div>
                                         </div>
                                     </div>
@@ -208,11 +233,13 @@
                                 <div id="all_sat_type_2">
                                     <div class="filter-group">
                                         <div class="form-check">
-                                            <input class="form-check-input toggle-parent" type="checkbox" id="allSet2Toggle">
+                                            <input class="form-check-input toggle-parent" type="checkbox"
+                                                id="allSet2Toggle">
                                             <label class="form-check-label" for="allSet2Toggle">
                                                 All SAT 2
                                             </label>
-                                            <span class="toggle-icon" data-target="allSet2"><i class="fas fa-chevron-down"></i></span>
+                                            <span class="toggle-icon" data-target="allSet2"><i
+                                                    class="fas fa-chevron-down"></i></span>
                                         </div>
                                         <div class="nested-options collapse" id="allSet2">
                                             <div class="form-check">
@@ -233,39 +260,47 @@
                                     <button class="reset-slider"><u>Reset</u></button>
                                 </div>
                                 <div class="mb-1">
-                                    <input type="text" class="form-control search_input w-100" placeholder="Search Questions">
+                                    <input type="text" class="form-control search_input w-100"
+                                        placeholder="Search Questions">
                                 </div>
                                 <div class="filter-group">
                                     <div class="form-check">
-                                        <input class="form-check-input toggle-parent" type="checkbox" id="highSchoolToggle">
+                                        <input class="form-check-input toggle-parent" type="checkbox"
+                                            id="highSchoolToggle">
                                         <label class="form-check-label" for="highSchoolToggle">
                                             View all High School Exams
                                         </label>
-                                        <span class="toggle-icon" data-target="highSchoolOptions"><i class="fas fa-chevron-down"></i></span>
+                                        <span class="toggle-icon" data-target="highSchoolOptions"><i
+                                                class="fas fa-chevron-down"></i></span>
                                     </div>
                                     <div class="nested-options collapse" id="highSchoolOptions">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="exam1">
-                                            <label class="form-check-label" for="exam1">High School Verbal Exam 1</label>
+                                            <label class="form-check-label" for="exam1">High School Verbal Exam
+                                                1</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="exam2">
-                                            <label class="form-check-label" for="exam2">High School Verbal Exam 2</label>
+                                            <label class="form-check-label" for="exam2">High School Verbal Exam
+                                                2</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="exam3">
-                                            <label class="form-check-label" for="exam3">High School Verbal Exam 3</label>
+                                            <label class="form-check-label" for="exam3">High School Verbal Exam
+                                                3</label>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="filter-group">
                                     <div class="form-check">
-                                        <input class="form-check-input toggle-parent" type="checkbox" id="collegeToggle">
+                                        <input class="form-check-input toggle-parent" type="checkbox"
+                                            id="collegeToggle">
                                         <label class="form-check-label" for="collegeToggle">
                                             View all College Exams
                                         </label>
-                                        <span class="toggle-icon" data-target="collegeOptions"><i class="fas fa-chevron-down"></i></span>
+                                        <span class="toggle-icon" data-target="collegeOptions"><i
+                                                class="fas fa-chevron-down"></i></span>
                                     </div>
                                     <div class="nested-options collapse" id="collegeOptions">
                                         <div class="form-check">
@@ -277,7 +312,7 @@
                                             <label class="form-check-label" for="college2">College Quant Exam</label>
                                         </div>
                                     </div>
-                                </div>                                    
+                                </div>
                             </div>
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
@@ -286,19 +321,23 @@
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
                                     <input type="checkbox" id="super-man">
-                                    <label class="form-check-label pl-1" for="super-man"><span class="badge badge-pill badge-easy"><b>Easy</b></span></label>
+                                    <label class="form-check-label pl-1" for="super-man"><span
+                                            class="badge badge-pill badge-easy"><b>Easy</b></span></label>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox"  id="avenger">
-                                    <label class="form-check-label pl-1" for="avenger"><span class="badge badge-pill badge-medium"><b>Medium</b></span></label>
+                                    <input type="checkbox" id="avenger">
+                                    <label class="form-check-label pl-1" for="avenger"><span
+                                            class="badge badge-pill badge-medium"><b>Medium</b></span></label>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox"  id="gladiator">
-                                    <label class="form-check-label pl-1" for="gladiator"><span class="badge badge-pill badge-hard"><b>Hard</b></span></label>
+                                    <input type="checkbox" id="gladiator">
+                                    <label class="form-check-label pl-1" for="gladiator"><span
+                                            class="badge badge-pill badge-hard"><b>Hard</b></span></label>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox"  id="gladiator">
-                                    <label class="form-check-label pl-1" for="gladiator"><span class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
+                                    <input type="checkbox" id="gladiator">
+                                    <label class="form-check-label pl-1" for="gladiator"><span
+                                            class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
                                 </div>
                             </div>
                             <div class="mt-2">
@@ -309,24 +348,26 @@
                                         <button class="reset-slider" id="reset-slider">Reset</button>
                                     </div>
                                     <div class="range-slider">
-                                        <input type="range" min="1" max="120" value="1" id="min-range">
-                                        <input type="range" min="1" max="120" value="120" id="max-range">
+                                        <input type="range" min="1" max="120" value="1"
+                                            id="min-range">
+                                        <input type="range" min="1" max="120" value="120"
+                                            id="max-range">
                                     </div>
                                     <div class="slider-labels">
                                         <span id="min-label">1m 00s</span>
                                         <span id="max-label">2m 00s</span>
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div class="mt-2">
                                 <h6><b>Created By:</b></h6>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox"  id="monthly">
+                                    <input type="checkbox" id="monthly">
                                     <label class="form-check-label pl-1" for="monthly">Admin</label>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox"  id="annual">
+                                    <input type="checkbox" id="annual">
                                     <label class="form-check-label pl-1" for="annual">Sefat</label>
                                 </div>
                             </div>
@@ -336,55 +377,74 @@
                 </div>
                 <div class="border-top fixed-bottom-buttons">
                     <div class="d-flex justify-content-between p-3">
-                        <button type="button" class="btn" style="background-color:#691D5E ;border-radius: 8px; color:#fff; width:50%">Apply Filters</button>
-                        <button type="button" class="btn btn-outline-dark ml-2" style="border: 1px solid #D0D5DD; border-radius: 8px; width:50%">Reset All</button>
+                        <button type="button" class="btn"
+                            style="background-color:#691D5E ;border-radius: 8px; color:#fff; width:50%">Apply
+                            Filters</button>
+                        <button type="button" class="btn btn-outline-dark ml-2"
+                            style="border: 1px solid #D0D5DD; border-radius: 8px; width:50%">Reset All</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
-    {{-- edit modal --}}
+
+    {{-- show details modal --}}
     <section>
-        <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog" aria-labelledby="detailModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="detailModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" style="border-radius: 24px; height:100%">
-                    <div class="modal-header text-left" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
+                    <div class="modal-header text-left"
+                        style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
                         <h5 class="modal-title" id="exampleModalLongTitle">StudentID <span>#SID6386</span></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true">&times;</span>
                         </button>
-                      </div>
+                    </div>
                     <div class="modal-body">
                         <div>
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="question-tab" data-toggle="tab" href="#question" role="tab" aria-controls="question" aria-selected="true">Question</a>
+                                    <a class="nav-link active" id="question-tab" data-toggle="tab" href="#question"
+                                        role="tab" aria-controls="question" aria-selected="true">Question</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="performance-tab" data-toggle="tab" href="#performance" role="tab" aria-controls="performance" aria-selected="false">Explanation</a>
+                                    <a class="nav-link" id="performance-tab" data-toggle="tab" href="#performance"
+                                        role="tab" aria-controls="performance"
+                                        aria-selected="false">Explanation</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#wallet" role="tab" aria-controls="wallet" aria-selected="false">Details</a>
+                                    <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#wallet"
+                                        role="tab" aria-controls="wallet" aria-selected="false">Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="ratings-tab" data-toggle="tab" href="#ratings" role="tab" aria-controls="ratings" aria-selected="false">Analytics</a>
+                                    <a class="nav-link" id="ratings-tab" data-toggle="tab" href="#ratings"
+                                        role="tab" aria-controls="ratings" aria-selected="false">Analytics</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="test-result-tab" data-toggle="tab" href="#test-result" role="tab" aria-controls="test-result" aria-selected="false">Feedbacks</a>
+                                    <a class="nav-link" id="test-result-tab" data-toggle="tab" href="#test-result"
+                                        role="tab" aria-controls="test-result"
+                                        aria-selected="false">Feedbacks</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="question" role="tabpanel" aria-labelledby="question-tab">
+                                <div class="tab-pane fade show active" id="question" role="tabpanel"
+                                    aria-labelledby="question-tab">
                                     <div>
-                                        <div id="question-show-card" style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB">
-                                            Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les 
+                                        <div id="question-show-card"
+                                            style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB">
+                                            Lorem Ipsum est simplement du faux texte employé dans la composition et la
+                                            mise en page avant impression. Le Lorem Ipsum est le faux texte standard de
+                                            l'imprimerie depuis les
                                             <p class="mb-0 mt-1">
                                                 <strong>Question:</strong>
                                             </p>
-                                            <p class="pt-0 mt-0">The Lorem ipsum text is derived from sections 1.10.32 and 1.10.33 of Cicero's De finibus bonorum et malorum.</p>
+                                            <p class="pt-0 mt-0">The Lorem ipsum text is derived from sections 1.10.32
+                                                and 1.10.33 of Cicero's De finibus bonorum et malorum.</p>
                                         </div>
-                                        <div class="mt-3"><h5><strong><strong>Options:</strong></h5></div>
+                                        <div class="mt-3">
+                                            <h5><strong><strong>Options:</strong></h5>
+                                        </div>
                                         {{-- <div id="option-show-in-view"class="row mt-2" style="margin-left: 3px">
                                             <div class="col-md-6">
                                                 <div class="form-check mb-2">
@@ -417,17 +477,37 @@
                                         </div> --}}
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab">
+                                <div class="tab-pane fade" id="performance" role="tabpanel"
+                                    aria-labelledby="performance-tab">
                                     <div>
                                         <h4>Appearing Exams</h4>
-                                        <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
+                                        <table class="table datatable-basic" id="DataTables_Table_0" role="grid"
+                                            aria-describedby="DataTables_Table_0_info"
+                                            style="border: 1px solid #EAECF0">
                                             <thead>
                                                 <tr class="bg-light" role="row">
-                                                    <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Notification: activate to sort column descending">Course</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Test/Section</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Score</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">%</th>
+                                                    <th class="sorting_asc" tabindex="0"
+                                                        aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Notification: activate to sort column descending">
+                                                        Course</th>
+                                                    <th class="sorting" tabindex="0"
+                                                        aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1"
+                                                        aria-label="Date: activate to sort column ascending">Date</th>
+                                                    <th class="sorting" tabindex="0"
+                                                        aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1"
+                                                        aria-label="Date: activate to sort column ascending">
+                                                        Test/Section</th>
+                                                    <th class="sorting" tabindex="0"
+                                                        aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1"
+                                                        aria-label="Date: activate to sort column ascending">Score</th>
+                                                    <th class="sorting" tabindex="0"
+                                                        aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1"
+                                                        aria-label="Date: activate to sort column ascending">%</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -456,18 +536,24 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
-                                    <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
+                                <div class="tab-pane fade" id="wallet" role="tabpanel"
+                                    aria-labelledby="wallet-tab">
+                                    <div class="d-flex justify-content-center align-items-center"
+                                        style="background: #F5F5F5; width:100%; height:300px">
                                         <p><b>Waiting for content</b></p>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="ratings" role="tabpanel" aria-labelledby="ratings-tab">
-                                    <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
+                                <div class="tab-pane fade" id="ratings" role="tabpanel"
+                                    aria-labelledby="ratings-tab">
+                                    <div class="d-flex justify-content-center align-items-center"
+                                        style="background: #F5F5F5; width:100%; height:300px">
                                         <p><b>Waiting for content</b></p>
-                                    </div>   
+                                    </div>
                                 </div>
-                                <div class="tab-pane fade" id="test-result" role="tabpanel" aria-labelledby="test-result-tab">
-                                    <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
+                                <div class="tab-pane fade" id="test-result" role="tabpanel"
+                                    aria-labelledby="test-result-tab">
+                                    <div class="d-flex justify-content-center align-items-center"
+                                        style="background: #F5F5F5; width:100%; height:300px">
                                         <p><b>Waiting for content</b></p>
                                     </div>
                                 </div>
@@ -475,17 +561,21 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between border-top pt-3">
-                        <button type="button" class="btn" style="border: 1px solid #D0D5DD; border-radius: 8px;">Edit Question</button>
-                        <button type="button" class="btn btn-outline-dark" style="background-color:#691D5E ;border-radius: 8px; color:#fff"  data-dismiss="modal">Close</button>
+                        <button type="button" class="btn"
+                            style="border: 1px solid #D0D5DD; border-radius: 8px;">Edit Question</button>
+                        <button type="button" class="btn btn-outline-dark"
+                            style="background-color:#691D5E ;border-radius: 8px; color:#fff"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     {{-- create modal --}}
     <section>
-        <div class="modal fade" id="questionModal" tabindex="-1" role="dialog" aria-labelledby="questionModalTitle" aria-hidden="true">
+        <div class="modal fade" id="questionModal" tabindex="-1" role="dialog"
+            aria-labelledby="questionModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" style="border-radius: 24px; height:100%">
                     <div style="background: #F9FAFB;  border-bottom:1px solid #D0D5DD ">
@@ -495,7 +585,263 @@
                             </button>
                         </div>
                         <h4 class="text-center font-weight-bold">Create a Question</h4>
-                        <p class="text-center text-muted">Step 1: Select Audience & Question Type</p>
+                        <p class="text-center text-muted step-title"></p>
+                        <div class="d-flex justify-content-center align-items-center mb-4 step-container">
+                            <div class="step-group">
+                                <div class="step-circle active" data-step="1"><i
+                                        class="fa-solid fa-check d-none"></i><span class="circle-count">1</span></div>
+                            </div>
+                            <div class="step-group">
+                                <div class="step-line"></div>
+                                <div class="step-circle m-0" data-step="2"><i
+                                        class="fa-solid fa-check d-none"></i><span class="circle-count">2</span></div>
+                            </div>
+                            <div class="step-group">
+                                <div class="step-line"></div>
+                                <div class="step-circle m-0" data-step="3"><i
+                                        class="fa-solid fa-check d-none"></i><span class="circle-count">3</span></div>
+                            </div>
+                            <div class="step-group">
+                                <div class="step-line"></div>
+                                <div class="step-circle m-0" data-step="4"><i
+                                        class="fa-solid fa-check d-none"></i><span class="circle-count">4</span></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body" style="padding: 10px 40px">
+                        {{-- Form Start --}}
+                        <div class="step step-1">
+                            <h5><strong>1. Select the Audience</strong></h5>
+                            <div class="row" style="margin-left: 3px">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="audience" value="High School"
+                                            class="form-check-input sat_1" id="high_school">
+                                        <label class="radio-container form-check-label" for="high_school">
+                                            High School
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="audience" value="Graduation"
+                                            class="form-check-input sat_1" id="graduation">
+                                        <label class="radio-container form-check-label" for="graduation">
+                                            Graduation
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="audience" value="College"
+                                            class="form-check-input sat_1" id="college">
+                                        <label class="radio-container form-check-label" for="college">
+                                            College
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="audience" value="SAT 2"
+                                            class="form-check-input sat_2" id="sat_2">
+                                        <label class="radio-container form-check-label" for="sat_2">
+                                            SAT 2
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="sat_type_1" class="d-none">
+                                <h5 class="mt-3"><strong>2. Select the Question Type</strong></h5>
+                                <div class="row" style="margin-left: 3px">
+                                    <div class="col-md-12 row" style="margin-left: 3px">
+                                        <div class="form-check col-md-6 mb-2">
+                                            <input type="radio" class="form-check-input" name="question_type"
+                                                value="Verbal" id="verbal">
+                                            <label class="radio-container form-check-label" for="verbal">
+                                                Verbal
+                                            </label>
+                                        </div>
+                                        <div class="form-check col-md-6 mb-2">
+                                            <input type="radio" class="form-check-input" name="question_type"
+                                                value="Quant" id="quant">
+                                            <label class="radio-container form-check-label" for="quant">
+                                                Quant
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="sat_type_2" class="d-none">
+                                <h5 class="mt-3"><strong>2. Select the Question Subject</strong></h5>
+                                <div class="row" style="margin-left: 3px">
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            <input type="radio" name="subjects" value="Physics"
+                                                class="form-check-input" id="physics">
+                                            <label class="form-check-label radio-container" for="physics">
+                                                Physics
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input type="radio" name="subjects" value="Chemistry"
+                                                class="form-check-input" id="chemistry">
+                                            <label class="form-check-label radio-container" for="chemistry">
+                                                Chemistry
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            <input type="radio" name="subjects" value="Biology"
+                                                class="form-check-input" id="biology">
+                                            <label class="form-check-label radio-container" for="biology">
+                                                Biology
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input type="radio" name="subjects" value="Math"
+                                                class="form-check-input" id="math">
+                                            <label class="form-check-label radio-container" for="math">
+                                                Math
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Placeholder for future steps --}}
+                        <div class="step step-2 d-none">
+                            <div>
+                                <h5><strong>3. Provide the verbal Context*</strong></h5>
+                                <div id="editor-container">
+                                    <div class="editor mb-3" id="context"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h5><strong>4. Write Question & Provide Options*</strong></h5>
+                                <div id="editor-container">
+                                    <div class="editor mb-3" id="mcq_question"></div>
+                                </div>
+                                <div class="option-block mt-2 " id="option-container" style="margin-left: 3px">
+
+                                </div>
+                                <a type="button" class="mt-2 add-options" style="color: #691D5E">
+                                    <b>+ Add Option</b>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="step step-3 d-none">
+                            <div id="question-container"
+                                style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB">
+                            </div>
+                            <div class="mt-3">
+                                <h5><strong>5. Select the Right Answer</h5>
+                            </div>
+                            <div id="show-options"class="row mt-2" style="margin-left: 3px"></div>
+                            <div>
+                                <h5 class="mt-3"><strong>6. How difficult is this Question?</strong></h5>
+                            </div>
+                            <div class="row" style="margin-left: 3px">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty"
+                                            id="easy" value="Easy">
+                                        <label class="form-check-label" for="easy">
+                                            <span class="badge badge-pill badge-easy">Easy</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty"
+                                            id="hard" value="Hard">
+                                        <label class="form-check-label" for="hard">
+                                            <span class="badge badge-pill badge-hard">Hard</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty"
+                                            id="medium" value="Medium">
+                                        <label class="form-check-label" for="medium">
+                                            <span class="badge badge-pill badge-medium">Medium</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty"
+                                            id="very-hard" value="Very Hard">
+                                        <label class="form-check-label" for="very-hard">
+                                            <span class="badge badge-pill badge-very-hard">Very Hard</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="step step-4 d-none">
+                            <h5><strong>7. Provide the Explanation</strong></h5>
+                            <div id="editor-container">
+                                <div class="editor mb-3" id="explanation"></div>
+                            </div>
+                            <h5 class="mt-3"><strong>8. Want to Active this Question upon saving</strong></h5>
+                            <div class="row" style="margin-left: 3px">
+                                <div class="col-md-12 row" style="margin-left: 3px">
+                                    <div class="form-check col-md-6 mb-2">
+                                        <input type="radio" class="form-check-input" name="question_status"
+                                            value="active" id="active">
+                                        <label class="radio-container form-check-label" for="active">
+                                            Make it Active
+                                        </label>
+                                    </div>
+                                    <div class="form-check col-md-6 mb-2">
+                                        <input type="radio" class="form-check-input" name="question_status"
+                                            value="inactive" id="inactive">
+                                        <label class="radio-container form-check-label" for="inactive">
+                                            Keep Inactive for now
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <!-- Left side: Placeholder wrapper to maintain spacing -->
+                            <div class="left-placeholder">
+                                <button type="button" class="btn new-question d-none">Save & Create Another</button>
+                            </div>
+
+                            <!-- Right side: Navigation buttons -->
+                            <div class="d-flex">
+                                <button type="button"
+                                    class="btn back-btn btn-outline-secondary cancel mr-2">Cancel</button>
+                                <button type="button"
+                                    class="btn back-btn btn-outline-secondary prev-step mr-2 d-none">Back</button>
+                                <button type="button" class="btn next-step">Next</button>
+                                <button type="submit" class="btn save-question d-none"
+                                    style="background:#691D5E; color: #EAECF0; border-radius: 8px;">Save
+                                    Question</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- edit modal --}}
+    {{-- <section>
+        <div class="modal fade" id="questionEditModal" tabindex="-1" role="dialog" aria-labelledby="questionModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="border-radius: 24px; height:100%">
+                    <div style="background: #F9FAFB;  border-bottom:1px solid #D0D5DD ">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <h4 class="text-center font-weight-bold">Create a Question</h4>
+                        <p class="text-center text-muted step-title"></p>
                         <div class="d-flex justify-content-center align-items-center mb-4 step-container">
                             <div class="step-group">
                                 <div class="step-circle active" data-step="1"><i class="fa-solid fa-check d-none"></i><span
@@ -520,7 +866,6 @@
 
                     </div>
                     <div class="modal-body" style="padding: 10px 40px">
-                        {{-- Form Start --}}
                         <div class="step step-1">
                             <h5><strong>1. Select the Audience</strong></h5>
                             <div class="row" style="margin-left: 3px">
@@ -608,7 +953,6 @@
                             </div>
                         </div>
 
-                        {{-- Placeholder for future steps --}}
                         <div class="step step-2 d-none">
                             <div>
                                 <h5><strong>3. Provide the verbal Context*</strong></h5>
@@ -640,13 +984,13 @@
                             <div class="row" style="margin-left: 3px">
                                 <div class="col-md-6">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="difficulty" id="easy">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="easy" value="Easy">
                                         <label class="form-check-label" for="easy">
                                             <span class="badge badge-pill badge-easy">Easy</span>
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="difficulty" id="hard">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="hard" value="Hard">
                                         <label class="form-check-label" for="hard">
                                             <span class="badge badge-pill badge-hard">Hard</span>
                                         </label>
@@ -654,13 +998,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="difficulty" id="medium">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="medium" value="Medium">
                                         <label class="form-check-label" for="medium">
                                             <span class="badge badge-pill badge-medium">Medium</span>
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="difficulty" id="very-hard">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="very-hard" value="Very Hard">
                                         <label class="form-check-label" for="very-hard">
                                             <span class="badge badge-pill badge-very-hard">Very Hard</span>
                                         </label>
@@ -673,20 +1017,20 @@
                         <div class="step step-4 d-none">
                             <h5><strong>7. Provide the Explanation</strong></h5>
                             <div id="editor-container">
-                                <div class="editor mb-3"></div>
+                                <div class="editor mb-3" id="explanation"></div>
                             </div>
                             <h5 class="mt-3"><strong>8. Want to Active this Question upon saving</strong></h5>
                             <div class="row" style="margin-left: 3px">
                                 <div class="col-md-12 row" style="margin-left: 3px">
                                     <div class="form-check col-md-6 mb-2">
-                                        <input type="radio" class="form-check-input" name="question_type" value="1" id="is_active">
-                                        <label class="radio-container form-check-label" for="is_active">
+                                        <input type="radio" class="form-check-input" name="question_status" value="1" id="active">
+                                        <label class="radio-container form-check-label" for="active">
                                             Make it Active
                                         </label>
                                     </div>
                                     <div class="form-check col-md-6 mb-2">
-                                        <input type="radio" class="form-check-input" name="question_type" value="2" id="is_inactive">
-                                        <label class="radio-container form-check-label" for="is_inactive">
+                                        <input type="radio" class="form-check-input" name="question_status" value="2" id="inactive">
+                                        <label class="radio-container form-check-label" for="inactive">
                                             Keep Inactive for now
                                         </label>
                                     </div>
@@ -696,12 +1040,10 @@
                     </div>
                     <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
                         <div class="d-flex w-100 justify-content-between align-items-center">
-                            <!-- Left side: Placeholder wrapper to maintain spacing -->
                             <div class="left-placeholder">
                                 <button type="button" class="btn new-question d-none">Save & Create Another</button>
                             </div>
 
-                            <!-- Right side: Navigation buttons -->
                             <div class="d-flex">
                                 <button type="button" class="btn back-btn btn-outline-secondary cancel mr-2">Cancel</button>
                                 <button type="button" class="btn back-btn btn-outline-secondary prev-step mr-2 d-none">Back</button>
@@ -713,14 +1055,16 @@
                 </div>
             </div>
         </div>
-    </section>
-    
+    </section> --}}
+
     {{-- Question upload modal --}}
     <section>
-        <div class="modal fade" id="uploadQuestion" tabindex="-1" role="dialog" aria-labelledby="uploadQuestion" aria-hidden="true">
+        <div class="modal fade" id="uploadQuestion" tabindex="-1" role="dialog" aria-labelledby="uploadQuestion"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content student-create-section" style="border-radius: 24px; height:100%">
-                    <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
+                    <div class="modal-header text-center"
+                        style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
                         <h3 class="" id="exampleModalLongTitle"><b>Upload CSV</b></h3>
                     </div>
                     <div class="modal-body">
@@ -730,31 +1074,37 @@
                             <div class="photosection" ondragover="allowDrop(event)" ondrop="dropImage(event)">
                                 <!-- Profile Image Preview -->
                                 <img id="previewImage" src="">
-                            
+
                                 <!-- Upload Area -->
                                 <label for="profileImage" style="cursor: pointer; position: relative;">
                                     <div class="upload-icon">
-                                        <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
+                                        <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon"
+                                            style="width: 16.67px; height: 15px;">
                                     </div>
                                     <h5 style="font-size: 14px;">
-                                        <span style="color: #521749">Click to upload</span> 
+                                        <span style="color: #521749">Click to upload</span>
                                         <span style="color: #475467"> or drag and drop</span>
                                     </h5>
                                 </label>
-                            
+
                                 <!-- Hidden File Input -->
-                                <input type="file" id="profileImage" name="profile_image" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                                <input type="file" id="profileImage" name="profile_image" accept="image/*"
+                                    style="display: none;" onchange="previewImage(event)">
                             </div>
-                            
+
                         </div>
                         <div class="mt-2">
                             <label for="question-url">Or upload from URL</label>
-                            <input type="text" class="form-control" id="question-url" placeholder="Enter Url here" styele="border-radius:8px; border:1px solid #D0D5DD; ">
+                            <input type="text" class="form-control" id="question-url"
+                                placeholder="Enter Url here" styele="border-radius:8px; border:1px solid #D0D5DD; ">
                         </div>
                     </div>
                     <div class="modal-footer border-top pt-3">
-                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn save-student" style="background-color:#A16A99 ;border-radius: 8px; color:#fff">Upload</button>
+                        <button type="button" class="btn btn-outline-dark"
+                            style="border: 1px solid #D0D5DD; border-radius: 8px;"
+                            data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn save-student"
+                            style="background-color:#A16A99 ;border-radius: 8px; color:#fff">Upload</button>
                     </div>
                 </div>
             </div>
@@ -762,10 +1112,11 @@
     </section>
 
     @push('css')
+        <!-- DataTables -->
+        {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"> --}}
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
-                
-        <style>
 
+        <style>
             .nav-tabs {
                 border: 1px solid #ddd;
                 background-color: #F9FAFB;
@@ -789,7 +1140,7 @@
                 border-radius: 8px !important;
             }
 
-            .search__input {
+            .search_input {
                 width: 400px;
                 padding: 12px 24px;
                 background-color: transparent;
@@ -807,9 +1158,11 @@
                 transform-style: preserve-3d;
                 padding-left: 36px;
             }
-            .search__input::placeholder {
+
+            .search_input::placeholder {
                 padding-left: 30px;
             }
+
             input[type='checkbox'] {
                 width: 20px;
                 height: 20px;
@@ -837,11 +1190,13 @@
                 width: 100%;
                 height: 100%;
             }
-            .custom-checkbox input[type='checkbox']{
+
+            .custom-checkbox input[type='checkbox'] {
                 margin-top: 3px;
             }
 
-            .dataTable tbody > tr.selected, .dataTable tbody > tr > .selected {
+            .dataTable tbody>tr.selected,
+            .dataTable tbody>tr>.selected {
                 background-color: #F1E9F0 !important;
             }
 
@@ -864,12 +1219,14 @@
                 border-radius: 0px;
             }
 
-            .datatable-footer, .datatable-header {
+            .datatable-footer,
+            .datatable-header {
                 padding: 1.25rem 1.25rem 0 1.25rem;
                 margin-left: 17px;
                 margin-right: 17px;
                 margin-bottom: 17px;
             }
+
             .datatable-header {
                 border-bottom: 1px solid #ddd;
                 display: none;
@@ -883,6 +1240,7 @@
                 padding: 0.3125rem;
                 border-radius: 1.1875rem;
             }
+
             .dropzone .dz-default.dz-message:before {
                 content: "";
                 font-family: icomoon;
@@ -899,7 +1257,8 @@
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
             }
-            .dropzone .dz-default.dz-message > span {
+
+            .dropzone .dz-default.dz-message>span {
                 font-size: 1.0625rem;
                 color: #777;
                 display: block;
@@ -912,6 +1271,7 @@
                 left: 0;
                 margin-top: 0.00002rem;
             }
+
             .fixed-bottom-buttons {
                 border-top: 1px solid #D0D5DD;
                 background-color: #fff;
@@ -934,6 +1294,7 @@
                 display: flex;
                 flex-direction: column;
             }
+
             .filter-sidebar-content {
                 flex-grow: 1;
                 height: calc(100vh - 60px - 60px);
@@ -941,6 +1302,7 @@
                 padding-left: 15px;
                 padding-bottom: 60px;
             }
+
             .sidebar-overlay {
                 display: none;
                 position: fixed;
@@ -965,9 +1327,9 @@
             }
 
             .sidebar-overlay.active {
-                display: block; 
+                display: block;
             }
-            
+
             /* filter sidebar every dropdown start */
             .filter-group {
                 margin-bottom: 10px;
@@ -977,7 +1339,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: flex-start;
-                gap: 8px; 
+                gap: 8px;
                 cursor: pointer;
             }
 
@@ -1074,6 +1436,7 @@
                 font-size: 14px;
                 margin-top: 8px;
             }
+
             /* avg time slider end */
 
             .close-btn {
@@ -1148,11 +1511,11 @@
             }
         </style>
         <style>
-
             input[type="radio"] {
                 accent-color: #691D5E;
             }
-            label{
+
+            label {
                 padding-top: 2px;
             }
 
@@ -1243,8 +1606,10 @@
             }
 
             .border-left {
-                border-left: 3px solid #6c757d; /* Left border when options exist */
-                padding-left: 10px; /* Spacing to avoid text touching the border */
+                border-left: 3px solid #6c757d;
+                /* Left border when options exist */
+                padding-left: 10px;
+                /* Spacing to avoid text touching the border */
             }
 
 
@@ -1253,29 +1618,94 @@
                 padding: 5px 15px;
                 font-size: 14px;
             }
+
             .badge-easy {
                 background-color: #d4edda;
                 color: #28a745;
                 border: 1px solid #28a745;
             }
+
             .badge-medium {
                 background-color: #d1ecf1;
                 color: #17a2b8;
                 border: 1px solid #17a2b8;
             }
+
             .badge-hard {
                 background-color: #fff3cd;
                 color: #fab905;
                 border: 1px solid #fab905;
             }
+
             .badge-very-hard {
                 background-color: #f8d7da;
                 color: #dc3545;
                 border: 1px solid #dc3545;
             }
+
             .form-check-input:checked {
                 background-color: #6f42c1;
                 border-color: #6f42c1;
+            }
+        </style>
+
+        {{-- /* Switch Button Styles */ --}}
+        <style>
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 40px;
+                height: 22px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+                border-radius: 22px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 16px;
+                width: 16px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+            input:checked+.slider {
+                background-color: #22c55e;
+            }
+
+            input:checked+.slider:before {
+                transform: translateX(18px);
+            }
+
+            .sortable {
+                cursor: pointer;
+            }
+
+            .asc::after {
+                content: "🔼";
+            }
+
+            .desc::after {
+                content: "🔽";
             }
         </style>
     @endpush
@@ -1287,47 +1717,56 @@
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/uploader_dropzone.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_checkboxes_radios.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switch.min.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script>
+        {{-- <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switchery.min.js"></script> --}}
+        {{-- <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switch.min.js"></script> --}}
+        {{-- <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/tables/datatables/datatables.min.js"></script> --}}
+        {{-- <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script> --}}
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
         <!-- /theme JS files -->
 
-        <script>
-          
-            function toggleDeleteButton() {
-                let anyChecked = document.querySelectorAll(".row-checkbox:checked").length > 0;
-                document.querySelector(".delete-btn").classList.toggle("d-none", !anyChecked);
-            }
+        <!-- DataTables -->
+        {{-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
 
-            document.querySelectorAll(".row-checkbox").forEach(checkbox => {
-                checkbox.addEventListener("change", function() {
-                    this.closest("tr").classList.toggle("selected", this.checked);
+        <script>
+            // toggle delete checkboxes
+            $(document).ready(function() {
+                function toggleDeleteButton() {
+                    let anyChecked = $(".row-checkbox:checked").length > 0;
+
+                    if (anyChecked) {
+                        $(".delete-btn").removeClass("d-none");
+                    } else {
+                        $(".delete-btn").addClass("d-none");
+                    }
+                }
+
+                $(document).on("change", ".row-checkbox", function() {
+
+                    $(this).closest("tr").toggleClass("selected", this.checked);
                     toggleDeleteButton();
                 });
-            });
 
-            document.getElementById("selectAll").addEventListener("change", function() {
-                let isChecked = this.checked;
-                document.querySelectorAll(".row-checkbox").forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                    checkbox.closest("tr").classList.toggle("selected", isChecked);
+
+                $("#selectAll").on("change", function() {
+                    let isChecked = this.checked;
+                    $(".row-checkbox").prop("checked", isChecked).closest("tr").toggleClass("selected",
+                        isChecked);
+                    toggleDeleteButton();
                 });
+
+                // Ensure button state is set correctly on page load
                 toggleDeleteButton();
             });
-
-            // Initial check on page load
-            toggleDeleteButton();
         </script>
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
                     $('#taskSidebar').removeClass('open');
                     $('#taskSidebarOverlay').removeClass('active');
                     $('#boardHiddenInputSection').html('');
                 });
             });
+
             function filter(button) {
                 const filter = $('.filter');
                 filter.show();
@@ -1342,7 +1781,7 @@
             }
 
             // Remove dragover style on leave
-            document.querySelector('.photosection').addEventListener('dragleave', function () {
+            document.querySelector('.photosection').addEventListener('dragleave', function() {
                 this.classList.remove('dragover');
             });
 
@@ -1367,7 +1806,7 @@
             // Preview image
             function previewFile(file) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     const preview = document.getElementById('previewImage');
                     preview.src = e.target.result;
                     preview.style.display = 'block';
@@ -1377,7 +1816,7 @@
 
             // filter every dropdown in sidebar
             document.querySelectorAll(".toggle-icon").forEach(icon => {
-                icon.addEventListener("click", function () {
+                icon.addEventListener("click", function() {
                     const target = document.getElementById(this.dataset.target);
                     target.classList.toggle("collapse");
                     this.classList.toggle("open");
@@ -1386,8 +1825,9 @@
             });
 
             document.querySelectorAll(".toggle-parent").forEach(parentCheckbox => {
-                parentCheckbox.addEventListener("change", function () {
-                    let targetDiv = document.getElementById(this.nextElementSibling.nextElementSibling.dataset.target);
+                parentCheckbox.addEventListener("change", function() {
+                    let targetDiv = document.getElementById(this.nextElementSibling.nextElementSibling.dataset
+                        .target);
                     let checkboxes = targetDiv.querySelectorAll("input[type='checkbox']");
                     checkboxes.forEach(cb => cb.checked = this.checked);
                 });
@@ -1427,30 +1867,545 @@
 
             // Ensure initial full length is displayed
             updateSlider();
-
-
         </script>
         <script>
-            $(document).ready(function() {
+            let currentStep = 1;
+            let optionCount = 1;
+            const totalSteps = $(".step").length;
 
-                $(".sat_2").change(function () {
+            $(document).ready(function() {
+                initializeQuill(".editor")
+
+                $(".sat_2").change(function() {
+                    $('#sat_type_1').find('input').prop('checked', false);
                     $("#sat_type_2").removeClass("d-none");
                     $("#sat_type_1").addClass("d-none");
                 });
 
-                $(".sat_1").change(function () {
+                $(".sat_1").change(function() {
+                    $('#sat_type_2').find('input').prop('checked', false);
                     $("#sat_type_1").removeClass("d-none");
                     $("#sat_type_2").addClass("d-none");
                 });
 
-                let currentStep = 1;
-                let optionCount = 1;
-                const totalSteps = $(".step").length;
-                console.log(currentStep);
 
-                initializeQuill(".editor")
+                $(".next-step").click(function() {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        showStep(currentStep);
+                    }
+                });
 
-                function updateButtons() {
+                $(".prev-step").click(function() {
+                    if (currentStep > 1) {
+                        currentStep--;
+                        showStep(currentStep);
+                    }
+                });
+
+                $(".cancel").click(function() {
+                    $("#questionModal").modal("hide"); // Hide modal on cancel (replace ID)
+                });
+
+                $(document).on("click", ".add-options", addOption);
+
+                // Event Listener for Removing an Option
+                $(document).on("click", ".remove-option", removeOption);
+
+                showStep(currentStep);
+
+
+                //store and edit section
+                let currentPage = 1;
+                let perPage = $('#rowsPerPage').val();
+
+                $(document).on('click', '.save-question', store);
+                fetchQuestions(currentPage, perPage);
+
+                // Handle pagination clicks
+                $(document).on('click', '.pagination a', function(e) {
+                    e.preventDefault();
+                    let page = $(this).data('page');
+                    if (page) {
+                        currentPage = page;
+                        fetchQuestions(currentPage, perPage);
+                    }
+                });
+
+                // Handle "Rows per page" change
+                $('#rowsPerPage').change(function() {
+                    perPage = $(this).val();
+                    fetchQuestions(1, perPage);
+                });
+
+                $('.search_input, .multiselect').on('input click', function() {
+                    fetchQuestions();
+                });
+
+                $(document).on('change', '.toggle-status', updateState);
+
+                $(document).on("change", ".row-checkbox", function() {
+                    $(this).closest("tr").toggleClass("selected", this.checked);
+                    updateActiveInactiveCount();
+                });
+
+                $("#selectAll").on("change", function() {
+                    let isChecked = this.checked;
+                    $(".row-checkbox").prop("checked", isChecked).closest("tr").toggleClass("selected",
+                        isChecked);
+                    updateActiveInactiveCount();
+                });
+
+                $(document).on('click', '.edit-btn', show);
+            });
+
+            function updateButtons() {
+                if (currentStep === 1) {
+                    $(".cancel").removeClass("d-none"); // Show "Cancel"
+                    $(".prev-step").addClass("d-none"); // Hide "Back"
+                } else {
+                    $(".cancel").addClass("d-none"); // Hide "Cancel"
+                    $(".prev-step").removeClass("d-none"); // Show "Back"
+                }
+
+                if (currentStep === totalSteps) {
+                    $(".new-question").removeClass("d-none"); // show "Next" on last step
+                    $(".next-step").addClass("d-none"); // Hide "Next" on last step
+                    $(".save-question").removeClass("d-none"); // Show "Save"
+                } else {
+                    $(".new-question").addClass("d-none"); // Hide "Next" on last step
+                    $(".next-step").removeClass("d-none"); // Show "Next"
+                    $(".save-question").addClass("d-none"); // Hide "Save" before last step
+                }
+            }
+            
+            function showStep(step) {
+
+                $(".step").addClass("d-none");
+                $(".step-" + step).removeClass("d-none");
+
+                // Step progress indicator
+                $(".step-circle").removeClass("active completed");
+                $(".step-line").css("background", "#D0D5DD");
+                $(".step-circle i").addClass("d-none");
+                $(".step-circle .circle-count").removeClass("d-none");
+
+                for (let i = 1; i < step; i++) {
+                    $(".step-circle[data-step=" + i + "]").addClass("completed");
+                    $(".step-circle[data-step=" + i + "] i").removeClass("d-none");
+                    $(".step-circle[data-step=" + i + "] .circle-count").addClass("d-none");
+                    $(".step-circle[data-step=" + i + "]").parent().next(".step-group").find(".step-line").css(
+                        "background", "#12B76A");
+                }
+
+                $(".step-circle[data-step=" + step + "]").addClass("active");
+
+                initializeQuill(); // Reinitialize Quill editor if needed
+
+                updateButtons(); // Ensure button visibility updates
+
+                if (step === 1) {
+                    $('.step-title').text('Step 1: Select Audience & Question Type');
+
+                } else if (step === 2) {
+                    $('.step-title').text('Step 2: Input Context, Question & Options');
+                } else if (step === 3) {
+                    $('.step-title').text('Step 3: Select right anwser & choose difficulty level');
+                    updateStep3Content();
+                } else if (step === 4) {
+                    $('.step-title').text('Step 4: Provide explanation & Confirm');
+                }
+            }
+
+            function addOption() {  
+                optionCount++;
+                let newOptionId = `option-${optionCount}`;
+
+                let newOptionHtml = `
+                    <div class="option-block mt-2" id="${newOptionId}">
+                        <div class="parent-editor mb-3" id="option-editor-${optionCount}"></div>
+                        <a type="button" class="remove-option" data-option="${newOptionId}"  style="color: red">
+                            <b>Remove Option</b>
+                        </a>
+                    </div>
+                `;
+
+                $('#option-container').append(newOptionHtml);
+                initializeQuill(`#option-editor-${optionCount}`);
+
+                updateOptionContainerBorder();
+            }
+
+            function removeOption() {
+                let optionId = $(this).data("option");
+                $(`#${optionId}`).remove();
+                updateOptionContainerBorder();
+            }
+
+             // Function to Add/Remove Border Dynamically
+             function updateOptionContainerBorder() {
+                if ($('#option-container').children().length > 0) {
+                    $('#option-container').addClass('border-left');
+                } else {
+                    $('#option-container').removeClass('border-left');
+                }
+            }
+
+             // Function to Copy Step 2 Data into Step 3
+             function updateStep3Content() {
+                let context = $("#context .ql-editor").text();
+                let mcq_question = $("#mcq_question .ql-editor").text();
+
+                // if (context === "" || mcq_question === "") {
+                //     alert('Please fill all the fields');
+                //     // $('.step-3').html('');
+                // }
+                $('#question-container').html(
+                    `
+                        <p>${context}</p>
+                        <div>
+                            <p><strong>Question:</strong></p>
+                            <p style="padding:0">${mcq_question}</p>
+                        </div>
+                    `
+                );
+                let optionsHtml = ``;
+
+                // Loop through options and create radio button inputs
+                $("#option-container .option-block .parent-editor").each(function(index) {
+                    let optionText = $(this).find(".ql-editor p").html(); // Get option content
+                    optionsHtml += `
+                        <div class="form-check col-md-6 row" style="margin-left:3px">
+                            <label class="radio-container col-md-12" style="padding-top:2px" for="option-${index}">
+                                <input class="form-check-input" type="radio" name="mcq_options" value="${optionText}" id="option-${index}" style="display: inline-block; visibility: visible;">
+                                ${optionText}
+                            </label>
+                        </div>
+                    `;
+                });
+
+                $('#show-options').html(optionsHtml);
+            }
+
+            function initializeQuill(selector, content = null) {
+                // console.log('Received content inside initializeQuill:', content);
+
+                $(selector).each(function() {
+                    if (!$(this).hasClass("ql-container")) {
+                        new Quill(this, {
+                            modules: {
+                                toolbar: [
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    ['blockquote', 'code-block'],
+                                    ['link', 'image', 'video', 'formula'],
+                                    [{
+                                        'header': 1
+                                    }, {
+                                        'header': 2
+                                    }],
+                                    [{
+                                        'list': 'ordered'
+                                    }, {
+                                        'list': 'bullet'
+                                    }],
+                                    [{
+                                        'script': 'sub'
+                                    }, {
+                                        'script': 'super'
+                                    }],
+                                    [{
+                                        'direction': 'rtl'
+                                    }],
+                                    [{
+                                        'size': ['small', false, 'large', 'huge']
+                                    }],
+                                    [{
+                                        'header': [1, 2, 3, 4, 5, 6, false]
+                                    }],
+                                    [{
+                                        'color': []
+                                    }, {
+                                        'background': []
+                                    }],
+                                    [{
+                                        'font': []
+                                    }],
+                                    [{
+                                        'align': []
+                                    }]
+                                ]
+                            },
+                            placeholder: 'Compose an epic...',
+                            theme: 'snow'
+                        });
+                        // console.log('Before condition check: content.trim() is', content);
+
+                        if (content !== null && content.trim() !== '') {
+                            // console.log('Content being set: ', content);
+                            quill.root.innerHTML = content; // Set the content as HTML
+                        } else {
+                            // console.log('No content to set or content is empty.');
+                        }
+                    }
+                });
+            }
+
+
+
+            const store = (e) => {
+                e.preventDefault();
+
+                let formData = {
+                    audience: $('input[name="audience"]:checked').val(),
+                    sat_type: $('input[name="audience"]:checked').val() === 'SAT 2' ? 'SAT 2' : 'SAT 1',
+                    sat_question_type: $('input[name="question_type"]:checked').val() || $(
+                        'input[name="subjects"]:checked').val(),
+                    question_title: $('#mcq_question').text().trim(),
+                    question_description: $('#context').text().trim(),
+                    question_text: $('#mcq_question').text().trim(),
+                    question_type: 'MCQ',
+                    options: JSON.stringify(getOptions()),
+                    correct_answer: $('input[name="mcq_options"]:checked').val(),
+                    difficulty: $('input[name="difficulty"]:checked').val(),
+                    explanation: $('#explanation').text().trim(),
+                    status: $('input[name="question_status"]:checked').val() == '1' ? 'active' : 'inactive',
+                };
+
+                $.ajax({
+                    url: '/api/questions',
+                    type: 'POST',
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire("Success", "Question created successfully!", "success");
+                            location.reload();
+                        } else {
+                            Swal.fire("Error", "Failed to created successfully!", "error");
+                            checkbox.prop('checked', !checkbox.is(':checked'));
+                        }
+                    },
+                    error: function() {
+                        Swal.fire("Error", "Something went wrong!", "error");
+                        checkbox.prop('checked', !checkbox.is(':checked'));
+                    }
+
+                });
+            }
+
+            // Function to collect options from the UI
+            function getOptions() {
+                let options = [];
+                $(".option-block .parent-editor").each(function() {
+                    let optionText = $(this).find(".ql-editor").text().trim(); // Get option text properly
+                    if (optionText) {
+                        options.push(optionText);
+                    }
+                });
+                return options;
+            }
+
+            // get all questions
+            function fetchQuestions(page = 1, perPage = 10) {
+                let filters = {
+                    search: $('.search_input').val(),
+                    difficulty: $('.multiselect').val(),
+                };
+
+                $.ajax({
+                    url: "/api/questions?page=" + page + "&per_page=" + perPage,
+                    type: "GET",
+                    data: filters,
+                    success: function(response) {
+                        let rows = '';
+                        $.each(response.data, function(index, question) {
+                            let difficultyColor = getDifficultyColor(question.difficulty);
+                            let statusChecked = question.status ? "checked" : "";
+
+                            // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
+                            rows += `<tr>
+                                <td><input type="checkbox" class="row-checkbox"></td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.question_title}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.audience}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.question_type}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.exam || ''}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" ><span class="badge badge-pill ${difficultyColor}">${question.difficulty}</span></td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.avg_time || '00:00'} min</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.created_at}</td>
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" class="toggle-status" data-id="${question.id}" ${question.status === 'active' ? 'checked' : '' }>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                     <td class="text-center"><button data-toggle="modal" data-id="${question.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button></td>
+                                </td>
+                            </tr>`;
+                        });
+                        $("#question-table-body").html(rows);
+                        updatePagination(response, page);
+                    },
+                    error: function() {
+                        alert("Error fetching questions.");
+                    }
+                });
+            }
+
+            function updatePagination(response, currentPage) {
+                let totalResults = response.total;
+                let perPage = response.per_page;
+                let totalPages = response.last_page;
+                let start = (response.from || 0);
+                let end = (response.to || 0);
+
+                $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
+                $('#total-questions').text(`${totalResults} Questions`);
+
+                let paginationHtml = '';
+
+                // First & Previous
+                paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" data-page="1">«</a></li>`;
+                paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" data-page="${currentPage - 1}">‹</a></li>`;
+
+                // Page Numbers
+                if (currentPage > 2) {
+                    paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`;
+                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                }
+
+                for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages, currentPage + 1); i++) {
+                    paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                                            <a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+                }
+
+                if (currentPage < totalPages - 1) {
+                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                    paginationHtml +=
+                        `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
+                }
+
+                // Next & Last
+                paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" data-page="${currentPage + 1}">›</a></li>`;
+                paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" data-page="${totalPages}">»</a></li>`;
+
+                $('#pagination-links').html(paginationHtml);
+            }
+
+            function getDifficultyColor(difficulty) {
+                switch (difficulty.toLowerCase()) {
+                    case "easy":
+                        return "badge-easy";
+                    case "medium":
+                        return "badge-medium";
+                    case "hard":
+                        return "badge-hard";
+                    case "very hard":
+                        return "badge-very-hard";
+                    default:
+                        return "bg-secondary text-white";
+                }
+            }
+
+            // Toggle status (on/off)
+            function updateState() {
+                let questionId = $(this).data('id');
+
+                let newStatus = $(this).is(':checked') ? 'active' : 'inactive';
+
+                $.ajax({
+                    url: `/api/questions/${questionId}/update-status`,
+                    type: "PATCH",
+                    data: {
+                        status: newStatus
+                    },
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire("Success", "Status updated successfully!", "success");
+                        } else {
+                            Swal.fire("Error", "Failed to update status.", "error");
+                            checkbox.prop('checked', !checkbox.is(':checked'));
+                        }
+                    },
+                    error: function() {
+                        Swal.fire("Error", "Something went wrong!", "error");
+                        checkbox.prop('checked', !checkbox.is(':checked'));
+                    }
+                });
+            }
+
+            function updateActiveInactiveCount() {
+                let selectedRows = $(".row-checkbox:checked").closest("tr");
+
+                let activeCount = selectedRows.find(".toggle-status:checked").length;
+                let inactiveCount = selectedRows.length - activeCount;
+
+                // Update UI
+                $("#active-count").text(activeCount);
+                $("#inactive-count").text(inactiveCount);
+            }
+
+            function resetModalData() {
+                // Reset all form inputs, text areas, and select elements
+                $('#question_id').val('');
+                $('#question_title').val('');
+                $('#question_description').val('');
+                $('#question_text').val('');
+                $('#explanation').val('');
+                $('#difficulty').val('');
+                $('#correct_answer').val('');
+                $('#question_type').val('');
+
+                // Reset all radio buttons
+                $("input[type='radio']").prop('checked', false);
+
+                // Reset all Quill editors
+                $('.quill-editor').each(function() {
+                    // Assuming your Quill editors have class 'quill-editor'
+                    $(this).html('');
+                });
+
+                // Reset the options container
+                $('#option-container').html('');
+                $('#show-options').html('');
+
+                // Hide sat-type options by default
+                $('#sat_type_1').removeClass('d-none');
+                $('#sat_type_2').addClass('d-none');
+                $('#sat_type_1').find('input').prop('checked', false);
+                $('#sat_type_2').find('input').prop('checked', false);
+                
+            }
+
+            function show() {
+                let questionId = $(this).data('id');
+                let dynamicModalId = $('#questionModal').attr('dynamic-id', 1);
+
+                if (dynamicModalId != questionId) {
+                    if (currentStep > 1) {
+                        let stepIndex = currentStep;
+                        let stepBackInterval = setInterval(function() {
+                            if (stepIndex > 1) {
+                                stepIndex--;
+                                showStep(stepIndex);
+                            } else {
+                                clearInterval(stepBackInterval);
+                                currentStep = 1; // Ensure currentStep is set to 1 after loop
+                                showStep(currentStep); // Show step 1
+                                console.log('Current Step After Reset:', currentStep);
+                            }
+                        }, 5);
+                    }
+
                     if (currentStep === 1) {
                         $(".cancel").removeClass("d-none"); // Show "Cancel"
                         $(".prev-step").addClass("d-none"); // Hide "Back"
@@ -1459,195 +2414,84 @@
                         $(".prev-step").removeClass("d-none"); // Show "Back"
                     }
 
-                    if (currentStep === totalSteps) {
-                        $(".new-question").removeClass("d-none"); // show "Next" on last step
-                        $(".next-step").addClass("d-none"); // Hide "Next" on last step
-                        $(".save-question").removeClass("d-none"); // Show "Save"
-                    } else {
-                        $(".new-question").addClass("d-none"); // Hide "Next" on last step
-                        $(".next-step").removeClass("d-none"); // Show "Next"
-                        $(".save-question").addClass("d-none"); // Hide "Save" before last step
-                    }
+                    $('#questionModal').attr('dynamic-id', questionId)
+                    resetModalData();
                 }
 
-                function showStep(step) {
-                    console.log(step);
-                    $(".step").addClass("d-none");
-                    $(".step-" + step).removeClass("d-none");
+                $.get(`/api/questions/${questionId}`, function(response) {
+                    console.log(response);
 
-                    // Step progress indicator
-                    $(".step-circle").removeClass("active completed");
-                    $(".step-line").css("background", "#D0D5DD");
-                    $(".step-circle i").addClass("d-none");
-                    $(".step-circle .circle-count").removeClass("d-none");
+                    // Set values in the modal
+                    $("input[name='audience'][value='" + response.audience + "']").prop('checked', true);
 
-                    for (let i = 1; i < step; i++) {
-                        $(".step-circle[data-step=" + i + "]").addClass("completed");
-                        $(".step-circle[data-step=" + i + "] i").removeClass("d-none");
-                        $(".step-circle[data-step=" + i + "] .circle-count").addClass("d-none");
-                        $(".step-circle[data-step=" + i + "]").parent().next(".step-group").find(".step-line").css("background", "#12B76A");
+                    if (response.sat_type === 'SAT 2') {
+                        $('#sat_type_1').addClass('d-none');
+                        $('#sat_type_2').removeClass('d-none');
+                        $('#sat_type_1').find('input').prop('checked', false);
+
+                        $("input[name='subjects'][value='" + response.sat_question_type + "']").prop('checked', true);
+                    } else if ((response.sat_type === 'SAT 1')) {
+                        $('#sat_type_2').addClass('d-none');
+                        $('#sat_type_1').removeClass('d-none');
+                        $('#sat_type_2').find('input').prop('checked', false);
+
+                        $("input[name='question_type'][value='" + response.sat_question_type + "']").prop('checked', true);
                     }
+                    $("input[name='question_status'][value='" + response.status + "']").prop('checked', true);
+                    $("input[name='difficulty'][value='" + response.difficulty + "']").prop('checked', true);
 
-                    $(".step-circle[data-step=" + step + "]").addClass("active");
+                    $('#mcq_question').text();
+                    $('#question_id').val(response.id);
+                    $('#modalTitle').text('Edit Question'); // Change modal title
+                    $('#question_title').val(response.question_title);
+                    $('#question_description').val(response.question_description);
+                    $('#question_text').val(response.question_text);
+                    $('#explanation').val(response.explanation);
+                    $('#difficulty').val(response.difficulty);
+                    $('#correct_answer').val(response.correct_answer);
+                    // $('#audience').val(response.audience);
+                    $('#question_type').val(response.question_type);
 
-                    initializeQuill(); // Reinitialize Quill editor if needed
+                    initializeQuill('#context', response.question_description);
+                    initializeQuill('#mcq_question', response.question_title);
 
-                    updateButtons(); // Ensure button visibility updates
-
-                    if(step === 3){
-                        updateStep3Content();
-                    }
-                }
-
-                $(".next-step").click(function () {
-                    if (currentStep < totalSteps) {
-                        currentStep++;
-                        showStep(currentStep);
-                    }
-                });
-
-                $(".prev-step").click(function () {
-                    if (currentStep > 1) {
-                        currentStep--;
-                        showStep(currentStep);
-                    }
-                });
-
-                $(".cancel").click(function () {
-                    $("#questionModal").modal("hide"); // Hide modal on cancel (replace ID)
-                });
-
-                function initializeQuill(selector) {
-                    $(selector).each(function() {
-                        if (!$(this).hasClass("ql-container")) {
-                            new Quill(this, {
-                                modules: {
-                                    toolbar: [
-                                        ['bold', 'italic', 'underline', 'strike'],
-                                        ['blockquote', 'code-block'],
-                                        ['link', 'image', 'video', 'formula'],
-                                        [{
-                                            'header': 1
-                                        }, {
-                                            'header': 2
-                                        }],
-                                        [{
-                                            'list': 'ordered'
-                                        }, {
-                                            'list': 'bullet'
-                                        }],
-                                        [{
-                                            'script': 'sub'
-                                        }, {
-                                            'script': 'super'
-                                        }],
-                                        [{
-                                            'direction': 'rtl'
-                                        }],
-                                        [{
-                                            'size': ['small', false, 'large', 'huge']
-                                        }],
-                                        [{
-                                            'header': [1, 2, 3, 4, 5, 6, false]
-                                        }],
-                                        [{
-                                            'color': []
-                                        }, {
-                                            'background': []
-                                        }],
-                                        [{
-                                            'font': []
-                                        }],
-                                        [{
-                                            'align': []
-                                        }]
-                                    ]
-                                },
-                                placeholder: 'Compose an epic...',
-                                theme: 'snow'
-                            });
-                        }
-                    });
-                }
-
-                $(document).on("click", ".add-options", function () {
-                    optionCount++;
-                    let newOptionId = `option-${optionCount}`;
-
-                    let newOptionHtml = `
-                        <div class="option-block mt-2" id="${newOptionId}">
-                            <div class="parent-editor mb-3" id="option-editor-${optionCount}"></div>
-                            <a type="button" class="remove-option" data-option="${newOptionId}"  style="color: red">
-                                <b>Remove Option</b>
-                            </a>
-                        </div>
-                    `;
-
-                    $('#option-container').append(newOptionHtml);
-                    initializeQuill(`#option-editor-${optionCount}`);
-
-                    updateOptionContainerBorder();
-                });
-
-                // Event Listener for Removing an Option
-                $(document).on("click", ".remove-option", function () {
-                    let optionId = $(this).data("option");
-                    $(`#${optionId}`).remove();
-                    updateOptionContainerBorder();
-                });
-
-                // Function to Add/Remove Border Dynamically
-                function updateOptionContainerBorder() {
-                    if ($('#option-container').children().length > 0) {
-                        $('#option-container').addClass('border-left');
-                    } else {
-                        $('#option-container').removeClass('border-left');
-                    }
-                }
-
-
-                // Function to Copy Step 2 Data into Step 3
-                function updateStep3Content() {
-                    let context = $("#context .ql-editor").text();
-                    let mcq_question = $("#mcq_question .ql-editor").text();
-
-                    if(context === "" || mcq_question === ""){
-                        alert('Please fill all the fields');
-                        // $('.step-3').html('');
-                    }
-                    $('#question-container').html(
-                        `
-                            <p>${context}</p>
-                            <div>
-                                <p><strong>Question:</strong></p>
-                                <p style="padding:0">${mcq_question}</p>
-                            </div>
-                        `
-                    );
+                    // Parse and set options
+                    let options = JSON.parse(response.options);
                     let optionsHtml = ``;
+                    // $('#option-container').html('');
+                    options.forEach(function(optionText, index) {
 
-                    // Loop through options and create radio button inputs
-                    $("#option-container .option-block .parent-editor").each(function (index) {
-                        let optionText = $(this).find(".ql-editor p").html(); // Get option content
-                        optionsHtml += `
-                            <div class="form-check col-md-6 row" style="margin-left:3px">
-                                <label class="radio-container col-md-12" style="padding-top:2px" for="option-${index}">
-                                    <input class="form-check-input" type="radio" name="mcq_options" value="${optionText}" id="option-${index}" style="display: inline-block; visibility: visible;">
-                                    ${optionText}
-                                </label>
+                        let newOptionHtml = `
+                            <div class="option-block mt-2" id="option-${index}">
+                                <div class="parent-editor mb-3" id="option-editor-${index}">${optionText}</div>
+                                <a type="button" class="remove-option" data-option="option-${index}"  style="color: red">
+                                    <b>Remove Option</b>
+                                </a>
                             </div>
                         `;
+
+                        $('#option-container').append(newOptionHtml);
+                        initializeQuill(`#option-editor-${index}`);
                     });
 
                     $('#show-options').html(optionsHtml);
-                }
+                    // console.log(initialStep, 'jhdbfjhsf');
 
-                showStep(currentStep);
+                    // Show modal
+                    $('#questionModal').modal('show');
 
+                    // $('#audience').val(response.audience);
+                    // $('#question_type').val(response.question_type);
+                    // $('#question_title').val(response.question_title);
 
+                    // $('#question_description').val(response.question_description);
+                });
+            }
 
+            function edit() {
 
-            });
+            }
+
         </script>
     @endpush
 

@@ -1,6 +1,6 @@
 <x-backend.layouts.master>
 
-    <x-backend.layouts.partials.blocks.contentwrapper 
+    <x-backend.layouts.partials.blocks.contentwrapper
         :headerTitle="'
             <a href=\'\roles\' class=\'text-dark\'>
                 <i class=\'fa-solid fa-angle-left mr-2\'></i> Create Exam : Add Question to Section 1
@@ -16,7 +16,7 @@
             </div>
         '"
         :prependContent="'
-            
+
         '">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
@@ -209,45 +209,45 @@
                         </div>
                     `;
                 }
-    
+
                 // Generate initial 10 cards
                 for (let i = 0; i < 10; i++) {
                     $('#question-container').append(createQuestionCard(i));
                 }
-    
+
                 // Drag and Drop functionality
                 let draggedCard = null;
-    
+
                 // Handle drag start
                 $(document).on('dragstart', '.question-card', function(e) {
                     draggedCard = this;
                     $(this).addClass('dragging');
                     e.originalEvent.dataTransfer.effectAllowed = 'move';
                 });
-    
+
                 // Handle drag end
                 $(document).on('dragend', '.question-card', function() {
                     $(this).removeClass('dragging');
                     draggedCard = null;
                 });
-    
+
                 // Exam section drag events
                 const $examSection = $('#exam-section');
-                
+
                 $examSection.on('dragover', function(e) {
                     e.preventDefault();
                     $(this).addClass('drag-over');
                     e.originalEvent.dataTransfer.dropEffect = 'move';
                 });
-    
+
                 $examSection.on('dragleave', function() {
                     $(this).removeClass('drag-over');
                 });
-    
+
                 $examSection.on('drop', function(e) {
                     e.preventDefault();
                     $(this).removeClass('drag-over');
-    
+
                     if (draggedCard) {
                         const $card = $(draggedCard);
                         // Modify card for exam section
@@ -255,29 +255,29 @@
                         $card.find('.question-card-footer').addClass('d-none');
                         $card.removeClass('col-md-4');
                         $card.addClass('col-md-12');
-                        
+
                         // Add to exam section
                         $(this).append($card);
                     }
                 });
-    
+
                 // Question container drag events (for dragging back)
                 const $questionContainer = $('#question-container');
-    
+
                 $questionContainer.on('dragover', function(e) {
                     e.preventDefault();
                     $(this).addClass('drag-over');
                     e.originalEvent.dataTransfer.dropEffect = 'move';
                 });
-    
+
                 $questionContainer.on('dragleave', function() {
                     $(this).removeClass('drag-over');
                 });
-    
+
                 $questionContainer.on('drop', function(e) {
                     e.preventDefault();
                     $(this).removeClass('drag-over');
-    
+
                     if (draggedCard) {
                         const $card = $(draggedCard);
                         // Restore card for question section
@@ -285,7 +285,7 @@
                         $card.find('.question-card-footer').removeClass('d-none');
                         $card.removeClass('col-md-12');
                         $card.addClass('col-md-4');
-                        
+
                         // Add back to question container
                         $(this).prepend($card);
                     }

@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\RoleNavItemApiController;
-use App\Http\Controllers\Api\StudentController;
-use App\Http\Controllers\Api\SupervisorController;
-use App\Http\Controllers\Api\RoleManagementController;
-use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\MainQuestionController;
+use App\Http\Controllers\Api\SupervisorController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\RoleManagementController;
+use App\Http\Controllers\Api\RoleNavItemApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +24,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::group(['middleware' => ['api', 'auth', 'web'], 'as' => 'api.'], function () {
+// 'middleware' => ['api', 'auth', 'web'],
+Route::group([ 'as' => 'api.'], function () {
     Route::get('get-role-navitems-with-selected/{id}', [RoleNavItemApiController::class,'getnavitemWithSelected']);
     Route::post('/profile/update', [ProfileController::class, 'update']);
     Route::post('/students/{uuid}/update', [StudentController::class, 'update']);
@@ -45,5 +46,39 @@ Route::group(['middleware' => ['api', 'auth', 'web'], 'as' => 'api.'], function 
     Route::post('/roles/update-status', [RoleManagementController::class, 'updateStatus']);
 
     Route::post('/notifications-delete', [NotificationController::class, 'delete']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Routes for Questions
+    |--------------------------------------------------------------------------
+    */
+
+    // 📌 Get all questions (supports filtering & pagination)
+    Route::get('/questions', [MainQuestionController::class, 'index']);
+
+    // 📌 Create a new question
+    Route::post('/questions', [MainQuestionController::class, 'store']);
+
+    // 📌 Get a specific question by ID (with related exams & sections)
+    Route::get('/questions/{id}', [MainQuestionController::class, 'show']);
+
+    // 📌 Update a question
+    Route::put('/questions/{id}', [MainQuestionController::class, 'update']);
+
+    // 📌 Soft delete a question
+    Route::delete('/questions/{id}', [MainQuestionController::class, 'destroy']);
+
+    // 📌 Restore a soft-deleted question
+    Route::post('/questions/{id}/restore', [MainQuestionController::class, 'restore']);
+
+    // 📌 Toggle question status (active <-> inactive)
+    Route::patch('/questions/{id}/update-status', [MainQuestionController::class, 'toggleStatus']);
+
+
+    // 📌 Get related exams and sections for a question
+    Route::get('/questions/{id}/relations', [MainQuestionController::class, 'getRelations']);
+
+
 
 });

@@ -14,18 +14,23 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique()->index();
-            $table->string('name', 120)->index();
-            $table->enum('audience', ['high_school', 'college', 'graduation', 'sat_2'])->index();
-            $table->integer('total_questions');
-            $table->integer('total_duration'); // In minutes
-            $table->boolean('has_time_gaps')->default(false); // Optional breaks between sections
-            $table->integer('retake_cooldown')->nullable(); // Optional cooldown period in hours
-            $table->enum('result_processing', ['instant', 'admin_approval'])->default('instant');
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft')->index();
-            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('title')->index();
+            $table->text('description')->nullable();
+            $table->dateTime('scheduled_at')->nullable();
+            $table->integer('duration')->unsigned()->nullable(); // Duration in minutes
+
+            // Foreign key references
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            
             $table->softDeletes();
             $table->timestamps();
+
+            // Foreign key constraints
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 
