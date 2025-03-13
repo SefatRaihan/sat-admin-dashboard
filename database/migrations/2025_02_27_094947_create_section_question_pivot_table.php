@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('section_question_pivot', function (Blueprint $table) {
             $table->unsignedBigInteger('section_id');
-            $table->unsignedBigInteger('question_id'); // Changed from UUID to BIGINT
+            $table->unsignedBigInteger('question_id');
 
             // Composite primary key to prevent duplicates
             $table->primary(['section_id', 'question_id']);

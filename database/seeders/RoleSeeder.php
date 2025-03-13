@@ -3,30 +3,26 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 use App\Models\Role;
+use Illuminate\Support\Str;
 
 class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
         $roles = [
-            ['id' => 1, 'name' => 'Admin', 'slug' => 'admin'],
-            ['id' => 2, 'name' => 'Student', 'slug' => 'student'],
-            ['id' => 3, 'name' => 'Adviser', 'slug' => 'adviser'],
+            ['name' => 'Admin', 'slug' => 'admin', 'description' => 'Administrator with full access.', 'is_supervisor_role' => true],
+            ['name' => 'Supervisor', 'slug' => 'supervisor', 'description' => 'Teacher who can manage exams and questions.', 'is_supervisor_role' => false],
+            ['name' => 'Student', 'slug' => 'student', 'description' => 'Student who can take exams.', 'is_supervisor_role' => false],
         ];
 
         foreach ($roles as $role) {
             Role::updateOrCreate(
-                ['id' => $role['id']],
-                [
-                    'uuid' => Str::uuid(),
-                    'name' => $role['name'],
-                    'slug' => $role['slug'],
-                ]
+                ['slug' => $role['slug']], // Ensure uniqueness by slug
+                array_merge($role, ['uuid' => Str::uuid()]) // Auto-generate UUID
             );
         }
     }

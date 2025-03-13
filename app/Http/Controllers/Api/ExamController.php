@@ -6,174 +6,126 @@ use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\ExamSection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class ExamController extends Controller
 {
     /**
-     * 📌 Get a list of all exams (with optional filters)
+     * Display a listing of the exams based on filters.
+     * Possible filters: active, inactive, all
      */
     public function index(Request $request)
     {
-        $exams = Exam::query();
+        $filter = $request->query('filter', 'active'); // Default to active exams
 
-        // Apply filters if provided
-        if ($request->has('scheduled_at')) {
-            $exams->whereDate('scheduled_at', $request->scheduled_at);
+        if ($filter === 'inactive') {
+            $exams = Exam::onlyTrashed()->get();
+        } elseif ($filter === 'all') {
+            $exams = Exam::withTrashed()->get();
+        } else {
+            $exams = Exam::all(); // Active exams
         }
 
-        // Filter soft-deleted exams only if requested
-        if ($request->has('with_deleted') && $request->with_deleted == true) {
-            $exams = $exams->withTrashed();
-        }
-
-        return response()->json($exams->paginate($request->get('per_page', 10)));
+        return response()->json($exams, Response::HTTP_OK);
     }
 
     /**
-     * 📌 Store a newly created exam.
+     * Store a newly created exam in storage.
      */
     public function store(Request $request)
 {
     $validator = Validator::make($request->all(), [
         'title' => 'required|string|max:255',
         'description' => 'nullable|string',
-        'scheduled_at' => 'nullable|date',
+        'scheduled_at' => 'required|date',
         'duration' => 'required|integer|min:1',
-        'num_sections' => 'nullable|integer|min:1|max:4', // Default is 1
-        'created_by' => 'required|exists:users,id',
+        'created_by' => 'required|integer|exists:users,id',
     ]);
 
     if ($validator->fails()) {
         return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    return DB::transaction(function () use ($request) {
-        // ✅ Ensure UUID is generated for the Exam
-        $exam = Exam::create([
-            'uuid' => Str::uuid(),  
-            'title' => $request->title,
-            'description' => $request->description,
-            'scheduled_at' => $request->scheduled_at,
-            'duration' => $request->duration,
-            'created_by' => $request->created_by,
-        ]);
+    // Create the exam
+    $exam = Exam::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'scheduled_at' => $request->scheduled_at,
+        'duration' => $request->duration,
+        'created_by' => $request->created_by,
+    ]);
 
-        // ✅ Default to 1 section if num_sections not provided
-        $numSections = $request->num_sections ?? 1;
+    // Automatically create a default section
+    $defaultSection = ExamSection::create([
+        'exam_id' => $exam->id,
+        'title' => 'Default Section', // You can change this title
+        'description' => 'This is an auto-generated section for the exam.',
+        'duration' => $request->duration, // Set section duration same as exam by default
+        'created_by' => $request->created_by,
+    ]);
 
-        // ✅ Create Sections (Ensuring `title` is set)
-        for ($i = 1; $i <= $numSections; $i++) {
-            ExamSection::create([
-                'uuid' => Str::uuid(),  
-                'exam_id' => $exam->id,
-                'title' => "Section $i",  // ✅ This ensures title is always set
-                'description' => null,  
-                'duration' => null,     
-                'created_by' => $request->created_by,
-            ]);
-        }
-
-        Log::info('Exam created with sections', ['exam_id' => $exam->id]);
-
-        return response()->json([
-            'message' => 'Exam created successfully with sections',
-            'exam' => $exam->load('sections'),
-        ], 201);
-    });
+    return response()->json([
+        'message' => 'Exam created successfully with a default section.',
+        'exam' => $exam,
+        'section' => $defaultSection
+    ], 201);
 }
 
 
-
-
-
-
     /**
-     * 📌 Get details of a specific exam (with sections).
+     * Display the specified exam.
      */
-    public function show($id)
+    public function show(Exam $exam)
     {
-        try {
-            $exam = Exam::with('sections')->findOrFail($id);
-            return response()->json($exam);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Exam not found'], 404);
-        }
+        return response()->json($exam, Response::HTTP_OK);
     }
 
     /**
-     * 📌 Update an existing exam.
+     * Update the specified exam in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Exam $exam)
     {
-        try {
-            $exam = Exam::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'title' => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'scheduled_at' => 'nullable|date',
+            'duration' => 'sometimes|integer|min:1',
+        ]);
 
-            $validator = Validator::make($request->all(), [
-                'title' => 'sometimes|string|max:255',
-                'description' => 'nullable|string',
-                'scheduled_at' => 'nullable|date',
-                'duration' => 'sometimes|integer|min:1',
-                'updated_by' => 'nullable|exists:users,id',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
-
-            $exam->update($validator->validated());
-
-            Log::info('Exam updated', ['exam_id' => $exam->id, 'updated_by' => $exam->updated_by]);
-
-            return response()->json($exam);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Exam not found'], 404);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+
+        $exam->update(array_merge($request->all(), ['updated_by' => auth()->id()]));
+
+        return response()->json($exam, Response::HTTP_OK);
     }
 
     /**
-     * 📌 Soft delete an exam.
+     * Soft delete the specified exam.
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Exam $exam)
     {
-        try {
-            $exam = Exam::findOrFail($id);
+        $exam->update(['deleted_by' => auth()->id()]);
+        $exam->delete();
 
-            // Validate deleted_by
-            $validator = Validator::make($request->all(), [
-                'deleted_by' => 'nullable|exists:users,id',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
-
-            $exam->update(['deleted_by' => $request->deleted_by]);
-
-            $exam->delete();
-
-            return response()->json(['message' => 'Exam deleted successfully']);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Exam not found'], 404);
-        }
+        return response()->json(['message' => 'Exam soft deleted successfully'], Response::HTTP_OK);
     }
 
     /**
-     * 📌 Restore a soft-deleted exam.
+     * Restore a soft deleted exam.
      */
     public function restore($id)
     {
-        try {
-            $exam = Exam::onlyTrashed()->findOrFail($id);
-            $exam->restore();
+        $exam = Exam::withTrashed()->find($id);
 
-            return response()->json(['message' => 'Exam restored successfully', 'exam' => $exam]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Exam not found or not deleted'], 404);
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found'], Response::HTTP_NOT_FOUND);
         }
+
+        $exam->restore();
+
+        return response()->json(['message' => 'Exam restored successfully', 'exam' => $exam], Response::HTTP_OK);
     }
 }

@@ -2,22 +2,25 @@
 
 namespace Database\Factories;
 
+use App\Models\Exam;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Exam>
- */
 class ExamFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = Exam::class;
+
+    public function definition()
     {
         return [
-            //
+            'uuid' => Str::uuid(),
+            'title' => $this->faker->sentence(4),
+            'description' => $this->faker->paragraph(),
+            'scheduled_at' => now()->addDays(rand(1, 30)),
+            'duration' => rand(30, 180), // Duration in minutes
+            'created_by' => User::inRandomOrder()->first()->id ?? User::factory(),
+            'updated_by' => User::inRandomOrder()->first()->id ?? User::factory(),
         ];
     }
 }

@@ -15,6 +15,10 @@ return new class extends Migration
             // Primary Key
             $table->id(); // BIGINT Auto-incrementing ID
             
+            // Reference to Section (New Addition)
+            $table->unsignedBigInteger('section_id')->nullable()->comment('References the section this question belongs to');
+            $table->foreign('section_id')->references('id')->on('exam_sections')->onDelete('cascade');
+            
             // Audience Selection
             $table->enum('audience', ['High School', 'College', 'Graduation', 'SAT 2'])->default('High School')->comment('Defines the target audience for the question');
 
@@ -53,6 +57,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Indexing for Performance
+            $table->index(['section_id'], 'idx_section_id');
             $table->index(['difficulty'], 'idx_difficulty');
             $table->index(['deleted_at'], 'idx_deleted_at');
             $table->index(['language_code'], 'idx_language_code');

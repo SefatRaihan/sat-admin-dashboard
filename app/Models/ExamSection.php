@@ -12,16 +12,6 @@ class ExamSection extends Model
     use HasFactory, SoftDeletes;
 
     /**
-     * Indicates that the primary key is not auto-incrementing.
-     */
-    public $incrementing = false;
-
-    /**
-     * Specifies the primary key type as a string (UUID).
-     */
-    protected $keyType = 'string';
-
-    /**
      * The table associated with the model.
      *
      * @var string
@@ -34,23 +24,20 @@ class ExamSection extends Model
     protected $fillable = [
         'uuid',
         'exam_id',
-        'title', // ✅ Ensure this is here
+        'title',
         'description',
         'duration',
         'created_by',
         'updated_by',
         'deleted_by',
     ];
-    
 
     /**
      * The attributes that should be cast to native types.
      */
     protected $casts = [
-        'num_questions' => 'integer',
         'duration' => 'integer',
     ];
-
 
     /**
      * Relationship: A section belongs to an exam.
@@ -65,18 +52,25 @@ class ExamSection extends Model
      */
     public function questions()
     {
-        return $this->belongsToMany(ExamQuestion::class, 'section_question_pivot', 'section_id', 'question_id');
+        return $this->belongsToMany(
+            ExamQuestion::class,
+            'section_question_pivot',
+            'section_id',
+            'question_id'
+        );
     }
 
+    /**
+     * Auto-generate UUID on creation.
+     */
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($section) {
             if (empty($section->uuid)) {
-                $section->uuid = (string) Str::uuid(); // ✅ Correct field
+                $section->uuid = (string) Str::uuid();
             }
         });
     }
-
 }

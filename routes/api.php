@@ -4,8 +4,9 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\ExamSectionController;
-use App\Http\Controllers\MainQuestionController;
+use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ExamController;
+use App\Http\Controllers\Api\StudentExamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,30 +40,11 @@ Route::group(['middleware' => ['api', 'auth', 'web'], 'as' => 'api.'], function 
 |--------------------------------------------------------------------------
 */
 
-// 📌 Get all questions (supports filtering & pagination)
-Route::get('/questions', [MainQuestionController::class, 'index']);
+// Resource routes for standard CRUD operations
+Route::apiResource('/questions', QuestionController::class);
 
-// 📌 Create a new question
-Route::post('/questions', [MainQuestionController::class, 'store']);
-
-// 📌 Get a specific question by ID (with related exams & sections)
-Route::get('/questions/{id}', [MainQuestionController::class, 'show']);
-
-// 📌 Update a question
-Route::put('/questions/{id}', [MainQuestionController::class, 'update']);
-
-// 📌 Soft delete a question
-Route::delete('/questions/{id}', [MainQuestionController::class, 'destroy']);
-
-// 📌 Restore a soft-deleted question
-Route::post('/questions/{id}/restore', [MainQuestionController::class, 'restore']);
-
-// 📌 Toggle question status (active <-> inactive)
-Route::patch('/questions/{id}/toggle-status', [MainQuestionController::class, 'toggleStatus']);
-
-
-// 📌 Get related exams and sections for a question
-Route::get('/questions/{id}/relations', [MainQuestionController::class, 'getRelations']);
+// Route for restoring soft-deleted questions
+Route::post('/questions/{id}/restore', [QuestionController::class, 'restore']);
 
 
 
@@ -72,8 +54,6 @@ Route::get('/questions/{id}/relations', [MainQuestionController::class, 'getRela
 |--------------------------------------------------------------------------
 */
 
-
-
 Route::apiResource('/exams', ExamController::class);
 Route::post('/exams/{id}/restore', [ExamController::class, 'restore']);
 
@@ -81,7 +61,10 @@ Route::post('/exams/{id}/restore', [ExamController::class, 'restore']);
 
 
 // ✅ Assign Question to Section (Drag & Drop)
-Route::post('/sections/assign-question', [ExamSectionController::class, 'assignQuestionToSection']);
+//Route::post('/sections/assign-question', [ExamSectionController::class, 'assignQuestionToSection']);
 
 // ✅ Remove Question from Section (Drag Out)
-Route::post('/sections/remove-question', [ExamSectionController::class, 'removeQuestionFromSection']);
+//Route::post('/sections/remove-question', [ExamSectionController::class, 'removeQuestionFromSection']);
+
+//Route::get('/student/exam/{examId}', [StudentExamController::class, 'getExamForStudent']);
+

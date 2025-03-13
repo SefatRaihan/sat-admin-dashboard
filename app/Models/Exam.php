@@ -5,46 +5,37 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Exam extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'exams';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'uuid',          // ✅ Ensure this is auto-generated in the controller
-        'title',         // ✅ This is correct
-        'description',   // ✅ Nullable field
-        'scheduled_at',  // ✅ Make sure this exists in the migration
-        'duration',      // ✅ Make sure this exists in the migration
-        'created_by',    // ✅ Foreign key reference
-        'updated_by',    // ✅ Foreign key reference
-        'deleted_by',    // ✅ Add this since it exists in migration (important for soft deletes)
+        'uuid',
+        'title',
+        'description',
+        'scheduled_at',
+        'duration',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
-    
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * Auto-generate UUID on creation.
      */
-    protected $casts = [
-        'has_time_gaps' => 'boolean',
-        'retake_cooldown' => 'integer',
-        'total_questions' => 'integer',
-        'total_duration' => 'integer',
-    ];
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($exam) {
+            if (empty($exam->uuid)) {
+                $exam->uuid = (string) Str::uuid();
+            }
+        });
+    }
 
     /**
      * Get the creator of the exam.
@@ -63,18 +54,19 @@ class Exam extends Model
     }
 
     /**
-     * Many-to-Many Relationship: Get all questions associated with this exam.
+     * Get all questions associated with this exam through sections.
      */
     public function questions()
     {
-        return $this->belongsToMany(ExamQuestion::class, 'exam_question_pivot', 'exam_id', 'question_id');
-    }
-
-    /**
-     * Scope a query to only include published exams.
-     */
-    public function scopePublished($query)
-    {
-        return $query->where('status', 'published');
+        return $this->hasManyThrough(
+            ExamQuestion::class,
+            ExamSection::class,
+            'exam_id',                 // Foreign key on ExamSection table linking to Exam
+            'id',                      // Primary key on ExamQuestions table
+            'id',                      // Local key on Exams table
+            'id'                       // Local key on ExamSections table
+        )
+        ->join('section_question_pivot', 'exam_questions.id', '=', 'section_question_pivot.question_id')
+        ->select('exam_questions.*');
     }
 }
