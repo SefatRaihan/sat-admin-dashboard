@@ -128,4 +128,24 @@ class ExamController extends Controller
 
         return response()->json(['message' => 'Exam restored successfully', 'exam' => $exam], Response::HTTP_OK);
     }
+
+    public function toggleStatus($id)
+    {
+        $exam = Exam::find($id);
+
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found'], 404);
+        }
+
+        // Toggle between active/inactive
+        $exam->status = $exam->status === 'active' ? 'inactive' : 'active';
+        $exam->save();
+
+        return response()->json([
+            'message' => 'Exam status updated successfully',
+            'exam' => $exam
+        ], 200);
+    }
+
+
 }

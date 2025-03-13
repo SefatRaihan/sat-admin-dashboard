@@ -56,6 +56,7 @@ Route::post('/questions/{id}/restore', [QuestionController::class, 'restore']);
 
 Route::apiResource('/exams', ExamController::class);
 Route::post('/exams/{id}/restore', [ExamController::class, 'restore']);
+Route::patch('/exams/{id}/toggle-status', [ExamController::class, 'toggleStatus']);
 
 
 

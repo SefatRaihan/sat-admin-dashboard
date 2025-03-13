@@ -19,6 +19,7 @@ class Exam extends Model
         'description',
         'scheduled_at',
         'duration',
+        'status',
         'created_by',
         'updated_by',
         'deleted_by',
