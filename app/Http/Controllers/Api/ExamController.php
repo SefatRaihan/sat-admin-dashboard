@@ -19,19 +19,20 @@ class ExamController extends Controller
      */
     public function index(Request $request)
     {
-        $exams = Exam::query();
+        // $exams = Exam::query();
 
-        // Apply filters if provided
-        if ($request->has('scheduled_at')) {
-            $exams->whereDate('scheduled_at', $request->scheduled_at);
-        }
+        // // Apply filters if provided
+        // if ($request->has('scheduled_at')) {
+        //     $exams->whereDate('scheduled_at', $request->scheduled_at);
+        // }
 
-        // Filter soft-deleted exams only if requested
-        if ($request->has('with_deleted') && $request->with_deleted == true) {
-            $exams = $exams->withTrashed();
-        }
+        // // Filter soft-deleted exams only if requested
+        // if ($request->has('with_deleted') && $request->with_deleted == true) {
+        //     $exams = $exams->withTrashed();
+        // }
 
-        return response()->json($exams->paginate($request->get('per_page', 10)));
+        // return response()->json($exams->paginate($request->get('per_page', 10)));
+        return view('backend.exams.index');
     }
 
     /**

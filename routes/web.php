@@ -67,6 +67,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/users-pdf', [UserController::class, 'pdf'])->name('users.pdf');
     Route::resource('generals', GeneralController::class);
     Route::resource('question', QuestionController::class);
+    Route::resource('exam', ExamController::class);
 
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification.index');
     Route::get('/notification/create', [NotificationController::class, 'create'])->name('notification.create');

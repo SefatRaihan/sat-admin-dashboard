@@ -77,7 +77,7 @@
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead>
-                                <tr>
+                                <tr align="center">
                                     <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
                                     <th data-column="question" class="sortable">Question</th>
                                     <th data-column="audience" class="sortable">Audience</th>
@@ -87,7 +87,7 @@
                                     <th data-column="avg_time" class="sortable">Avg. Time</th>
                                     <th data-column="created_at" class="sortable">Created</th>
                                     <th>State</th>
-                                    <th>Action</th>
+                                    <th align="center">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="question-table-body">
@@ -1957,6 +1957,20 @@
                 });
 
                 $(document).on('click', '.edit-btn', show);
+
+                // $(document).on('click', '#questionModal' , function() {
+                //     // Reset radio buttons and checkboxes (but keep default values)
+                //     $("input[name='audience']").prop('checked', false);  
+                //     $("input[name='subjects']").prop('checked', false);  
+                //     $("input[name='question_type']").prop('checked', false); 
+
+                //     // Hide SAT sections initially
+                //     $('#sat_type_1, #sat_type_2').addClass('d-none');
+
+                //     // Clear options container
+                //     $('#option-container').html('');
+                //     $('#questionModal').modal('show');
+                // });
             });
 
             function updateButtons() {
