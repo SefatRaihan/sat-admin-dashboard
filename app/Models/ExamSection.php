@@ -31,9 +31,7 @@ class ExamSection extends Model
     /**
      * The attributes that should be mass-assignable.
      */
-    protected $fillable = [
-        'id', 'exam_id', 'section_name', 'section_type', 'num_questions', 'duration'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.

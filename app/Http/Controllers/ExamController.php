@@ -10,4 +10,10 @@ class ExamController extends Controller
     {
         return view('backend.exams.index');
     }
+
+    public function create()
+    {
+        return view('backend.exams.create');
+    }
+
 }

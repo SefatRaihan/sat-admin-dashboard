@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Exam;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,15 +11,16 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ExamFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = Exam::class;
+
+    public function definition()
     {
         return [
-            //
+            'uuid' => Str::uuid(),
+            'title' => $this->faker->word,
+            'description' => $this->faker->sentence,
+            'scheduled_at' => $this->faker->dateTime(),
+            'duration' => $this->faker->numberBetween(30, 180), // Duration in minutes
         ];
     }
 }

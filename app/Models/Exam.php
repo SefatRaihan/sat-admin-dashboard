@@ -22,19 +22,7 @@ class Exam extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'uuid',
-        'name',
-        'audience',
-        'total_questions',
-        'total_duration',
-        'has_time_gaps',
-        'retake_cooldown',
-        'result_processing',
-        'status',
-        'created_by',
-        'updated_by',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.

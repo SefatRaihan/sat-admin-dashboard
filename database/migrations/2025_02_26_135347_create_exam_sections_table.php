@@ -12,14 +12,34 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_sections', function (Blueprint $table) {
+
             $table->id();
+            
+            // Unique Identifier
             $table->uuid('uuid')->unique()->index();
-            $table->foreignId('exam_id')->constrained('exams')->onDelete('cascade');
-            $table->string('section_name', 120)->index();
-            $table->enum('section_type', ['verbal', 'quant', 'physics', 'chemistry', 'maths', 'biology', 'mixed'])->index();
-            $table->integer('num_questions');
-            $table->integer('duration'); // In minutes
+            
+            // Foreign Key: Associated Exam
+            $table->unsignedBigInteger('exam_id')->index()->comment('References the exam this section belongs to');
+            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
+            
+            // Section Details
+            $table->enum('audience', ['High School', 'College', 'Graduation', 'SAT 2'])->nullable();
+            $table->enum('section_type', ['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])->nullable();
+            $table->string('title')->index()->comment('Title of the section');
+            $table->text('description')->nullable()->comment('Detailed description of the section');
+            $table->integer('num_of_question')->nullable();
+            $table->integer('duration')->unsigned()->nullable()->comment('Duration in minutes for this section');
+            $table->integer('section_order')->default(1)->comment('total section 4');
+            
+            // Tracking Users (On user delete, values are set to null)
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
+            
         });
     }
 
