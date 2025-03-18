@@ -1947,7 +1947,7 @@
                     correct_answer: $('input[name="mcq_options"]:checked').val(),
                     difficulty: $('input[name="difficulty"]:checked').val(),
                     explanation: $('#explanation').text().trim(),
-                    status: $('input[name="question_status"]:checked').val() == '1' ? 'active' : 'inactive',
+                    status: $('input[name="question_status"]:checked').val(),
                 };
 
                 $.ajax({

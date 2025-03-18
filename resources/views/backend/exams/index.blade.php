@@ -12,13 +12,13 @@
     <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'All Exams'" :prependContent="$prependHtml">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
-    {{-- <x-backend.layouts.partials.blocks.empty-state 
-        title="You have not created any exams yet" 
+    {{-- <x-backend.layouts.partials.blocks.empty-state
+        title="You have not created any exams yet"
         message="Let’s add your first exam now"
         buttonText="Create Exam"
         buttonText="Create Exam"
-        data-toggle="modal" 
-        data-target="#examModal" 
+        data-toggle="modal"
+        data-target="#examModal"
     /> --}}
     <div>
         <div class="card"
@@ -129,7 +129,7 @@
                                     <label class="label-header" for="examName">Set a Name for the Exam</label>
                                     <label class="label-header" for="">Max 120 characters</label>
                                 </div>
-                                <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Stress Endurance Test for Hi School">
+                                <input type="text" class="form-control" max="120" id="title" name="title" placeholder="">
                             </div>
                         </div>
                         <div>
@@ -174,519 +174,84 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="section_div_1 d-none">
+                        <div class="section_part section_div_1 d-none">
                             <label class="label-header" for="">Provide details for : Section 1</label>
-                            <div class="sat_type_1" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="verbal" value="verbal">
-                                            <label class="form-check-label" for="verbal">
-                                                Verbal
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="quant" value="quant">
-                                            <label class="form-check-label" for="quant">
-                                            Quant
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
-                                                Mixed
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="label-header" for="">Name of the Section</label>
-                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
-                                                </div>
+                            <div style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px 13px 0 13px;">
+                                <div class="sat_type_1" >
+                                    <label for="">Section Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_1" id="verbal_section_1" value="Verbal">
+                                                <label class="form-check-label" for="verbal_section_1">
+                                                    Verbal
+                                                </label>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-none sat_type_2" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="physics" value="physics">
-                                            <label class="form-check-label" for="physics">
-                                                Physics
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="chemistry" value="chemistry">
-                                            <label class="form-check-label" for="chemistry">
-                                                Chemistry
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="biology" value="biology">
-                                            <label class="form-check-label" for="biology">
-                                                Biology
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="math" value="math">
-                                            <label class="form-check-label" for="math">
-                                                Math
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
-                                                Mixed
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="label-header" for="">Name of the Section</label>
-                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="section_div_2 d-none">
-                            <label class="label-header" for="">Provide details for : Section 2</label>
-                            <div class="sat_type_1" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="verbal" value="verbal">
-                                            <label class="form-check-label" for="verbal">
-                                                Verbal
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="quant" value="quant">
-                                            <label class="form-check-label" for="quant">
-                                            Quant
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
-                                                Mixed
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="label-header" for="">Name of the Section</label>
-                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-none sat_type_2" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="physics" value="physics">
-                                            <label class="form-check-label" for="physics">
-                                                Physics
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="chemistry" value="chemistry">
-                                            <label class="form-check-label" for="chemistry">
-                                                Chemistry
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="biology" value="biology">
-                                            <label class="form-check-label" for="biology">
-                                                Biology
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="math" value="math">
-                                            <label class="form-check-label" for="math">
-                                                Math
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
-                                                Mixed
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="label-header" for="">Name of the Section</label>
-                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="section_div_3 d-none">
-                            <label class="label-header" for="sat_type_1"> Provide details for : Section 3</label>
-                            <div class="sat_type_1" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="verbal" value="verbal">
-                                            <label class="form-check-label" for="verbal">
-                                                Verbal
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="quant" value="quant">
-                                            <label class="form-check-label" for="quant">
-                                            Quant
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
-                                                Mixed
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="label-header" for="">Name of the Section</label>
-                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-none sat_type_2" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="physics" value="physics">
-                                            <label class="form-check-label" for="physics">
-                                                Physics
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="chemistry" value="chemistry">
-                                            <label class="form-check-label" for="chemistry">
-                                                Chemistry
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="biology" value="biology">
-                                            <label class="form-check-label" for="biology">
-                                                Biology
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="math" value="math">
-                                            <label class="form-check-label" for="math">
-                                                Math
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
-                                                Mixed
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="label-header" for="">Name of the Section</label>
-                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="section_div_4 d-none">
-                            <label class="label-header" for="sat_type_1"> Provide details for : Section 4</label>
-                            <div class="sat_type_1" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="verbal" value="verbal">
-                                            <label class="form-check-label" for="verbal">
-                                                Verbal
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="quant" value="quant">
-                                            <label class="form-check-label" for="quant">
-                                            Quant
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_1" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
-                                                Mixed
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="label-header" for="">Name of the Section</label>
-                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_qty" placeholder="20">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_duration" placeholder="40">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-none sat_type_2" style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="physics" value="physics">
-                                            <label class="form-check-label" for="physics">
-                                                Physics
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="chemistry" value="chemistry">
-                                            <label class="form-check-label" for="chemistry">
-                                                Chemistry
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="biology" value="biology">
-                                            <label class="form-check-label" for="biology">
-                                                Biology
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="math" value="math">
-                                            <label class="form-check-label" for="math">
-                                                Math
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="sat_type_2" id="mixed" value="mixed">
-                                            <label class="form-check-label" for="mixed">
-                                                Mixed
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="label-header" for="">Name of the Section</label>
-                                            <input type="text" class="form-control" id="examName" name="exam_section_title" placeholder="Verbal Section">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- <div class="mt-2">
-                            <label class="label-header" for="">5. Provide details for : Section 2</label>
-                            <div style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px;">
-                                <label for="">Section Type</label>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="section_2" id="section_2_verbal" value="verbal">
-                                            <label class="form-check-label" for="section_2_verbal">
-                                                Verbal
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="section_2" id="section_2_quant" value="quant">
-                                            <label class="form-check-label" for="section_2_quant">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_1" id="quant_section_1" value="Quant">
+                                                <label class="form-check-label" for="quant_section_1">
                                                 Quant
-                                            </label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_1" id="mixed_section_1" value="Mixed">
+                                                <label class="form-check-label" for="mixed_section_1">
+                                                    Mixed
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="section_2" id="section_2_mixed" value="mixed">
-                                            <label class="form-check-label" for="section_2_mixed">
-                                                Mixed
-                                            </label>
+                                </div>
+                                <div class="d-none sat_type_2">
+                                    <label for="">Section Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_1" id="physics_section_1" value="Physics">
+                                                <label class="form-check-label" for="physics_section_1">
+                                                    Physics
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_1" id="chemistry_section_1" value="Chemistry">
+                                                <label class="form-check-label" for="chemistry_section_1">
+                                                    Chemistry
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_1" id="biology_section_1" value="Biology">
+                                                <label class="form-check-label" for="biology_section_1">
+                                                    Biology
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_1" id="math_section_1" value="Math">
+                                                <label class="form-check-label" for="math_section_1">
+                                                    Math
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_1" id="mixed_sat_section_1" value="Mixed">
+                                                <label class="form-check-label" for="mixed_sat_section_1">
+                                                    Mixed
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row mt-2">
                                     <div class="col-md-12 mt-2">
                                         <div class="form-group">
                                             <label class="label-header" for="">Name of the Section</label>
@@ -698,36 +263,345 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="20">
+                                                    <input type="text" class="form-control no_of_questions" id="no_of_questions" name="no_of_questions" placeholder="20">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="label-header" for="">Set Duration (minutes)</label>
-                                                    <input type="text" class="form-control" id="examName" name="exam_name" placeholder="40">
+                                                    <input type="text" class="form-control duration" id="duration" name="duration" placeholder="40">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
+                        <div class="section_part section_div_2 d-none">
+                            <label class="label-header" for="">Provide details for : Section 2</label>
+                            <div style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px 13px 0 13px;">
+                                <div class="sat_type_1" >
+                                    <label for="">Section Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_2" id="verbal_section_2" value="Verbal">
+                                                <label class="form-check-label" for="verbal_section_2">
+                                                    Verbal
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_2" id="quant_section_2" value="Quant">
+                                                <label class="form-check-label" for="quant_section_2">
+                                                Quant
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_2" id="mixed_section_2" value="Mixed">
+                                                <label class="form-check-label" for="mixed_section_2">
+                                                    Mixed
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-none sat_type_2">
+                                    <label for="">Section Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_2" id="physics_section_2" value="Physics">
+                                                <label class="form-check-label" for="physics_section_2">
+                                                    Physics
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_2" id="chemistry_section_2" value="Chemistry">
+                                                <label class="form-check-label" for="chemistry_section_2">
+                                                    Chemistry
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_2" id="biology_section_2" value="Biology">
+                                                <label class="form-check-label" for="biology_section_2">
+                                                    Biology
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_2" id="math_section_2" value="Math">
+                                                <label class="form-check-label" for="math_section_2">
+                                                    Math
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_2" id="mixed_sat_section_2" value="Mixed">
+                                                <label class="form-check-label" for="mixed_sat_section_2">
+                                                    Mixed
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label class="label-header" for="">Name of the Section</label>
+                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
+                                                    <input type="text" class="form-control no_of_questions" id="no_of_questions" name="no_of_questions" placeholder="20">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-header" for="">Set Duration (minutes)</label>
+                                                    <input type="text" class="form-control duration" id="duration" name="duration" placeholder="40">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section_part section_div_3 d-none">
+                            <label class="label-header" for="sat_type_1"> Provide details for : Section 3</label>
+                            <div style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px 13px 0 13px;">
+                                <div class="sat_type_1" >
+                                    <label for="">Section Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_3" id="verbal_section_3" value="Verbal">
+                                                <label class="form-check-label" for="verbal_section_3">
+                                                    Verbal
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_3" id="quant_section_3" value="Quant">
+                                                <label class="form-check-label" for="quant_section_3">
+                                                Quant
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_3" id="mixed_section_3" value="Mixed">
+                                                <label class="form-check-label" for="mixed_section_3">
+                                                    Mixed
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-none sat_type_2">
+                                    <label for="">Section Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_3" id="physics_section_3" value="Physics">
+                                                <label class="form-check-label" for="physics_section_3">
+                                                    Physics
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_3" id="chemistry_section_3" value="Chemistry">
+                                                <label class="form-check-label" for="chemistry_section_3">
+                                                    Chemistry
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_3" id="biology_section_3" value="Biology">
+                                                <label class="form-check-label" for="biology_section_3">
+                                                    Biology
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_3" id="math_section_3" value="Math">
+                                                <label class="form-check-label" for="math_section_3">
+                                                    Math
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_3" id="mixed_sat_section_3" value="Mixed">
+                                                <label class="form-check-label" for="mixed_sat_section_3">
+                                                    Mixed
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label class="label-header" for="">Name of the Section</label>
+                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
+                                                    <input type="text" class="form-control no_of_questions" id="no_of_questions" name="no_of_questions" placeholder="20">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-header" for="">Set Duration (minutes)</label>
+                                                    <input type="text" class="form-control duration" id="duration" name="duration" placeholder="40">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section_part section_div_4 d-none">
+                            <label class="label-header" for="sat_type_1"> Provide details for : Section 4</label>
+                            <div style="background-color: #F9FAFB; border:1px solid #EAECF0;border-radius: 8px; padding: 13px 13px 0 13px;">
+                                <div class="sat_type_1" >
+                                    <label for="">Section Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_4" id="verbal_section_4" value="Verbal">
+                                                <label class="form-check-label" for="verbal_section_4">
+                                                    Verbal
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_4" id="quant_section_4" value="Quant">
+                                                <label class="form-check-label" for="quant_section_4">
+                                                Quant
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_4" id="mixed_section_4" value="Mixed">
+                                                <label class="form-check-label" for="mixed_section_4">
+                                                    Mixed
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-none sat_type_2">
+                                    <label for="">Section Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_4" id="physics_section_4" value="Physics">
+                                                <label class="form-check-label" for="physics_section_4">
+                                                    Physics
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_4" id="chemistry_section_4" value="Chemistry">
+                                                <label class="form-check-label" for="chemistry_section_4">
+                                                    Chemistry
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_4" id="biology_section_4" value="Biology">
+                                                <label class="form-check-label" for="biology_section_4">
+                                                    Biology
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_4" id="math_sat_section_4" value="Math">
+                                                <label class="form-check-label" for="math_sat_section_4">
+                                                    Math
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="sat_type_section_4" id="mixed_section_4" value="Mixed">
+                                                <label class="form-check-label" for="mixed_section_4">
+                                                    Mixed
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label class="label-header" for="">Name of the Section</label>
+                                            <input type="text" class="form-control" id="examName" name="exam_name" placeholder="Verbal Section">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
+                                                    <input type="text" class="form-control no_of_questions" id="no_of_questions" name="no_of_questions" placeholder="20">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-header" for="">Set Duration (minutes)</label>
+                                                    <input type="text" class="form-control duration" id="duration" name="duration" placeholder="40">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div>
                             <div class="form-group mt-2">
                                 <label class="label-header" for=""> Total no of Questions</label>
-                                <input type="text" class="form-control" id="examName" name="exam_name" >
+                                <input type="text" class="form-control" id="total_questions" name="total_questions" readonly>
                             </div>
                         </div>
                         <div>
                             <div class="form-group">
                                 <label class="label-header" for=""> Total duration</label>
-                                <input type="text" class="form-control" id="examName" name="exam_name">
+                                <input type="text" class="form-control" id="total_duration" name="total_duration" readonly>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer border-top pt-3">
                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <a href="/exams/create" class="btn save-exam" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Proceed to Add Questions</a>
+                        <a href="" class="btn save-exam" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Proceed to Add Questions</a>
                     </div>
                 </div>
             </div>
@@ -1157,13 +1031,13 @@
                 width: 50px;
                 height: 23px;
             }
-    
-            .switch input { 
+
+            .switch input {
                 opacity: 0;
                 width: 0;
                 height: 0;
             }
-    
+
             .slider {
                 position: absolute;
                 cursor: pointer;
@@ -1175,7 +1049,7 @@
                 -webkit-transition: .4s;
                 transition: .4s;
             }
-    
+
             .slider:before {
                 position: absolute;
                 content: "";
@@ -1187,26 +1061,26 @@
                 -webkit-transition: .4s;
                 transition: .4s;
             }
-    
+
             input:checked + .slider {
                 background-color: #2196F3;
             }
-    
+
             input:focus + .slider {
                 box-shadow: 0 0 1px #2196F3;
             }
-    
+
             input:checked + .slider:before {
                 -webkit-transform: translateX(26px);
                 -ms-transform: translateX(26px);
                 transform: translateX(26px);
             }
-    
+
             /* Rounded sliders */
             .slider.round {
                 border-radius: 34px;
             }
-    
+
             .slider.round:before {
                 border-radius: 50%;
             }
@@ -1220,14 +1094,17 @@
                     $(".sat_type_2").removeClass("d-none");
                     $(".sat_type_1").addClass("d-none");
                 });
-    
+
                 $(".sat_1").change(function () {
                     $(".sat_type_1").removeClass("d-none");
                     $(".sat_type_2").addClass("d-none");
                 });
 
+                $(document).on('input change', '.no_of_questions, .duration', function() {
+                    calculateTotalSectionValues();
+                });
                 $(document).on('change', "input[name='section']", section);
-                // $(document).on('click', ".save-exam", store);
+                $(document).on('click', ".save-exam", store);
 
                 // fetchQuestions(currentPage, perPage);
 
@@ -1254,13 +1131,12 @@
                 // $(document).on('change', '.toggle-status', updateState);
             });
 
-            function section() {  
-                
-                var sectionValue = $("input[name='section']:checked").val(); // Use jQuery for consistency
-                console.log(sectionValue);
-                
+            function section() {
+
+                var sectionValue = $("input[name='section']:checked").val();
+
                 // Hide all section divs initially
-                $(".section_div_1, .section_div_2, .section_div_3, .section_div_4").addClass("d-none");
+                $(".section_part").addClass("d-none");
 
                 // Show only the necessary divs
                 for (let i = 1; i <= sectionValue; i++) {
@@ -1268,64 +1144,93 @@
                 }
             }
 
-            // const store = (e) => {
-            //     e.preventDefault();
+            function calculateTotalSectionValues() {
+                let totalQuestions = 0;
+                let totalDuration = 0;
 
-            //     let formData = {
-            //         audience: $('input[name="audience"]:checked').val(),
+                $('.section_part').each(function(index) {
+                    if ($(this).hasClass("d-none")) return;
 
-                   
-            //         // sat_type: $('input[name="audience"]:checked').val() === 'SAT 2' ? 'SAT 2' : 'SAT 1',
-            //         // section: $('input[name="section"]:checked').val()
-            //         // section: $('input[name="question_type"]:checked').val() || $(
-            //         //     'input[name="subjects"]:checked').val(),
-            //         // question_title: $('#mcq_question').text().trim(),
-            //         // question_description: $('#context').text().trim(),
-            //         // question_text: $('#mcq_question').text().trim(),
-            //         // question_type: 'MCQ',
-            //         // options: JSON.stringify(getOptions()),
-            //         // correct_answer: $('input[name="mcq_options"]:checked').val(),
-            //         // difficulty: $('input[name="difficulty"]:checked').val(),
-            //         // explanation: $('#explanation').text().trim(),
-            //         // status: $('input[name="question_status"]:checked').val() == '1' ? 'active' : 'inactive',
-            //     };
+                    const no_of_questions = parseInt($(this).find('input[name="no_of_questions"]').val()) || 0;
+                    const duration = parseInt($(this).find('input[name="duration"]').val()) || 0;
+                    console.log(no_of_questions, duration);
 
-            //     $('.section_div_1').find('input').each(function() {
-            //         let sat_type_1 = $('name=['sat_type_1']:checked').val();
-            //         let sat_type_2 = $('name=['sat_type_2']:checked').val();
-            //         if(){
+                    totalQuestions += no_of_questions;
+                    totalDuration += duration;
+                });
 
-            //         }
-            //     });
+                // Update totals in the DOM
+                $('#total_questions').val(totalQuestions);
+                $('#total_duration').val(totalDuration);
+            }
 
-            //     console.log(formData);
-                
-            //     return false;
-            //     $.ajax({
-            //         url: '/api/questions',
-            //         type: 'POST',
-            //         data: formData,
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //         },
-            //         success: function(response) {
-            //             if (response.success) {
-            //                 Swal.fire("Success", "Question created successfully!", "success");
-            //                 location.reload();
-            //             } else {
-            //                 Swal.fire("Error", "Failed to created successfully!", "error");
-            //                 checkbox.prop('checked', !checkbox.is(':checked'));
-            //             }
-            //         },
-            //         error: function() {
-            //             Swal.fire("Error", "Something went wrong!", "error");
-            //             checkbox.prop('checked', !checkbox.is(':checked'));
-            //         }
+            const store = (e) => {
+                 e.preventDefault();
 
-            //     });
-            // }
+                let formData = {
+                    title: $('#title').val(),
+                    audience: $('input[name="audience"]:checked').val(),
+                    section: $('input[name="section"]:checked').val(),
+                    section_details: [],
+                    total_questions: 0,
+                    total_duration: 0
+                };
 
+                let totalQuestions = 0;
+                let totalDuration = 0;
 
+                $('.section_part').each(function(index) {
+                    if ($(this).hasClass("d-none")) return; // Skip hidden sections
+
+                    const sectionIndex = index + 1;
+
+                    const $inputs = $(this).find('input');
+                    const no_of_questions = parseInt($inputs.filter('[name="no_of_questions"]').val()) || 0;
+                    const duration = parseInt($inputs.filter('[name="duration"]').val()) || 0;
+
+                    const sectionData = {
+                        section_type: $inputs.filter(`[name="sat_type_section_${sectionIndex}"]:checked`).val(),
+                        exam_name: $inputs.filter('[name="exam_name"]').val(),
+                        section_order: sectionIndex,
+                        no_of_questions,
+                        duration
+                    };
+
+                    formData.section_details.push(sectionData);
+                    totalQuestions += no_of_questions;
+                    totalDuration += duration;
+                });
+
+                formData.total_questions = totalQuestions;
+                formData.total_duration = totalDuration;
+
+                // console.log(formData);
+
+                 $.ajax({
+                     url: '/api/exams',
+                     type: 'POST',
+                     data: formData,
+                     headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                     },
+                     success: function(response) {
+                         if (response.success) {
+                            Swal.fire("Success", "Exam created successfully!", "success").then(() => {
+                                window.location.href = response.redirect;
+                            });
+                         } else {
+                             Swal.fire("Error", "Failed to created successfully!", "error");
+                             checkbox.prop('checked', !checkbox.is(':checked'));
+                         }
+                     },
+                     error: function(response) {
+                         Swal.fire("Error", response.error, "error");
+                         Swal.fire("Error", "Something went wrong!", "error");
+                         checkbox.prop('checked', !checkbox.is(':checked'));
+                     }
+
+                });
+            }
 
 
             // get all exams

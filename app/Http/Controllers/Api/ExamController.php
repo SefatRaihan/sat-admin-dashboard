@@ -19,20 +19,20 @@ class ExamController extends Controller
      */
     public function index(Request $request)
     {
-        // $exams = Exam::query();
+        $exams = Exam::query();
 
-        // // Apply filters if provided
-        // if ($request->has('scheduled_at')) {
-        //     $exams->whereDate('scheduled_at', $request->scheduled_at);
-        // }
+        // Apply filters if provided
+        if ($request->has('scheduled_at')) {
+            $exams->whereDate('scheduled_at', $request->scheduled_at);
+        }
 
-        // // Filter soft-deleted exams only if requested
-        // if ($request->has('with_deleted') && $request->with_deleted == true) {
-        //     $exams = $exams->withTrashed();
-        // }
+        // Filter soft-deleted exams only if requested
+        if ($request->has('with_deleted') && $request->with_deleted == true) {
+            $exams = $exams->withTrashed();
+        }
 
-        // return response()->json($exams->paginate($request->get('per_page', 10)));
-        return view('backend.exams.index');
+        return response()->json($exams->paginate($request->get('per_page', 10)));
+        // return view('backend.exams.index');
     }
 
     /**
@@ -40,43 +40,47 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'scheduled_at' => 'required|date',
-            'duration' => 'required|integer|min:1',
-            'created_by' => 'required|integer|exists:users,id',
+            'title'        => 'required|string|max:255',
+            // 'description'  => 'nullable|string',
+            // 'scheduled_at' => 'required|date',
+            'total_duration'  => 'required|integer|min:1',
+            // 'created_by'      => 'required|integer|exists:users,id',
         ]);
     
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
     
-        // Create the exam
-        $exam = Exam::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'scheduled_at' => $request->scheduled_at,
-            'duration' => $request->duration,
-            'created_by' => $request->created_by,
-        ]);
-    
-        // Automatically create a default section
-        $defaultSection = ExamSection::create([
-            'exam_id' => $exam->id,
-            'section_name' => 'Default Section', // You can change this title
-            'description' => 'This is an auto-generated section for the exam.',
-            'section_type' => $request->section_type, // Set section duration same as exam by default
-            'num_questions' => $request->total_question, // Set section duration same as exam by default
-            'duration' => $request->duration, // Set section duration same as exam by default
-            'created_by' => $request->created_by,
-        ]);
-    
-        return response()->json([
-            'message' => 'Exam created successfully with a default section.',
-            'exam' => $exam,
-            'section' => $defaultSection
-        ], 201);
+        DB::beginTransaction();
+            // Create the exam
+            $exam = Exam::create([
+                'uuid' => Str::uuid(),
+                'title' => $request->title,
+                // 'description' => $request->description,
+                // 'scheduled_at' => $request->scheduled_at,
+                'duration' => $request->total_duration,
+                'created_by' =>  auth()->id(),
+            ]);
+        
+            foreach ($request->section_details as $section) {
+                // dd($section['exam_name']);
+                ExamSection::create([
+                    'uuid' => Str::uuid(),
+                    'exam_id'  => $exam->id,
+                    'audience' => $request->audience,
+                    'title'    => $section['exam_name'],
+                    // 'description'   => $section['section_type'],
+                    'section_order'   => $section['section_order'],
+                    'section_type'    => $section['section_type'],
+                    'num_of_question' => $section['no_of_questions'],
+                    'duration'        => $section['duration'],
+                    'created_by'      => auth()->id(),
+                ]);
+            }
+        DB::commit();
+        return response()->json(['success'=> true, 'redirect' => route('exams.show', $exam->id), 201]);
         
     }
 
@@ -169,4 +173,25 @@ class ExamController extends Controller
             return response()->json(['error' => 'Exam not found or not deleted'], 404);
         }
     }
+
+    public function toggleStatus(Request $request, $id)
+    {
+        try {
+            $exam = Exam::findOrFail($id);
+
+            $exam->update(['status' => $request->status]);
+
+            Log::info('Question status toggled', ['question_id' => $exam->id, 'new_status' => $exam->status]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Question status updated successfully.",
+                // 'question_id' => $question->id,
+                // 'new_status' => $status
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Question not found'], 404);
+        }
+    }
+
 }

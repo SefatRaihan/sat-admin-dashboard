@@ -24,7 +24,7 @@ return new class extends Migration
             
             // Section Details
             $table->enum('audience', ['High School', 'College', 'Graduation', 'SAT 2'])->nullable();
-            $table->enum('section_type', ['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])->nullable();
+            $table->enum('section_type', ['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant', 'Mixed'])->nullable();
             $table->string('title')->index()->comment('Title of the section');
             $table->text('description')->nullable()->comment('Detailed description of the section');
             $table->integer('num_of_question')->nullable();

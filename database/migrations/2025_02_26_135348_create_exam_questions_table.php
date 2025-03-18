@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('uuid')->index(); // BIGINT Auto-incrementing ID
             
             // Audience Selection
-            $table->enum('audience', ['High School', 'College', 'Graduation', 'SAT 2'])->default('High School')->comment('Defines the target audience for the question');
+            $table->enum('audience', ['High School', 'College', 'Graduation', 'SAT 2'])->comment('Defines the target audience for the question');
 
             // SAT Type
             $table->enum('sat_type', ['SAT 1', 'SAT 2'])->nullable()->comment('Defines if the question is for SAT 1 or SAT 2');

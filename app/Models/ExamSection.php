@@ -9,17 +9,17 @@ use Illuminate\Support\Str;
 
 class ExamSection extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     /**
      * Indicates that the primary key is not auto-incrementing.
      */
-    public $incrementing = false;
+    // public $incrementing = false;
 
     /**
      * Specifies the primary key type as a string (UUID).
      */
-    protected $keyType = 'string';
+    // protected $keyType = 'string';
 
     /**
      * The table associated with the model.
@@ -49,9 +49,7 @@ class ExamSection extends Model
         parent::boot();
 
         static::creating(function ($section) {
-            if (empty($section->id)) {
-                $section->id = (string) Str::uuid();
-            }
+            $section->uuid = (string) Str::uuid(); 
         });
     }
 
@@ -60,7 +58,7 @@ class ExamSection extends Model
      */
     public function exam()
     {
-        return $this->belongsTo(Exam::class, 'exam_id');
+        return $this->belongsTo(Exam::class);
     }
 
     /**

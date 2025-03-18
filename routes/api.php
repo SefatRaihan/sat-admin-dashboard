@@ -2,10 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\MainQuestionController;
 use App\Http\Controllers\Api\SupervisorController;
+use App\Http\Controllers\Api\ExamSectionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
@@ -25,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 // 'middleware' => ['api', 'auth', 'web'],
-Route::group([ 'as' => 'api.'], function () {
+Route::group([ 'as' => 'api'], function () {
     Route::get('get-role-navitems-with-selected/{id}', [RoleNavItemApiController::class,'getnavitemWithSelected']);
     Route::post('/profile/update', [ProfileController::class, 'update']);
     Route::post('/students/{uuid}/update', [StudentController::class, 'update']);
@@ -79,6 +81,17 @@ Route::group([ 'as' => 'api.'], function () {
     // 📌 Get related exams and sections for a question
     Route::get('/questions/{id}/relations', [MainQuestionController::class, 'getRelations']);
 
+    /*
+    |--------------------------------------------------------------------------
+    | API Routes for Exams
+    |--------------------------------------------------------------------------
+    */
 
+    Route::get('/exams/questions', [ExamSectionController::class, 'getQuestionsWithExamSection']);
+    Route::post('/exams/exam-section-questions', [ExamSectionController::class, 'examSectionQuestion']);
+    // Route::post('/exams/publish', [ExamSectionController::class, 'examPublish']);
+    Route::apiResource('/exams', ExamController::class);
+    Route::post('/exams/{id}/restore', [ExamController::class, 'restore']);
+    Route::patch('/exams/{id}/update-status', [ExamController::class, 'toggleStatus']);
 
 });

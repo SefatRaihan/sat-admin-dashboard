@@ -49,7 +49,7 @@ class Exam extends Model
      */
     public function sections()
     {
-        return $this->hasMany(ExamSection::class, 'exam_id');
+        return $this->hasMany(ExamSection::class);
     }
 
     /**

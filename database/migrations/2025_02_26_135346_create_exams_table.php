@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->dateTime('scheduled_at')->nullable();
             $table->integer('duration')->unsigned()->nullable(); // Duration in minutes
+            $table->enum('status', ['active', 'inactive'])->nullable(); // Duration in minutes
 
             // Foreign key references
             $table->unsignedBigInteger('created_by')->nullable();
