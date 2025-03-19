@@ -83,12 +83,7 @@ class ExamController extends Controller
         return response()->json(['success'=> true, 'redirect' => route('exams.show', $exam->id), 201]);
         
     }
-
-
-
-
-
-
+    
     /**
      * 📌 Get details of a specific exam (with sections).
      */

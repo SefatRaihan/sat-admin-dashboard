@@ -3,7 +3,7 @@
     <x-backend.layouts.partials.blocks.contentwrapper
         :headerTitle="'
             <a href=\'\roles\' class=\'text-dark\'>
-                <i class=\'fa-solid fa-angle-left mr-2\'></i> Create Exam : Add Question to Section 1
+                <i class=\'fa-solid fa-angle-left mr-2\'></i> Create Exam : Add Question to Section <span class=\'section_order\'></span>
             </a>
 
             <div class=\'heading-summary\'>
@@ -25,7 +25,7 @@
             <div class="col-md-9" style="background-color:#fff; padding: 16px; padding-left: 45px !important; border-bottom:1px solid #EAECF0">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <input type="text" id="search" class="form-control search__input" placeholder="Search Notification" style="padding-left: 35px">
+                        <input type="text" id="search" class="form-control search_input" placeholder="Search Notification" style="padding-left: 35px">
                     </div>
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
@@ -54,12 +54,12 @@
                         <button class="btn p-0" style="font-size: 12px"><u>Clear All</u></button>
                     </div>
                 </div>
-                <h6><b>Section 1: Extreme Section</b></h6>
+                <h6><b>Section <span class="section_order"></span>: Extreme Section</b></h6>
             </div>
         </div>
         <div class="row">
             <div class="col-md-9" style="height: 82vh; background-color:#fff; border-right:1px solid #D0D5DD; padding-left:50px; overflow-y: auto;">
-                <h5 style="color: #101828; font-size:16px"><span id="totalQuestion">10</span> Questions</h5>
+                <h5 style="color: #101828; font-size:16px"><span id="totalQuestion">0</span> Questions</h5>
                 <div class="row" id="question-container" style="height:100%"></div>
             </div>
             <div class="col-md-3 p-0 m-0" style="background-color:#fff; height: 82vh; position: relative;">
@@ -225,41 +225,6 @@
 
 
             $(document).ready(function() {
-                // Initial question card generation
-                // function createQuestionCard(id) {
-                //     return `
-                //         <div class="col-md-4 p-2 question-card" data-id="${id}" draggable="true" style="border-radius:8px; background-color:transparent !important">
-                //             <div class="card card-body m-0" style="border-left:3px solid #F79009; background-color:#F2F4F7; border-radius:8px">
-                //                 <input type="hidden" class="question-id" value="${id}">
-                //                 <div class="question-card-header">
-                //                     <div class="d-flex justify-content-between">
-                //                         <div>
-                //                             <ul class="p-0" style="display: flex; gap:20px; color:#475467">
-                //                                 <li style="list-style: none">Hi School</li>
-                //                                 <li>Verbal</li>
-                //                                 <li>Details</li>
-                //                             </ul>
-                //                         </div>
-                //                         <input type="checkbox" class="question-checkbox">
-                //                     </div>
-                //                 </div>
-                //                 <p class="question-title">A car accelerates uniformly from rest to a velocity of 30 m/s in 10 s. What is the car’s acceleration?</p>
-                //                 <div class="question-card-footer">
-                //                     <ul class="p-0 m-0" style="display: flex; gap:20px; color:#475467">
-                //                         <li style="list-style: none"><u>2 Exams</u></li>
-                //                         <li>84%</li>
-                //                         <li>1m 12s</li>
-                //                     </ul>
-                //                 </div>
-                //             </div>
-                //         </div>
-                //     `;
-                // }
-
-                // // Generate initial 10 cards
-                // for (let i = 0; i < 10; i++) {
-                //     $('#question-container').append(createQuestionCard(i));
-                // }
 
                 // Drag and Drop functionality
                 let draggedCard = null;
@@ -332,8 +297,11 @@
                         $card.removeClass('col-md-12');
                         $card.addClass('col-md-4');
 
-                        // Add back to question container
-                        $(this).prepend($card);
+                        let totalQuestion = parseInt($('.section-total-question').text());
+                        // if(totalQuestion >= ){
+                            // Add back to question container
+                            $(this).prepend($card);
+                        // }
                     }
                 });
 
@@ -348,15 +316,18 @@
                 }
                 
                 let currentSection = sections[currentSectionIndex];
-
+                $('.section-total-question').text(currentSection.num_of_question);
+                
+                $('.section_order').text(currentSection.section_order)
                 // $("#section-title").text(`Section: ${currentSection.section_type}`)
-
+                
                 $.ajax({
                     type: "GET",
                     url: "/api/exams/questions",
                     data: {section_type: currentSection.section_type , audience: currentSection.audience, exam_id: currentSection.exam_id},
                     success: function (response) {
                         
+                        $('#totalQuestion').text(response.data.length);
                         response.data.forEach(element => {
                             let difficultyColor = getDifficultyColor(element.difficulty);
                             let html = `

@@ -99,12 +99,13 @@ class ExamSectionController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         DB::beginTransaction();
-
             $section = ExamSection::find($request->section_id);
-            $section->questions()->sync($request->questions);
+            $section->questions()->syncWithoutDetaching($request->questions);
 
             $exam = Exam::find($request->exam_id);
-            $exam->questions()->sync($request->questions);
+            $exam->questions()->syncWithoutDetaching($request->questions);
+            
+
 
         DB::commit();
 
