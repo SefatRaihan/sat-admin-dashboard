@@ -1106,29 +1106,31 @@
                 $(document).on('change', "input[name='section']", section);
                 $(document).on('click', ".save-exam", store);
 
-                // fetchQuestions(currentPage, perPage);
+                let currentPage = 1;
+                let perPage = $('#rowsPerPage').val();
+                fetchQuestions(currentPage, perPage);
 
-                // // Handle pagination clicks
-                // $(document).on('click', '.pagination a', function(e) {
-                //     e.preventDefault();
-                //     let page = $(this).data('page');
-                //     if (page) {
-                //         currentPage = page;
-                //         fetchQuestions(currentPage, perPage);
-                //     }
-                // });
+                // Handle pagination clicks
+                $(document).on('click', '.pagination a', function(e) {
+                    e.preventDefault();
+                    let page = $(this).data('page');
+                    if (page) {
+                        currentPage = page;
+                        fetchQuestions(currentPage, perPage);
+                    }
+                });
 
-                // // Handle "Rows per page" change
-                // $('#rowsPerPage').change(function() {
-                //     perPage = $(this).val();
-                //     fetchQuestions(1, perPage);
-                // });
+                // Handle "Rows per page" change
+                $('#rowsPerPage').change(function() {
+                    perPage = $(this).val();
+                    fetchQuestions(1, perPage);
+                });
 
-                // $('.search_input, .multiselect').on('input click', function() {
-                //     fetchQuestions();
-                // });
+                $('.search_input, .multiselect').on('input click', function() {
+                    fetchQuestions();
+                });
 
-                // $(document).on('change', '.toggle-status', updateState);
+                $(document).on('change', '.toggle-status', updateState);
             });
 
             function section() {
@@ -1170,7 +1172,7 @@
                 let formData = {
                     title: $('#title').val(),
                     audience: $('input[name="audience"]:checked').val(),
-                    section: $('input[name="section"]:checked').val(),
+                    section: parseInt($('input[name="section"]:checked').val()),
                     section_details: [],
                     total_questions: 0,
                     total_duration: 0
@@ -1241,33 +1243,40 @@
                 };
 
                 $.ajax({
-                    url: "/api/exam?page=" + page + "&per_page=" + perPage,
+                    url: "/api/exams?page=" + page + "&per_page=" + perPage,
                     type: "GET",
                     data: filters,
                     success: function(response) {
+                        console.log(response);
+
                         let rows = '';
-                        $.each(response.data, function(index, question) {
-                            let difficultyColor = getDifficultyColor(question.difficulty);
-                            let statusChecked = question.status ? "checked" : "";
+                        $.each(response.data, function(index, exam) {
+                            // let difficultyColor = getDifficultyColor(exam.difficulty);
+                            let statusChecked = exam.status ? "checked" : "";
 
                             // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
                             rows += `<tr>
                                 <td><input type="checkbox" class="row-checkbox"></td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.question_title}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.audience}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.question_type}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.exam || ''}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" ><span class="badge badge-pill ${difficultyColor}">${question.difficulty}</span></td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.avg_time || '00:00'} min</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.created_at}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.title}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.sections[0].audience}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.section}</td>
+                                <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" >${exam.total_question_count}<p>${exam.duration}<span>min</span></p></td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >N/A</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${new Date(exam.created_at).toLocaleDateString('en-GB', {
+                                    year: 'numeric', month: '2-digit', day: '2-digit',
+                                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                                    hour12: true})}
+                                </td>
                                 <td>
                                     <label class="switch">
-                                        <input type="checkbox" class="toggle-status" data-id="${question.id}" ${question.status === 'active' ? 'checked' : '' }>
+                                        <input type="checkbox" class="toggle-status" data-id="${exam.id}" ${exam.status === 'active' ? 'checked' : '' }>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
                                 <td>
-                                     <td class="text-center"><button data-toggle="modal" data-id="${question.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button></td>
+                                     <td class="text-center"><button data-toggle="modal" data-id="${exam.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button></td>
                                 </td>
                             </tr>`;
                         });

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique()->index();
             $table->string('title')->index();
             $table->text('description')->nullable();
+            $table->integer('section')->nullable();
             $table->dateTime('scheduled_at')->nullable();
             $table->integer('duration')->unsigned()->nullable(); // Duration in minutes
             $table->enum('status', ['active', 'inactive'])->nullable(); // Duration in minutes
@@ -24,7 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
-            
+
             $table->softDeletes();
             $table->timestamps();
 

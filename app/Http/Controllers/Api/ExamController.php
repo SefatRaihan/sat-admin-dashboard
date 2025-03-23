@@ -19,7 +19,11 @@ class ExamController extends Controller
      */
     public function index(Request $request)
     {
-        $exams = Exam::query();
+        $exams = Exam::with([
+            'sections' => function ($query) {
+                $query->withCount('questions');
+            }
+        ])->withCount('sections');
 
         // Apply filters if provided
         if ($request->has('scheduled_at')) {
@@ -31,8 +35,16 @@ class ExamController extends Controller
             $exams = $exams->withTrashed();
         }
 
-        return response()->json($exams->paginate($request->get('per_page', 10)));
-        // return view('backend.exams.index');
+        $perPage = $request->get('per_page', 10);
+        $exams = $exams->paginate($perPage);
+
+        // Append total question count
+        $exams->getCollection()->transform(function ($exam) {
+            $exam->total_question_count = $exam->sections->sum('questions_count');
+            return $exam;
+        });
+
+        return response()->json($exams);
     }
 
     /**
@@ -43,27 +55,27 @@ class ExamController extends Controller
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'title'        => 'required|string|max:255',
-            // 'description'  => 'nullable|string',
+            'section'      => 'required|integer',
             // 'scheduled_at' => 'required|date',
             'total_duration'  => 'required|integer|min:1',
             // 'created_by'      => 'required|integer|exists:users,id',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-    
+
         DB::beginTransaction();
             // Create the exam
             $exam = Exam::create([
                 'uuid' => Str::uuid(),
                 'title' => $request->title,
-                // 'description' => $request->description,
+                'section' => $request->section,
                 // 'scheduled_at' => $request->scheduled_at,
                 'duration' => $request->total_duration,
                 'created_by' =>  auth()->id(),
             ]);
-        
+
             foreach ($request->section_details as $section) {
                 // dd($section['exam_name']);
                 ExamSection::create([
@@ -81,9 +93,9 @@ class ExamController extends Controller
             }
         DB::commit();
         return response()->json(['success'=> true, 'redirect' => route('exams.show', $exam->id), 201]);
-        
+
     }
-    
+
     /**
      * 📌 Get details of a specific exam (with sections).
      */

@@ -17,8 +17,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $general = General::latest()->first();
-        return view('backend.question.index', compact('general'));
+        return view('backend.question.index');
     }
 
     /**

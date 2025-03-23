@@ -75,7 +75,7 @@
                     </div>
                     <div id="exam-section" class="row exam-question-section" style="padding: 8px; min-height:100%"></div>
                 </div>
-            
+
                 <!-- Fixed Footer Button -->
                 <div class="fixed-footer d-flex justify-content-center" style="border-top: 1px solid #D0D5DD; padding: 10px">
                     <button type="button" class="btn btn-sm next-step" style="background:#691D5E; color: #EAECF0; border-radius: 8px; font-size:1rem">
@@ -117,7 +117,7 @@
       </div>
     </div>
   </div>
-  
+
 
     @push('css')
         <style>
@@ -219,7 +219,7 @@
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
         <script>
             let exam =  @JSON($exam);
-            console.log(exam);
+            // console.log(exam);
             let sections = exam.sections; // Use sections directly from Blade
             let currentSectionIndex = 0
 
@@ -260,6 +260,17 @@
                     $(this).removeClass('drag-over');
 
                     if (draggedCard) {
+
+                        let totalExamQuestions = $('#exam-section .question-card').length;
+                        let totalQuestions = $('.section-total-question').text();
+
+                        $('.exam-question-count').text(totalExamQuestions+1)
+
+                        if (totalQuestions <= totalExamQuestions) {
+                            alert(`Total questions limit exceeded! You can add up to ${totalQuestions} questions.`);
+                            return;
+                        }
+
                         const $card = $(draggedCard);
                         // Modify card for exam section
                         $card.find('.question-card-header').addClass('d-none');
@@ -290,6 +301,11 @@
                     $(this).removeClass('drag-over');
 
                     if (draggedCard) {
+
+                        let totalExamQuestions = $('#exam-section .question-card').length;
+
+                        $('.exam-question-count').text(totalExamQuestions-1)
+
                         const $card = $(draggedCard);
                         // Restore card for question section
                         $card.find('.question-card-header').removeClass('d-none');
@@ -297,11 +313,9 @@
                         $card.removeClass('col-md-12');
                         $card.addClass('col-md-4');
 
-                        let totalQuestion = parseInt($('.section-total-question').text());
-                        // if(totalQuestion >= ){
-                            // Add back to question container
-                            $(this).prepend($card);
-                        // }
+                        // Add back to question container
+                        $(this).prepend($card);
+
                     }
                 });
 
@@ -309,24 +323,24 @@
                 $(document).on('click', '.next-step', saveQuestions)
             });
 
-            function getQuestionAndSection() {  
+            function getQuestionAndSection() {
                 if (currentSectionIndex >= sections.length) {
                     Swal.fire("Success", "All sections have been processed!", "success");
                     return;
                 }
-                
+
                 let currentSection = sections[currentSectionIndex];
                 $('.section-total-question').text(currentSection.num_of_question);
-                
+
                 $('.section_order').text(currentSection.section_order)
                 // $("#section-title").text(`Section: ${currentSection.section_type}`)
-                
+
                 $.ajax({
                     type: "GET",
                     url: "/api/exams/questions",
                     data: {section_type: currentSection.section_type , audience: currentSection.audience, exam_id: currentSection.exam_id},
                     success: function (response) {
-                        
+
                         $('#totalQuestion').text(response.data.length);
                         response.data.forEach(element => {
                             let difficultyColor = getDifficultyColor(element.difficulty);
@@ -359,11 +373,11 @@
                             `;
                             $('#question-container').append(html);
                         });
-                        
+
                     }
                 });
             }
-        
+
             function getDifficultyColor(difficulty) {
                 switch (difficulty.toLowerCase()) {
                     case "easy":
@@ -379,15 +393,15 @@
                 }
             }
 
-            function saveQuestions() {  
+            function saveQuestions() {
                 let currentSection = sections[currentSectionIndex]; // Get current section
                 let questionIds = [];
-                $('#exam-section .question-card').each(function (index, value) { 
+                $('#exam-section .question-card').each(function (index, value) {
                      let questionId = $(this).data('id');
                      questionIds.push(questionId)
 
                 });
-                
+
                 Swal.fire({
                     title: "Are you sure?",
                     text: `Save questions for ${currentSection.section_type}?`,
@@ -403,7 +417,7 @@
                             questions: questionIds, // Assuming questions are included in `sections`
                             _token: $('meta[name="csrf-token"]').attr("content"), // For Laravel CSRF protection
                         };
-                        
+
                         // Send data to API
                         $.ajax({
                             url: "/api/exams/exam-section-questions", // Adjust API route
