@@ -1257,9 +1257,9 @@
                             // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
                             rows += `<tr>
                                 <td><input type="checkbox" class="row-checkbox"></td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.title}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.sections[0].audience}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.section}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.title || ''}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.sections[0].audience || ''}</td>
+                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.section || ''}</td>
                                 <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" >${exam.total_question_count}<p>${exam.duration}<span>min</span></p></td>
                                 <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
                                 <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
