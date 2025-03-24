@@ -2077,11 +2077,16 @@
             const store = (e) => {
                 e.preventDefault();
 
+                // Get the submit button
+                const submitButton = $('button[type="submit"]'); // Adjust selector based on your HTML
+                
+                // Change button text to "Processing" and disable it
+                submitButton.text('Processing').prop('disabled', true);
+
                 let formData = {
                     audience: $('input[name="audience"]:checked').val(),
                     sat_type: $('input[name="audience"]:checked').val() === 'SAT 2' ? 'SAT 2' : 'SAT 1',
-                    sat_question_type: $('input[name="question_type"]:checked').val() || $(
-                        'input[name="subjects"]:checked').val(),
+                    sat_question_type: $('input[name="question_type"]:checked').val() || $('input[name="subjects"]:checked').val(),
                     question_title: $('#mcq_question .ql-editor').html(),
                     question_description: $('#context .ql-editor').html(),
                     question_text: $('#mcq_question').text().trim(),
@@ -2105,13 +2110,13 @@
                         if (response.success) {
                             Swal.fire("Success", response.message, "success");
                             $('#questionModal').find('input[type="radio"]').prop('checked', false);
-                            $('#context .ql-editor').html(''),
-                            $('#mcq_question .ql-editor').html(''),
-                            $('#explanation .ql-editor').html(''),
+                            $('#context .ql-editor').html('');
+                            $('#mcq_question .ql-editor').html('');
+                            $('#explanation .ql-editor').html('');
                             $('#explanation').html('');
-                            $('#option-container').empty(); // Clear options
-                            $('.step').addClass('d-none').filter('.step-1').removeClass('d-none'); // Reset to step 1
-                            $('.step-circle').removeClass('active').first().addClass('active'); // Reset progress
+                            $('#option-container').empty();
+                            $('.step').addClass('d-none').filter('.step-1').removeClass('d-none');
+                            $('.step-circle').removeClass('active').first().addClass('active');
                             $('.question-modal-heading').text('Create New Question');
                             $('.close').trigger('click');
                             fetchQuestions(1, $('#rowsPerPage').val());
@@ -2128,50 +2133,47 @@
                                             showStep(stepIndex);
                                         } else {
                                             clearInterval(stepBackInterval);
-                                            currentStep = 1; // Ensure currentStep is set to 1 after loop
-                                            showStep(currentStep); // Show step 1
+                                            currentStep = 1;
+                                            showStep(currentStep);
                                             console.log('Current Step After Reset:', currentStep);
                                         }
                                     }, 5);
                                 }
 
                                 if (currentStep === 1) {
-                                    $(".cancel").removeClass("d-none"); // Show "Cancel"
-                                    $(".prev-step").addClass("d-none"); // Hide "Back"
+                                    $(".cancel").removeClass("d-none");
+                                    $(".prev-step").addClass("d-none");
                                 } else {
-                                    $(".cancel").addClass("d-none"); // Hide "Cancel"
-                                    $(".prev-step").removeClass("d-none"); // Show "Back"
+                                    $(".cancel").addClass("d-none");
+                                    $(".prev-step").removeClass("d-none");
                                 }
 
-                                $('#questionModal').attr('dynamic-id', questionId)
+                                $('#questionModal').attr('dynamic-id', questionId);
                                 resetModalData();
                             }
                         } else {
                             Swal.fire("Error", "Failed to created successfully!", "error");
                             checkbox.prop('checked', !checkbox.is(':checked'));
                         }
+                        // Reset button text and enable it
+                        submitButton.text('Save Question').prop('disabled', false);
                     },
                     error: function(error) {
-                        // Log the errors for debugging
                         console.log(error.responseJSON.errors);
-
-                        // Extract and format the error messages
+                        
                         let errors = error.responseJSON.errors;
                         let errorMessage = "";
 
                         if (errors && typeof errors === 'object') {
-                            // Loop through each field and its error messages
                             errorMessage = Object.keys(errors)
                                 .map(field => {
-                                    // Join multiple messages for the same field (if any)
                                     return `${field.replace('_', ' ')}: ${errors[field].join(', ')}`;
                                 })
-                                .join('\n'); // Separate each field's error with a newline
+                                .join('\n');
                         } else {
                             errorMessage = "An unexpected error occurred.";
                         }
 
-                        // Show the formatted error message in SweetAlert2
                         Swal.fire({
                             icon: 'error',
                             title: 'Validation Error',
@@ -2179,12 +2181,13 @@
                             footer: 'Please correct the errors and try again.'
                         });
 
-                        // Toggle checkbox (if this is intentional)
                         checkbox.prop('checked', !checkbox.is(':checked'));
+                        
+                        // Reset button text and enable it on error
+                        submitButton.text('Save Question').prop('disabled', false);
                     }
-
                 });
-            }
+            };
 
             // Function to collect options from the UI
             function getOptions() {
