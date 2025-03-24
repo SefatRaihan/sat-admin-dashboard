@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\General;
 use Illuminate\Support\Str;
+use App\Models\ExamQuestion;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreGeneralRequest;
 use App\Http\Requests\UpdateGeneralRequest;
 
@@ -17,7 +18,11 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        return view('backend.question.index');
+        $exams = ExamQuestion::with('createdBy')
+        ->select('created_by') // Select only the created_by column
+        ->distinct()           // Get unique created_by values
+        ->get();
+        return view('backend.question.index', compact('exams'));
     }
 
     /**

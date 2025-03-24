@@ -2,13 +2,13 @@
     @php
         $prependHtml = '
             <div class="d-flex align-items-center justify-content-center" style="margin-right: 10px">
-                 <a  href="/students/upload" data-toggle="modal" data-target="#uploadQuestion" class="btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 btn-sm" style="padding: 5px 15px; border:2px solid #D0D5DD; border-radius:10px; background-color: #FFFFFF; color:#344054; font-size: 12px">
+                 <a  href="/questions/upload" data-toggle="modal" data-target="#uploadQuestion" class="btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 btn-sm" style="padding: 5px 15px; border:2px solid #D0D5DD; border-radius:10px; background-color: #FFFFFF; color:#344054; font-size: 12px">
                     <i class="fa-solid fa-cloud-arrow-up mt-1 pr-1"></i> Upload Question
                 </a>
 
             </div>
             <div class="d-flex align-items-center justify-content-center" style="margin-right: 10px">
-                <a href=\'/students/create\' data-toggle=\'modal\' data-target=\'#questionModal\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
+                <a href=\'/questions/create\' data-toggle=\'modal\' data-target=\'#questionModal\' class=\'btn d-flex btn-link create-btn btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
                     <i class=\'fas fa-plus\' style=\'font-size: 12px; margin-right: 5px; margin-top: 5px;\'></i> Add Question
                 </a>
             </div>
@@ -18,25 +18,22 @@
     <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'All Question'" :prependContent="$prependHtml">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
-    {{-- <x-backend.layouts.partials.blocks.empty-state
-        title="You have not created any Question yet"
-        message="Let’s create a new question"
-        buttonText="Add Question"
-        buttonText="Add Question"
-        data-toggle="modal"
-        data-target="#questionModal"
-        buttonRoute="/button/create"
-        /> --}}
+    <div class="d-none" id="questionNullList">
+        <x-backend.layouts.partials.blocks.empty-state 
+            title="You have not created any Question yet"
+            message="Let’s create a new question"
+            buttonText="Add Question"
+            buttonRoute="#questionModal"
+        />
+    </div>
 
     <section>
-
-       
-        <div>
+        <div id="questionList">
             <div class="card"
                 style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                 <div class="card-header border-bottom d-flex justify-content-between">
                     <div>
-                        <input type="text" class="form-control search_input" placeholder="Search Questions">
+                        <input type="text" id="search" class="form-control search_input" placeholder="Search Questions" style="padding-left: 40px">
                     </div>
 
                     <div class="d-flex">
@@ -45,7 +42,7 @@
                                 src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
 
                         <div class="form-group mb-0">
-                            <select class="form-control multiselect" multiple="multiple" data-fouc>
+                            <select class="form-control select-questions multiselect" multiple="multiple" data-fouc>
                                 <option value="All">All</option>
                                 <option value="Unread">Unread</option>
                                 <option value="Audience">Audience</option>
@@ -65,7 +62,7 @@
                         <div class="delete-btn d-none">
                             <button class="btn"><img src="{{ asset('image/icon/download.png') }}"
                                     alt=""></button>
-                            <button class="btn text-danger"><i class="fas fa-trash-alt"></i></button>
+                            <button class="btn text-danger question-delete"><i class="fas fa-trash-alt"></i></button>
                             <button class="btn text-success"><strong>Make <span id="active-count"></span>
                                     Active</strong></button>
                             <button class="btn text-warning"><strong>Make <span id="inactive-count"></span>
@@ -79,14 +76,14 @@
                             <thead>
                                 <tr align="center">
                                     <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
-                                    <th data-column="question" class="sortable">Question</th>
-                                    <th data-column="audience" class="sortable">Audience</th>
-                                    <th data-column="question_type" class="sortable">Q. Type</th>
-                                    <th data-column="exam" class="sortable">Exam</th>
-                                    <th data-column="difficulty" class="sortable">Difficulty</th>
-                                    <th data-column="avg_time" class="sortable">Avg. Time</th>
-                                    <th data-column="created_at" class="sortable">Created</th>
-                                    <th>State</th>
+                                    <th data-column="question" class="sortable text-center">Question</th>
+                                    <th data-column="audience" class="sortable text-center">Audience</th>
+                                    <th data-column="question_type" class="sortable text-center">Q. Type</th>
+                                    <th data-column="exam" class="sortable text-center">Exam</th>
+                                    <th data-column="difficulty" class="sortable text-center">Difficulty</th>
+                                    <th data-column="avg_time" class="sortable text-center">Avg. Time</th>
+                                    <th data-column="created_at" class="sortable text-center">Created</th>
+                                    <th class="text-center">State</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -260,7 +257,7 @@
                                     <button class="reset-slider"><u>Reset</u></button>
                                 </div>
                                 <div class="mb-1">
-                                    <input type="text" class="form-control search_input w-100"
+                                    <input type="text" class="form-control search_input w-100 pl-4"
                                         placeholder="Search Questions">
                                 </div>
                                 <div class="filter-group">
@@ -320,22 +317,22 @@
                                     <button class="reset-slider"><u>Reset</u></button>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" id="super-man">
-                                    <label class="form-check-label pl-1" for="super-man"><span
+                                    <input type="checkbox" class="difficulty" value="Easy">
+                                    <label class="form-check-label pl-1"><span
                                             class="badge badge-pill badge-easy"><b>Easy</b></span></label>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" id="avenger">
-                                    <label class="form-check-label pl-1" for="avenger"><span
+                                    <input type="checkbox" class="difficulty" value="Medium">
+                                    <label class="form-check-label pl-1"><span
                                             class="badge badge-pill badge-medium"><b>Medium</b></span></label>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" id="gladiator">
+                                    <input type="checkbox" class="defficulty" value="Hard">
                                     <label class="form-check-label pl-1" for="gladiator"><span
                                             class="badge badge-pill badge-hard"><b>Hard</b></span></label>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" id="gladiator">
+                                    <input type="checkbox" class="difficulty" value="Very Hard">
                                     <label class="form-check-label pl-1" for="gladiator"><span
                                             class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
                                 </div>
@@ -358,18 +355,15 @@
                                         <span id="max-label">2m 00s</span>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="mt-2">
                                 <h6><b>Created By:</b></h6>
+                                @foreach ($exams as $exam)
                                 <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" id="monthly">
-                                    <label class="form-check-label pl-1" for="monthly">Admin</label>
+                                    <input type="checkbox" class="created_by" value="{{ $exam->createdBy->id }}">
+                                    <label class="form-check-label pl-1">{{ $exam->createdBy->full_name }}</label>
                                 </div>
-                                <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" id="annual">
-                                    <label class="form-check-label pl-1" for="annual">Sefat</label>
-                                </div>
+                                @endforeach
                             </div>
 
                         </div>
@@ -377,10 +371,10 @@
                 </div>
                 <div class="border-top fixed-bottom-buttons">
                     <div class="d-flex justify-content-between p-3">
-                        <button type="button" class="btn"
+                        <button type="button" class="btn apply-filter-btn"
                             style="background-color:#691D5E ;border-radius: 8px; color:#fff; width:50%">Apply
                             Filters</button>
-                        <button type="button" class="btn btn-outline-dark ml-2"
+                        <button type="button" class="btn btn-outline-dark ml-2 reset-filter-btn"
                             style="border: 1px solid #D0D5DD; border-radius: 8px; width:50%">Reset All</button>
                     </div>
                 </div>
@@ -392,13 +386,12 @@
     <section>
         <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog"
             aria-labelledby="detailModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 60%">
                 <div class="modal-content" style="border-radius: 24px; height:100%">
-                    <div class="modal-header text-left"
-                        style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                        <h5 class="modal-title" id="exampleModalLongTitle">StudentID <span>#SID6386</span></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                    <div class="modal-header text-left d-flex pb-3" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
+                        <h5 class="modal-title" id="exampleModalLongTitle">QuestionID <span id="questionCode">#SID000</span></h5>
+                        <button type="button" class="close p-0 m-0" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -409,161 +402,176 @@
                                         role="tab" aria-controls="question" aria-selected="true">Question</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="performance-tab" data-toggle="tab" href="#performance"
-                                        role="tab" aria-controls="performance"
-                                        aria-selected="false">Explanation</a>
+                                    <a class="nav-link" id="explanation-tab" data-toggle="tab" href="#explanation"
+                                        role="tab" aria-controls="explanation" aria-selected="false">Explanation</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#wallet"
-                                        role="tab" aria-controls="wallet" aria-selected="false">Details</a>
+                                    <a class="nav-link" id="details-tab" data-toggle="tab" href="#details"
+                                        role="tab" aria-controls="details" aria-selected="false">Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="ratings-tab" data-toggle="tab" href="#ratings"
-                                        role="tab" aria-controls="ratings" aria-selected="false">Analytics</a>
+                                    <a class="nav-link" id="analytics-tab" data-toggle="tab" href="#analytics"
+                                        role="tab" aria-controls="analytics" aria-selected="false">Analytics</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="test-result-tab" data-toggle="tab" href="#test-result"
-                                        role="tab" aria-controls="test-result"
-                                        aria-selected="false">Feedbacks</a>
+                                    <a class="nav-link" id="feedbacks-tab" data-toggle="tab" href="#feedbacks"
+                                        role="tab" aria-controls="feedbacks" aria-selected="false">Feedbacks</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="question" role="tabpanel"
-                                    aria-labelledby="question-tab">
+                                <div class="tab-pane fade show active" id="question" role="tabpanel" aria-labelledby="question-tab">
                                     <div>
-                                        <div id="question-show-card"
-                                            style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB">
-                                            Lorem Ipsum est simplement du faux texte employé dans la composition et la
-                                            mise en page avant impression. Le Lorem Ipsum est le faux texte standard de
-                                            l'imprimerie depuis les
+                                        <div id="question-show-card" style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB">
+                                            <span id="question_description"></span>
                                             <p class="mb-0 mt-1">
                                                 <strong>Question:</strong>
                                             </p>
-                                            <p class="pt-0 mt-0">The Lorem ipsum text is derived from sections 1.10.32
-                                                and 1.10.33 of Cicero's De finibus bonorum et malorum.</p>
+                                            <p id="question_text" class="pt-0 mt-0"></p>
                                         </div>
                                         <div class="mt-3">
-                                            <h5><strong><strong>Options:</strong></h5>
+                                            <h5><strong>Options:</strong></h5>
+                                            <div id="question-options" class="row mt-2" style="margin-left: 3px"></div>
                                         </div>
-                                        {{-- <div id="option-show-in-view"class="row mt-2" style="margin-left: 3px">
-                                            <div class="col-md-6">
-                                                <div class="form-check mb-2">
-                                                    <input type="radio" name="audience" value="High School" class="form-check-input sat_1" id="high_school">
-                                                    <label class="radio-container form-check-label" for="high_school" >
-                                                        High School
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="radio" name="audience" value="Graduation" class="form-check-input sat_1" id="graduation">
-                                                    <label class="radio-container form-check-label" for="graduation">
-                                                        Graduation
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-check mb-2">
-                                                    <input type="radio" name="audience" value="College" class="form-check-input sat_1" id="college">
-                                                    <label class="radio-container form-check-label" for="college">
-                                                        College
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="radio" name="audience" value="SAT 2" class="form-check-input sat_2" id="sat_2">
-                                                    <label class="radio-container form-check-label" for="sat_2">
-                                                        SAT 2
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div> --}}
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="performance" role="tabpanel"
-                                    aria-labelledby="performance-tab">
+                                <div class="tab-pane fade" id="explanation" role="tabpanel" aria-labelledby="explanation-tab">
                                     <div>
-                                        <h4>Appearing Exams</h4>
-                                        <table class="table datatable-basic" id="DataTables_Table_0" role="grid"
-                                            aria-describedby="DataTables_Table_0_info"
-                                            style="border: 1px solid #EAECF0">
-                                            <thead>
-                                                <tr class="bg-light" role="row">
-                                                    <th class="sorting_asc" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Notification: activate to sort column descending">
-                                                        Course</th>
-                                                    <th class="sorting" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1"
-                                                        colspan="1"
-                                                        aria-label="Date: activate to sort column ascending">Date</th>
-                                                    <th class="sorting" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1"
-                                                        colspan="1"
-                                                        aria-label="Date: activate to sort column ascending">
-                                                        Test/Section</th>
-                                                    <th class="sorting" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1"
-                                                        colspan="1"
-                                                        aria-label="Date: activate to sort column ascending">Score</th>
-                                                    <th class="sorting" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1"
-                                                        colspan="1"
-                                                        aria-label="Date: activate to sort column ascending">%</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="custom-row">
-                                                    <td>Chemistry</td>
-                                                    <td>27-09-25</td>
-                                                    <td>Not found</td>
-                                                    <td>45.9</td>
-                                                    <td>100%</td>
-                                                </tr>
-                                                <tr class="custom-row">
-                                                    <td>Chemistry</td>
-                                                    <td>27-09-25</td>
-                                                    <td>Not found</td>
-                                                    <td>45.9</td>
-                                                    <td>100%</td>
-                                                </tr>
-                                                <tr class="custom-row">
-                                                    <td>Chemistry</td>
-                                                    <td>27-09-25</td>
-                                                    <td>Not found</td>
-                                                    <td>45.9</td>
-                                                    <td>100%</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <span id="explanation"></span>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="wallet" role="tabpanel"
-                                    aria-labelledby="wallet-tab">
-                                    <div class="d-flex justify-content-center align-items-center"
-                                        style="background: #F5F5F5; width:100%; height:300px">
-                                        <p><b>Waiting for content</b></p>
-                                    </div>
+                                <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+                                    <h4>Question Details</h4>
+                                    <table class="table table-striped custom-table question-details-table" style="border: 1px solid #EAECF0">
+                                        <tr>
+                                            <td style="width: 25%">Audience</td>
+                                            <td class="font-weight-bold audience" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Question Type</td>
+                                            <td class="font-weight-bold question-type" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Created By</td>
+                                            <td class="font-weight-bold created-by" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Created on</td>
+                                            <td class="font-weight-bold created-on" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Appearing exams</td>
+                                            <td class="font-weight-bold apperaing-exam" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Total appearance</td>
+                                            <td class="font-weight-bold total-appearance" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Correct percentage</td>
+                                            <td class="font-weight-bold correct-percentage" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Average time</td>
+                                            <td class="font-weight-bold average-time" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Difficulty level</td>
+                                            <td class="font-weight-bold defficulty-level" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Feedbacks</td>
+                                            <td class="font-weight-bold feedbacks" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Last updated by</td>
+                                            <td class="font-weight-bold last-updated-by" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Last updated on</td>
+                                            <td class="font-weight-bold last-updated-on" style="width: 25%">: </td>
+                                        </tr>
+                                    </table>
+
+                                    <h4 class="mt-3">Appearing Exams</h4>
+                                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
+                                        <thead>
+                                            <tr class="bg-light" role="row">
+                                                <th>Exam</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Total App</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Correct</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Wrong</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">N/A</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Avg. Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="exam-details">
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="tab-pane fade" id="ratings" role="tabpanel"
-                                    aria-labelledby="ratings-tab">
-                                    <div class="d-flex justify-content-center align-items-center"
-                                        style="background: #F5F5F5; width:100%; height:300px">
-                                        <p><b>Waiting for content</b></p>
-                                    </div>
+                                <div class="tab-pane fade" id="analytics" role="tabpanel" aria-labelledby="analytics-tab">
+                                    <h4>Result Analysis</h4>
+                                    <div id="chartdiv"></div>
+                                    <h4>Result Analysis</h4>
+                                    <div id="areaChartdiv"></div>
+                                    <h4 class="mt-3">All Appearances</h4>
+                                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
+                                        <thead>
+                                            <tr class="bg-light" role="row">
+                                                <th>Exam</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Student</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">App. Type</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Status</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Time</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Created</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="all-appearances">
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="tab-pane fade" id="test-result" role="tabpanel"
-                                    aria-labelledby="test-result-tab">
-                                    <div class="d-flex justify-content-center align-items-center"
-                                        style="background: #F5F5F5; width:100%; height:300px">
-                                        <p><b>Waiting for content</b></p>
+                                <div class="tab-pane fade" id="feedbacks" role="tabpanel" aria-labelledby="feedbacks-tab">
+                                    <div>
+                                        <button class="btn ml-0 feedback-btn active">Pending <span class="feedback-btn-count">4</span></button>
+                                        <button class="btn feedback-btn">Pending <span class="feedback-btn-count">2</span></button>
+                                        <button class="btn feedback-btn">Pending <span class="feedback-btn-count">0</span></button>
                                     </div>
+
+                                    <h4 class="mt-3">4 Pending Feedbacks</h4>
+                                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
+                                        <thead>
+                                            <tr class="bg-light" role="row">
+                                                <th><input type="checkbox" class="select-all-feedback"></th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Feedback</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Student</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Created</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="all-appearances">
+                                            <tr>
+                                                <td><input type="checkbox" class="row-checkbox student-row""></td>
+                                                <td>I think this question is not appropriate for the SAT 1 exam. Can you look into it?</td>
+                                                <td>Sani</td>
+                                                <td>22 Mar, 2025</td>
+                                                <td class="d-flex">
+                                                    <button class="btn btn-sm" style="border: 1px solid #EAECF0; border-radius: 7px;">
+                                                        <i class="far fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm ml-2" style="border: 1px solid #EAECF0; border-radius: 7px;">
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="modal-footer d-flex justify-content-between border-top pt-3">
-                        <button type="button" class="btn"
-                            style="border: 1px solid #D0D5DD; border-radius: 8px;">Edit Question</button>
-                        <button type="button" class="btn btn-outline-dark"
+                        <button type="button" class="btn show-edit-btn"
+                            style="border: 1px solid #D0D5DD; border-radius: 8px;" data-toggle="modal" data-target="#questionModal">Edit Question</button>
+                        <button type="button" class="btn btn-outline-dark show-modal-close"
                             style="background-color:#691D5E ;border-radius: 8px; color:#fff"
                             data-dismiss="modal">Close</button>
                     </div>
@@ -584,7 +592,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <h4 class="text-center font-weight-bold">Create a Question</h4>
+                        <h4 class="text-center font-weight-bold question-modal-heading">Create a Question</h4>
                         <p class="text-center text-muted step-title"></p>
                         <div class="d-flex justify-content-center align-items-center mb-4 step-container">
                             <div class="step-group">
@@ -610,6 +618,8 @@
 
                     </div>
                     <div class="modal-body" style="padding: 10px 40px">
+                        <input type="hidden" name="" id="questionCorrectAnswer" value="{{null}}">
+                        <input type="hidden" name="" id="questionId" value="{{null}}">
                         {{-- Form Start --}}
                         <div class="step step-1">
                             <h5><strong>1. Select the Audience</strong></h5>
@@ -737,7 +747,7 @@
                             <div class="mt-3">
                                 <h5><strong>5. Select the Right Answer</h5>
                             </div>
-                            <div id="show-options"class="row mt-2" style="margin-left: 3px"></div>
+                            <div id="show-options" class="row mt-2" style="margin-left: 3px"></div>
                             <div>
                                 <h5 class="mt-3"><strong>6. How difficult is this Question?</strong></h5>
                             </div>
@@ -805,11 +815,11 @@
                         </div>
                     </div>
                     <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
-                        <div class="d-flex w-100 justify-content-between align-items-center">
+                        <div class="d-flex w-100 justify-content-end align-items-center">
                             <!-- Left side: Placeholder wrapper to maintain spacing -->
-                            <div class="left-placeholder">
+                            {{-- <div class="left-placeholder">
                                 <button type="button" class="btn new-question d-none">Save & Create Another</button>
-                            </div>
+                            </div> --}}
 
                             <!-- Right side: Navigation buttons -->
                             <div class="d-flex">
@@ -834,7 +844,7 @@
         <div class="modal fade" id="uploadQuestion" tabindex="-1" role="dialog" aria-labelledby="uploadQuestion"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content student-create-section" style="border-radius: 24px; height:100%">
+                <div class="modal-content question-create-section" style="border-radius: 24px; height:100%">
                     <div class="modal-header text-center"
                         style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
                         <h3 class="" id="exampleModalLongTitle"><b>Upload CSV</b></h3>
@@ -875,7 +885,7 @@
                         <button type="button" class="btn btn-outline-dark"
                             style="border: 1px solid #D0D5DD; border-radius: 8px;"
                             data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn save-student"
+                        <button type="button" class="btn save-question"
                             style="background-color:#A16A99 ;border-radius: 8px; color:#fff">Upload</button>
                     </div>
                 </div>
@@ -1050,6 +1060,42 @@
                 padding: 10px;
                 position: sticky;
                 bottom: 0;
+            }
+
+            .multiselect-native-select {
+                position: relative;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                min-width: 125px;
+            }
+
+            .multiselect:after {
+                position: absolute;
+                top: 50%;
+                right: 2px !important;
+            }
+
+            .multiselect.btn-light {
+                background-color: transparent;
+                border-width: 0px 0 !important;
+                border-color: #fff !important;
+                border-top-color: transparent;
+                border-radius: 0;
+            }
+            .multiselect.btn{
+                padding: 8px .875rem !important;
+            }
+            .multiselect-container {
+                max-height: 280px;
+                overflow-y: auto;
+                width: 200px;
+            }
+
+            .datatable-footer, .datatable-header {
+                padding: 0.25rem 0.25rem 0 0.25rem;
+                margin-left: 0px;
+                margin-right: 0px;
+                margin-bottom: 14px;
             }
         </style>
         <style>
@@ -1423,6 +1469,16 @@
 
         {{-- /* Switch Button Styles */ --}}
         <style>
+            #chartdiv {
+                width: 100%;
+                height: 300px;
+            }
+
+            #areaChartdiv {
+                width: 100%;
+                max-width:100%;
+                height: 500px;
+            }
             .switch {
                 position: relative;
                 display: inline-block;
@@ -1480,9 +1536,33 @@
                 content: "🔽";
             }
         </style>
+        <style>
+            .feedback-btn-count {
+                border: 1px solid #EAECF0;
+                border-radius: 50%;
+                padding: 3px;
+                padding-left: 6px;
+                padding-right: 6px;
+                font-size: 11px;
+                background-color: #F9FAFB;
+                margin-left: 5px;
+            }
+
+            .feedback-btn.active{
+                color: #521749 !important   ;
+                border: 1px solid #F1E9F0 !important;
+                background-color: #F1E9F0 !important;
+            }
+
+            .feedback-btn.active .feedback-btn-count {
+                border: 1px solid #521749 !important;
+                background-color: #F1E9F0 !important;
+            }
+        </style>
     @endpush
 
     @push('js')
+        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
         <!-- Theme JS files -->
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/uploaders/dropzone.min.js"></script>
@@ -1490,6 +1570,7 @@
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_checkboxes_radios.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
         <!-- /theme JS files -->
 
         <script>
@@ -1506,7 +1587,13 @@
                 }
 
                 $(document).on("change", ".row-checkbox", function() {
-
+                    var row = $(this).closest('tr'); // Get the closest <tr> element
+                    if ($(this).prop('checked')) {
+                        row.css('background-color', '#F1E9F0'); // Change background color
+                    } else {
+                        row.css('background-color', ''); // Reset background color
+                    }
+                    
                     $(this).closest("tr").toggleClass("selected", this.checked);
                     toggleDeleteButton();
                 });
@@ -1521,6 +1608,19 @@
 
                 // Ensure button state is set correctly on page load
                 toggleDeleteButton();
+
+                $('.create-btn').on('click', function() {
+                    $('#questionModal').find('input[type="radio"]').prop('checked', false);
+                    $('#context .ql-editor').html(''),
+                    $('#mcq_question .ql-editor').html(''),
+                    $('#explanation .ql-editor').html(''),
+                    $('#explanation').html('');
+                    $('#option-container').empty(); // Clear options
+                    $('.step').addClass('d-none').filter('.step-1').removeClass('d-none'); // Reset to step 1
+                    $('.step-circle').removeClass('active').first().addClass('active'); // Reset progress
+                    $('.question-modal-heading').text('Create New Question');
+                    $('#questionId').val(null);
+                });
             });
         </script>
         <script>
@@ -1638,7 +1738,18 @@
             let optionCount = 1;
             const totalSteps = $(".step").length;
 
+            $('.show-edit-btn').click(function (e) { 
+                e.preventDefault();
+                $('.show-modal-close').trigger('click');
+            });
+
+            $(".feedback-btn").on("click", function() {
+                $(".feedback-btn").removeClass("active")
+                $(this).addClass("active");
+            });
+
             $(document).ready(function() {
+
                 initializeQuill(".editor")
 
                 $(".sat_2").change(function() {
@@ -1722,6 +1833,34 @@
                 });
 
                 $(document).on('click', '.edit-btn', show);
+
+                let searchTimeout;
+                $('.search_input').on('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        fetchQuestions(1, $('#rowsPerPage').val());
+                    }, 300); // 300ms debounce
+                });
+
+                // Apply filters button click
+                $('.apply-filter-btn').on('click', function() {
+                    fetchQuestions(1, $('#rowsPerPage').val());
+                });
+
+                // Reset filters button click
+                $('.reset-filter-btn').on('click', function() {
+                    // Reset all filter inputs
+                    $('.search_input').val('');
+                    $('input[name="crated_start_at"]').val('');
+                    $('input[name="crated_end_at"]').val('');
+                    $('input[name="status"][value="All"]').prop('checked', true);
+                    $('.filter-group input:checkbox').prop('checked', false);
+                    $('.custom-checkbox input:checkbox').prop('checked', false);
+                    $('.multiselect').val([]).trigger('change');
+                    
+                    // Fetch with reset filters
+                    fetchQuestions(1, $('#rowsPerPage').val());
+                });
 
                 // $(document).on('click', '#questionModal' , function() {
                 //     // Reset radio buttons and checkboxes (but keep default values)
@@ -1850,13 +1989,19 @@
                 );
                 let optionsHtml = ``;
 
-                // Loop through options and create radio button inputs
+                let correctAnswer = $('#questionCorrectAnswer').val(); // Get the correct answer from the hidden input
+                console.log(correctAnswer);
+                
+
                 $("#option-container .option-block .parent-editor").each(function(index) {
-                    let optionText = $(this).find(".ql-editor p").html(); // Get option content
+                    let optionText = $(this).find(".ql-editor").html(); // Get raw HTML content
+                    let optionPlainText = $(this).find(".ql-editor").text();
+                    let isCorrect = (optionPlainText == correctAnswer); // Compare with correct answer
+                    
                     optionsHtml += `
                         <div class="form-check col-md-6 row" style="margin-left:3px">
                             <label class="radio-container col-md-12" style="padding-top:2px" for="option-${index}">
-                                <input class="form-check-input" type="radio" name="mcq_options" value="${optionText}" id="option-${index}" style="display: inline-block; visibility: visible;">
+                                <input class="form-check-input" type="radio" name="mcq_options" value="${optionText}" id="option-${index}" style="display: inline-block; visibility: visible;" ${isCorrect ? 'checked' : ''}>
                                 ${optionText}
                             </label>
                         </div>
@@ -1929,8 +2074,6 @@
                 });
             }
 
-
-
             const store = (e) => {
                 e.preventDefault();
 
@@ -1939,15 +2082,16 @@
                     sat_type: $('input[name="audience"]:checked').val() === 'SAT 2' ? 'SAT 2' : 'SAT 1',
                     sat_question_type: $('input[name="question_type"]:checked').val() || $(
                         'input[name="subjects"]:checked').val(),
-                    question_title: $('#mcq_question').text().trim(),
-                    question_description: $('#context').text().trim(),
+                    question_title: $('#mcq_question .ql-editor').html(),
+                    question_description: $('#context .ql-editor').html(),
                     question_text: $('#mcq_question').text().trim(),
                     question_type: 'MCQ',
                     options: JSON.stringify(getOptions()),
                     correct_answer: $('input[name="mcq_options"]:checked').val(),
                     difficulty: $('input[name="difficulty"]:checked').val(),
-                    explanation: $('#explanation').text().trim(),
+                    explanation: $('#explanation .ql-editor').html(),
                     status: $('input[name="question_status"]:checked').val(),
+                    questionId: $('#questionId').val(),
                 };
 
                 $.ajax({
@@ -1959,15 +2103,83 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            Swal.fire("Success", "Question created successfully!", "success");
-                            location.reload();
+                            Swal.fire("Success", response.message, "success");
+                            $('#questionModal').find('input[type="radio"]').prop('checked', false);
+                            $('#context .ql-editor').html(''),
+                            $('#mcq_question .ql-editor').html(''),
+                            $('#explanation .ql-editor').html(''),
+                            $('#explanation').html('');
+                            $('#option-container').empty(); // Clear options
+                            $('.step').addClass('d-none').filter('.step-1').removeClass('d-none'); // Reset to step 1
+                            $('.step-circle').removeClass('active').first().addClass('active'); // Reset progress
+                            $('.question-modal-heading').text('Create New Question');
+                            $('.close').trigger('click');
+                            fetchQuestions(1, $('#rowsPerPage').val());
+
+                            let questionId = $(this).data('id');
+                            let dynamicModalId = $('#questionModal').attr('dynamic-id', 1);
+
+                            if (dynamicModalId != questionId) {
+                                if (currentStep > 1) {
+                                    let stepIndex = currentStep;
+                                    let stepBackInterval = setInterval(function() {
+                                        if (stepIndex > 1) {
+                                            stepIndex--;
+                                            showStep(stepIndex);
+                                        } else {
+                                            clearInterval(stepBackInterval);
+                                            currentStep = 1; // Ensure currentStep is set to 1 after loop
+                                            showStep(currentStep); // Show step 1
+                                            console.log('Current Step After Reset:', currentStep);
+                                        }
+                                    }, 5);
+                                }
+
+                                if (currentStep === 1) {
+                                    $(".cancel").removeClass("d-none"); // Show "Cancel"
+                                    $(".prev-step").addClass("d-none"); // Hide "Back"
+                                } else {
+                                    $(".cancel").addClass("d-none"); // Hide "Cancel"
+                                    $(".prev-step").removeClass("d-none"); // Show "Back"
+                                }
+
+                                $('#questionModal').attr('dynamic-id', questionId)
+                                resetModalData();
+                            }
                         } else {
                             Swal.fire("Error", "Failed to created successfully!", "error");
                             checkbox.prop('checked', !checkbox.is(':checked'));
                         }
                     },
-                    error: function() {
-                        Swal.fire("Error", "Something went wrong!", "error");
+                    error: function(error) {
+                        // Log the errors for debugging
+                        console.log(error.responseJSON.errors);
+
+                        // Extract and format the error messages
+                        let errors = error.responseJSON.errors;
+                        let errorMessage = "";
+
+                        if (errors && typeof errors === 'object') {
+                            // Loop through each field and its error messages
+                            errorMessage = Object.keys(errors)
+                                .map(field => {
+                                    // Join multiple messages for the same field (if any)
+                                    return `${field.replace('_', ' ')}: ${errors[field].join(', ')}`;
+                                })
+                                .join('\n'); // Separate each field's error with a newline
+                        } else {
+                            errorMessage = "An unexpected error occurred.";
+                        }
+
+                        // Show the formatted error message in SweetAlert2
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            text: errorMessage,
+                            footer: 'Please correct the errors and try again.'
+                        });
+
+                        // Toggle checkbox (if this is intentional)
                         checkbox.prop('checked', !checkbox.is(':checked'));
                     }
 
@@ -1989,8 +2201,19 @@
             // get all questions
             function fetchQuestions(page = 1, perPage = 10) {
                 let filters = {
-                    search: $('.search_input').val(),
-                    difficulty: $('.multiselect').val(),
+                    search: $('.search_input').val() || '', // Search input value, default to empty string if undefined
+                    difficulty: $('.difficulty:checked').map((_, el) => el.value).get(), // Get all checked difficulty levels
+                    crated_start_at: $('input[name="crated_start_at"]').val() || '', // Start date, default to empty string
+                    crated_end_at: $('input[name="crated_end_at"]').val() || '', // End date, default to empty string
+                    status: $('input[name="status"]:checked').val() || 'All', // Selected status, default to 'All'
+                    audience: $('#all_sat_type_1 .nested-options input:checked').map((_, el) => el.value).get(), // Checked SAT 1 options
+                    sat_type: $('#all_sat_type_2 .nested-options input:checked').map((_, el) => el.value).get(), // Checked SAT 2 options
+                    exam_appearance: $('.filter-group .nested-options input:checked').map((_, el) => el.value).get(), // Checked exam appearance options
+                    created_by: $('.custom-checkbox .created_by:checked').map((_, el) => el.value).get(), // Checked created_by values
+                    average_time: {
+                        min: $('#min-range').val() || 1, // Minimum time from slider
+                        max: $('#max-range').val() || 120 // Maximum time from slider
+                    }
                 };
 
                 $.ajax({
@@ -1998,39 +2221,54 @@
                     type: "GET",
                     data: filters,
                     success: function(response) {
-                        let rows = '';
-                        $.each(response.data, function(index, question) {
-                            let difficultyColor = getDifficultyColor(question.difficulty);
-                            let statusChecked = question.status ? "checked" : "";
 
-                            // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
-                            rows += `<tr>
-                                <td><input type="checkbox" class="row-checkbox"></td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.question_title}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.audience}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.question_type}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.exam || ''}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" ><span class="badge badge-pill ${difficultyColor}">${question.difficulty}</span></td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.avg_time || '00:00'} min</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${question.created_at}</td>
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" class="toggle-status" data-id="${question.id}" ${question.status === 'active' ? 'checked' : '' }>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                     <td class="text-center"><button data-toggle="modal" data-id="${question.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button></td>
-                                </td>
-                            </tr>`;
-                        });
-                        $("#question-table-body").html(rows);
-                        updatePagination(response, page);
+                        if (response.data.length === 0) {
+                            document.getElementById('questionNullList').classList.remove('d-none');
+                            document.getElementById('questionList').classList.add('d-none');
+                        } else {
+                            document.getElementById('questionNullList').classList.add('d-none');
+                            document.getElementById('questionList').classList.remove('d-none');
+                            let rows = '';
+                            $.each(response.data, function(index, question) {
+                                let difficultyColor = getDifficultyColor(question.difficulty);
+                                let statusChecked = question.status ? "checked" : "";
+    
+                                // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
+                                rows += `<tr>
+                                    <td><input type="checkbox" class="row-checkbox question-row" value="${question.uuid}"></td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.question_title}</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.audience}</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.sat_question_type}</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.exam || ''}</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}"><span class="badge badge-pill ${difficultyColor}">${question.difficulty}</span></td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.avg_time || '00:00'} min</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${formatDate(question.created_at)} ${question.created_by.full_name}</td>
+                                    <td class="text-center">
+                                        <label class="switch">
+                                            <input type="checkbox" class="toggle-status" data-id="${question.id}" ${question.status === 'active' ? 'checked' : '' }>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                         <button data-toggle="modal" data-id="${question.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
+                                    </td>
+                                </tr>`;
+                            });
+                            $("#question-table-body").html(rows);
+                            updatePagination(response, page);
+                        }
+                        
                     },
                     error: function() {
                         alert("Error fetching questions.");
                     }
                 });
+            }
+
+            function formatDate(dateString) {
+                let date = new Date(dateString);
+                let options = { day: '2-digit', month: 'short', year: 'numeric' };
+                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
             }
 
             function updatePagination(response, currentPage) {
@@ -2076,6 +2314,48 @@
 
                 $('#pagination-links').html(paginationHtml);
             }
+
+            function getSelectedQuestions() {
+                return $(".row-checkbox:checked").map(function () {
+                    return $(this).val();
+                }).get();
+            }
+
+            $(".question-delete").click(function () {
+                let selectedQuestions = getSelectedQuestions();
+                if (selectedQuestions.length === 0) {
+                    Swal.fire("Warning", "Please select at least one question.", "warning");
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/api/questions-delete",
+                            type: "POST",
+                            data: {
+                                questions: selectedQuestions,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function (response) {
+                                Swal.fire("Deleted!", "Questions deleted successfully.", "success");
+                                fetchQuestions(1);
+                            },
+                            error: function () {
+                                Swal.fire("Error", "Failed to delete questions.", "error");
+                            }
+                        });
+                    }
+                });
+            });
 
             function getDifficultyColor(difficulty) {
                 switch (difficulty.toLowerCase()) {
@@ -2198,7 +2478,7 @@
                 }
 
                 $.get(`/api/questions/${questionId}`, function(response) {
-                    console.log(response);
+                    $('.question-modal-heading').text('Edit Question');
 
                     // Set values in the modal
                     $("input[name='audience'][value='" + response.audience + "']").prop('checked', true);
@@ -2223,20 +2503,20 @@
                     $('#question_id').val(response.id);
                     $('#modalTitle').text('Edit Question'); // Change modal title
                     $('#question_title').val(response.question_title);
-                    $('#question_description').val(response.question_description);
-                    $('#question_text').val(response.question_text);
-                    $('#explanation').val(response.explanation);
+                    // $('#question_description').val(response.question_description);
+                    // $('#question_text').val(response.question_text);
                     $('#difficulty').val(response.difficulty);
-                    $('#correct_answer').val(response.correct_answer);
-                    // $('#audience').val(response.audience);
                     $('#question_type').val(response.question_type);
+                    // $('#audience').val(response.audience);
+                    $('#context .ql-editor').html(response.question_description),
+                    $('#mcq_question .ql-editor').html(response.question_text),
+                    $('#explanation .ql-editor').html(response.explanation);
 
                     initializeQuill('#context', response.question_description);
                     initializeQuill('#mcq_question', response.question_title);
 
                     // Parse and set options
                     let options = JSON.parse(response.options);
-                    let optionsHtml = ``;
                     // $('#option-container').html('');
                     options.forEach(function(optionText, index) {
 
@@ -2253,10 +2533,9 @@
                         initializeQuill(`#option-editor-${index}`);
                     });
 
-                    $('#show-options').html(optionsHtml);
-                    // console.log(initialStep, 'jhdbfjhsf');
-
-                    // Show modal
+                    
+                    $('#questionCorrectAnswer').val(response.correct_answer);
+                    $('#questionId').val(response.id);
                     $('#questionModal').modal('show');
 
                     // $('#audience').val(response.audience);
@@ -2267,10 +2546,398 @@
                 });
             }
 
-            function edit() {
+            $(document).on("click", ".openDetailModal", function () {
+                var questionid = $(this).data("id"); // Button er data-id theke Student ID pabo
 
+                $.ajax({
+                    url: `/api/questions/${questionid}`, // Backend route jekhane data fetch hobe
+                    type: "GET",
+                    success: function (response) {
+                        // Modal er ID update
+                        $("#questionCode").text("#" + response.question_code);
+                        $("#question_description").text(response.question_description);
+                        $("#question_text").text(response.question_text);
+                        $("#explanation").text(response.explanation);
+                        
+                        let options = JSON.parse(response.options);
+                        $('#question-options').html('');
+                        let optionsHtml = ``;
+                        // $('#option-container').html('');
+                        options.forEach(function(optionText, index) {
+
+                            let newOptionHtml = `
+                                <div class="col-md-6 pl-0">
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="subjects" value="${optionText}"
+                                            class="form-check-input" id="${optionText}" ${response.correct_answer == optionText ? 'checked' : '' }>
+                                        <label class="form-check-label radio-container" for="${optionText}">
+                                            ${optionText}
+                                        </label>
+                                    </div>
+                                </div>
+                            `;
+
+                            $('#question-options').append(newOptionHtml);
+                        });
+                        
+
+                        $(".audience").text(response.audience);
+                        $(".question-type").text(response.sat_question_type);
+                        $(".created-by").text(response.created_by.full_name);
+                        $(".created-on").text(moment(response.created_at).format("hh:mm A, D MMM YY"));
+                        $(".apperaing-exam").text(response.apperaing_exam ?? 'N/A');
+                        $(".total-appearance").text(response.appearance ?? 'N/A');
+                        $(".correct-percentage").text(response.correct_percentage ?? 'N/A');
+                        $(".average-time").text(response.average_time ?? 'N/A');
+                        $(".defficulty-level").text(
+                            response.difficulty.charAt(0).toUpperCase() + response.difficulty.slice(1).toLowerCase()
+                        );
+                        $(".feedbacks").text(response.feedbacks ?? 'N/A');
+                        $(".last-updated-by").text(
+                            response.updated_by && response.updated_by.full_name ? response.updated_by.full_name : 'N/A'
+                        );
+                        $(".last-updated-on").text(moment(response.updated_at).format("hh:mm A, D MMM YY"));
+                        console.log(response.exams.length);
+                        
+                        if (response.exams.length == 0) {
+                            $("#exam-details").html('<p>No exam details found.</p>');
+                            $("#all-appearances").html('<p>No data found.</p>');
+                        }else{
+                            $("#exam-details").html('');
+                            $.each(response.exams, function (indexInArray, valueOfElement) { 
+                                console.log(valueOfElement);
+                                
+                                $("#exam-details").append(`
+                                <tr class="custom-row">
+                                    <td>
+                                        <b>${valueOfElement.sections[0].audience}</b>
+                                        <br>
+                                        <p style="color:#475467; font-size:10px">${valueOfElement.sections[0].section_type}</P>
+                                        
+                                    </td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                </tr>
+                                `);
+                            });
+
+                            $("#all-appearances").html('');
+                            $.each(response.exams, function (indexInArray, valueOfElement) { 
+                                console.log(valueOfElement);
+                                
+                                $("#all-appearances").append(`
+                                <tr class="custom-row">
+                                    <td>
+                                        <b>${valueOfElement.sections[0].audience}</b>
+                                        <br>
+                                        <p style="color:#475467; font-size:10px">${valueOfElement.sections[0].section_type}</P>
+                                        
+                                    </td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>${moment(valueOfElement.created_at).format("hh:mm A, D MMM YY")}</td>
+                                </tr>
+                                `);
+                            });
+                        }
+
+                        
+                        // Modal show
+                        $("#detailModalCenter").modal("show");
+                    },
+                    error: function () {
+                        alert("Failed to fetch question details.");
+                    },
+                });
+            });
+        </script>
+
+        <!-- Resources -->
+        <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+        <!-- Chart code -->
+        <script>
+            am5.ready(function() {
+
+            // Create root element
+            // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+            var root = am5.Root.new("chartdiv");
+
+            // Set themes
+            // https://www.amcharts.com/docs/v5/concepts/themes/
+            root.setThemes([
+            am5themes_Animated.new(root)
+            ]);
+
+            // Create chart
+            // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
+            var chart = root.container.children.push(am5percent.PieChart.new(root, {
+            radius: am5.percent(90),
+            innerRadius: am5.percent(50),
+            layout: root.horizontalLayout
+            }));
+
+            // Create series
+            // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
+            var series = chart.series.push(am5percent.PieSeries.new(root, {
+            name: "Series",
+            valueField: "sales",
+            categoryField: "country"
+            }));
+
+            // Set data
+            // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
+            series.data.setAll([{
+            country: "All appearances",
+            sales: 501.9
+            }, {
+            country: "Correct answer",
+            sales: 301.9
+            }, {
+            country: "Wrong answer",
+            sales: 201.1
+            }, {
+            country: "Unanswered",
+            sales: 165.8
+            }, {
+            country: "Feedbacks",
+            sales: 139.9
+            }]);
+
+            // Disabling labels and ticks
+            series.labels.template.set("visible", false);
+            series.ticks.template.set("visible", false);
+
+            // Adding gradients
+            series.slices.template.set("strokeOpacity", 0);
+            series.slices.template.set("fillGradient", am5.RadialGradient.new(root, {
+            stops: [{
+                brighten: -0.8
+            }, {
+                brighten: -0.8
+            }, {
+                brighten: -0.5
+            }, {
+                brighten: 0
+            }, {
+                brighten: -0.5
+            }]
+            }));
+
+            // Create legend
+            // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
+            var legend = chart.children.push(am5.Legend.new(root, {
+            centerY: am5.percent(50),
+            y: am5.percent(50),
+            layout: root.verticalLayout
+            }));
+            // set value labels align to right
+            legend.valueLabels.template.setAll({ textAlign: "right" })
+            // set width and max width of labels
+            legend.labels.template.setAll({ 
+            maxWidth: 140,
+            width: 140,
+            oversizedBehavior: "wrap"
+            });
+
+            legend.data.setAll(series.dataItems);
+
+
+            // Play initial series animation
+            // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
+            series.appear(1000, 100);
+
+            }); // end am5.ready()
+        </script>
+
+        <!-- Resources -->
+        <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Responsive.js"></script>
+
+        <!-- Chart code -->
+        <script>
+            am5.ready(function() {
+
+            // Create root element
+            // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+            var root = am5.Root.new("areaChartdiv");
+
+            const myTheme = am5.Theme.new(root);
+
+            myTheme.rule("AxisLabel", ["minor"]).setAll({
+            dy:1
+            });
+
+            myTheme.rule("AxisLabel").setAll({
+            fontSize:"0.9em"
+            });
+
+
+            // Set themes
+            // https://www.amcharts.com/docs/v5/concepts/themes/
+            root.setThemes([
+            am5themes_Animated.new(root),
+            myTheme,
+            am5themes_Responsive.new(root)
+            ]);
+
+
+            // Create chart
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/
+            var chart = root.container.children.push(am5xy.XYChart.new(root, {
+            wheelX: "panX",
+            wheelY: "zoomX",
+            pinchZoomX: true,
+            paddingLeft: 0
+            }));
+
+
+            // Add cursor
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+            var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+            behavior: "none"
+            }));
+            cursor.lineY.set("visible", false);
+
+
+            // Generate random data
+            var date = new Date();
+            date.setHours(0, 0, 0, 0);
+            var value = 100;
+
+            function generateData() {
+            value = Math.round((Math.random() * 10 - 5) + value);
+            am5.time.add(date, "day", 1);
+            return {
+                date: date.getTime(),
+                value: value
+            };
             }
 
+            function generateDatas(count) {
+            var data = [];
+            for (var i = 0; i < count; ++i) {
+                data.push(generateData());
+            }
+            return data;
+            }
+
+
+            // Create axes
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+            var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
+            maxDeviation: 0.2,
+            baseInterval: {
+                timeUnit: "day",
+                count: 1
+            },
+            renderer: am5xy.AxisRendererX.new(root, {
+                minorGridEnabled: true,
+                minorLabelsEnabled: true
+            }),
+            tooltip: am5.Tooltip.new(root, {})
+            }));
+
+            xAxis.set("minorDateFormats", {
+            "day":"dd",
+            "month":"MMM"
+            });
+
+            var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            renderer: am5xy.AxisRendererY.new(root, {
+                pan: "zoom"
+            })
+            }));
+
+
+            // Add series
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+            var series = chart.series.push(am5xy.LineSeries.new(root, {
+            name: "Series",
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: "value",
+            valueXField: "date",
+            tooltip: am5.Tooltip.new(root, {
+                labelText: "{valueY}"
+            })
+            }));
+
+            series.bullets.push(function() {
+            var graphics = am5.Circle.new(root, {
+                radius: 4,
+                interactive: true,
+                cursorOverStyle: "ns-resize",
+                stroke: series.get("stroke"),
+                fill: am5.color(0xffffff)
+            });
+
+            return am5.Bullet.new(root, {
+                sprite: graphics
+            });
+            });
+
+            // Add scrollbar
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+            chart.set("scrollbarX", am5.Scrollbar.new(root, {
+            orientation: "horizontal"
+            }));
+
+            // manipulating with mouse code
+            var isDown = false;
+
+            // register down
+            chart.plotContainer.events.on("pointerdown", function() {
+            isDown = true;
+            })
+            // register up
+            chart.plotContainer.events.on("globalpointerup", function() {
+            isDown = false;
+            })
+
+            chart.plotContainer.events.on("globalpointermove", function(e) {
+            // if pointer is down
+            if (isDown) {
+                // get tooltip data item 
+                var tooltipDataItem = series.get("tooltipDataItem");
+                if (tooltipDataItem) {
+                if (e.originalEvent) {
+
+                    var position = yAxis.coordinateToPosition(chart.plotContainer.toLocal(e.point).y);
+                    var value = yAxis.positionToValue(position);
+                    // need to set bot working and original value
+                    tooltipDataItem.set("valueY", value);
+                    tooltipDataItem.set("valueYWorking", value);
+                }
+                }
+            }
+            })
+
+            chart.plotContainer.children.push(am5.Label.new(root, {
+            x: am5.p100,
+            centerX: am5.p100,
+            text: "Click and move mouse anywhere on plot area to change the graph"
+            }))
+
+            // Set data
+            var data = generateDatas(40);
+            series.data.setAll(data);
+
+
+            // Make stuff animate on load
+            // https://www.amcharts.com/docs/v5/concepts/animations/
+            series.appear(1000);
+            chart.appear(1000, 100);
+
+            }); // end am5.ready()
         </script>
     @endpush
 

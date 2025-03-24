@@ -351,9 +351,9 @@
     <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog" aria-labelledby="detailModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 60%">
             <div class="modal-content" style="border-radius: 24px; height:100%">
-                <div class="modal-header text-left" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                    <h5 class="modal-title" id="exampleModalLongTitle">StudentID <span id="studentCode">#SID6386</span></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header text-left d-flex pb-3" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
+                    <h5 class="modal-title" id="exampleModalLongTitle">StudentID <span id="studentCode">#SID000</span></h5>
+                    <button type="button" class="close p-0 m-0" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
@@ -383,31 +383,31 @@
                                     <table class="table table-striped custom-table" style="border: 1px solid #EAECF0">
                                         <tr>
                                             <td style="width: 25%">Name</td>
-                                            <td class="font-weight-bold" style="width: 25%" id="studentName">: Addul Hakim</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentName">: </td>
 
                                             <td style="width: 25%">Date of Birth</td>
-                                            <td class="font-weight-bold" style="width: 25%" id="studentDob">: 22-Jan-24</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentDob">: </td>
                                         </tr>
 
                                         <tr>
                                             <td style="width: 25%">Email</td>
-                                            <td class="font-weight-bold" style="width: 25%" id="StudentEmail">: a.hakim@email.com</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="StudentEmail">: </td>
 
                                             <td style="width: 25%">Audience Type</td>
-                                            <td class="font-weight-bold" style="width: 25%" id="studentAudience">: Hi School</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentAudience">: </td>
                                         </tr>
 
                                         <tr>
                                             <td style="width: 25%">Gender</td>
-                                            <td class="font-weight-bold" style="width: 25%" id="studentGender">: Male</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentGender">: </td>
 
                                             <td style="width: 25%">Active Status</td>
-                                            <td class="font-weight-bold" style="width: 25%" id="studentStatus">: Active</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentStatus">: </td>
                                         </tr>
 
                                         <tr>
                                             <td style="width: 25%">Phone Number</td>
-                                            <td class="font-weight-bold" style="width: 25%" id="studentPhone">: +96657647535</td>
+                                            <td class="font-weight-bold" style="width: 25%" id="studentPhone">: </td>
 
                                             <td style="width: 25%">-</td>
                                             <td class="font-weight-bold" style="width: 25%">: -</td>
@@ -1199,11 +1199,14 @@
             });
 
             function toggleDeleteButton() {
+                
+                
                 let anyChecked = document.querySelectorAll(".row-checkbox:checked").length > 0;
                 document.querySelector(".delete-btn").classList.toggle("d-none", !anyChecked);
             }
 
             document.querySelectorAll(".row-checkbox").forEach(checkbox => {
+                
                 checkbox.addEventListener("change", function() {
                     this.closest("tr").classList.toggle("selected", this.checked);
                     toggleDeleteButton();

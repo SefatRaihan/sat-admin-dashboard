@@ -58,6 +58,8 @@ Route::group([ 'as' => 'api'], function () {
 
     // 📌 Get all questions (supports filtering & pagination)
     Route::get('/questions', [MainQuestionController::class, 'index']);
+    Route::post('/questions-delete', [MainQuestionController::class, 'delete']);
+
 
     // 📌 Create a new question
     Route::post('/questions', [MainQuestionController::class, 'store']);

@@ -37,6 +37,7 @@ return new class extends Migration
             $table->longText('explanation')->nullable();
             $table->integer('version_number')->default(1)->comment('Tracks updates to questions');
             $table->string('language_code', 10)->default('en')->comment('Supports multiple languages');
+            $table->string('question_code')->index();
 
             // Question Status
             $table->enum('status', ['active', 'inactive'])->default('active')->comment('Determines if the question is available for use');
