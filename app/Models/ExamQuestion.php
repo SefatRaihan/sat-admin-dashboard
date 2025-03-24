@@ -30,6 +30,7 @@ class ExamQuestion extends Model
         'status',
         'created_by',
         'updated_by',
+        'question_code'
     ];
 
     protected $casts = [

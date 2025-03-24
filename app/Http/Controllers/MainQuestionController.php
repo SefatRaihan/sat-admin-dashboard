@@ -141,15 +141,13 @@ class MainQuestionController extends Controller
         } else {
 
             $latestStudent = ExamQuestion::latest('id')->first();
-    
-            if ($latestStudent && preg_match('/SID(\d+)/', $latestStudent->question_code, $matches)) {
-                $nextCoded = (int)$matches[1] + 1; // Extract numeric part and increment
+            if ($latestStudent && preg_match('/Q(\d+)/', $latestStudent->question_code, $matches)) {
+                $nextCoded = (int)$matches[1] + 1; // Extract numeric part (002) and increment to 3
             } else {
                 $nextCoded = 1; // Start from 1 if no question exists
             }
             
-            // Format question_code as SID0001, SID0002, etc.
-            $questionCode = 'SID' . str_pad($nextCoded, 4, '0', STR_PAD_LEFT);
+            $questionCode = 'Q' . str_pad($nextCoded, 4, '0', STR_PAD_LEFT);
             
             $question = ExamQuestion::create([
                 'question_code'        => $questionCode, 

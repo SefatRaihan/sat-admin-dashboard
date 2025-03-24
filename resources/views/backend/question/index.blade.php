@@ -2555,9 +2555,9 @@
                     success: function (response) {
                         // Modal er ID update
                         $("#questionCode").text("#" + response.question_code);
-                        $("#question_description").text(response.question_description);
-                        $("#question_text").text(response.question_text);
-                        $("#explanation").text(response.explanation);
+                        $("#question_description").html(response.question_description);
+                        $("#question_text").html(response.question_text);
+                        $("#explanation").html(response.explanation);
                         
                         let options = JSON.parse(response.options);
                         $('#question-options').html('');
