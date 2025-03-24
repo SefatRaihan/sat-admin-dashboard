@@ -133,7 +133,7 @@
                 </div>
                 <div class="filter-sidebar-content">
                     <div class="task-form">
-                        <div class="p-3 ">
+                        <div class="pt-3 pr-3 pb-3 pl-0">
                             <div class="d-flex justify-content-between">
                                 <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span
                                         style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
@@ -153,7 +153,6 @@
                             <div id="filter-status">
                                 <div class="d-flex justify-content-between">
                                     <h6><b>Status:</b> Active Only</h6>
-                                    <button class="reset-slider"><u>Reset</u></button>
                                 </div>
                                 <div class="form-check status-radio">
                                     <input class="form-check-input" type="radio" name="status" id="all"
@@ -180,7 +179,6 @@
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
                                     <h6><b>Audience & Type:</b> All Result</h6>
-                                    <button class="reset-slider"><u>Reset</u></button>
                                 </div>
                                 <div id="all_sat_type_1">
                                     <div class="filter-group">
@@ -253,8 +251,7 @@
                             </div>
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
-                                    <h6><b>Exam Appearance:</b> 2 Selected</h6>
-                                    <button class="reset-slider"><u>Reset</u></button>
+                                    <h6><b>Exam Appearance:</b> All Result</h6>
                                 </div>
                                 <div class="mb-1">
                                     <input type="text" class="form-control search_input w-100 pl-4"
@@ -313,8 +310,7 @@
                             </div>
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
-                                    <h6><b>Exam Appearance:</b> 2 Selected</h6>
-                                    <button class="reset-slider"><u>Reset</u></button>
+                                    <h6><b>Defficulty:</b> All result</h6>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
                                     <input type="checkbox" class="difficulty" value="Easy">
@@ -338,7 +334,7 @@
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <div class="slider-container">
+                                <div class="slider-container" style="max-width: 100% !important">
                                     <div class="slider-header">
                                         <span>Average Time:</span>
                                         <span id="slider-value">1m 00s - 2m 00s</span>

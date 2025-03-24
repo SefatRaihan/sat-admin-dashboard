@@ -19,10 +19,10 @@ class ExamController extends Controller
      */
     public function index(Request $request)
     {
-        $exams = Exam::with([
+        $exams = Exam::latest()->with([
             'sections' => function ($query) {
                 $query->withCount('questions');
-            }
+            },'createdBy'
         ])->withCount('sections');
 
         // Apply filters if provided
@@ -52,48 +52,65 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        // Validate incoming request data
         $validator = Validator::make($request->all(), [
-            'title'        => 'required|string|max:255',
-            'section'      => 'required|integer',
-            // 'scheduled_at' => 'required|date',
+            'title'           => 'required|string|max:255',
+            'section'         => 'required|integer',
             'total_duration'  => 'required|integer|min:1',
-            // 'created_by'      => 'required|integer|exists:users,id',
+            'audience'        => 'required|string', // Added assuming it's used in ExamSection
+            'section_details' => 'required|array',  // Validate section_details as an array
+            'section_details.*.exam_name'     => 'required|string|max:255',
+            'section_details.*.section_order' => 'required|integer|min:1',
+            'section_details.*.section_type'  => 'required|string',
+            'section_details.*.no_of_questions' => 'required|integer|min:1',
+            'section_details.*.duration'      => 'required|integer|min:1',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
-        DB::beginTransaction();
+    
+        try {
+            DB::beginTransaction();
+    
             // Create the exam
             $exam = Exam::create([
                 'uuid' => Str::uuid(),
                 'title' => $request->title,
                 'section' => $request->section,
-                // 'scheduled_at' => $request->scheduled_at,
                 'duration' => $request->total_duration,
-                'created_by' =>  auth()->id(),
+                'created_by' => auth()->id(),
             ]);
-
+    
+            // Create exam sections
             foreach ($request->section_details as $section) {
-                // dd($section['exam_name']);
                 ExamSection::create([
                     'uuid' => Str::uuid(),
-                    'exam_id'  => $exam->id,
+                    'exam_id' => $exam->id,
                     'audience' => $request->audience,
-                    'title'    => $section['exam_name'],
-                    // 'description'   => $section['section_type'],
-                    'section_order'   => $section['section_order'],
-                    'section_type'    => $section['section_type'],
+                    'title' => $section['exam_name'],
+                    'section_order' => $section['section_order'],
+                    'section_type' => $section['section_type'],
                     'num_of_question' => $section['no_of_questions'],
-                    'duration'        => $section['duration'],
-                    'created_by'      => auth()->id(),
+                    'duration' => $section['duration'],
+                    'created_by' => auth()->id(),
                 ]);
             }
-        DB::commit();
-        return response()->json(['success'=> true, 'redirect' => route('exams.show', $exam->id), 201]);
-
+    
+            DB::commit();
+    
+            return response()->json([
+                'success' => true,
+                'redirect' => route('exams.show', $exam->id),
+            ], 201); // 201 Created status code
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create exam: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -199,6 +216,12 @@ class ExamController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Question not found'], 404);
         }
+    }
+
+    public function delete(Request $request)
+    {
+        Exam::whereIn('uuid', $request->exams)->delete();
+        return response()->json(['message' => 'Exams deleted successfully']);
     }
 
 }

@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
+use App\Traits\UserTrackable;
+
 
 class ExamAttemptQuestion extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, UserTrackable;
 
     protected $table = 'exam_attempt_questions';
     protected $primaryKey = 'id';
@@ -86,5 +88,15 @@ class ExamAttemptQuestion extends Model
             'question_id' => $this->question_id,
             'is_correct' => $this->is_correct,
         ]);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

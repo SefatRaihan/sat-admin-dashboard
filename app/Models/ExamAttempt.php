@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Traits\UserTrackable;
+
 
 class ExamAttempt extends Model
 {
@@ -118,5 +120,15 @@ class ExamAttempt extends Model
         static::deleting(function ($attempt) {
             Log::warning('Exam attempt deleted', ['attempt_id' => $attempt->id]);
         });
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

@@ -12,20 +12,21 @@
     <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'All Exams'" :prependContent="$prependHtml">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
-    {{-- <x-backend.layouts.partials.blocks.empty-state
-        title="You have not created any exams yet"
-        message="Let’s add your first exam now"
-        buttonText="Create Exam"
-        buttonText="Create Exam"
-        data-toggle="modal"
-        data-target="#examModal"
-    /> --}}
-    <div>
+    <div class="d-none" id="examNullList">
+        <x-backend.layouts.partials.blocks.empty-state 
+            title="You have not created any exams yet"
+            message="Let’s add your first exam now"
+            buttonText="Create Exam"
+            buttonRoute="#examModal"
+        />
+    </div>
+
+    <div id="examList">
         <div class="card"
             style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
             <div class="card-header border-bottom d-flex justify-content-between">
                 <div>
-                    <input type="text" class="form-control search_input" placeholder="Search Questions">
+                    <input type="text" id="search" class="form-control search_input" placeholder="Search Exam" style="padding-left: 40px">
                 </div>
 
                 <div class="d-flex">
@@ -38,7 +39,7 @@
                             <option value="All">All</option>
                             <option value="Unread">Unread</option>
                             <option value="Audience">Audience</option>
-                            <option value="Audience">Question Type</option>
+                            <option value="Audience">Exam Type</option>
                             <option value="Audience">Difficulty</option>
                             <option data-role="divider"></option>
                             <option value="Latest">Latest</option>
@@ -50,11 +51,11 @@
             <div class="card-body p-0 m-0 table-responsive">
                 <!-- Filters & Pagination Controls -->
                 <div class="d-flex justify-content-between align-items-center mt-3 p-2">
-                    <h4><strong id="total-questions"></strong></h4>
+                    <h4><strong id="total-exams"></strong></h4>
                     <div class="delete-btn d-none">
                         <button class="btn"><img src="{{ asset('image/icon/download.png') }}"
                                 alt=""></button>
-                        <button class="btn text-danger"><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn text-danger exam-delete"><i class="fas fa-trash-alt"></i></button>
                         <button class="btn text-success"><strong>Make <span id="active-count"></span>
                                 Active</strong></button>
                         <button class="btn text-warning"><strong>Make <span id="inactive-count"></span>
@@ -62,21 +63,21 @@
                     </div>
                 </div>
 
-                <!-- Questions Table -->
+                <!-- Exams Table -->
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead>
                             <tr align="center">
                                 <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
-                                <th data-column="question" class="sortable">Exam</th>
-                                <th data-column="audience" class="sortable">Audience</th>
-                                <th data-column="question_type" class="sortable">Section</th>
-                                <th data-column="exam" class="sortable">Total</th>
-                                <th data-column="difficulty" class="sortable">Average</th>
-                                <th data-column="avg_time" class="sortable">Highest</th>
-                                <th data-column="created_at" class="sortable">Complete</th>
-                                <th data-column="created_at" class="sortable">Created</th>
-                                <th>State</th>
+                                <th data-column="exam" class="sortable text-left">Exam</th>
+                                <th data-column="audience" class="sortable text-left">Audience</th>
+                                <th data-column="exam_type" class="sortable text-left">Section</th>
+                                <th data-column="exam" class="sortable text-left">Total</th>
+                                <th data-column="difficulty" class="sortable text-left">Average</th>
+                                <th data-column="avg_time" class="sortable text-left">Highest</th>
+                                <th data-column="created_at" class="sortable text-left">Complete</th>
+                                <th data-column="created_at" class="sortable text-left">Created</th>
+                                <th class="text-left">State</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -262,8 +263,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control no_of_questions" id="no_of_questions" name="no_of_questions" placeholder="20">
+                                                    <label class="label-header" for="">No of Exams (Verbal)</label>
+                                                    <input type="text" class="form-control no_of_exams" id="no_of_exams" name="no_of_questions" placeholder="20">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -365,8 +366,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control no_of_questions" id="no_of_questions" name="no_of_questions" placeholder="20">
+                                                    <label class="label-header" for="">No of Question (Verbal)</label>
+                                                    <input type="text" class="form-control no_of_exams" id="no_of_exams" name="no_of_questions" placeholder="20">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -468,8 +469,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control no_of_questions" id="no_of_questions" name="no_of_questions" placeholder="20">
+                                                    <label class="label-header" for="">No of Exams (Verbal)</label>
+                                                    <input type="text" class="form-control no_of_exams" id="no_of_exams" name="no_of_questions" placeholder="20">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -571,8 +572,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
-                                                    <input type="text" class="form-control no_of_questions" id="no_of_questions" name="no_of_questions" placeholder="20">
+                                                    <label class="label-header" for="">No of Exams (Verbal)</label>
+                                                    <input type="text" class="form-control no_of_exams" id="no_of_exams" name="no_of_questions" placeholder="20">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -601,12 +602,273 @@
                     </div>
                     <div class="modal-footer border-top pt-3">
                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <a href="" class="btn save-exam" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Proceed to Add Questions</a>
+                        <a href="" class="btn save-exam" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Proceed to Add Exams</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <div class="sidebar-overlay" id="taskSidebarOverlay"></div>
+    <div class="floating-sidebar" id="taskSidebar">
+        <div class="filter">
+            <div class="sidebar-header">
+                <div>
+                    <h4 style="font-size: 18px;" class="p-0 m-0">Filters</h4>
+                    <p class="p-0 m-0" style="color: #475467">Apply filters to table data.</p>
+                </div>
+                <button type="button" class="close-btn" id="closeSidebar">&times;</button>
+            </div>
+            <div class="filter-sidebar-content">
+                <div class="task-form">
+                    <div class="pt-3 pr-3 pb-3 pl-0">
+                        <div class="d-flex justify-content-between">
+                            <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span
+                                    style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
+                            <button class="reset-slider"><u>Reset</u></button>
+                        </div>
+                        <div class="mt-1 mb-2 d-flex justify-content-between">
+                            <div style="width: 49%">
+                                <input type="date" class="form-control" name="crated_start_at">
+                            </div>
+                            <div style="align-items: center; display: flex; width:1%">
+                                -
+                            </div>
+                            <div style="width: 49%">
+                                <input type="date" class="form-control" name="crated_end_at">
+                            </div>
+                        </div>
+                        <div id="filter-status">
+                            <div class="d-flex justify-content-between">
+                                <h6><b>Status:</b> Active Only</h6>
+                            </div>
+                            <div class="form-check status-radio">
+                                <input class="form-check-input" type="radio" name="status" id="all"
+                                    value="All" checked>
+                                <label class="form-check-label" for="all">
+                                    All
+                                </label>
+                            </div>
+                            <div class="form-check status-radio">
+                                <input class="form-check-input" type="radio" name="status" id="activeonly"
+                                    value="Active only">
+                                <label class="form-check-label" for="activeonly">
+                                    Active only
+                                </label>
+                            </div>
+                            <div class="form-check status-radio">
+                                <input class="form-check-input" type="radio" name="status" id="inactiveonly"
+                                    value="Inactive only">
+                                <label class="form-check-label" for="inactiveonly">
+                                    Inactive only
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="d-flex justify-content-between">
+                                <h6><b>Audience & Type:</b> All Result</h6>
+                            </div>
+                            <div id="all_sat_type_1">
+                                <div class="filter-group">
+                                    <div class="form-check">
+                                        <input class=" toggle-parent" type="checkbox"
+                                            id="allSet1Toggle">
+                                        <label class="form-check-label" for="allSet1Toggle">
+                                            All SAT 1
+                                        </label>
+                                        <span class="toggle-icon" data-target="allSet1"><i
+                                                class="fas fa-chevron-down"></i></span>
+                                    </div>
+                                    <div class="nested-options collapse" id="allSet1">
+                                        <div class="form-check">
+                                            <input class="" type="checkbox" id="exam1">
+                                            <label class="form-check-label" for="exam1">Hight School :
+                                                Verbal</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="" type="checkbox" id="exam2">
+                                            <label class="form-check-label" for="exam2">Hight School :
+                                                Quant</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="" type="checkbox" id="exam3">
+                                            <label class="form-check-label" for="exam3">College :
+                                                Verbal</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="" type="checkbox" id="exam3">
+                                            <label class="form-check-label" for="exam3">College :
+                                                Verbal</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="" type="checkbox" id="exam3">
+                                            <label class="form-check-label" for="exam3">Graduate :
+                                                Verbal</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="" type="checkbox" id="exam3">
+                                            <label class="form-check-label" for="exam3">Graduate :
+                                                Quant</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="all_sat_type_2">
+                                <div class="filter-group">
+                                    <div class="form-check">
+                                        <input class=" toggle-parent" type="checkbox"
+                                            id="allSet2Toggle">
+                                        <label class="form-check-label" for="allSet2Toggle">
+                                            All SAT 2
+                                        </label>
+                                        <span class="toggle-icon" data-target="allSet2"><i
+                                                class="fas fa-chevron-down"></i></span>
+                                    </div>
+                                    <div class="nested-options collapse" id="allSet2">
+                                        <div class="form-check">
+                                            <input class="" type="checkbox" id="exam1">
+                                            <label class="form-check-label" for="exam1">Verbal</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="" type="checkbox" id="exam2">
+                                            <label class="form-check-label" for="exam2">Quant</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="d-flex justify-content-between">
+                                <h6><b>Exam Appearance:</b> 2 Selected</h6>
+                            </div>
+                            <div class="mb-1">
+                                <input type="text" class="form-control search_input w-100 pl-4"
+                                    placeholder="Search Exams">
+                            </div>
+                            <div class="filter-group">
+                                <div class="form-check">
+                                    <input class=" toggle-parent" type="checkbox"
+                                        id="highSchoolToggle">
+                                    <label class="form-check-label" for="highSchoolToggle">
+                                        View all High School Exams
+                                    </label>
+                                    <span class="toggle-icon" data-target="highSchoolOptions"><i
+                                            class="fas fa-chevron-down"></i></span>
+                                </div>
+                                <div class="nested-options collapse" id="highSchoolOptions">
+                                    <div class="form-check">
+                                        <input class="" type="checkbox" id="exam1">
+                                        <label class="form-check-label" for="exam1">High School Verbal Exam
+                                            1</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="" type="checkbox" id="exam2">
+                                        <label class="form-check-label" for="exam2">High School Verbal Exam
+                                            2</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="" type="checkbox" id="exam3">
+                                        <label class="form-check-label" for="exam3">High School Verbal Exam
+                                            3</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <div class="form-check">
+                                    <input class=" toggle-parent" type="checkbox"
+                                        id="collegeToggle">
+                                    <label class="form-check-label" for="collegeToggle">
+                                        View all College Exams
+                                    </label>
+                                    <span class="toggle-icon" data-target="collegeOptions"><i
+                                            class="fas fa-chevron-down"></i></span>
+                                </div>
+                                <div class="nested-options collapse" id="collegeOptions">
+                                    <div class="form-check">
+                                        <input class="" type="checkbox" id="college1">
+                                        <label class="form-check-label" for="college1">College Verbal Exam</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="" type="checkbox" id="college2">
+                                        <label class="form-check-label" for="college2">College Quant Exam</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="d-flex justify-content-between">
+                                <h6><b>Defficulty Level:</b> All Result</h6>
+                            </div>
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="difficulty" value="Easy">
+                                <label class="form-check-label pl-1"><span
+                                        class="badge badge-pill badge-easy"><b>Easy</b></span></label>
+                            </div>
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="difficulty" value="Medium">
+                                <label class="form-check-label pl-1"><span
+                                        class="badge badge-pill badge-medium"><b>Medium</b></span></label>
+                            </div>
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="defficulty" value="Hard">
+                                <label class="form-check-label pl-1" for="gladiator"><span
+                                        class="badge badge-pill badge-hard"><b>Hard</b></span></label>
+                            </div>
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="difficulty" value="Very Hard">
+                                <label class="form-check-label pl-1" for="gladiator"><span
+                                        class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="slider-container" style="max-width: 100% !important;">
+                                <div class="slider-header">
+                                    <span>Correct Percentage: All Result</span>
+                                </div>
+                                <div class="range-slider">
+                                    <input type="range" min="1" max="120" value="1"
+                                        id="min-range">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="slider-container" style="max-width: 100% !important;">
+                                <div class="slider-header">
+                                    <span>Average Time: All Result</span>
+                                </div>
+                                <div class="range-slider">
+                                    <input type="range" min="1" max="120" value="1"
+                                        id="min-range">
+                                    <input type="range" min="1" max="120" value="120"
+                                        id="max-range">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <h6><b>Created By:</b></h6>
+                            @foreach ($exams as $exam)
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="created_by" value="{{ $exam->createdBy->id ?? '' }}">
+                                <label class="form-check-label pl-1">{{ $exam->createdBy->full_name ?? '' }}</label>
+                            </div>
+                            @endforeach
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="border-top fixed-bottom-buttons">
+                <div class="d-flex justify-content-between p-3">
+                    <button type="button" class="btn apply-filter-btn"
+                        style="background-color:#691D5E ;border-radius: 8px; color:#fff; width:50%">Apply
+                        Filters</button>
+                    <button type="button" class="btn btn-outline-dark ml-2 reset-filter-btn"
+                        style="border: 1px solid #D0D5DD; border-radius: 8px; width:50%">Reset All</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @push('css')
         <style>
@@ -616,6 +878,28 @@
             .label-header {
                 font-size: 12px;
                 font-weight: bold;
+            }
+            .search_input {
+                width: 400px;
+                padding: 12px 24px;
+                background-color: transparent;
+                transition: transform 250ms ease-in-out;
+                font-size: 14px;
+                line-height: 18px;
+                color: #575756;
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-size: 18px 18px;
+                background-position: 10px center;
+                border-radius: 50px;
+                transition: all 250ms ease-in-out;
+                backface-visibility: hidden;
+                transform-style: preserve-3d;
+                padding-left: 36px;
+            }
+
+            .search_input::placeholder {
+                padding-left: 30px;
             }
         </style>
         <style>
@@ -922,10 +1206,19 @@
                 width: 400px;
                 height: 100%;
                 background-color: #fff;
-                box-: -2px 0 5px rgba(0, 0, 0, 0.2);
+                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
                 transition: right 0.3s ease-in-out;
                 z-index: 1050;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .filter-sidebar-content {
+                flex-grow: 1;
+                height: calc(100vh - 60px - 60px);
                 overflow-y: auto;
+                padding-left: 15px;
+                padding-bottom: 60px;
             }
 
             .sidebar-overlay {
@@ -944,6 +1237,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                border-bottom: 1px solid #D0D5DD;
             }
 
             .floating-sidebar.open {
@@ -953,6 +1247,115 @@
             .sidebar-overlay.active {
                 display: block;
             }
+
+            /* filter sidebar every dropdown start */
+            .filter-group {
+                margin-bottom: 10px;
+            }
+
+            .form-check {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 8px;
+                cursor: pointer;
+            }
+
+            .nested-options {
+                margin-left: 24px;
+                display: none;
+            }
+
+            .toggle-icon {
+                cursor: pointer;
+                font-size: 14px;
+                transition: transform 0.3s ease-in-out;
+                margin-left: auto;
+            }
+
+            .toggle-icon.open {
+                transform: rotate(180deg);
+            }
+
+            .form-check-input {
+                width: 18px;
+                height: 18px;
+                accent-color: #4B1D3F;
+            }
+
+            .form-check-label {
+                font-size: 14px;
+                color: #333;
+            }
+
+            /* filter sidebar every dropdown end */
+
+            /* filter avg time slider start  */
+            .slider-container {
+                width: 100%;
+                max-width: 300px;
+                font-family: Arial, sans-serif;
+            }
+
+            .slider-header {
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            .reset-slider {
+                background: none;
+                border: none;
+                color: black;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: bold;
+                text-decoration: #000 underline;
+            }
+
+            .range-slider {
+                position: relative;
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+
+            .range-slider input {
+                -webkit-appearance: none;
+                width: 100%;
+                position: absolute;
+                background: transparent;
+                pointer-events: none;
+            }
+
+            .range-slider input::-webkit-slider-runnable-track {
+                background: #E0E0E0;
+                height: 4px;
+                border-radius: 2px;
+            }
+
+            .range-slider input::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 16px;
+                height: 16px;
+                background: white;
+                border: 3px solid #69275C;
+                border-radius: 50%;
+                cursor: pointer;
+                pointer-events: auto;
+                margin-top: -6px;
+            }
+
+            .slider-labels {
+                display: flex;
+                background: white;
+                justify-content: space-between;
+                font-size: 14px;
+                margin-top: 8px;
+            }
+
+            /* avg time slider end */
 
             .close-btn {
                 background: none;
@@ -996,11 +1399,12 @@
 
             .photosection {
                 height: 120px;
-                border: 1px solid #EAECF0;
+                border: 2px solid #A16A99;
                 border-radius: 8px;
                 align-items: end;
                 display: flex;
                 justify-content: center;
+                border-style: dashed;
             }
 
             .toggle-password {
@@ -1085,9 +1489,257 @@
                 border-radius: 50%;
             }
         </style>
+        <style>
+            input[type="radio"] {
+                accent-color: #691D5E;
+            }
+
+            label {
+                padding-top: 2px;
+            }
+
+            .new-question {
+                border: 1px solid #691D5E;
+                background: #FFFFFF;
+                color: #691D5E;
+                border-radius: 8px;
+            }
+
+            .next-step {
+                background: #691D5E;
+                color: #EAECF0;
+                border-radius: 8px;
+            }
+
+            .back-btn {
+                border: 1px solid #D0D5DD;
+                background: #FFFFFF;
+                color: #344054;
+                border-radius: 8px;
+            }
+
+            .modal-content {
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+            }
+
+            .step-container {
+                display: flex;
+                align-items: center;
+                position: relative;
+            }
+
+            .step-group {
+                display: flex;
+                align-items: center;
+            }
+
+            .step-line {
+                width: 50px;
+                height: 3px;
+                background: #D0D5DD;
+            }
+
+            .step-group:first-child .step-line {
+                display: none;
+            }
+
+            .step-circle {
+                width: 40px;
+                height: 40px;
+                border: 3px solid #D0D5DD;
+                border-radius: 50%;
+                background: #FFFFFF;
+                color: black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                position: relative;
+                z-index: 2;
+                transition: 0.3s ease-in-out;
+            }
+
+            /* Active step */
+            .step-circle.active {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: #691D5E;
+                color: white;
+                border-color: #691D5E;
+            }
+
+            /* Completed step */
+            .step-circle.completed {
+                background: #12B76A;
+                color: white;
+                border-color: #12B76A;
+                position: relative;
+            }
+
+            .step-circle.completed::before {
+                color: white;
+                font-size: 18px;
+            }
+
+            .border-left {
+                border-left: 3px solid #6c757d;
+                /* Left border when options exist */
+                padding-left: 10px;
+                /* Spacing to avoid text touching the border */
+            }
+
+
+            .badge-pill {
+                border-radius: 50px;
+                padding: 5px 15px;
+                font-size: 14px;
+            }
+
+            .badge-easy {
+                background-color: #d4edda;
+                color: #28a745;
+                border: 1px solid #28a745;
+            }
+
+            .badge-medium {
+                background-color: #d1ecf1;
+                color: #17a2b8;
+                border: 1px solid #17a2b8;
+            }
+
+            .badge-hard {
+                background-color: #fff3cd;
+                color: #fab905;
+                border: 1px solid #fab905;
+            }
+
+            .badge-very-hard {
+                background-color: #f8d7da;
+                color: #dc3545;
+                border: 1px solid #dc3545;
+            }
+
+            .form-check-input:checked {
+                background-color: #6f42c1;
+                border-color: #6f42c1;
+            }
+               
+        </style>
     @endpush
 
     @push('js')
+        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
+                    $('#taskSidebar').removeClass('open');
+                    $('#taskSidebarOverlay').removeClass('active');
+                    $('#boardHiddenInputSection').html('');
+                });
+            });
+
+            function filter(button) {
+                const filter = $('.filter');
+                filter.show();
+                $('#taskSidebar').addClass('open');
+                $('#taskSidebarOverlay').addClass('active');
+            }
+
+
+            // filter every dropdown in sidebar
+            document.querySelectorAll(".toggle-icon").forEach(icon => {
+                icon.addEventListener("click", function() {
+                    const target = document.getElementById(this.dataset.target);
+                    target.classList.toggle("collapse");
+                    this.classList.toggle("open");
+                    target.style.display = target.classList.contains("collapse") ? "none" : "block";
+                });
+            });
+
+            document.querySelectorAll(".toggle-parent").forEach(parentCheckbox => {
+                parentCheckbox.addEventListener("change", function() {
+                    let targetDiv = document.getElementById(this.nextElementSibling.nextElementSibling.dataset
+                        .target);
+                    let checkboxes = targetDiv.querySelectorAll("input[type='checkbox']");
+                    checkboxes.forEach(cb => cb.checked = this.checked);
+                });
+            });
+
+            // avg time filter slider
+            const minRange = document.getElementById("min-range");
+            const maxRange = document.getElementById("max-range");
+            const minLabel = document.getElementById("min-label");
+            const maxLabel = document.getElementById("max-label");
+            const sliderValue = document.getElementById("slider-value");
+            const resetButton = document.getElementById("reset-slider");
+
+            function updateSlider() {
+                let minValue = parseInt(minRange.value);
+                let maxValue = parseInt(maxRange.value);
+
+                if (maxValue - minValue < 10) {
+                    minRange.value = maxValue - 10;
+                    maxRange.value = minValue + 10;
+                }
+
+                minLabel.innerText = `${Math.floor(minRange.value / 60)}m ${minRange.value % 60}s`;
+                maxLabel.innerText = `${Math.floor(maxRange.value / 60)}m ${maxRange.value % 60}s`;
+
+                sliderValue.innerText = `${minLabel.innerText} - ${maxLabel.innerText}`;
+            }
+
+            minRange.addEventListener("input", updateSlider);
+            maxRange.addEventListener("input", updateSlider);
+
+            // resetButton.addEventListener("click", () => {
+            //     minRange.value = 90; // Reset to full range
+            //     maxRange.value = 120;
+            //     updateSlider();
+            // });
+
+            // Ensure initial full length is displayed
+            // updateSlider();
+        </script>
+        <script>
+            // toggle delete checkboxes
+            $(document).ready(function() {
+                function toggleDeleteButton() {
+                    let anyChecked = $(".row-checkbox:checked").length > 0;
+
+                    if (anyChecked) {
+                        $(".delete-btn").removeClass("d-none");
+                    } else {
+                        $(".delete-btn").addClass("d-none");
+                    }
+                }
+
+                $(document).on("change", ".row-checkbox", function() {
+                    var row = $(this).closest('tr'); // Get the closest <tr> element
+                    if ($(this).prop('checked')) {
+                        row.css('background-color', '#F1E9F0'); // Change background color
+                    } else {
+                        row.css('background-color', ''); // Reset background color
+                    }
+                    
+                    $(this).closest("tr").toggleClass("selected", this.checked);
+                    toggleDeleteButton();
+                });
+
+
+                $("#selectAll").on("change", function() {
+                    let isChecked = this.checked;
+                    $(".row-checkbox").prop("checked", isChecked).closest("tr").toggleClass("selected",
+                        isChecked);
+                    toggleDeleteButton();
+                });
+
+                // Ensure button state is set correctly on page load
+                toggleDeleteButton();
+            });
+        </script>
         <script>
             $(document).ready(function() {
                 $(".sat_2").change(function () {
@@ -1100,7 +1752,7 @@
                     $(".sat_type_2").addClass("d-none");
                 });
 
-                $(document).on('input change', '.no_of_questions, .duration', function() {
+                $(document).on('input change', '.no_of_exams, .duration', function() {
                     calculateTotalSectionValues();
                 });
                 $(document).on('change', "input[name='section']", section);
@@ -1108,7 +1760,7 @@
 
                 let currentPage = 1;
                 let perPage = $('#rowsPerPage').val();
-                fetchQuestions(currentPage, perPage);
+                fetchExams(currentPage, perPage);
 
                 // Handle pagination clicks
                 $(document).on('click', '.pagination a', function(e) {
@@ -1116,18 +1768,18 @@
                     let page = $(this).data('page');
                     if (page) {
                         currentPage = page;
-                        fetchQuestions(currentPage, perPage);
+                        fetchExams(currentPage, perPage);
                     }
                 });
 
                 // Handle "Rows per page" change
                 $('#rowsPerPage').change(function() {
                     perPage = $(this).val();
-                    fetchQuestions(1, perPage);
+                    fetchExams(1, perPage);
                 });
 
                 $('.search_input, .multiselect').on('input click', function() {
-                    fetchQuestions();
+                    fetchExams();
                 });
 
                 $(document).on('change', '.toggle-status', updateState);
@@ -1147,22 +1799,22 @@
             }
 
             function calculateTotalSectionValues() {
-                let totalQuestions = 0;
+                let totalExams = 0;
                 let totalDuration = 0;
 
                 $('.section_part').each(function(index) {
                     if ($(this).hasClass("d-none")) return;
 
-                    const no_of_questions = parseInt($(this).find('input[name="no_of_questions"]').val()) || 0;
+                    const no_of_exams = parseInt($(this).find('input[name="no_of_questions"]').val()) || 0;
                     const duration = parseInt($(this).find('input[name="duration"]').val()) || 0;
-                    console.log(no_of_questions, duration);
+                    console.log(no_of_exams, duration);
 
-                    totalQuestions += no_of_questions;
+                    totalExams += no_of_exams;
                     totalDuration += duration;
                 });
 
                 // Update totals in the DOM
-                $('#total_questions').val(totalQuestions);
+                $('#total_questions').val(totalExams);
                 $('#total_duration').val(totalDuration);
             }
 
@@ -1225,21 +1877,83 @@
                              checkbox.prop('checked', !checkbox.is(':checked'));
                          }
                      },
-                     error: function(response) {
-                         Swal.fire("Error", response.error, "error");
-                         Swal.fire("Error", "Something went wrong!", "error");
-                         checkbox.prop('checked', !checkbox.is(':checked'));
-                     }
+                    error: function(error) {
+                        console.log(error.responseJSON.errors);
+                        
+                        let errors = error.responseJSON.errors;
+                        let errorMessage = "";
+
+                        if (errors && typeof errors === 'object') {
+                            errorMessage = Object.keys(errors)
+                                .map(field => {
+                                    return `${field.replace('_', ' ')}: ${errors[field].join(', ')}`;
+                                })
+                                .join('\n');
+                        } else {
+                            errorMessage = "An unexpected error occurred.";
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            text: errorMessage,
+                            footer: 'Please correct the errors and try again.'
+                        });
+
+                        checkbox.prop('checked', !checkbox.is(':checked'));
+                        
+                        // Reset button text and enable it on error
+                        submitButton.text('Save Question').prop('disabled', false);
+                    }
 
                 });
             }
 
 
+            let searchTimeout;
+            $('.search_input').on('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    fetchExams(1, $('#rowsPerPage').val());
+                }, 300); // 300ms debounce
+            });
+
+            // Apply filters button click
+            $('.apply-filter-btn').on('click', function() {
+                fetchExams(1, $('#rowsPerPage').val());
+            });
+
+            // Reset filters button click
+            $('.reset-filter-btn').on('click', function() {
+                // Reset all filter inputs
+                $('.search_input').val('');
+                $('input[name="crated_start_at"]').val('');
+                $('input[name="crated_end_at"]').val('');
+                $('input[name="status"][value="All"]').prop('checked', true);
+                $('.filter-group input:checkbox').prop('checked', false);
+                $('.custom-checkbox input:checkbox').prop('checked', false);
+                $('.multiselect').val([]).trigger('change');
+                
+                // Fetch with reset filters
+                fetchExams(1, $('#rowsPerPage').val());
+            });
+
             // get all exams
-            function fetchQuestions(page = 1, perPage = 10) {
+            function fetchExams(page = 1, perPage = 10) {
                 let filters = {
-                    search: $('.search_input').val(),
-                    difficulty: $('.multiselect').val(),
+                    search: $('.search_input').val() || '', // Search input value, default to empty string if undefined
+                    difficulty: $('.difficulty:checked').map((_, el) => el.value).get(), // Get all checked difficulty levels
+                    crated_start_at: $('input[name="crated_start_at"]').val() || '', // Start date, default to empty string
+                    crated_end_at: $('input[name="crated_end_at"]').val() || '', // End date, default to empty string
+                    status: $('input[name="status"]:checked').val() || 'All', // Selected status, default to 'All'
+                    audience: $('#all_sat_type_1 .nested-options input:checked').map((_, el) => el.value).get(), // Checked SAT 1 options
+                    sat_type: $('#all_sat_type_2 .nested-options input:checked').map((_, el) => el.value).get(), // Checked SAT 2 options
+                    exam_appearance: $('.filter-group .nested-options input:checked').map((_, el) => el.value).get(), // Checked exam appearance options
+                    created_by: $('.custom-checkbox .created_by:checked').map((_, el) => el.value).get(), // Checked created_by values
+                    average_time: {
+                        min: $('#min-range').val() || 1, // Minimum time from slider
+                        max: $('#max-range').val() || 120 // Maximum time from slider
+                    }
                 };
 
                 $.ajax({
@@ -1249,44 +1963,77 @@
                     success: function(response) {
                         console.log(response);
 
-                        let rows = '';
-                        $.each(response.data, function(index, exam) {
-                            // let difficultyColor = getDifficultyColor(exam.difficulty);
-                            let statusChecked = exam.status ? "checked" : "";
+                        if (response.data.length === 0) {
+                            document.getElementById('examNullList').classList.remove('d-none');
+                            document.getElementById('examList').classList.add('d-none');
+                        } else {
+                            document.getElementById('examNullList').classList.add('d-none');
+                            document.getElementById('examList').classList.remove('d-none');
 
-                            // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
-                            rows += `<tr>
-                                <td><input type="checkbox" class="row-checkbox"></td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.title || ''}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.sections[0].audience || ''}</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.section || ''}</td>
-                                <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" >${exam.total_question_count}<p>${exam.duration}<span>min</span></p></td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >N/A</td>
-                                <td class="openDetailModal" data-toggle="modal" data-target="#detailModalCenter" >${new Date(exam.created_at).toLocaleDateString('en-GB', {
-                                    year: 'numeric', month: '2-digit', day: '2-digit',
-                                    hour: '2-digit', minute: '2-digit', second: '2-digit',
-                                    hour12: true})}
-                                </td>
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" class="toggle-status" data-id="${exam.id}" ${exam.status === 'active' ? 'checked' : '' }>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                     <td class="text-center"><button data-toggle="modal" data-id="${exam.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button></td>
-                                </td>
-                            </tr>`;
-                        });
-                        $("#exam-table-body").html(rows);
-                        updatePagination(response, page);
+                            let rows = '';
+                            $.each(response.data, function(index, exam) {
+                                // let difficultyColor = getDifficultyColor(exam.difficulty);
+                                let statusChecked = exam.status ? "checked" : "";
+
+                                // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
+                                rows += `<tr>
+                                    <td><input type="checkbox" class="row-checkbox  exam-row" value="${exam.uuid}"></td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.title || ''}</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.sections[0].audience || ''}</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.section || ''}</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.sections[0].num_of_question}<p>${exam.duration}<span>min</span></p></td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >N/A</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${formatDate(exam.created_at)} ${exam?.created_by?.full_name || ''}</td>
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" class="toggle-status" data-id="${exam.id}" ${exam.status === 'active' ? 'checked' : '' }>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                        <button data-toggle="modal" data-id="${exam.id}" data-target="#examModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
+                                    </td>
+                                </tr>`;
+                            });
+                            $("#exam-table-body").html(rows);
+                            updatePagination(response, page);
+                        }
                     },
                     error: function() {
-                        alert("Error fetching questions.");
+                        alert("Error fetching exams.");
                     }
                 });
+            }
+
+            function formatDate(dateString) {
+                let date = new Date(dateString);
+                let options = { day: '2-digit', month: 'short', year: 'numeric' };
+                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
+            }
+
+            $(document).on("change", ".row-checkbox", function() {
+                $(this).closest("tr").toggleClass("selected", this.checked);
+                updateActiveInactiveCount();
+            });
+
+            $("#selectAll").on("change", function() {
+                let isChecked = this.checked;
+                $(".row-checkbox").prop("checked", isChecked).closest("tr").toggleClass("selected",
+                    isChecked);
+                updateActiveInactiveCount();
+            });
+
+            function updateActiveInactiveCount() {
+                let selectedRows = $(".row-checkbox:checked").closest("tr");
+
+                let activeCount = selectedRows.find(".toggle-status:checked").length;
+                let inactiveCount = selectedRows.length - activeCount;
+
+                // Update UI
+                $("#active-count").text(activeCount);
+                $("#inactive-count").text(inactiveCount);
             }
 
             function updatePagination(response, currentPage) {
@@ -1297,7 +2044,7 @@
                 let end = (response.to || 0);
 
                 $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
-                $('#total-questions').text(`${totalResults} Questions`);
+                $('#total-exams').text(`${totalResults} Exams`);
 
                 let paginationHtml = '';
 
@@ -1350,12 +2097,12 @@
 
             // Toggle status (on/off)
             function updateState() {
-                let questionId = $(this).data('id');
+                let examId = $(this).data('id');
 
                 let newStatus = $(this).is(':checked') ? 'active' : 'inactive';
 
                 $.ajax({
-                    url: `/api/questions/${questionId}/update-status`,
+                    url: `/api/exams/${examId}/update-status`,
                     type: "PATCH",
                     data: {
                         status: newStatus
@@ -1377,6 +2124,48 @@
                     }
                 });
             }
+
+            function getSelectedExams() {
+                return $(".row-checkbox:checked").map(function () {
+                    return $(this).val();
+                }).get();
+            }
+
+            $(".exam-delete").click(function () {
+                let selectedExams = getSelectedExams();
+                if (selectedExams.length === 0) {
+                    Swal.fire("Warning", "Please select at least one exam.", "warning");
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/api/exam-delete",
+                            type: "POST",
+                            data: {
+                                exams: selectedExams,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function (response) {
+                                Swal.fire("Deleted!", "Exams deleted successfully.", "success");
+                                fetchExams(1);
+                            },
+                            error: function () {
+                                Swal.fire("Error", "Failed to delete exams.", "error");
+                            }
+                        });
+                    }
+                });
+            });
         </script>
     @endpush
 </x-backend.layouts.master>

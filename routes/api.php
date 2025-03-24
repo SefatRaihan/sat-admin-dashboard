@@ -93,6 +93,7 @@ Route::group([ 'as' => 'api'], function () {
     Route::post('/exams/exam-section-questions', [ExamSectionController::class, 'examSectionQuestion']);
     // Route::post('/exams/publish', [ExamSectionController::class, 'examPublish']);
     Route::apiResource('/exams', ExamController::class);
+    Route::post('/exam-delete', [ExamController::class, 'delete']);
     Route::post('/exams/{id}/restore', [ExamController::class, 'restore']);
     Route::patch('/exams/{id}/update-status', [ExamController::class, 'toggleStatus']);
 

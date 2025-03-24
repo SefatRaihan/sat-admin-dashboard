@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Traits\UserTrackable;
+
 
 class ExamSection extends Model
 {
-    use HasFactory;
+    use HasFactory, UserTrackable;
 
     /**
      * Indicates that the primary key is not auto-incrementing.
@@ -67,5 +69,15 @@ class ExamSection extends Model
     public function questions()
     {
         return $this->belongsToMany(ExamQuestion::class, 'section_question_pivot', 'section_id', 'question_id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

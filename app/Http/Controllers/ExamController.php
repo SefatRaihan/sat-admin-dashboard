@@ -9,12 +9,22 @@ class ExamController extends Controller
 {
     public function index()
     {
-        return view('backend.exams.index');
+        $exams = Exam::with('createdBy')
+        ->select('created_by') // Select only the created_by column
+        ->distinct()           // Get unique created_by values
+        ->get();
+
+        return view('backend.exams.index', compact('exams'));
     }
 
     public function create()
     {
-        return view('backend.exams.create');
+        $exams = Exam::with('createdBy')
+        ->select('created_by') // Select only the created_by column
+        ->distinct()           // Get unique created_by values
+        ->get();
+
+        return view('backend.exams.create' , compact('exams'));
     }
 
     public function show($id)
