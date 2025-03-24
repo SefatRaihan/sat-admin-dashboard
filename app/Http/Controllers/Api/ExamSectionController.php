@@ -18,12 +18,97 @@ class ExamSectionController extends Controller
 
     public function getQuestionsWithExamSection(Request $request)
     {
-        $questions =  ExamQuestion::where('sat_question_type', $request->section_type)
-                                    ->where('audience', $request->audience)
-                                    ->where('status', 'active')
-                                    ->get();
+        $query = ExamQuestion::latest()->with('createdBy');
+    
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('question_title', 'like', "%{$search}%")
+                  ->orWhere('question_description', 'like', "%{$search}%")
+                  ->orWhere('question_text', 'like', "%{$search}%");
+            });
+        }
+    
+        // Date range filter
+        if ($request->filled('crated_start_at') && $request->filled('crated_end_at')) {
+            $query->whereBetween('created_at', [
+                $request->crated_start_at,
+                $request->crated_end_at
+            ]);
+        }
+    
+        // Status filter
+        if ($request->filled('status')) {
+            switch ($request->status) {
+                case 'Active only':
+                    $query->where('status', 'active');
+                    break;
+                case 'Inactive only':
+                    $query->where('status', '!=', 'active');
+                    break;
+                // 'All' case doesn't need additional where clause
+            }
+        }
+    
+        // Audience and Type filters
+        if ($request->filled('audience')) {
+            $query->where('audience', $request->audience);
+        }
+    
+        if ($request->filled('sat_type')) {
+            $query->where('sat_type', $request->sat_type);
+        }
+    
+        if ($request->filled('sat_question_type')) {
+            $query->where('sat_question_type', $request->sat_question_type);
+        }
+    
+        // Exam appearance filter
+        if ($request->filled('exam_appearance')) {
+            $query->whereIn('audience', $request->exam_appearance);
+        }
+    
+        // Difficulty filter
+        if ($request->filled('difficulty')) {
+            $difficulties = is_array($request->difficulty) ? $request->difficulty : [$request->difficulty];
+            $query->whereIn('difficulty', $difficulties);
+        }
+    
+        // Created by filter
+        if ($request->filled('created_by')) {
+            $query->whereIn('created_by', $request->created_by);
+        }
+    
+        // Question type filter
+        if ($request->filled('question_type')) {
+            $query->where('question_type', $request->question_type);
+        }
+
+        if ($request->section_type != 'Mixed') {
+            $query->where('sat_question_type', $request->section_type);
+        }
+
+        $questions = $query->where('status', 'active')->get();
+        
         return response()->json(['code' => 200, 'data' => $questions]);
     }
+
+    // public function getQuestionsWithExamSection(Request $request)
+    // {
+    //     dd($request->all());
+    //     if ($request->section_type == 'Mixed') {
+    //         $questions =  ExamQuestion::where('audience', $request->audience)
+    //                                     ->where('status', 'active')
+    //                                     ->get();
+    //     } else {
+    //         $questions =  ExamQuestion::where('sat_question_type', $request->section_type)
+    //                                     ->where('audience', $request->audience)
+    //                                     ->where('status', 'active')
+    //                                     ->get();
+    //     }
+    //     return response()->json(['code' => 200, 'data' => $questions]);
+    // }
     
     /**
      * Assign a question to a section (Drag & Drop).

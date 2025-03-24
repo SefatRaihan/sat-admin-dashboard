@@ -19,7 +19,7 @@
     </x-backend.layouts.partials.blocks.contentwrapper>
 
     <div class="d-none" id="questionNullList">
-        <x-backend.layouts.partials.blocks.empty-state 
+        <x-backend.layouts.partials.blocks.empty-state
             title="You have not created any Question yet"
             message="Let’s create a new question"
             buttonText="Add Question"
@@ -133,7 +133,7 @@
                 </div>
                 <div class="filter-sidebar-content">
                     <div class="task-form">
-                        <div class="p-3 ">
+                        <div class="pt-3 pr-3 pb-3 pl-0">
                             <div class="d-flex justify-content-between">
                                 <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span
                                         style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
@@ -153,7 +153,6 @@
                             <div id="filter-status">
                                 <div class="d-flex justify-content-between">
                                     <h6><b>Status:</b> Active Only</h6>
-                                    <button class="reset-slider"><u>Reset</u></button>
                                 </div>
                                 <div class="form-check status-radio">
                                     <input class="form-check-input" type="radio" name="status" id="all"
@@ -180,7 +179,6 @@
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
                                     <h6><b>Audience & Type:</b> All Result</h6>
-                                    <button class="reset-slider"><u>Reset</u></button>
                                 </div>
                                 <div id="all_sat_type_1">
                                     <div class="filter-group">
@@ -253,8 +251,7 @@
                             </div>
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
-                                    <h6><b>Exam Appearance:</b> 2 Selected</h6>
-                                    <button class="reset-slider"><u>Reset</u></button>
+                                    <h6><b>Exam Appearance:</b> All Result</h6>
                                 </div>
                                 <div class="mb-1">
                                     <input type="text" class="form-control search_input w-100 pl-4"
@@ -313,8 +310,7 @@
                             </div>
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
-                                    <h6><b>Exam Appearance:</b> 2 Selected</h6>
-                                    <button class="reset-slider"><u>Reset</u></button>
+                                    <h6><b>Defficulty:</b> All result</h6>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
                                     <input type="checkbox" class="difficulty" value="Easy">
@@ -338,7 +334,7 @@
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <div class="slider-container">
+                                <div class="slider-container" style="max-width: 100% !important">
                                     <div class="slider-header">
                                         <span>Average Time:</span>
                                         <span id="slider-value">1m 00s - 2m 00s</span>
@@ -566,7 +562,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="modal-footer d-flex justify-content-between border-top pt-3">
                         <button type="button" class="btn show-edit-btn"
@@ -1593,7 +1589,7 @@
                     } else {
                         row.css('background-color', ''); // Reset background color
                     }
-                    
+
                     $(this).closest("tr").toggleClass("selected", this.checked);
                     toggleDeleteButton();
                 });
@@ -1620,6 +1616,36 @@
                     $('.step-circle').removeClass('active').first().addClass('active'); // Reset progress
                     $('.question-modal-heading').text('Create New Question');
                     $('#questionId').val(null);
+                    
+                    let questionId = $(this).data('id');
+                    let dynamicModalId = $('#questionModal').attr('dynamic-id', 1);
+                    if (dynamicModalId != questionId) {
+                        if (currentStep > 1) {
+                            let stepIndex = currentStep;
+                            let stepBackInterval = setInterval(function() {
+                                if (stepIndex > 1) {
+                                    stepIndex--;
+                                    showStep(stepIndex);
+                                } else {
+                                    clearInterval(stepBackInterval);
+                                    currentStep = 1; // Ensure currentStep is set to 1 after loop
+                                    showStep(currentStep); // Show step 1
+                                    console.log('Current Step After Reset:', currentStep);
+                                }
+                            }, 5);
+                        }
+
+                        if (currentStep === 1) {
+                            $(".cancel").removeClass("d-none"); // Show "Cancel"
+                            $(".prev-step").addClass("d-none"); // Hide "Back"
+                        } else {
+                            $(".cancel").addClass("d-none"); // Hide "Cancel"
+                            $(".prev-step").removeClass("d-none"); // Show "Back"
+                        }
+
+                        $('#questionModal').attr('dynamic-id', questionId)
+                        resetModalData();
+                    }
                 });
             });
         </script>
@@ -1738,7 +1764,7 @@
             let optionCount = 1;
             const totalSteps = $(".step").length;
 
-            $('.show-edit-btn').click(function (e) { 
+            $('.show-edit-btn').click(function (e) {
                 e.preventDefault();
                 $('.show-modal-close').trigger('click');
             });
@@ -1857,24 +1883,11 @@
                     $('.filter-group input:checkbox').prop('checked', false);
                     $('.custom-checkbox input:checkbox').prop('checked', false);
                     $('.multiselect').val([]).trigger('change');
-                    
+
                     // Fetch with reset filters
                     fetchQuestions(1, $('#rowsPerPage').val());
                 });
 
-                // $(document).on('click', '#questionModal' , function() {
-                //     // Reset radio buttons and checkboxes (but keep default values)
-                //     $("input[name='audience']").prop('checked', false);  
-                //     $("input[name='subjects']").prop('checked', false);  
-                //     $("input[name='question_type']").prop('checked', false); 
-
-                //     // Hide SAT sections initially
-                //     $('#sat_type_1, #sat_type_2').addClass('d-none');
-
-                //     // Clear options container
-                //     $('#option-container').html('');
-                //     $('#questionModal').modal('show');
-                // });
             });
 
             function updateButtons() {
@@ -1896,7 +1909,7 @@
                     $(".save-question").addClass("d-none"); // Hide "Save" before last step
                 }
             }
-            
+
             function showStep(step) {
 
                 $(".step").addClass("d-none");
@@ -1935,7 +1948,7 @@
                 }
             }
 
-            function addOption() {  
+            function addOption() {
                 optionCount++;
                 let newOptionId = `option-${optionCount}`;
 
@@ -1991,13 +2004,13 @@
 
                 let correctAnswer = $('#questionCorrectAnswer').val(); // Get the correct answer from the hidden input
                 console.log(correctAnswer);
-                
+
 
                 $("#option-container .option-block .parent-editor").each(function(index) {
                     let optionText = $(this).find(".ql-editor").html(); // Get raw HTML content
                     let optionPlainText = $(this).find(".ql-editor").text();
                     let isCorrect = (optionPlainText == correctAnswer); // Compare with correct answer
-                    
+
                     optionsHtml += `
                         <div class="form-check col-md-6 row" style="margin-left:3px">
                             <label class="radio-container col-md-12" style="padding-top:2px" for="option-${index}">
@@ -2079,7 +2092,7 @@
 
                 // Get the submit button
                 const submitButton = $('button[type="submit"]'); // Adjust selector based on your HTML
-                
+
                 // Change button text to "Processing" and disable it
                 submitButton.text('Processing').prop('disabled', true);
 
@@ -2135,7 +2148,6 @@
                                             clearInterval(stepBackInterval);
                                             currentStep = 1;
                                             showStep(currentStep);
-                                            console.log('Current Step After Reset:', currentStep);
                                         }
                                     }, 5);
                                 }
@@ -2160,7 +2172,7 @@
                     },
                     error: function(error) {
                         console.log(error.responseJSON.errors);
-                        
+
                         let errors = error.responseJSON.errors;
                         let errorMessage = "";
 
@@ -2182,7 +2194,7 @@
                         });
 
                         checkbox.prop('checked', !checkbox.is(':checked'));
-                        
+
                         // Reset button text and enable it on error
                         submitButton.text('Save Question').prop('disabled', false);
                     }
@@ -2235,7 +2247,7 @@
                             $.each(response.data, function(index, question) {
                                 let difficultyColor = getDifficultyColor(question.difficulty);
                                 let statusChecked = question.status ? "checked" : "";
-    
+
                                 // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
                                 rows += `<tr>
                                     <td><input type="checkbox" class="row-checkbox question-row" value="${question.uuid}"></td>
@@ -2260,7 +2272,7 @@
                             $("#question-table-body").html(rows);
                             updatePagination(response, page);
                         }
-                        
+
                     },
                     error: function() {
                         alert("Error fetching questions.");
@@ -2351,6 +2363,8 @@
                             success: function (response) {
                                 Swal.fire("Deleted!", "Questions deleted successfully.", "success");
                                 fetchQuestions(1);
+                                $('#active-count').text('')
+                                $('#inactive-count').text('')
                             },
                             error: function () {
                                 Swal.fire("Error", "Failed to delete questions.", "error");
@@ -2445,7 +2459,7 @@
                 $('#sat_type_2').addClass('d-none');
                 $('#sat_type_1').find('input').prop('checked', false);
                 $('#sat_type_2').find('input').prop('checked', false);
-                
+
             }
 
             function show() {
@@ -2536,7 +2550,7 @@
                         initializeQuill(`#option-editor-${index}`);
                     });
 
-                    
+
                     $('#questionCorrectAnswer').val(response.correct_answer);
                     $('#questionId').val(response.id);
                     $('#questionModal').modal('show');
@@ -2561,7 +2575,7 @@
                         $("#question_description").html(response.question_description);
                         $("#question_text").html(response.question_text);
                         $("#explanation").html(response.explanation);
-                        
+
                         let options = JSON.parse(response.options);
                         $('#question-options').html('');
                         let optionsHtml = ``;
@@ -2582,7 +2596,7 @@
 
                             $('#question-options').append(newOptionHtml);
                         });
-                        
+
 
                         $(".audience").text(response.audience);
                         $(".question-type").text(response.sat_question_type);
@@ -2601,22 +2615,22 @@
                         );
                         $(".last-updated-on").text(moment(response.updated_at).format("hh:mm A, D MMM YY"));
                         console.log(response.exams.length);
-                        
+
                         if (response.exams.length == 0) {
                             $("#exam-details").html('<p>No exam details found.</p>');
                             $("#all-appearances").html('<p>No data found.</p>');
                         }else{
                             $("#exam-details").html('');
-                            $.each(response.exams, function (indexInArray, valueOfElement) { 
+                            $.each(response.exams, function (indexInArray, valueOfElement) {
                                 console.log(valueOfElement);
-                                
+
                                 $("#exam-details").append(`
                                 <tr class="custom-row">
                                     <td>
                                         <b>${valueOfElement.sections[0].audience}</b>
                                         <br>
                                         <p style="color:#475467; font-size:10px">${valueOfElement.sections[0].section_type}</P>
-                                        
+
                                     </td>
                                     <td>N/A</td>
                                     <td>N/A</td>
@@ -2628,16 +2642,16 @@
                             });
 
                             $("#all-appearances").html('');
-                            $.each(response.exams, function (indexInArray, valueOfElement) { 
+                            $.each(response.exams, function (indexInArray, valueOfElement) {
                                 console.log(valueOfElement);
-                                
+
                                 $("#all-appearances").append(`
                                 <tr class="custom-row">
                                     <td>
                                         <b>${valueOfElement.sections[0].audience}</b>
                                         <br>
                                         <p style="color:#475467; font-size:10px">${valueOfElement.sections[0].section_type}</P>
-                                        
+
                                     </td>
                                     <td>N/A</td>
                                     <td>N/A</td>
@@ -2649,7 +2663,7 @@
                             });
                         }
 
-                        
+
                         // Modal show
                         $("#detailModalCenter").modal("show");
                     },
@@ -2744,7 +2758,7 @@
             // set value labels align to right
             legend.valueLabels.template.setAll({ textAlign: "right" })
             // set width and max width of labels
-            legend.labels.template.setAll({ 
+            legend.labels.template.setAll({
             maxWidth: 140,
             width: 140,
             oversizedBehavior: "wrap"
@@ -2909,7 +2923,7 @@
             chart.plotContainer.events.on("globalpointermove", function(e) {
             // if pointer is down
             if (isDown) {
-                // get tooltip data item 
+                // get tooltip data item
                 var tooltipDataItem = series.get("tooltipDataItem");
                 if (tooltipDataItem) {
                 if (e.originalEvent) {
