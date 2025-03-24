@@ -137,7 +137,7 @@
                             <div class="row">
                                 <div class="col-md-6 row">
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input class="sat_1" type="radio" name="audience" value="High School" checked> High School
+                                        <input class="sat_1" type="radio" name="audience" value="High School"> High School
                                     </label>
                                     <label class="radio-container mb-3 col-md-12">
                                         <input class="sat_1" type="radio" name="audience" value="Graduation"> Graduation

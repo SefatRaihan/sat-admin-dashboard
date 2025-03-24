@@ -8,7 +8,7 @@
 
             <div class=\'heading-summary\'>
                 <ul class=\'pl-4 m-0\'>
-                    <li id=\'type\' style=\'list-style: none\'>Hi School</li>
+                    <li id=\'audience\' style=\'list-style: none\'>Hi School</li>
                     <li id=\'total-section\'>4 sections</li>
                     <li id=\'total-question\'>40 Questions</li>
                     <li id=\'total-time\'>1h 30m</li>
@@ -19,7 +19,7 @@
 
         '">
     </x-backend.layouts.partials.blocks.contentwrapper>
-{{-- @dd($exam ) --}}
+{{-- @dd($exam->sections->sum('num_of_question')) --}}
     <div>
         <div class="row">
             <div class="col-md-9" style="background-color:#fff; padding: 16px; padding-left: 45px !important; border-bottom:1px solid #EAECF0">
@@ -46,8 +46,8 @@
                 <div class="d-flex justify-content-between pt-1">
                     <div>
                         <ul class="p-0" style="display: flex; gap:20px">
-                            <li style="list-style: none">Verbal</li>
-                            <li>45 min</li>
+                            <li id="section_type" style="list-style: none">Verbal</li>
+                            <li id="section_duration">45 min</li>
                         </ul>
                     </div>
                     <div>
@@ -57,7 +57,7 @@
                 <h6><b>Section <span class="section_order"></span>: Extreme Section</b></h6>
             </div>
         </div>
-        <div class="row">
+        <div class="row h-100">
             <div class="col-md-9" style="height: 82vh; background-color:#fff; border-right:1px solid #D0D5DD; padding-left:50px; overflow-y: auto;">
                 <h5 style="color: #101828; font-size:16px"><span id="totalQuestion">0</span> Questions</h5>
                 <div class="row" id="question-container" style="height:100%"></div>
@@ -219,7 +219,8 @@
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
         <script>
             let exam =  @JSON($exam);
-            // console.log(exam);
+            let totalQuestion =  @JSON($exam->sections->sum('num_of_question'));
+            console.log(exam);
             let sections = exam.sections; // Use sections directly from Blade
             let currentSectionIndex = 0
 
@@ -331,8 +332,14 @@
 
                 let currentSection = sections[currentSectionIndex];
                 $('.section-total-question').text(currentSection.num_of_question);
+                console.log(currentSection, 'hi');
 
                 $('.section_order').text(currentSection.section_order)
+                $('#section_type').text(currentSection.section_type)
+                $('#audience').text(currentSection.audience)
+                $('#total-question').text(totalQuestion + ' Questions')
+                $('#total-section').text(exam.section + ' Sections')
+                $('#total-time').text(formatDuration(exam.duration))
                 // $("#section-title").text(`Section: ${currentSection.section_type}`)
 
                 $.ajax({
@@ -391,6 +398,15 @@
                     default:
                         return "bg-secondary text-white";
                 }
+            }
+
+            function formatDuration(minutes) {
+                if (minutes >= 60) {
+                    let hours = Math.floor(minutes / 60);
+                    let remainingMinutes = minutes % 60;
+                    return hours + "hr" + (remainingMinutes > 0 ? " " + remainingMinutes + "min" : "");
+                }
+                return minutes + "min";
             }
 
             function saveQuestions() {
