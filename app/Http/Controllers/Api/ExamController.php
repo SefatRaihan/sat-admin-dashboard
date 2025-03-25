@@ -30,6 +30,18 @@ class ExamController extends Controller
             $exams->whereDate('scheduled_at', $request->scheduled_at);
         }
 
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $exams->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('section', 'like', "%{$search}%")
+                  ->orWhere('scheduled_at', 'like', "%{$search}%")
+                  ->orWhere('status', 'like', "%{$search}%")
+                  ->orWhere('duration', 'like', "%{$search}%");
+            });
+        }
+
         // Filter soft-deleted exams only if requested
         if ($request->has('with_deleted') && $request->with_deleted == true) {
             $exams = $exams->withTrashed();
@@ -119,7 +131,7 @@ class ExamController extends Controller
     public function show($id)
     {
         try {
-            $exam = Exam::with('sections')->findOrFail($id);
+            $exam = Exam::with('sections','createdBy','updatedBy','questions')->findOrFail($id);
             return response()->json($exam);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Exam not found'], 404);
