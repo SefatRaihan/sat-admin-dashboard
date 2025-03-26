@@ -65,11 +65,11 @@
                 <div class="exam-question-summary p-2" style="overflow-y: auto; height: calc(80vh - 60px);">
                     <div class="d-flex justify-content-between">
                         <p style="color: #333333; font-size:14px"><b>Total : <span class="exam-question-count">0</span>/<span class="section-total-question">20</span> </b></p>
-                        <div>
+                        {{-- <div>
                             @for ($i = 0; $i < $exam->section; $i++)
                             <span class="badge badge-flat badge-pill border-secondary text-secondary-600"><span class="dot"></span> 0{{++$i}}</span>
                             @endfor
-                        </div>
+                        </div> --}}
                     </div>
                     <div id="exam-section" class="row exam-question-section" style="padding: 8px; height:100%"></div>
                 </div>
@@ -944,7 +944,7 @@
         <script>
             let exam =  @JSON($exam);
             let totalQuestion =  @JSON($exam->sections->sum('num_of_question'));
-            console.log(exam);
+            // console.log(exam);
             let sections = exam.sections; // Use sections directly from Blade
             let currentSectionIndex = 0
 
@@ -1145,7 +1145,7 @@
                     url: "/api/exams/questions",
                     data: filters,
                     success: function (response) {
-                        console.log(response);
+                        // console.log(response);
 
                         $('#question-container').html('');
                         $('#totalQuestion').text(response.data.length);

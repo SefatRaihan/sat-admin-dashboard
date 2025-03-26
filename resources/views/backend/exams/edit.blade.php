@@ -2,7 +2,7 @@
     <x-backend.layouts.partials.blocks.contentwrapper
         :headerTitle="'
             <a href=\'\roles\' class=\'text-dark\'>
-                <i class=\'fa-solid fa-angle-left mr-2\'></i> Create Exam : Add Question to Section <span class=\'section_order\'></span>
+                <i class=\'fa-solid fa-angle-left mr-2\'></i> Edit Exam : Add Question to Section <span class=\'section_order\'></span>
             </a>
 
             <div class=\'heading-summary\'>
@@ -66,9 +66,9 @@
                     <div class="d-flex justify-content-between">
                         <p style="color: #333333; font-size:14px"><b>Total : <span class="exam-question-count">0</span>/<span class="section-total-question">20</span> </b></p>
                         <div>
-                            @for ($i = 0; $i < $exam->section; $i++)
+                            {{-- @for ($i = 0; $i < $exam->section; $i++)
                             <span class="badge badge-flat badge-pill border-secondary text-secondary-600"><span class="dot"></span> 0{{++$i}}</span>
-                            @endfor
+                            @endfor --}}
                         </div>
                     </div>
                     <div id="exam-section" class="row exam-question-section" style="padding: 8px; height:100%"></div>
