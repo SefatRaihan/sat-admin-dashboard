@@ -892,10 +892,273 @@
         </div>
     </div>
 
+    {{-- show details modal --}}
+    <section>
+        <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="detailModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 60%">
+                <div class="modal-content" style="border-radius: 24px; height:100%">
+                    <div class="modal-header text-left d-flex pb-3" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Exam ID <span id="examCode">#E0000</span></h5>
+                        <button type="button" class="close p-0 m-0" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="question-tab" data-toggle="tab" href="#question"
+                                        role="tab" aria-controls="question" aria-selected="true">Exam</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="explanation-tab" data-toggle="tab" href="#explanation"
+                                        role="tab" aria-controls="explanation" aria-selected="false">Explanation</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="details-tab" data-toggle="tab" href="#details"
+                                        role="tab" aria-controls="details" aria-selected="false">Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="analytics-tab" data-toggle="tab" href="#analytics"
+                                        role="tab" aria-controls="analytics" aria-selected="false">Analytics</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="feedbacks-tab" data-toggle="tab" href="#feedbacks"
+                                        role="tab" aria-controls="feedbacks" aria-selected="false">Feedbacks</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="question" role="tabpanel" aria-labelledby="question-tab">
+                                    <h4>Exam Details</h4>
+                                    <table class="table table-striped custom-table question-details-table" style="border: 1px solid #EAECF0">
+                                        <tr>
+                                            <td style="width: 25%">Exam Name</td>
+                                            <td class="font-weight-bold exam-name" style="width: 25%">: </td>
 
+                                            <td style="width: 25%">Audience</td>
+                                            <td class="font-weight-bold audience" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Created By</td>
+                                            <td class="font-weight-bold created-by" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Created on</td>
+                                            <td class="font-weight-bold created-on" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">No of sections</td>
+                                            <td class="font-weight-bold no-of-sections" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Feedbacks</td>
+                                            <td class="font-weight-bold feedbacks" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">No of quesion</td>
+                                            <td class="font-weight-bold no-of-question" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Average time</td>
+                                            <td class="font-weight-bold average-time" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Average score</td>
+                                            <td class="font-weight-bold average-score" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Exam duration</td>
+                                            <td class="font-weight-bold exam-duration" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Best Score</td>
+                                            <td class="font-weight-bold best-score" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Best Time</td>
+                                            <td class="font-weight-bold best-time" style="width: 25%">: </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 25%">Total apperance</td>
+                                            <td class="font-weight-bold total-apperance" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Total completion</td>
+                                            <td class="font-weight-bold total-completion" style="width: 25%">: </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 25%">Last updated by</td>
+                                            <td class="font-weight-bold last-updated-by" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Last updated on</td>
+                                            <td class="font-weight-bold last-updated-on" style="width: 25%">: </td>
+                                        </tr>
+                                    </table>
+
+                                    <h4 class="mt-3">All Sections</h4>
+                                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
+                                        <thead>
+                                            <tr class="bg-light" role="row">
+                                                <th>Section Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Type</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Total</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Average</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Best</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Completion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="section-details">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="explanation" role="tabpanel" aria-labelledby="explanation-tab">
+                                    <h4>Section Details</h4>
+                                    <table class="table table-striped custom-table question-details-table" style="border: 1px solid #EAECF0">
+                                        <tr>
+                                            <td style="width: 25%">Section Name</td>
+                                            <td class="font-weight-bold section-name" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Question Type</td>
+                                            <td class="font-weight-bold question-type" style="width: 25%">: </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 25%">No of quesion</td>
+                                            <td class="font-weight-bold no-of-question" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Exam duration</td>
+                                            <td class="font-weight-bold exam-duration" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Highest score</td>
+                                            <td class="font-weight-bold highest-score" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Lowest time</td>
+                                            <td class="font-weight-bold lowest-time" style="width: 25%">: </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 25%">Average score</td>
+                                            <td class="font-weight-bold average-score" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Average time</td>
+                                            <td class="font-weight-bold average-time" style="width: 25%">: </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 25%">Total apperance</td>
+                                            <td class="font-weight-bold total-apperance" style="width: 25%">: </td>
+
+                                            <td style="width: 25%">Total completion</td>
+                                            <td class="font-weight-bold total-completion" style="width: 25%">: </td>
+                                        </tr>
+                                    </table>
+
+                                    <h4 class="mt-3">All Qestions</h4>
+                                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
+                                        <thead>
+                                            <tr class="bg-light" role="row">
+                                                <th>Question</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Difficulty</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Appear.</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Right</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Wrong</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">N/A</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="question-details">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+                                    <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
+                                        <p><b>Waiting for content</b></p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="analytics" role="tabpanel" aria-labelledby="analytics-tab">
+                                    <h4>Performance Comparison</h4>
+                                    <div id="chartdiv"></div>
+                                    <h4>Time Analysis</h4>
+                                    <div id="areaChartdiv"></div>
+                                    <h4 class="mt-3">Ranking</h4>
+                                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
+                                        <thead>
+                                            <tr class="bg-light" role="row">
+                                                <th>Rank</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Student</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">App. Type</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Status</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Time</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Created</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="all-appearances">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="feedbacks" role="tabpanel" aria-labelledby="feedbacks-tab">
+                                    <div>
+                                        <button class="btn ml-0 feedback-btn active">Pending <span class="feedback-btn-count">4</span></button>
+                                        <button class="btn feedback-btn">Pending <span class="feedback-btn-count">2</span></button>
+                                        <button class="btn feedback-btn">Pending <span class="feedback-btn-count">0</span></button>
+                                    </div>
+
+                                    <h4 class="mt-3">4 Pending Feedbacks</h4>
+                                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
+                                        <thead>
+                                            <tr class="bg-light" role="row">
+                                                <th><input type="checkbox" class="select-all-feedback"></th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Feedback</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Student</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Created</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="all-appearances">
+                                            <tr>
+                                                <td><input type="checkbox" class="row-checkbox student-row""></td>
+                                                <td>I think this question is not appropriate for the SAT 1 exam. Can you look into it?</td>
+                                                <td>Sani</td>
+                                                <td>22 Mar, 2025</td>
+                                                <td class="d-flex">
+                                                    <button class="btn btn-sm" style="border: 1px solid #EAECF0; border-radius: 7px;">
+                                                        <i class="far fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm ml-2" style="border: 1px solid #EAECF0; border-radius: 7px;">
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between border-top pt-3">
+                        <button type="button" class="btn show-edit-btn edit-btn"
+                            style="border: 1px solid #D0D5DD; border-radius: 8px;" data-toggle="modal" data-target="#examModal">Edit Exam</button>
+                        <button type="button" class="btn btn-outline-dark show-modal-close"
+                            style="background-color:#691D5E ;border-radius: 8px; color:#fff"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     @push('css')
         <style>
+            #chartdiv {
+                width: 100%;
+                height: 300px;
+            }
+
+            #areaChartdiv {
+                width: 100%;
+                max-width:100%;
+                height: 500px;
+            }
             input[type="radio"] {
                 accent-color: #691D5E;
             }
@@ -1700,6 +1963,7 @@
 
     @push('js')
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
         <script>
             $(document).ready(function() {
                 $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
@@ -1918,13 +2182,10 @@
                     update(examId, event);
                 });
 
-
-                // $(document).on('click', '.proceedBtn', update);
-
-
-
-
-
+                $(document).on("click", ".openDetailModal", openDetailModal);
+                $(document).on('click', '.edit-btn', function () {
+                    $('#detailModalCenter').modal('hide');
+                });
 
             });
 
@@ -1963,46 +2224,6 @@
 
             const store = (e) => {
                  e.preventDefault();
-
-                // let formData = {
-                //     title: $('#title').val(),
-                //     audience: $('input[name="audience"]:checked').val(),
-                //     section: parseInt($('input[name="section"]:checked').val()),
-                //     section_details: [],
-                //     total_questions: 0,
-                //     total_duration: 0
-                // };
-
-                // let totalQuestions = 0;
-                // let totalDuration = 0;
-
-                // $('.section_part').each(function(index) {
-                //     if ($(this).hasClass("d-none")) return; // Skip hidden sections
-
-                //     const sectionIndex = index + 1;
-
-                //     const $inputs = $(this).find('input');
-                //     const no_of_questions = parseInt($inputs.filter('[name="no_of_questions"]').val()) || 0;
-                //     const duration = parseInt($inputs.filter('[name="duration"]').val()) || 0;
-
-                //     const sectionData = {
-                //         section_type: $inputs.filter(`[name="sat_type_section_${sectionIndex}"]:checked`).val(),
-                //         exam_name: $inputs.filter('[name="exam_name"]').val(),
-                //         section_order: sectionIndex,
-                //         no_of_questions,
-                //         duration
-                //     };
-
-                //     formData.section_details.push(sectionData);
-                //     totalQuestions += no_of_questions;
-                //     totalDuration += duration;
-                // });
-
-                // formData.total_questions = totalQuestions;
-                // formData.total_duration = totalDuration;
-
-                // console.log(getFormData());
-                // return false;
 
                  $.ajax({
                      url: '/api/exams',
@@ -2105,14 +2326,14 @@
                                 // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
                                 rows += `<tr>
                                     <td><input type="checkbox" class="row-checkbox  exam-row" value="${exam.uuid}"></td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.title || ''}</td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.sections[0].audience || ''}</td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.section || ''}</td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.sections[0].num_of_question}<p>${exam.duration}<span>min</span></p></td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${exam.avg_time || '00:00'} min</td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >N/A</td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" >${formatDate(exam.created_at)} ${exam?.created_by?.full_name || ''}</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.title || ''}</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.sections[0].audience || ''}</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.section || ''}</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.sections[0].num_of_question}<p>${exam.duration}<span>min</span></p></td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.avg_time || '00:00'} min</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.avg_time || '00:00'} min</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">N/A</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${formatDate(exam.created_at)} ${exam?.created_by?.full_name || ''}</td>
                                     <td>
                                         <label class="switch">
                                             <input type="checkbox" class="toggle-status" data-id="${exam.id}" ${exam.status === 'active' ? 'checked' : '' }>
@@ -2329,7 +2550,6 @@
 
                 // console.log('examid:', examId, getFormData());
 
-                // Perform PATCH request
                 $.ajax({
                     url: `/api/exams/${examId}`,
                     type: 'PATCH',
@@ -2405,7 +2625,7 @@
 
                 formData.total_questions = totalQuestions;
                 formData.total_duration = totalDuration;
-                
+
                 return formData;
             }
 
@@ -2429,6 +2649,421 @@
                 // Show modal
                 $('#examModal').modal('show');
             }
+
+            function openDetailModal() {
+                var examId = $(this).data("id"); // Button er data-id theke Student ID pabo
+
+                $('.show-edit-btn').attr('data-id', examId);
+                $.ajax({
+                    url: `/api/exams/${examId}`, // Backend route jekhane data fetch hobe
+                    type: "GET",
+                    success: function (response) {
+
+                        // Modal er ID update
+                        $("#examCode").text("#" + (response.exam_code ?? 'E0000'));
+                        $(".exam-name").text(': ' + (response.title ?? 'N/A'));
+                        $(".audience").text(': ' + (response.audience ?? 'N/A'));
+
+                        $(".created-by").text(': ' + (response.created_by && response.created_by.full_name ? response.created_by.full_name : 'N/A'));
+                        $(".created-on").text(': ' + (response.created_at ? moment(response.created_at).format("hh:mm A, D MMM YY") : 'N/A'));
+
+                        $(".no-of-sections").text(': ' + (response.sections.length ?? 'N/A'));
+                        $(".feedbacks").text(': ' + (response.feedbacks ?? 'N/A'));
+
+                        $(".average-time").text(': ' + (response.average_time ?? 'N/A'));
+
+                        $(".average-score").text(': ' + (response.average_score ?? 'N/A'));
+                        $(".exam-duration").text(': ' + (response.exam_duration ?? 'N/A'));
+
+                        $(".best-score").text(': ' + (response.best_score ?? 'N/A'));
+                        $(".best-time").text(': ' + (response.best_time ?? 'N/A'));
+
+                        $(".total-apperance").text(': ' + (response.total_appearance ?? 'N/A'));
+                        $(".total-completion").text(': ' + (response.total_completion ?? 'N/A'));
+
+                        $(".last-updated-by").text(': ' + (response.updated_by && response.updated_by.full_name ? response.updated_by.full_name : 'N/A'));
+                        $(".last-updated-on").text(': ' + (response.updated_at ? moment(response.updated_at).format("hh:mm A, D MMM YY") : 'N/A'));
+
+
+                        if (response.sections.length == 0) {
+                            $("#section-details").html('<p>No exam details found.</p>');
+                            $("#question-details").html('<p>No data found.</p>');
+                            $("#all-appearances").html('<p>No data found.</p>');
+                        }else{
+                            let totalQuestion = 0;
+                            $("#section-details").html('');
+                            $.each(response.sections, function (indexInArray, valueOfElement) {
+                                console.log(valueOfElement);
+                                totalQuestion += valueOfElement.num_of_question;
+
+                                $("#section-details").append(`
+                                <tr class="custom-row">
+                                    <td>
+                                        <b>${valueOfElement.title}</b>
+                                    </td>
+                                    <td>${valueOfElement.section_type}</td>
+                                    <td>${valueOfElement.duration}</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                </tr>
+                                `);
+                            });
+
+                            $(".no-of-question").text(': ' + (totalQuestion ?? 'N/A'));
+
+
+                            $("#question-details").html('');
+                            $.each(response.questions, function (indexInArray, valueOfElement) {
+                                console.log(valueOfElement);
+
+                                $("#question-details").append(`
+                                <tr class="custom-row">
+                                    <td>
+                                        <b>${valueOfElement.question_text}</b>
+                                    </td>
+                                    <td>${valueOfElement.difficulty}</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                </tr>
+                                `);
+                            });
+                        }
+
+
+                        // Modal show
+                        $("#detailModalCenter").modal("show");
+                    },
+                    error: function () {
+                        alert("Failed to fetch question details.");
+                    },
+                });
+            }
+        </script>
+
+        <!-- Resources -->
+        <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+        <!-- Chart code -->
+        <script>
+            am5.ready(function() {
+
+
+            // Create root element
+            // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+            var root = am5.Root.new("chartdiv");
+
+
+            // Set themes
+            // https://www.amcharts.com/docs/v5/concepts/themes/
+            root.setThemes([
+              am5themes_Animated.new(root)
+            ]);
+
+
+            // Create chart
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/
+            var chart = root.container.children.push(am5xy.XYChart.new(root, {
+              panX: false,
+              panY: false,
+              paddingLeft: 0,
+              wheelX: "panX",
+              wheelY: "zoomX",
+              layout: root.verticalLayout
+            }));
+
+
+            // Add legend
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+            var legend = chart.children.push(
+              am5.Legend.new(root, {
+                centerX: am5.p50,
+                x: am5.p50
+              })
+            );
+
+            var data = [{
+              "year": "Whole Exam",
+              "correct": 2.5,
+              "wrong": 2.5,
+              "excludeUnfinishedAttempts": 2.1
+            }, {
+              "year": "Section 1",
+              "correct": 2.6,
+              "wrong": 2.7,
+              "excludeUnfinishedAttempts": 2.2
+            }, {
+              "year": "Section 2",
+              "correct": 2.8,
+              "wrong": 2.9,
+              "excludeUnfinishedAttempts": 2.4
+            }]
+
+
+            // Create axes
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+            var xRenderer = am5xy.AxisRendererX.new(root, {
+              cellStartLocation: 0.1,
+              cellEndLocation: 0.9,
+              minorGridEnabled: true
+            })
+
+            var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+              categoryField: "year",
+              renderer: xRenderer,
+              tooltip: am5.Tooltip.new(root, {})
+            }));
+
+            xRenderer.grid.template.setAll({
+              location: 1
+            })
+
+            xAxis.data.setAll(data);
+
+            var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+              renderer: am5xy.AxisRendererY.new(root, {
+                strokeOpacity: 0.1
+              })
+            }));
+
+
+            // Add series
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+            function makeSeries(name, fieldName) {
+              var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                name: name,
+                xAxis: xAxis,
+                yAxis: yAxis,
+                valueYField: fieldName,
+                categoryXField: "year"
+              }));
+
+              series.columns.template.setAll({
+                tooltipText: "{name}, {categoryX}:{valueY}",
+                width: am5.percent(90),
+                tooltipY: 0,
+                strokeOpacity: 0
+              });
+
+              series.data.setAll(data);
+
+              // Make stuff animate on load
+              // https://www.amcharts.com/docs/v5/concepts/animations/
+              series.appear();
+
+              series.bullets.push(function () {
+                return am5.Bullet.new(root, {
+                  locationY: 0,
+                  sprite: am5.Label.new(root, {
+                    text: "{valueY}",
+                    fill: root.interfaceColors.get("alternativeText"),
+                    centerY: 0,
+                    centerX: am5.p50,
+                    populateText: true
+                  })
+                });
+              });
+
+              legend.data.push(series);
+            }
+
+            makeSeries("Correct", "correct");
+            makeSeries("Wrong", "wrong");
+            makeSeries("Exclude Unfinished Attempts", "excludeUnfinishedAttempts");
+
+
+            // Make stuff animate on load
+            // https://www.amcharts.com/docs/v5/concepts/animations/
+            chart.appear(1000, 100);
+
+            }); // end am5.ready()
+        </script>
+
+        <!-- Resources -->
+        <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Responsive.js"></script>
+
+        <!-- Chart code -->
+        <script>
+            am5.ready(function() {
+
+            // Create root element
+            // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+            var root = am5.Root.new("areaChartdiv");
+
+            const myTheme = am5.Theme.new(root);
+
+            myTheme.rule("AxisLabel", ["minor"]).setAll({
+            dy:1
+            });
+
+            myTheme.rule("AxisLabel").setAll({
+            fontSize:"0.9em"
+            });
+
+
+            // Set themes
+            // https://www.amcharts.com/docs/v5/concepts/themes/
+            root.setThemes([
+            am5themes_Animated.new(root),
+            myTheme,
+            am5themes_Responsive.new(root)
+            ]);
+
+
+            // Create chart
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/
+            var chart = root.container.children.push(am5xy.XYChart.new(root, {
+            wheelX: "panX",
+            wheelY: "zoomX",
+            pinchZoomX: true,
+            paddingLeft: 0
+            }));
+
+
+            // Add cursor
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+            var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+            behavior: "none"
+            }));
+            cursor.lineY.set("visible", false);
+
+
+            // Generate random data
+            var date = new Date();
+            date.setHours(0, 0, 0, 0);
+            var value = 100;
+
+            function generateData() {
+            value = Math.round((Math.random() * 10 - 5) + value);
+            am5.time.add(date, "day", 1);
+            return {
+                date: date.getTime(),
+                value: value
+            };
+            }
+
+            function generateDatas(count) {
+            var data = [];
+            for (var i = 0; i < count; ++i) {
+                data.push(generateData());
+            }
+            return data;
+            }
+
+
+            // Create axes
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+            var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
+            maxDeviation: 0.2,
+            baseInterval: {
+                timeUnit: "day",
+                count: 1
+            },
+            renderer: am5xy.AxisRendererX.new(root, {
+                minorGridEnabled: true,
+                minorLabelsEnabled: true
+            }),
+            tooltip: am5.Tooltip.new(root, {})
+            }));
+
+            xAxis.set("minorDateFormats", {
+            "day":"dd",
+            "month":"MMM"
+            });
+
+            var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            renderer: am5xy.AxisRendererY.new(root, {
+                pan: "zoom"
+            })
+            }));
+
+
+            // Add series
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+            var series = chart.series.push(am5xy.LineSeries.new(root, {
+            name: "Series",
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: "value",
+            valueXField: "date",
+            tooltip: am5.Tooltip.new(root, {
+                labelText: "{valueY}"
+            })
+            }));
+
+            series.bullets.push(function() {
+            var graphics = am5.Circle.new(root, {
+                radius: 4,
+                interactive: true,
+                cursorOverStyle: "ns-resize",
+                stroke: series.get("stroke"),
+                fill: am5.color(0xffffff)
+            });
+
+            return am5.Bullet.new(root, {
+                sprite: graphics
+            });
+            });
+
+            // Add scrollbar
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+            chart.set("scrollbarX", am5.Scrollbar.new(root, {
+            orientation: "horizontal"
+            }));
+
+            // manipulating with mouse code
+            var isDown = false;
+
+            // register down
+            chart.plotContainer.events.on("pointerdown", function() {
+            isDown = true;
+            })
+            // register up
+            chart.plotContainer.events.on("globalpointerup", function() {
+            isDown = false;
+            })
+
+            chart.plotContainer.events.on("globalpointermove", function(e) {
+            // if pointer is down
+            if (isDown) {
+                // get tooltip data item
+                var tooltipDataItem = series.get("tooltipDataItem");
+                if (tooltipDataItem) {
+                if (e.originalEvent) {
+
+                    var position = yAxis.coordinateToPosition(chart.plotContainer.toLocal(e.point).y);
+                    var value = yAxis.positionToValue(position);
+                    // need to set bot working and original value
+                    tooltipDataItem.set("valueY", value);
+                    tooltipDataItem.set("valueYWorking", value);
+                }
+                }
+            }
+            })
+
+            chart.plotContainer.children.push(am5.Label.new(root, {
+            x: am5.p100,
+            centerX: am5.p100,
+            text: "Click and move mouse anywhere on plot area to change the graph"
+            }))
+
+            // Set data
+            var data = generateDatas(40);
+            series.data.setAll(data);
+
+
+            // Make stuff animate on load
+            // https://www.amcharts.com/docs/v5/concepts/animations/
+            series.appear(1000);
+            chart.appear(1000, 100);
+
+            }); // end am5.ready()
         </script>
     @endpush
 </x-backend.layouts.master>
