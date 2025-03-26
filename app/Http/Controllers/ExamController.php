@@ -39,4 +39,22 @@ class ExamController extends Controller
         // Pass data to the Blade view
         return view('backend.exams.create', compact('exam'));
     }
+
+    public function edit($id)
+    {
+        // Fetch exam data from the database
+        $exam = Exam::with([
+            'sections' => function ($query) {
+                $query->with('questions');
+            }
+        ])->find($id);
+
+        // dd($exam);
+        if (!$exam) {
+            return abort(404, "Exam not found");
+        }
+
+        // Pass data to the Blade view
+        return view('backend.exams.edit', compact('exam'));
+    }
 }

@@ -41,7 +41,7 @@
                             style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img
                                 src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
 
-                        <div class="form-group mb-0">
+                        {{-- <div class="form-group mb-0">
                             <select class="form-control select-questions multiselect" multiple="multiple" data-fouc>
                                 <option value="All">All</option>
                                 <option value="Unread">Unread</option>
@@ -52,7 +52,7 @@
                                 <option value="Latest">Latest</option>
                                 <option value="Oldest">Oldest</option>
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="card-body p-0 m-0 table-responsive">
@@ -1616,7 +1616,7 @@
                     $('.step-circle').removeClass('active').first().addClass('active'); // Reset progress
                     $('.question-modal-heading').text('Create New Question');
                     $('#questionId').val(null);
-                    
+
                     let questionId = $(this).data('id');
                     let dynamicModalId = $('#questionModal').attr('dynamic-id', 1);
                     if (dynamicModalId != questionId) {
@@ -1816,12 +1816,13 @@
 
                 showStep(currentStep);
 
-
                 //store and edit section
+                $(document).on('click', '.save-question', store);
+
+                // start datatable code
                 let currentPage = 1;
                 let perPage = $('#rowsPerPage').val();
 
-                $(document).on('click', '.save-question', store);
                 fetchQuestions(currentPage, perPage);
 
                 // Handle pagination clicks
@@ -1840,9 +1841,7 @@
                     fetchQuestions(1, perPage);
                 });
 
-                $('.search_input, .multiselect').on('input click', function() {
-                    fetchQuestions();
-                });
+                //end datatable code
 
                 $(document).on('change', '.toggle-status', updateState);
 
@@ -1850,6 +1849,8 @@
                     $(this).closest("tr").toggleClass("selected", this.checked);
                     updateActiveInactiveCount();
                 });
+
+                $(document).on('click', '.question-delete', destroy);
 
                 $("#selectAll").on("change", function() {
                     let isChecked = this.checked;
@@ -1859,6 +1860,10 @@
                 });
 
                 $(document).on('click', '.edit-btn', show);
+
+                $('.search_input, .multiselect').on('input click', function() {
+                    fetchQuestions();
+                });
 
                 let searchTimeout;
                 $('.search_input').on('input', function() {
@@ -1887,6 +1892,8 @@
                     // Fetch with reset filters
                     fetchQuestions(1, $('#rowsPerPage').val());
                 });
+
+                $(document).on("click", ".openDetailModal", detailModal);
 
             });
 
@@ -1973,8 +1980,8 @@
                 updateOptionContainerBorder();
             }
 
-             // Function to Add/Remove Border Dynamically
-             function updateOptionContainerBorder() {
+            // Function to Add/Remove Border Dynamically
+            function updateOptionContainerBorder() {
                 if ($('#option-container').children().length > 0) {
                     $('#option-container').addClass('border-left');
                 } else {
@@ -2087,7 +2094,7 @@
                 });
             }
 
-            const store = (e) => {
+            function store(e){
                 e.preventDefault();
 
                 // Get the submit button
@@ -2213,6 +2220,7 @@
                 return options;
             }
 
+            // start datatable code
             // get all questions
             function fetchQuestions(page = 1, perPage = 10) {
                 let filters = {
@@ -2237,12 +2245,28 @@
                     data: filters,
                     success: function(response) {
 
+                        let questionList = $('#questionList');
+                        let questionNullList = $('#questionNullList');
+                        let tableBody = $("#question-table-body");
+
                         if (response.data.length === 0) {
-                            document.getElementById('questionNullList').classList.remove('d-none');
-                            document.getElementById('questionList').classList.add('d-none');
+                            // console.log(Object.values(filters));
+
+                            if (page === 1 && Object.values(filters).every(val => val === '' || (Array.isArray(val) && val.length === 0))) {
+                                // If no data exists in API (no filters applied)
+                                questionNullList.removeClass('d-none');
+                                questionList.addClass('d-none');
+                            } else {
+                                // Filters applied but no match
+                                questionNullList.addClass('d-none');
+                                questionList.removeClass('d-none');
+                                tableBody.html(""); // Keep table visible but empty body
+                            }
                         } else {
-                            document.getElementById('questionNullList').classList.add('d-none');
-                            document.getElementById('questionList').classList.remove('d-none');
+                            // Data exists, show table
+                            questionNullList.addClass('d-none');
+                            questionList.removeClass('d-none');
+
                             let rows = '';
                             $.each(response.data, function(index, question) {
                                 let difficultyColor = getDifficultyColor(question.difficulty);
@@ -2269,7 +2293,7 @@
                                     </td>
                                 </tr>`;
                             });
-                            $("#question-table-body").html(rows);
+                            tableBody.html(rows);
                             updatePagination(response, page);
                         }
 
@@ -2278,12 +2302,6 @@
                         alert("Error fetching questions.");
                     }
                 });
-            }
-
-            function formatDate(dateString) {
-                let date = new Date(dateString);
-                let options = { day: '2-digit', month: 'short', year: 'numeric' };
-                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
             }
 
             function updatePagination(response, currentPage) {
@@ -2329,50 +2347,13 @@
 
                 $('#pagination-links').html(paginationHtml);
             }
+            // end datatable code
 
-            function getSelectedQuestions() {
-                return $(".row-checkbox:checked").map(function () {
-                    return $(this).val();
-                }).get();
+            function formatDate(dateString) {
+                let date = new Date(dateString);
+                let options = { day: '2-digit', month: 'short', year: 'numeric' };
+                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
             }
-
-            $(".question-delete").click(function () {
-                let selectedQuestions = getSelectedQuestions();
-                if (selectedQuestions.length === 0) {
-                    Swal.fire("Warning", "Please select at least one question.", "warning");
-                    return;
-                }
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "/api/questions-delete",
-                            type: "POST",
-                            data: {
-                                questions: selectedQuestions,
-                                _token: "{{ csrf_token() }}"
-                            },
-                            success: function (response) {
-                                Swal.fire("Deleted!", "Questions deleted successfully.", "success");
-                                fetchQuestions(1);
-                                $('#active-count').text('')
-                                $('#inactive-count').text('')
-                            },
-                            error: function () {
-                                Swal.fire("Error", "Failed to delete questions.", "error");
-                            }
-                        });
-                    }
-                });
-            });
 
             function getDifficultyColor(difficulty) {
                 switch (difficulty.toLowerCase()) {
@@ -2415,6 +2396,50 @@
                     error: function() {
                         Swal.fire("Error", "Something went wrong!", "error");
                         checkbox.prop('checked', !checkbox.is(':checked'));
+                    }
+                });
+            }
+
+            function getSelectedQuestions() {
+                return $(".row-checkbox:checked").map(function () {
+                    return $(this).val();
+                }).get();
+            }
+
+            function destroy() {
+                let selectedQuestions = getSelectedQuestions();
+                if (selectedQuestions.length === 0) {
+                    Swal.fire("Warning", "Please select at least one question.", "warning");
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/api/questions-delete",
+                            type: "POST",
+                            data: {
+                                questions: selectedQuestions,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function (response) {
+                                Swal.fire("Deleted!", "Questions deleted successfully.", "success");
+                                fetchQuestions(1);
+                                $('#active-count').text('')
+                                $('#inactive-count').text('')
+                            },
+                            error: function () {
+                                Swal.fire("Error", "Failed to delete questions.", "error");
+                            }
+                        });
                     }
                 });
             }
@@ -2563,7 +2588,7 @@
                 });
             }
 
-            $(document).on("click", ".openDetailModal", function () {
+            function detailModal() {
                 var questionid = $(this).data("id"); // Button er data-id theke Student ID pabo
 
                 $.ajax({
@@ -2671,7 +2696,7 @@
                         alert("Failed to fetch question details.");
                     },
                 });
-            });
+            }
         </script>
 
         <!-- Resources -->

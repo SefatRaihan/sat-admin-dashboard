@@ -19,7 +19,7 @@ class ExamSectionController extends Controller
     public function getQuestionsWithExamSection(Request $request)
     {
         $query = ExamQuestion::latest()->with('createdBy');
-    
+
         // Search filter
         if ($request->filled('search')) {
             $search = $request->search;
@@ -29,7 +29,7 @@ class ExamSectionController extends Controller
                   ->orWhere('question_text', 'like', "%{$search}%");
             });
         }
-    
+
         // Date range filter
         if ($request->filled('crated_start_at') && $request->filled('crated_end_at')) {
             $query->whereBetween('created_at', [
@@ -37,7 +37,7 @@ class ExamSectionController extends Controller
                 $request->crated_end_at
             ]);
         }
-    
+
         // Status filter
         if ($request->filled('status')) {
             switch ($request->status) {
@@ -50,36 +50,36 @@ class ExamSectionController extends Controller
                 // 'All' case doesn't need additional where clause
             }
         }
-    
+
         // Audience and Type filters
         if ($request->filled('audience')) {
             $query->where('audience', $request->audience);
         }
-    
+
         if ($request->filled('sat_type')) {
             $query->where('sat_type', $request->sat_type);
         }
-    
+
         if ($request->filled('sat_question_type')) {
             $query->where('sat_question_type', $request->sat_question_type);
         }
-    
+
         // Exam appearance filter
         if ($request->filled('exam_appearance')) {
             $query->whereIn('audience', $request->exam_appearance);
         }
-    
+
         // Difficulty filter
         if ($request->filled('difficulty')) {
             $difficulties = is_array($request->difficulty) ? $request->difficulty : [$request->difficulty];
             $query->whereIn('difficulty', $difficulties);
         }
-    
+
         // Created by filter
         if ($request->filled('created_by')) {
             $query->whereIn('created_by', $request->created_by);
         }
-    
+
         // Question type filter
         if ($request->filled('question_type')) {
             $query->where('question_type', $request->question_type);
@@ -90,7 +90,6 @@ class ExamSectionController extends Controller
         }
 
         $questions = $query->where('status', 'active')->get();
-        
         return response()->json(['code' => 200, 'data' => $questions]);
     }
 
@@ -109,7 +108,7 @@ class ExamSectionController extends Controller
     //     }
     //     return response()->json(['code' => 200, 'data' => $questions]);
     // }
-    
+
     /**
      * Assign a question to a section (Drag & Drop).
      */
@@ -172,7 +171,6 @@ class ExamSectionController extends Controller
 
     public function examSectionQuestion(Request $request)
     {
-        // dd($request->all());
         $validator = Validator::make($request->all(),[
             'exam_id'     => 'required|exists:exams,id',
             'section_id'  => 'required|exists:exam_sections,id',
@@ -185,12 +183,10 @@ class ExamSectionController extends Controller
         }
         DB::beginTransaction();
             $section = ExamSection::find($request->section_id);
-            $section->questions()->syncWithoutDetaching($request->questions);
+            $section->questions()->sync($request->questions);
 
             $exam = Exam::find($request->exam_id);
             $exam->questions()->syncWithoutDetaching($request->questions);
-            
-
 
         DB::commit();
 

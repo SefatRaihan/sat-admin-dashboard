@@ -67,7 +67,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/users-pdf', [UserController::class, 'pdf'])->name('users.pdf');
     Route::resource('generals', GeneralController::class);
     Route::resource('question', QuestionController::class);
-    
+
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification.index');
     Route::get('/notification/create', [NotificationController::class, 'create'])->name('notification.create');
     Route::post('/notification/send', [NotificationController::class, 'sendNotification'])->name('notification.send');
@@ -79,6 +79,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::resource('students', StudentController::class);
 
     Route::resource('exams', ExamController::class);
+    Route::get('exams/{id}/edit', [ExamController::class, 'edit'])->name('exam.edit');
 
     Route::get('/mark-as-read/{id}', function ($id) {
         $notification = auth()->user()->notifications()->find($id);
@@ -87,7 +88,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
         }
         return redirect()->back();
     })->name('markAsRead');
-    
+
 });
 
 
