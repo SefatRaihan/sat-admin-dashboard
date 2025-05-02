@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ExamSectionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
+use App\Http\Controllers\RegistrationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,5 +97,7 @@ Route::group([ 'as' => 'api'], function () {
     Route::post('/exam-delete', [ExamController::class, 'delete']);
     Route::post('/exams/{id}/restore', [ExamController::class, 'restore']);
     Route::patch('/exams/{id}/update-status', [ExamController::class, 'toggleStatus']);
+
+    Route::post('/registrations', [RegistrationController::class, 'store']);
 
 });
