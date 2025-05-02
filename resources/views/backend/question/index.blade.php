@@ -19,7 +19,7 @@
     </x-backend.layouts.partials.blocks.contentwrapper>
 
     <div class="d-none" id="questionNullList">
-        <x-backend.layouts.partials.blocks.empty-state 
+        <x-backend.layouts.partials.blocks.empty-state
             title="You have not created any Question yet"
             message="Let’s create a new question"
             buttonText="Add Question"
@@ -41,7 +41,7 @@
                             style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img
                                 src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
 
-                        <div class="form-group mb-0">
+                        {{-- <div class="form-group mb-0">
                             <select class="form-control select-questions multiselect" multiple="multiple" data-fouc>
                                 <option value="All">All</option>
                                 <option value="Unread">Unread</option>
@@ -52,7 +52,7 @@
                                 <option value="Latest">Latest</option>
                                 <option value="Oldest">Oldest</option>
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="card-body p-0 m-0 table-responsive">
@@ -562,7 +562,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="modal-footer d-flex justify-content-between border-top pt-3">
                         <button type="button" class="btn show-edit-btn"
@@ -1589,7 +1589,7 @@
                     } else {
                         row.css('background-color', ''); // Reset background color
                     }
-                    
+
                     $(this).closest("tr").toggleClass("selected", this.checked);
                     toggleDeleteButton();
                 });
@@ -1616,6 +1616,36 @@
                     $('.step-circle').removeClass('active').first().addClass('active'); // Reset progress
                     $('.question-modal-heading').text('Create New Question');
                     $('#questionId').val(null);
+
+                    let questionId = $(this).data('id');
+                    let dynamicModalId = $('#questionModal').attr('dynamic-id', 1);
+                    if (dynamicModalId != questionId) {
+                        if (currentStep > 1) {
+                            let stepIndex = currentStep;
+                            let stepBackInterval = setInterval(function() {
+                                if (stepIndex > 1) {
+                                    stepIndex--;
+                                    showStep(stepIndex);
+                                } else {
+                                    clearInterval(stepBackInterval);
+                                    currentStep = 1; // Ensure currentStep is set to 1 after loop
+                                    showStep(currentStep); // Show step 1
+                                    console.log('Current Step After Reset:', currentStep);
+                                }
+                            }, 5);
+                        }
+
+                        if (currentStep === 1) {
+                            $(".cancel").removeClass("d-none"); // Show "Cancel"
+                            $(".prev-step").addClass("d-none"); // Hide "Back"
+                        } else {
+                            $(".cancel").addClass("d-none"); // Hide "Cancel"
+                            $(".prev-step").removeClass("d-none"); // Show "Back"
+                        }
+
+                        $('#questionModal').attr('dynamic-id', questionId)
+                        resetModalData();
+                    }
                 });
             });
         </script>
@@ -1734,7 +1764,7 @@
             let optionCount = 1;
             const totalSteps = $(".step").length;
 
-            $('.show-edit-btn').click(function (e) { 
+            $('.show-edit-btn').click(function (e) {
                 e.preventDefault();
                 $('.show-modal-close').trigger('click');
             });
@@ -1786,12 +1816,13 @@
 
                 showStep(currentStep);
 
-
                 //store and edit section
+                $(document).on('click', '.save-question', store);
+
+                // start datatable code
                 let currentPage = 1;
                 let perPage = $('#rowsPerPage').val();
 
-                $(document).on('click', '.save-question', store);
                 fetchQuestions(currentPage, perPage);
 
                 // Handle pagination clicks
@@ -1810,9 +1841,7 @@
                     fetchQuestions(1, perPage);
                 });
 
-                $('.search_input, .multiselect').on('input click', function() {
-                    fetchQuestions();
-                });
+                //end datatable code
 
                 $(document).on('change', '.toggle-status', updateState);
 
@@ -1820,6 +1849,8 @@
                     $(this).closest("tr").toggleClass("selected", this.checked);
                     updateActiveInactiveCount();
                 });
+
+                $(document).on('click', '.question-delete', destroy);
 
                 $("#selectAll").on("change", function() {
                     let isChecked = this.checked;
@@ -1829,6 +1860,10 @@
                 });
 
                 $(document).on('click', '.edit-btn', show);
+
+                $('.search_input, .multiselect').on('input click', function() {
+                    fetchQuestions();
+                });
 
                 let searchTimeout;
                 $('.search_input').on('input', function() {
@@ -1853,24 +1888,13 @@
                     $('.filter-group input:checkbox').prop('checked', false);
                     $('.custom-checkbox input:checkbox').prop('checked', false);
                     $('.multiselect').val([]).trigger('change');
-                    
+
                     // Fetch with reset filters
                     fetchQuestions(1, $('#rowsPerPage').val());
                 });
 
-                // $(document).on('click', '#questionModal' , function() {
-                //     // Reset radio buttons and checkboxes (but keep default values)
-                //     $("input[name='audience']").prop('checked', false);  
-                //     $("input[name='subjects']").prop('checked', false);  
-                //     $("input[name='question_type']").prop('checked', false); 
+                $(document).on("click", ".openDetailModal", detailModal);
 
-                //     // Hide SAT sections initially
-                //     $('#sat_type_1, #sat_type_2').addClass('d-none');
-
-                //     // Clear options container
-                //     $('#option-container').html('');
-                //     $('#questionModal').modal('show');
-                // });
             });
 
             function updateButtons() {
@@ -1892,7 +1916,7 @@
                     $(".save-question").addClass("d-none"); // Hide "Save" before last step
                 }
             }
-            
+
             function showStep(step) {
 
                 $(".step").addClass("d-none");
@@ -1931,7 +1955,7 @@
                 }
             }
 
-            function addOption() {  
+            function addOption() {
                 optionCount++;
                 let newOptionId = `option-${optionCount}`;
 
@@ -1956,8 +1980,8 @@
                 updateOptionContainerBorder();
             }
 
-             // Function to Add/Remove Border Dynamically
-             function updateOptionContainerBorder() {
+            // Function to Add/Remove Border Dynamically
+            function updateOptionContainerBorder() {
                 if ($('#option-container').children().length > 0) {
                     $('#option-container').addClass('border-left');
                 } else {
@@ -1987,13 +2011,13 @@
 
                 let correctAnswer = $('#questionCorrectAnswer').val(); // Get the correct answer from the hidden input
                 console.log(correctAnswer);
-                
+
 
                 $("#option-container .option-block .parent-editor").each(function(index) {
                     let optionText = $(this).find(".ql-editor").html(); // Get raw HTML content
                     let optionPlainText = $(this).find(".ql-editor").text();
                     let isCorrect = (optionPlainText == correctAnswer); // Compare with correct answer
-                    
+
                     optionsHtml += `
                         <div class="form-check col-md-6 row" style="margin-left:3px">
                             <label class="radio-container col-md-12" style="padding-top:2px" for="option-${index}">
@@ -2070,12 +2094,12 @@
                 });
             }
 
-            const store = (e) => {
+            function store(e){
                 e.preventDefault();
 
                 // Get the submit button
                 const submitButton = $('button[type="submit"]'); // Adjust selector based on your HTML
-                
+
                 // Change button text to "Processing" and disable it
                 submitButton.text('Processing').prop('disabled', true);
 
@@ -2131,7 +2155,6 @@
                                             clearInterval(stepBackInterval);
                                             currentStep = 1;
                                             showStep(currentStep);
-                                            console.log('Current Step After Reset:', currentStep);
                                         }
                                     }, 5);
                                 }
@@ -2156,7 +2179,7 @@
                     },
                     error: function(error) {
                         console.log(error.responseJSON.errors);
-                        
+
                         let errors = error.responseJSON.errors;
                         let errorMessage = "";
 
@@ -2178,7 +2201,7 @@
                         });
 
                         checkbox.prop('checked', !checkbox.is(':checked'));
-                        
+
                         // Reset button text and enable it on error
                         submitButton.text('Save Question').prop('disabled', false);
                     }
@@ -2197,6 +2220,7 @@
                 return options;
             }
 
+            // start datatable code
             // get all questions
             function fetchQuestions(page = 1, perPage = 10) {
                 let filters = {
@@ -2221,17 +2245,33 @@
                     data: filters,
                     success: function(response) {
 
+                        let questionList = $('#questionList');
+                        let questionNullList = $('#questionNullList');
+                        let tableBody = $("#question-table-body");
+
                         if (response.data.length === 0) {
-                            document.getElementById('questionNullList').classList.remove('d-none');
-                            document.getElementById('questionList').classList.add('d-none');
+                            // console.log(Object.values(filters));
+
+                            if (page === 1 && Object.values(filters).every(val => val === '' || (Array.isArray(val) && val.length === 0))) {
+                                // If no data exists in API (no filters applied)
+                                questionNullList.removeClass('d-none');
+                                questionList.addClass('d-none');
+                            } else {
+                                // Filters applied but no match
+                                questionNullList.addClass('d-none');
+                                questionList.removeClass('d-none');
+                                tableBody.html(""); // Keep table visible but empty body
+                            }
                         } else {
-                            document.getElementById('questionNullList').classList.add('d-none');
-                            document.getElementById('questionList').classList.remove('d-none');
+                            // Data exists, show table
+                            questionNullList.addClass('d-none');
+                            questionList.removeClass('d-none');
+
                             let rows = '';
                             $.each(response.data, function(index, question) {
                                 let difficultyColor = getDifficultyColor(question.difficulty);
                                 let statusChecked = question.status ? "checked" : "";
-    
+
                                 // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
                                 rows += `<tr>
                                     <td><input type="checkbox" class="row-checkbox question-row" value="${question.uuid}"></td>
@@ -2253,21 +2293,15 @@
                                     </td>
                                 </tr>`;
                             });
-                            $("#question-table-body").html(rows);
+                            tableBody.html(rows);
                             updatePagination(response, page);
                         }
-                        
+
                     },
                     error: function() {
                         alert("Error fetching questions.");
                     }
                 });
-            }
-
-            function formatDate(dateString) {
-                let date = new Date(dateString);
-                let options = { day: '2-digit', month: 'short', year: 'numeric' };
-                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
             }
 
             function updatePagination(response, currentPage) {
@@ -2313,48 +2347,13 @@
 
                 $('#pagination-links').html(paginationHtml);
             }
+            // end datatable code
 
-            function getSelectedQuestions() {
-                return $(".row-checkbox:checked").map(function () {
-                    return $(this).val();
-                }).get();
+            function formatDate(dateString) {
+                let date = new Date(dateString);
+                let options = { day: '2-digit', month: 'short', year: 'numeric' };
+                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
             }
-
-            $(".question-delete").click(function () {
-                let selectedQuestions = getSelectedQuestions();
-                if (selectedQuestions.length === 0) {
-                    Swal.fire("Warning", "Please select at least one question.", "warning");
-                    return;
-                }
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "/api/questions-delete",
-                            type: "POST",
-                            data: {
-                                questions: selectedQuestions,
-                                _token: "{{ csrf_token() }}"
-                            },
-                            success: function (response) {
-                                Swal.fire("Deleted!", "Questions deleted successfully.", "success");
-                                fetchQuestions(1);
-                            },
-                            error: function () {
-                                Swal.fire("Error", "Failed to delete questions.", "error");
-                            }
-                        });
-                    }
-                });
-            });
 
             function getDifficultyColor(difficulty) {
                 switch (difficulty.toLowerCase()) {
@@ -2401,6 +2400,50 @@
                 });
             }
 
+            function getSelectedQuestions() {
+                return $(".row-checkbox:checked").map(function () {
+                    return $(this).val();
+                }).get();
+            }
+
+            function destroy() {
+                let selectedQuestions = getSelectedQuestions();
+                if (selectedQuestions.length === 0) {
+                    Swal.fire("Warning", "Please select at least one question.", "warning");
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/api/questions-delete",
+                            type: "POST",
+                            data: {
+                                questions: selectedQuestions,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function (response) {
+                                Swal.fire("Deleted!", "Questions deleted successfully.", "success");
+                                fetchQuestions(1);
+                                $('#active-count').text('')
+                                $('#inactive-count').text('')
+                            },
+                            error: function () {
+                                Swal.fire("Error", "Failed to delete questions.", "error");
+                            }
+                        });
+                    }
+                });
+            }
+
             function updateActiveInactiveCount() {
                 let selectedRows = $(".row-checkbox:checked").closest("tr");
 
@@ -2441,7 +2484,7 @@
                 $('#sat_type_2').addClass('d-none');
                 $('#sat_type_1').find('input').prop('checked', false);
                 $('#sat_type_2').find('input').prop('checked', false);
-                
+
             }
 
             function show() {
@@ -2532,7 +2575,7 @@
                         initializeQuill(`#option-editor-${index}`);
                     });
 
-                    
+
                     $('#questionCorrectAnswer').val(response.correct_answer);
                     $('#questionId').val(response.id);
                     $('#questionModal').modal('show');
@@ -2545,7 +2588,7 @@
                 });
             }
 
-            $(document).on("click", ".openDetailModal", function () {
+            function detailModal() {
                 var questionid = $(this).data("id"); // Button er data-id theke Student ID pabo
 
                 $.ajax({
@@ -2557,7 +2600,7 @@
                         $("#question_description").html(response.question_description);
                         $("#question_text").html(response.question_text);
                         $("#explanation").html(response.explanation);
-                        
+
                         let options = JSON.parse(response.options);
                         $('#question-options').html('');
                         let optionsHtml = ``;
@@ -2578,7 +2621,7 @@
 
                             $('#question-options').append(newOptionHtml);
                         });
-                        
+
 
                         $(".audience").text(response.audience);
                         $(".question-type").text(response.sat_question_type);
@@ -2597,22 +2640,22 @@
                         );
                         $(".last-updated-on").text(moment(response.updated_at).format("hh:mm A, D MMM YY"));
                         console.log(response.exams.length);
-                        
+
                         if (response.exams.length == 0) {
                             $("#exam-details").html('<p>No exam details found.</p>');
                             $("#all-appearances").html('<p>No data found.</p>');
                         }else{
                             $("#exam-details").html('');
-                            $.each(response.exams, function (indexInArray, valueOfElement) { 
+                            $.each(response.exams, function (indexInArray, valueOfElement) {
                                 console.log(valueOfElement);
-                                
+
                                 $("#exam-details").append(`
                                 <tr class="custom-row">
                                     <td>
                                         <b>${valueOfElement.sections[0].audience}</b>
                                         <br>
                                         <p style="color:#475467; font-size:10px">${valueOfElement.sections[0].section_type}</P>
-                                        
+
                                     </td>
                                     <td>N/A</td>
                                     <td>N/A</td>
@@ -2624,16 +2667,16 @@
                             });
 
                             $("#all-appearances").html('');
-                            $.each(response.exams, function (indexInArray, valueOfElement) { 
+                            $.each(response.exams, function (indexInArray, valueOfElement) {
                                 console.log(valueOfElement);
-                                
+
                                 $("#all-appearances").append(`
                                 <tr class="custom-row">
                                     <td>
                                         <b>${valueOfElement.sections[0].audience}</b>
                                         <br>
                                         <p style="color:#475467; font-size:10px">${valueOfElement.sections[0].section_type}</P>
-                                        
+
                                     </td>
                                     <td>N/A</td>
                                     <td>N/A</td>
@@ -2645,7 +2688,7 @@
                             });
                         }
 
-                        
+
                         // Modal show
                         $("#detailModalCenter").modal("show");
                     },
@@ -2653,7 +2696,7 @@
                         alert("Failed to fetch question details.");
                     },
                 });
-            });
+            }
         </script>
 
         <!-- Resources -->
@@ -2740,7 +2783,7 @@
             // set value labels align to right
             legend.valueLabels.template.setAll({ textAlign: "right" })
             // set width and max width of labels
-            legend.labels.template.setAll({ 
+            legend.labels.template.setAll({
             maxWidth: 140,
             width: 140,
             oversizedBehavior: "wrap"
@@ -2905,7 +2948,7 @@
             chart.plotContainer.events.on("globalpointermove", function(e) {
             // if pointer is down
             if (isDown) {
-                // get tooltip data item 
+                // get tooltip data item
                 var tooltipDataItem = series.get("tooltipDataItem");
                 if (tooltipDataItem) {
                 if (e.originalEvent) {

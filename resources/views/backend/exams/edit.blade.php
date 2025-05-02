@@ -2,7 +2,7 @@
     <x-backend.layouts.partials.blocks.contentwrapper
         :headerTitle="'
             <a href=\'\roles\' class=\'text-dark\'>
-                <i class=\'fa-solid fa-angle-left mr-2\'></i> Create Exam : Add Question to Section <span class=\'section_order\'></span>
+                <i class=\'fa-solid fa-angle-left mr-2\'></i> Edit Exam : Add Question to Section <span class=\'section_order\'></span>
             </a>
 
             <div class=\'heading-summary\'>
@@ -65,11 +65,11 @@
                 <div class="exam-question-summary p-2" style="overflow-y: auto; height: calc(80vh - 60px);">
                     <div class="d-flex justify-content-between">
                         <p style="color: #333333; font-size:14px"><b>Total : <span class="exam-question-count">0</span>/<span class="section-total-question">20</span> </b></p>
-                        {{-- <div>
-                            @for ($i = 0; $i < $exam->section; $i++)
+                        <div>
+                            {{-- @for ($i = 0; $i < $exam->section; $i++)
                             <span class="badge badge-flat badge-pill border-secondary text-secondary-600"><span class="dot"></span> 0{{++$i}}</span>
-                            @endfor
-                        </div> --}}
+                            @endfor --}}
+                        </div>
                     </div>
                     <div id="exam-section" class="row exam-question-section" style="padding: 8px; height:100%"></div>
                 </div>
@@ -944,7 +944,7 @@
         <script>
             let exam =  @JSON($exam);
             let totalQuestion =  @JSON($exam->sections->sum('num_of_question'));
-            // console.log(exam);
+            console.log(exam);
             let sections = exam.sections; // Use sections directly from Blade
             let currentSectionIndex = 0
 
@@ -1105,6 +1105,7 @@
             });
 
 
+
             function getQuestionAndSection() {
                 if (currentSectionIndex >= sections.length) {
                     Swal.fire("Success", "All sections have been processed!", "success");
@@ -1120,6 +1121,45 @@
                 $('#total-question').text(totalQuestion + ' Questions')
                 $('#total-section').text(exam.section + ' Sections')
                 $('#total-time').text(formatDuration(exam.duration))
+
+                let existingQuestionIds = new Set();
+
+                currentSection.questions.forEach(element => {
+                    console.log(element, 'shows');
+                    existingQuestionIds.add(element.id);
+                    let difficultyColor = getDifficultyColor(element.difficulty);
+                    let html = `
+                                <div class="col-md-12 p-2 question-card" data-id="${element.id}" draggable="true" style="border-radius:8px; background-color:transparent !important">
+                                    <div class="card card-body m-0" style="border-left:3px solid ${difficultyColor}; background-color:#F2F4F7; border-radius:8px">
+                                        <input type="hidden" class="question-id" value="${element.id}">
+                                        <div class="question-card-header d-none">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <ul class="p-0" style="display: flex; color:#475467">
+                                                        <li style="list-style: none">${element.audience}</li>
+                                                        <li>${element.sat_question_type}</li>
+                                                        <li>Details</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="question-title">${element.question_title}</p>
+                                        <div class="question-card-footer d-none">
+                                            <ul class="p-0 m-0" style="display: flex; gap:20px; color:#475467">
+                                                <li style="list-style: none"><u>0 Exams</u></li>
+                                                <li>0%</li>
+                                                <li>0m 0s</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                    `;
+                    $('#exam-section').append(html);
+                });
+
+                $('.exam-question-count').text( currentSection.questions.length)
+
+
 
                 let filters = {
                     search: $('.search_input').val() || '', // Search input value, default to empty string if undefined
@@ -1146,10 +1186,12 @@
                     data: filters,
                     success: function (response) {
                         // console.log(response);
-
                         $('#question-container').html('');
                         $('#totalQuestion').text(response.data.length);
                         response.data.forEach(element => {
+                            if (existingQuestionIds.has(element.id)) {
+                                return; // Skip this question if it's already in #exam-section
+                            }
                             let difficultyColor = getDifficultyColor(element.difficulty);
                             let html = `
                                      <div class="col-md-4 p-2 question-card" data-id="${element.id}" draggable="true" style="border-radius:8px; background-color:transparent !important">

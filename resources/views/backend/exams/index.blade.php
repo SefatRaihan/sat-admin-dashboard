@@ -2,7 +2,7 @@
     @php
         $prependHtml = '
             <div class="d-flex align-items-center justify-content-center" style="margin-right: 10px">
-                <a href=\'/exams/create\' data-toggle=\'modal\' data-target=\'#examModal\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
+                <a data-toggle=\'modal\' data-target=\'#examModal\' class=\'create-button btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
                     <i class=\'fas fa-plus\' style=\'font-size: 12px; margin-right: 5px; margin-top: 5px;\'></i> Create Exam
                 </a>
             </div>
@@ -13,7 +13,7 @@
     </x-backend.layouts.partials.blocks.contentwrapper>
 
     <div class="d-none" id="examNullList">
-        <x-backend.layouts.partials.blocks.empty-state 
+        <x-backend.layouts.partials.blocks.empty-state
             title="You have not created any exams yet"
             message="Let’s add your first exam now"
             buttonText="Create Exam"
@@ -34,7 +34,7 @@
                         style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img
                             src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
 
-                    <div class="form-group mb-0">
+                    {{-- <div class="form-group mb-0">
                         <select class="form-control multiselect" multiple="multiple" data-fouc>
                             <option value="All">All</option>
                             <option value="Unread">Unread</option>
@@ -45,7 +45,7 @@
                             <option value="Latest">Latest</option>
                             <option value="Oldest">Oldest</option>
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="card-body p-0 m-0 table-responsive">
@@ -120,7 +120,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document" style="width:60%">
                 <div class="modal-content" style="border-radius: 24px; height:100%">
                     <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                        <h5 class="" id="exampleModalLongTitle"><b>Create an Exam</b></h5>
+                        <h5 class=""><b id="exampleModalLongTitle">Create an Exam</b></h5>
                         <p class="pb-2">Set a name and provide the exam parameters</p>
                     </div>
                     <div class="modal-body" style="height: 600px; overflow-y: scroll;">
@@ -138,7 +138,7 @@
                             <div class="row">
                                 <div class="col-md-6 row">
                                     <label class="radio-container mb-3 col-md-12">
-                                        <input class="sat_1" type="radio" name="audience" value="High School" checked> High School
+                                        <input class="sat_1" type="radio" name="audience" value="High School"> High School
                                     </label>
                                     <label class="radio-container mb-3 col-md-12">
                                         <input class="sat_1" type="radio" name="audience" value="Graduation"> Graduation
@@ -602,7 +602,29 @@
                     </div>
                     <div class="modal-footer border-top pt-3">
                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <a href="" class="btn save-exam" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Proceed to Add Exams</a>
+                        <a href="" class="btn save-exam d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Proceed to Add Exams</a>
+                        <a href="" class="btn edit-exam d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Proceed to Edit Exams</a>
+                    </div>
+                    {{-- edit confirmation modal --}}
+                    <div class="modal fade confirmModal" id="confirmationModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+                        <div class="modal-dialog" style="max-width: 400px;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalTitle">Read Before You Proceed</h5>
+                                    <button type="button" class="close p-0 m-0 confirmModalClose" id="closeConfirmModal" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Some of these changes may affect the existing sections of the exam.
+                                    The exam will be inactivated immediately for the time being.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" id="deleteBtn">Delete</button>
+                                    <button type="button" class="btn proceedBtn" id="proceedBtn" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">I Understand, Proceed</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1050,7 +1072,7 @@
                                 <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
                                     <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
                                         <p><b>Waiting for content</b></p>
-                                    </div>   
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="analytics" role="tabpanel" aria-labelledby="analytics-tab">
                                     <h4>Performance Comparison</h4>
@@ -1111,11 +1133,11 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="modal-footer d-flex justify-content-between border-top pt-3">
-                        <button type="button" class="btn show-edit-btn"
-                            style="border: 1px solid #D0D5DD; border-radius: 8px;">Edit Exam</button>
+                        <button type="button" class="btn show-edit-btn edit-btn"
+                            style="border: 1px solid #D0D5DD; border-radius: 8px;" data-toggle="modal" data-target="#examModal">Edit Exam</button>
                         <button type="button" class="btn btn-outline-dark show-modal-close"
                             style="background-color:#691D5E ;border-radius: 8px; color:#fff"
                             data-dismiss="modal">Close</button>
@@ -1891,7 +1913,51 @@
                 background-color: #6f42c1;
                 border-color: #6f42c1;
             }
-               
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 40px;
+                height: 22px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+                border-radius: 22px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 16px;
+                width: 16px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+            input:checked+.slider {
+                background-color: #22c55e;
+            }
+
+            input:checked+.slider:before {
+                transform: translateX(18px);
+            }
+
         </style>
     @endpush
 
@@ -1989,7 +2055,7 @@
                     } else {
                         row.css('background-color', ''); // Reset background color
                     }
-                    
+
                     $(this).closest("tr").toggleClass("selected", this.checked);
                     toggleDeleteButton();
                 });
@@ -2008,6 +2074,7 @@
         </script>
         <script>
             $(document).ready(function() {
+
                 $(".sat_2").change(function () {
                     $(".sat_type_2").removeClass("d-none");
                     $(".sat_type_1").addClass("d-none");
@@ -2021,9 +2088,11 @@
                 $(document).on('input change', '.no_of_exams, .duration', function() {
                     calculateTotalSectionValues();
                 });
+
                 $(document).on('change', "input[name='section']", section);
                 $(document).on('click', ".save-exam", store);
 
+                // start datatable
                 let currentPage = 1;
                 let perPage = $('#rowsPerPage').val();
                 fetchExams(currentPage, perPage);
@@ -2043,12 +2112,81 @@
                     perPage = $(this).val();
                     fetchExams(1, perPage);
                 });
+                //end datatable
 
                 $('.search_input, .multiselect').on('input click', function() {
                     fetchExams();
                 });
 
+                let searchTimeout;
+                $('.search_input').on('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        fetchExams(1, $('#rowsPerPage').val());
+                    }, 300); // 300ms debounce
+                });
+
+                // Apply filters button click
+                $('.apply-filter-btn').on('click', function() {
+                    fetchExams(1, $('#rowsPerPage').val());
+                });
+
+                // Reset filters button click
+                $('.reset-filter-btn').on('click', function() {
+                    // Reset all filter inputs
+                    $('.search_input').val('');
+                    $('input[name="crated_start_at"]').val('');
+                    $('input[name="crated_end_at"]').val('');
+                    $('input[name="status"][value="All"]').prop('checked', true);
+                    $('.filter-group input:checkbox').prop('checked', false);
+                    $('.custom-checkbox input:checkbox').prop('checked', false);
+                    $('.multiselect').val([]).trigger('change');
+
+                    // Fetch with reset filters
+                    fetchExams(1, $('#rowsPerPage').val());
+                });
+
+                $(document).on("change", ".row-checkbox", function() {
+                    $(this).closest("tr").toggleClass("selected", this.checked);
+                    updateActiveInactiveCount();
+                });
+
+                $("#selectAll").on("change", function() {
+                    let isChecked = this.checked;
+                    $(".row-checkbox").prop("checked", isChecked).closest("tr").toggleClass("selected",
+                        isChecked);
+                    updateActiveInactiveCount();
+                });
+
+                $(document).on('click', ".exam-delete", destroy);
+
                 $(document).on('change', '.toggle-status', updateState);
+
+                $(document).on('click', '.edit-btn', show);
+                $(document).on('click', '.create-button', function(){
+                    $('.save-exam').removeClass('d-none');
+                    $('.edit-exam').addClass('d-none');
+                    resetData()
+
+                });
+
+                // Open Confirmation Modal on "Edit Exam" Click
+                $('.edit-exam').on('click', function (event) {
+                    event.preventDefault();
+                    $('#confirmationModal').modal('show'); // Show Confirmation Modal
+                });
+
+                $(document).on('click', '#proceedBtn', function (event) {
+                    let examId = $(this).attr('data-exam-id');
+
+                    update(examId, event);
+                });
+
+                $(document).on("click", ".openDetailModal", openDetailModal);
+                $(document).on('click', '.edit-btn', function () {
+                    $('#detailModalCenter').modal('hide');
+                });
+
             });
 
             function section() {
@@ -2087,49 +2225,10 @@
             const store = (e) => {
                  e.preventDefault();
 
-                let formData = {
-                    title: $('#title').val(),
-                    audience: $('input[name="audience"]:checked').val(),
-                    section: parseInt($('input[name="section"]:checked').val()),
-                    section_details: [],
-                    total_questions: 0,
-                    total_duration: 0
-                };
-
-                let totalQuestions = 0;
-                let totalDuration = 0;
-
-                $('.section_part').each(function(index) {
-                    if ($(this).hasClass("d-none")) return; // Skip hidden sections
-
-                    const sectionIndex = index + 1;
-
-                    const $inputs = $(this).find('input');
-                    const no_of_questions = parseInt($inputs.filter('[name="no_of_questions"]').val()) || 0;
-                    const duration = parseInt($inputs.filter('[name="duration"]').val()) || 0;
-
-                    const sectionData = {
-                        section_type: $inputs.filter(`[name="sat_type_section_${sectionIndex}"]:checked`).val(),
-                        exam_name: $inputs.filter('[name="exam_name"]').val(),
-                        section_order: sectionIndex,
-                        no_of_questions,
-                        duration
-                    };
-
-                    formData.section_details.push(sectionData);
-                    totalQuestions += no_of_questions;
-                    totalDuration += duration;
-                });
-
-                formData.total_questions = totalQuestions;
-                formData.total_duration = totalDuration;
-
-                // console.log(formData);
-
                  $.ajax({
                      url: '/api/exams',
                      type: 'POST',
-                     data: formData,
+                     data: getFormData(),
                      headers: {
                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                      },
@@ -2145,7 +2244,7 @@
                      },
                     error: function(error) {
                         console.log(error.responseJSON.errors);
-                        
+
                         let errors = error.responseJSON.errors;
                         let errorMessage = "";
 
@@ -2167,7 +2266,7 @@
                         });
 
                         checkbox.prop('checked', !checkbox.is(':checked'));
-                        
+
                         // Reset button text and enable it on error
                         submitButton.text('Save Question').prop('disabled', false);
                     }
@@ -2175,35 +2274,7 @@
                 });
             }
 
-
-            let searchTimeout;
-            $('.search_input').on('input', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    fetchExams(1, $('#rowsPerPage').val());
-                }, 300); // 300ms debounce
-            });
-
-            // Apply filters button click
-            $('.apply-filter-btn').on('click', function() {
-                fetchExams(1, $('#rowsPerPage').val());
-            });
-
-            // Reset filters button click
-            $('.reset-filter-btn').on('click', function() {
-                // Reset all filter inputs
-                $('.search_input').val('');
-                $('input[name="crated_start_at"]').val('');
-                $('input[name="crated_end_at"]').val('');
-                $('input[name="status"][value="All"]').prop('checked', true);
-                $('.filter-group input:checkbox').prop('checked', false);
-                $('.custom-checkbox input:checkbox').prop('checked', false);
-                $('.multiselect').val([]).trigger('change');
-                
-                // Fetch with reset filters
-                fetchExams(1, $('#rowsPerPage').val());
-            });
-
+            //start datatable
             // get all exams
             function fetchExams(page = 1, perPage = 10) {
                 let filters = {
@@ -2227,14 +2298,25 @@
                     type: "GET",
                     data: filters,
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
 
+                        let examNullList = $('#examNullList');
+                        let examList = $('#examList');
+                        let tableBody = $("#exam-table-body");
                         if (response.data.length === 0) {
-                            document.getElementById('examNullList').classList.remove('d-none');
-                            document.getElementById('examList').classList.add('d-none');
+                            if (page === 1 && Object.values(filters).every(val => val === '' || (Array.isArray(val) && val.length === 0))) {
+                                // If no data exists in API (no filters applied)
+                                examNullList.removeClass('d-none');
+                                examList.addClass('d-none');
+                            } else {
+                                // Filters applied but no match
+                                examNullList.addClass('d-none');
+                                examList.removeClass('d-none');
+                                tableBody.html(""); // Keep table visible but empty body
+                            }
                         } else {
-                            document.getElementById('examNullList').classList.add('d-none');
-                            document.getElementById('examList').classList.remove('d-none');
+                            examNullList.addClass('d-none');
+                            examList.removeClass('d-none');
 
                             let rows = '';
                             $.each(response.data, function(index, exam) {
@@ -2263,7 +2345,7 @@
                                     </td>
                                 </tr>`;
                             });
-                            $("#exam-table-body").html(rows);
+                            tableBody.html(rows);
                             updatePagination(response, page);
                         }
                     },
@@ -2271,35 +2353,6 @@
                         alert("Error fetching exams.");
                     }
                 });
-            }
-
-            function formatDate(dateString) {
-                let date = new Date(dateString);
-                let options = { day: '2-digit', month: 'short', year: 'numeric' };
-                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
-            }
-
-            $(document).on("change", ".row-checkbox", function() {
-                $(this).closest("tr").toggleClass("selected", this.checked);
-                updateActiveInactiveCount();
-            });
-
-            $("#selectAll").on("change", function() {
-                let isChecked = this.checked;
-                $(".row-checkbox").prop("checked", isChecked).closest("tr").toggleClass("selected",
-                    isChecked);
-                updateActiveInactiveCount();
-            });
-
-            function updateActiveInactiveCount() {
-                let selectedRows = $(".row-checkbox:checked").closest("tr");
-
-                let activeCount = selectedRows.find(".toggle-status:checked").length;
-                let inactiveCount = selectedRows.length - activeCount;
-
-                // Update UI
-                $("#active-count").text(activeCount);
-                $("#inactive-count").text(inactiveCount);
             }
 
             function updatePagination(response, currentPage) {
@@ -2345,6 +2398,13 @@
 
                 $('#pagination-links').html(paginationHtml);
             }
+            //end datatable
+
+            function formatDate(dateString) {
+                let date = new Date(dateString);
+                let options = { day: '2-digit', month: 'short', year: 'numeric' };
+                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
+            }
 
             function getDifficultyColor(difficulty) {
                 switch (difficulty.toLowerCase()) {
@@ -2359,6 +2419,17 @@
                     default:
                         return "bg-secondary text-white";
                 }
+            }
+
+            function updateActiveInactiveCount() {
+                let selectedRows = $(".row-checkbox:checked").closest("tr");
+
+                let activeCount = selectedRows.find(".toggle-status:checked").length;
+                let inactiveCount = selectedRows.length - activeCount;
+
+                // Update UI
+                $("#active-count").text(activeCount);
+                $("#inactive-count").text(inactiveCount);
             }
 
             // Toggle status (on/off)
@@ -2391,13 +2462,7 @@
                 });
             }
 
-            function getSelectedExams() {
-                return $(".row-checkbox:checked").map(function () {
-                    return $(this).val();
-                }).get();
-            }
-
-            $(".exam-delete").click(function () {
+            function destroy() {
                 let selectedExams = getSelectedExams();
                 if (selectedExams.length === 0) {
                     Swal.fire("Warning", "Please select at least one exam.", "warning");
@@ -2431,17 +2496,169 @@
                         });
                     }
                 });
-            });
+            }
 
-            $(document).on("click", ".openDetailModal", function () {
-                var questionid = $(this).data("id"); // Button er data-id theke Student ID pabo
+            function getSelectedExams() {
+                return $(".row-checkbox:checked").map(function () {
+                    return $(this).val();
+                }).get();
+            }
+
+            function show() {
+                let examId = $(this).data('id');
+                $('.edit-exam').attr('data-id', examId);
+                $('#proceedBtn').attr('data-exam-id', examId);
+
+                $('.save-exam').addClass('d-none');
+                $('.edit-exam').removeClass('d-none');
+                resetData();
+                $.get(`/api/exams/${examId}`, function(response) {
+
+                    $('#exampleModalLongTitle').text('Edit Exam');
+
+                    // Set values in the modal
+                    $("input[name='audience'][value='" + response.sections[0].audience + "']").prop('checked', true).trigger('change');
+                    $("input[name='section'][value='" + response.section + "']").prop('checked', true).trigger('change');
+                    $('#title').val(response.title);
+
+                    $.each(response.sections, function (index, section) {
+                        let sectionDiv = $(`.section_div_${index + 1}`);
+
+                        if (sectionDiv.length) {
+                            sectionDiv.attr('section-id', section.id);
+                            // Set Section Name
+                            sectionDiv.find(`[name="exam_name"]`).val(section.title);
+
+                            // Set Number of Questions
+                            sectionDiv.find(`[name="no_of_questions"]`).val(section.num_of_question);
+
+                            // Set Duration
+                            sectionDiv.find(`[name="duration"]`).val(section.duration);
+
+                            // Select the correct radio button for Section Type
+                            sectionDiv.find(`[name="sat_type_section_${index+1}"][value="${section.section_type}"]`).prop("checked", true).trigger('change');
+                        }
+                    });
+                    calculateTotalSectionValues()
+                    $('#examModal').modal('show');
+
+                });
+            }
+
+            const update = (examId, e) => {
+                e.preventDefault();
+
+                // console.log('examid:', examId, getFormData());
 
                 $.ajax({
-                    url: `/api/exams/${questionid}`, // Backend route jekhane data fetch hobe
+                    url: `/api/exams/${examId}`,
+                    type: 'PATCH',
+                    data: getFormData(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire("Success", "Exam updated successfully!", "success").then(() => {
+                                window.location.href = response.redirect;
+                            });
+                        } else {
+                            Swal.fire("Error", "Failed to update the exam!", "error");
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error.responseJSON.errors);
+
+                        let errors = error.responseJSON.errors;
+                        let errorMessage = "";
+
+                        if (errors && typeof errors === 'object') {
+                            errorMessage = Object.keys(errors)
+                                .map(field => {
+                                    return `${field.replace('_', ' ')}: ${errors[field].join(', ')}`;
+                                })
+                                .join('\n');
+                        } else {
+                            errorMessage = "An unexpected error occurred.";
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            text: errorMessage,
+                            footer: 'Please correct the errors and try again.'
+                        });
+                    }
+                });
+            };
+
+            // Function to Get Form Data
+            function getFormData() {
+                let formData = {
+                    title: $('#title').val(),
+                    audience: $('input[name="audience"]:checked').val(),
+                    section: parseInt($('input[name="section"]:checked').val()) || null,
+                    section_details: [],
+                    total_questions: 0,
+                    total_duration: 0
+                };
+
+                let totalQuestions = 0, totalDuration = 0;
+
+                $('.section_part:not(.d-none)').each(function (index) {
+                    let $inputs = $(this).find('input');
+                    let no_of_questions = parseInt($inputs.filter('[name="no_of_questions"]').val()) || 0;
+                    let duration = parseInt($inputs.filter('[name="duration"]').val()) || 0;
+
+                    formData.section_details.push({
+                        section_type: $inputs.filter(`[name="sat_type_section_${index + 1}"]:checked`).val(),
+                        exam_name: $inputs.filter('[name="exam_name"]').val(),
+                        section_id: $(this).attr('section-id'),
+                        section_order: index + 1,
+                        no_of_questions,
+                        duration
+                    });
+
+                    totalQuestions += no_of_questions;
+                    totalDuration += duration;
+                });
+
+                formData.total_questions = totalQuestions;
+                formData.total_duration = totalDuration;
+
+                return formData;
+            }
+
+            function resetData(){
+                // Reset modal title
+                $('#exampleModalLongTitle').text('Create Exam');
+
+                // Clear all input fields
+                $('#examModal input[type="text"]').val('');
+                $('input[name="audience"]').prop('checked', false);
+                $('input[name="section"]').prop('checked', false);
+                $('.section_part input[type="radio"]').prop('checked', false);
+                $('.section_part').attr('section-id', '');
+
+                // Hide sections by adding 'd-none' class
+                $('.section_part').addClass('d-none');
+
+                // Reset section values
+                $('.section_part input[type="text"]').val('');
+
+                // Show modal
+                $('#examModal').modal('show');
+            }
+
+            function openDetailModal() {
+                var examId = $(this).data("id"); // Button er data-id theke Student ID pabo
+
+                $('.show-edit-btn').attr('data-id', examId);
+                $.ajax({
+                    url: `/api/exams/${examId}`, // Backend route jekhane data fetch hobe
                     type: "GET",
                     success: function (response) {
-                        console.log(response);
-                        
+
                         // Modal er ID update
                         $("#examCode").text("#" + (response.exam_code ?? 'E0000'));
                         $(".exam-name").text(': ' + (response.title ?? 'N/A'));
@@ -2467,7 +2684,7 @@
                         $(".last-updated-by").text(': ' + (response.updated_by && response.updated_by.full_name ? response.updated_by.full_name : 'N/A'));
                         $(".last-updated-on").text(': ' + (response.updated_at ? moment(response.updated_at).format("hh:mm A, D MMM YY") : 'N/A'));
 
-                        
+
                         if (response.sections.length == 0) {
                             $("#section-details").html('<p>No exam details found.</p>');
                             $("#question-details").html('<p>No data found.</p>');
@@ -2475,10 +2692,10 @@
                         }else{
                             let totalQuestion = 0;
                             $("#section-details").html('');
-                            $.each(response.sections, function (indexInArray, valueOfElement) { 
+                            $.each(response.sections, function (indexInArray, valueOfElement) {
                                 console.log(valueOfElement);
                                 totalQuestion += valueOfElement.num_of_question;
-                                
+
                                 $("#section-details").append(`
                                 <tr class="custom-row">
                                     <td>
@@ -2497,9 +2714,9 @@
 
 
                             $("#question-details").html('');
-                            $.each(response.questions, function (indexInArray, valueOfElement) { 
+                            $.each(response.questions, function (indexInArray, valueOfElement) {
                                 console.log(valueOfElement);
-                                
+
                                 $("#question-details").append(`
                                 <tr class="custom-row">
                                     <td>
@@ -2515,7 +2732,7 @@
                             });
                         }
 
-                        
+
                         // Modal show
                         $("#detailModalCenter").modal("show");
                     },
@@ -2523,7 +2740,7 @@
                         alert("Failed to fetch question details.");
                     },
                 });
-            });
+            }
         </script>
 
         <!-- Resources -->
@@ -2534,20 +2751,20 @@
         <!-- Chart code -->
         <script>
             am5.ready(function() {
-            
-            
+
+
             // Create root element
             // https://www.amcharts.com/docs/v5/getting-started/#Root_element
             var root = am5.Root.new("chartdiv");
-            
-            
+
+
             // Set themes
             // https://www.amcharts.com/docs/v5/concepts/themes/
             root.setThemes([
               am5themes_Animated.new(root)
             ]);
-            
-            
+
+
             // Create chart
             // https://www.amcharts.com/docs/v5/charts/xy-chart/
             var chart = root.container.children.push(am5xy.XYChart.new(root, {
@@ -2558,8 +2775,8 @@
               wheelY: "zoomX",
               layout: root.verticalLayout
             }));
-            
-            
+
+
             // Add legend
             // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
             var legend = chart.children.push(
@@ -2568,7 +2785,7 @@
                 x: am5.p50
               })
             );
-            
+
             var data = [{
               "year": "Whole Exam",
               "correct": 2.5,
@@ -2585,8 +2802,8 @@
               "wrong": 2.9,
               "excludeUnfinishedAttempts": 2.4
             }]
-            
-            
+
+
             // Create axes
             // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
             var xRenderer = am5xy.AxisRendererX.new(root, {
@@ -2594,26 +2811,26 @@
               cellEndLocation: 0.9,
               minorGridEnabled: true
             })
-            
+
             var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
               categoryField: "year",
               renderer: xRenderer,
               tooltip: am5.Tooltip.new(root, {})
             }));
-            
+
             xRenderer.grid.template.setAll({
               location: 1
             })
-            
+
             xAxis.data.setAll(data);
-            
+
             var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
               renderer: am5xy.AxisRendererY.new(root, {
                 strokeOpacity: 0.1
               })
             }));
-            
-            
+
+
             // Add series
             // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
             function makeSeries(name, fieldName) {
@@ -2624,20 +2841,20 @@
                 valueYField: fieldName,
                 categoryXField: "year"
               }));
-            
+
               series.columns.template.setAll({
                 tooltipText: "{name}, {categoryX}:{valueY}",
                 width: am5.percent(90),
                 tooltipY: 0,
                 strokeOpacity: 0
               });
-            
+
               series.data.setAll(data);
-            
+
               // Make stuff animate on load
               // https://www.amcharts.com/docs/v5/concepts/animations/
               series.appear();
-            
+
               series.bullets.push(function () {
                 return am5.Bullet.new(root, {
                   locationY: 0,
@@ -2650,19 +2867,19 @@
                   })
                 });
               });
-            
+
               legend.data.push(series);
             }
-            
+
             makeSeries("Correct", "correct");
             makeSeries("Wrong", "wrong");
             makeSeries("Exclude Unfinished Attempts", "excludeUnfinishedAttempts");
-            
-            
+
+
             // Make stuff animate on load
             // https://www.amcharts.com/docs/v5/concepts/animations/
             chart.appear(1000, 100);
-            
+
             }); // end am5.ready()
         </script>
 
@@ -2815,7 +3032,7 @@
             chart.plotContainer.events.on("globalpointermove", function(e) {
             // if pointer is down
             if (isDown) {
-                // get tooltip data item 
+                // get tooltip data item
                 var tooltipDataItem = series.get("tooltipDataItem");
                 if (tooltipDataItem) {
                 if (e.originalEvent) {
