@@ -12,10 +12,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\FullTestController;
 use App\Http\Controllers\MakeModelController;
 use App\Http\Controllers\RoleNavItemController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackageGenerateController;
+use App\Http\Controllers\StudentExamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +91,9 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
         return redirect()->back();
     })->name('markAsRead');
 
+    Route::resource('full-tests', FullTestController::class);
+    Route::get('results', [FullTestController::class, 'results'])->name('results');
+    Route::resource('student-exams', StudentExamController::class);
 });
 
 

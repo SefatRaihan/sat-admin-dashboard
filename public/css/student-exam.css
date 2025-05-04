@@ -1,0 +1,198 @@
+
+.box-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px 5px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.box {
+    width: 10px;
+    height: 10px;
+    border: 1px solid #ffffff;
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+/* Active box */
+.box.active {
+    background-color: #069212;
+    margin-left: 0px !important;
+    border-radius: 0px !important;
+}
+
+.box.completed {
+    background-color: #069212;
+}
+
+.box.incomplete {
+    background-color: #E59A0F;
+}
+
+.box:first-child.box.active {
+    margin-left: 0px !important;
+    border-radius: 10px 0px 0px 10px !important;
+}
+
+.box:last-child.box.active {
+    margin-left: 0px !important;
+    border-radius: 0px 10px 10px 0px !important;
+}
+
+/* Only first box left side rounded */
+.box:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+/* Only last box right side rounded */
+.box:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+
+
+.header-pagination {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 50%;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#timer-container {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* ইনপুট ও বাটন hide */
+#timeInput,
+button,
+h2 {
+    display: none;
+}
+
+#clock {
+    font-size: 18px;
+    color: rgb(0, 0, 0);
+    font-family: 'Share Tech Mono', monospace;
+    border-radius: 5px;
+}
+
+#clock.expired {
+    color: red;
+}
+
+#clock-wrapper{
+    border: 1px solid #D0D5DD;
+    background-color: #F9FAFB;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.question-content{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 90%;
+    gap: 80px;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.content-left{
+    width: 584px;
+    height: 765px;
+}
+
+.content-right{
+    width: 584px;
+    height: 765px;
+}
+
+.check-box-field label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.question-box{
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+.footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 92px;
+}
+
+.footer-content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.heading-summary ul {
+    display: flex;
+    gap: 25px;
+}
+.heading-summary li {
+    color: #667085;
+    font-size: 14px;
+}
+
+.fa-stopwatch {
+    color: #079455;
+}
+
+.groupActive {
+    color: #079455;
+}
+
+.content {
+    padding: 0px;
+    margin: 0px;
+}
+
+.check-box-field .form-check {
+    border-radius: 8px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    padding-left: 46px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-radio .form-check-input:checked ~ .form-check {
+    background-color: #F1E9F0;
+    border-color: #F0F9FF;
+}
+
+.custom-radio:has(.form-check-input:checked) {
+    background-color: #F0F9FF;
+    border: 1px solid #1570EF;;
+}

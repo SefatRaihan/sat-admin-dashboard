@@ -27,7 +27,7 @@
                          @if (isset($general->logo))
                             <img src="{{ asset('storage/' . ($general->logo)) }}" alt="Avatar" style="border-radius:50%; height: 40px">
                             @else
-                            <img src="{{ auth()->user()->profile_image ? asset('uploads/profile_images/' . auth()->user()->profile_image) : asset('image/profile.jpeg') }}" alt="Avatar" style="height: 40px; width:40px; border-radius:50%; object-fit: cover;">
+                            <img src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : asset('image/profile.jpeg') }}" alt="Avatar" style="height: 40px; width:40px; border-radius:50%; object-fit: cover;">
                          @endif
                          <div class="ml-3">
                             <p class="text-white m-0 p-0" style="font-size:16px !important">{{ auth()->user()->full_name }}</p>
