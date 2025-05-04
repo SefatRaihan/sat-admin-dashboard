@@ -29,7 +29,7 @@
             </div>
             <!-- Card 3 -->
             <div class="col-md-12 mb-4">
-                <a href="">
+                <a href="{{ route('student-exam.histories') }}">
                     <div class="custom-card">
                         <div class="image-placeholder">
                             <img src="{{ asset('image/history.png') }}" alt="">

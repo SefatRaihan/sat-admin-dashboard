@@ -92,8 +92,11 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     })->name('markAsRead');
 
     Route::resource('full-tests', FullTestController::class);
-    Route::get('results', [FullTestController::class, 'results'])->name('results');
     Route::resource('student-exams', StudentExamController::class);
+    Route::get('student-exam/histories', [StudentExamController::class, 'histories'])->name('student-exam.histories');
+    Route::get('results', [FullTestController::class, 'results'])->name('results');
+
+    Route::get('student-profile', [StudentController::class, 'studentProfile'])->name('student.profile');
 });
 
 

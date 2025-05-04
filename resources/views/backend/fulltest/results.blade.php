@@ -32,49 +32,151 @@
     <div class="mt-4">
         <div class="row">
             <div class="col-md-8">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4 style="font-size: 30px; color:#000000; font-weight:600">Question list</h4>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <input type="text" id="search" class="form-control search__input" placeholder="Search Notification" style="padding-left: 35px; margin-right:13px;">
-        
-                        <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px; width:200px; height: 38px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
-    
-                        <div class="form-group mb-0">
-                            <select class="form-control multiselect" multiple="multiple" data-fouc>
-                                <option value="All">All</option>
-                                <option value="Unread">Unread</option>
-                                <option value="Audience">Audience</option>
-                                <option data-role="divider"></option>
-                                <option value="Latest">Latest</option>
-                                <option value="Oldest">Oldest</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
 
                 <div>
                     <div class="questionListTableWrapper">
                         <table class="table  questionListTable">
                             <thead>
+                                <tr>
+                                    <td colspan="5">
+                                        <h4 class="mb-0" style="font-size: 16px; color:#000000; font-weight:500">Question list</h4>
+                                    </td>
+                                </tr>
+                                <tr style="border-top: 1px solid #ddd">
+                                    <td colspan="2">
+                                        <input type="text" id="search" class="form-control search__input" placeholder="Search Notification" style="padding-left: 35px; margin-right:13px; width:100% !important;">
+                                    </td>
+                                    <td colspan="2"></td>
+                                    <td class="text-right">
+                                        <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px; width:95px; height: 38px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
+                                        {{-- filter side modal --}}
+                                        <div class="sidebar-overlay" id="taskSidebarOverlay"></div>
+                                        <div class="floating-sidebar" id="taskSidebar">
+                                            <div class="filter">
+                                                <div class="sidebar-header">
+                                                    <div>
+                                                        <h4 style="font-size: 18px;" class="p-0 m-0 text-left">Filters</h4>
+                                                        <p class="p-0 m-0" style="color: #475467">Apply filters to table data.</p>
+                                                    </div>
+                                                    <button type="button" class="close-btn" id="closeSidebar">&times;</button>
+                                                </div>
+                                                <div class="filter-sidebar-content pl-0">
+                                                    <div class="task-form">
+                                                        <div class="pt-3 pb-3 pl-0">
+                                                            <div class="mt-2 pr-3 pl-2">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <h6><b>Question:</b> All Result</h6>
+                                                                    <button class="reset-slider">Reset</button>
+                                                                </div>
+                                                                <div id="correctAnswer">
+                                                                    <div class="filter-group">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input toggle-parent" type="checkbox" id="correctAnswerToggle" checked>
+                                                                            <label class="form-check-label" for="correctAnswerToggle">
+                                                                                Correct
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="incorrectAnswer">
+                                                                    <div class="filter-group">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input toggle-parent" type="checkbox" id="incorrectAnswerToggle" checked>
+                                                                            <label class="form-check-label" for="incorrectAnswerToggle">
+                                                                                Incorrect
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-2 pr-3 pl-2">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <h6><b>Defficulty:</b> All result</h6>
+                                                                    <button class="reset-slider">Reset</button>
+                                                                </div>
+                                                                <div class="form-check custom-checkbox d-flex justify-center">
+                                                                    <input type="checkbox" class="difficulty" value="Easy">
+                                                                    <label class="form-check-label pl-1"><span class="badge badge-pill badge-easy"><b>Easy</b></span></label>
+                                                                </div>
+                                                                <div class="form-check custom-checkbox d-flex justify-center">
+                                                                    <input type="checkbox" class="difficulty" value="Medium">
+                                                                    <label class="form-check-label pl-1"><span class="badge badge-pill badge-medium"><b>Medium</b></span></label>
+                                                                </div>
+                                                                <div class="form-check custom-checkbox d-flex justify-center">
+                                                                    <input type="checkbox" class="defficulty" value="Hard">
+                                                                    <label class="form-check-label pl-1" for="gladiator"><span class="badge badge-pill badge-hard"><b>Hard</b></span></label>
+                                                                </div>
+                                                                <div class="form-check custom-checkbox d-flex justify-center">
+                                                                    <input type="checkbox" class="difficulty" value="Very Hard">
+                                                                    <label class="form-check-label pl-1" for="gladiator"><span class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-2 pr-3 pl-2">
+                                                                <div class="slider-container" style="max-width: 100% !important">
+                                                                    <div class="slider-header">
+                                                                        <span>Duration:</span>
+                                                                        <span id="slider-value">1m 00s - 2m 00s</span>
+                                                                        <button class="reset-slider" id="reset-slider">Reset</button>
+                                                                    </div>
+                                                                    <div class="range-slider">
+                                                                        <input type="range" min="1" max="120" value="1"
+                                                                            id="min-range">
+                                                                        <input type="range" min="1" max="120" value="120"
+                                                                            id="max-range">
+                                                                    </div>
+                                                                    <div class="slider-labels">
+                                                                        <span id="min-label">1m 00s</span>
+                                                                        <span id="max-label">2m 00s</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-2 border-top">
+                                                                <div class="d-flex justify-content-between p-3">
+                                                                    <button type="button" class="btn btn-outline-dark mr-2 reset-filter-btn" style="border: 1px solid #D0D5DD; border-radius: 8px; width:50%">Reset All</button>
+                                                                    <button type="button" class="btn apply-filter-btn" style="background-color:#691D5E ;border-radius: 8px; color:#fff; width:50%">Apply Filters</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                                 <tr class="bg-light">
-                                    <th>Result</th>
-                                    <th>Question Title</th>
+                                    <th>Question</th>
                                     <th>Section</th>
-                                    <th>Difficulty level</th>
-                                    <th>Time</th>
+                                    <th>Difficulty</th>
+                                    <th>Your Time</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Sample</td>
-                                    <td>Sample Title</td>
+                                    <td>
+                                        <span class="correct-answer"><i class="fas fa-check"></i></span>
+                                        Sample Title
+                                    </td>
                                     <td>Sample Section</td>
                                     <td><span class="badge badge-pill badge-easy">Easy</span></td>
                                     <td>10:00</td>
-                                    <td>View</td>
+                                    <td>
+                                        <button type="button" class="btn view" style="background-color:#691D5E ;border-radius: 8px; color:#fff">View</button>
+                                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="wrong-answer"><i class="fas fa-check"></i></span>
+                                        Sample Title
+                                    </td>
+                                    <td>Sample Section</td>
+                                    <td><span class="badge badge-pill badge-easy">Easy</span></td>
+                                    <td>10:00</td>
+                                    <td>
+                                        <button type="button" class="btn view" style="background-color:#691D5E ;border-radius: 8px; color:#fff">View</button>
+                                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -82,10 +184,38 @@
                 </div>
             </div>
             <div class="col-md-4">
-                
+                <ul class="list-group">
+                    <li class="list-group-item" style="color: #101828">Leaderboard</li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <span class="mr-3">1</span>
+                        <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
+                        <div>
+                            <p class="p-0 m-0">Andi Lane</p>
+                            <p>75%</p>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <span class="mr-3">2</span>
+                        <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
+                        <div>
+                            <p class="p-0 m-0">Andi Lane</p>
+                            <p>75%</p>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <span class="mr-3">3</span>
+                        <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
+                        <div>
+                            <p class="p-0 m-0">Andi Lane</p>
+                            <p>75%</p>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
+
+    
 
     @push('css')
         <style>
@@ -97,7 +227,7 @@
             }
 
             .summary-text {
-                color: #000000;
+                color: #344054;
                 font-size: 16px;
                 font-weight: 500;
             }
@@ -105,13 +235,13 @@
             .summary-value {
                 color: #000000
                 font-size: 24px;
-                font-weight: 600;
+                font-weight: 700;
             }
 
             .summary-description {
-                color: #000000;
+                color: #344054;
                 font-size: 14px;
-                font-weight: 500;
+                font-weight: 400;
             }
 
             .search__input {
@@ -214,10 +344,238 @@
                 color: #dc3545;
                 border: 1px solid #dc3545;
             }
+
+            .list-group {
+                border-radius: 12px;
+            }
+            .list-group-item {
+                border-bottom: 1px solid #ddd;
+            }
+            .list-group-item:last-child {
+                border-bottom: none;
+            }
+            .list-group-item img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 12px;
+            }
+
+            .correct-answer {
+                padding: 4px;
+                border-radius: 6px;
+                border: 1px solid #079455;
+                background-color: #ECFDF3;
+                margin-right: 6px;
+            }
+
+            .correct-answer i {
+                color: #079455;
+            }
+
+            .wrong-answer {
+                padding: 4px;
+                border-radius: 6px;
+                border: 1px solid #D92D20;
+                background-color: #FEF3F2;
+                margin-right: 6px;
+            }
+
+            .wrong-answer i {
+                color: #D92D20;
+            }
+
+            tr {
+                border-bottom: 1px solid #ddd;
+            }
+
+            tr:last-child {
+                border-bottom: none;
+            }
+
+            /* filter section */
+            .floating-sidebar {
+                position: absolute;
+                top: 0;
+                right: -900px;
+                width: 400px;
+                height: auto;
+                background-color: #fff;
+                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+                z-index: 1050;
+                display: flex;
+                flex-direction: column;
+                border-radius: 15px;
+            }
+
+            .filter-sidebar-content {
+                flex-grow: 1;
+                overflow-y: auto;
+                padding-left: 15px;
+                padding-bottom: 60px;
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1040;
+            }
+
+            .sidebar-header {
+                padding: 18px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .floating-sidebar.open {
+                right: 0;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            /* filter sidebar every dropdown start */
+            .filter-group {
+                margin-bottom: 10px;
+            }
+
+            .form-check {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 8px;
+                cursor: pointer;
+            }
+
+            .nested-options {
+                margin-left: 24px;
+                display: none;
+            }
+
+            .toggle-icon {
+                cursor: pointer;
+                font-size: 14px;
+                transition: transform 0.3s ease-in-out;
+                margin-left: auto;
+            }
+
+            .toggle-icon.open {
+                transform: rotate(180deg);
+            }
+
+            .form-check-input {
+                width: 18px;
+                height: 18px;
+                accent-color: #4B1D3F;
+            }
+
+            .form-check-label {
+                font-size: 14px;
+                color: #333;
+            }
+
+            /* filter sidebar every dropdown end */
+            .close-btn {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+            }
+            /* filter avg time slider start  */
+            .slider-container {
+                width: 100%;
+                max-width: 300px;
+                font-family: Arial, sans-serif;
+            }
+
+            .slider-header {
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            .reset-slider {
+                background: none;
+                border: none;
+                color: black;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: bold;
+                text-decoration: #000 underline;
+            }
+
+            .range-slider {
+                position: relative;
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+
+            .range-slider input {
+                -webkit-appearance: none;
+                width: 100%;
+                position: absolute;
+                background: transparent;
+                pointer-events: none;
+            }
+
+            .range-slider input::-webkit-slider-runnable-track {
+                background: #E0E0E0;
+                height: 4px;
+                border-radius: 2px;
+            }
+
+            .range-slider input::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 16px;
+                height: 16px;
+                background: white;
+                border: 3px solid #69275C;
+                border-radius: 50%;
+                cursor: pointer;
+                pointer-events: auto;
+                margin-top: -6px;
+            }
+
+            .slider-labels {
+                display: flex;
+                background: white;
+                justify-content: space-between;
+                font-size: 14px;
+                margin-top: 8px;
+            }
+
+            /* avg time slider end */
+            /* filter section end */
         </style>
     @endpush
 
     @push('js')
-    <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
+                $('#taskSidebar').removeClass('open');
+                $('#taskSidebarOverlay').removeClass('active');
+                $('#boardHiddenInputSection').html('');
+            });
+
+        });
+
+        function filter(button) {
+            const filter = $('.filter');
+            filter.show();
+            $('#taskSidebar').addClass('open');
+            $('#taskSidebarOverlay').addClass('active');
+        }
+
+    </script>
     @endpush
 </x-backend.layouts.student-master>

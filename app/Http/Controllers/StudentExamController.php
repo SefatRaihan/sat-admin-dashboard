@@ -78,4 +78,9 @@ class StudentExamController extends Controller
 
         return redirect()->route('student-exams.index')->with('success', 'Exam submitted successfully!');
     }
+
+    public function histories()
+    {
+        return view('backend.student-exam.histories');
+    }
 }

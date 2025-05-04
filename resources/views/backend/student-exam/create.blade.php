@@ -27,9 +27,10 @@
             </div>
         
             <div id="timer-container">
-                <h2>Digital Countdown Timer</h2>
-                <input type="number" id="timeInput" placeholder="Enter time in minutes" />
-                <button onclick="startTimer()">Start</button>
+                <div class="d-none">
+                    <input type="number" id="timeInput" placeholder="Enter time in minutes" />
+                    <button onclick="startTimer()">Start</button>
+                </div>
                 <div id="clock-wrapper" style="display: flex; align-items: center; gap: 10px;">
                     <i class="fas fa-stopwatch" style="font-size: 20px; "></i>
                     <div id="clock">00:00:00</div>
@@ -66,25 +67,70 @@
         <div class="footer m-0 p-0" style="border-top: 1px solid #ddd;">
             <div class="footer-content p-4">
                 <div class="footer-left">
-                    <button type="button" class="btn" style="width: 112px; height: 44px; border-radius: 5px; border: 1px solid #FDA29B; color: #B42318;">End Exam</button>
+                    <button type="button" class="btn" style="width: 112px; height: 44px; border-radius: 5px; border: 1px solid #FDA29B; color: #B42318;" data-toggle="modal" data-target="#endExamdModal">End Exam</button>
                 </div>
                 <div class="footer-right">
                     <button type="button" id="prevBtn" class="btn btn-prev d-none mr-2" style="width: 108px; height: 44px; border-radius: 8px; border: 1px solid #A16A99; color: #521749;">Previous</button>
                     <button type="button" id="nextBtn" class="btn btn-next" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF;">Next</button>
-                    <button type="button" id="submitBtn" class="btn btn-submit d-none" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF;">Submit</button>
+                    <button type="button" id="submitBtn" class="btn btn-submit submit-exam d-none" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF;">Submit</button>
                 </div>
             </div>
         </div>
 
+        {{-- time over modal --}}
         <div class="modal fade" id="expiredModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content text-center">
+                <div class="modal-content text-center"  style="border-radius: 15px;">
                     <div class="modal-header">
-                        <h5 class="modal-title w-100">Time Expired</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">
+                            <img src="{{ asset('image/icon/time-out.png') }}" alt="">
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="font-size: 42px;">&times;</span>
+                        </button>
                     </div>
-                    <div class="modal-body">Your time has ended.</div>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                    <div class="modal-body text-left">
+                        <h4 class="mb-0 mt-3">Time up</h4>
+                        <p>Your time is up. This is just a demo text to fill out this supporting text field. UX writer will put the appropriate text here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- exam done modal --}}
+        <div class="modal fade" id="examDoneModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="examDoneModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="border-radius: 15px;">
+                    <div class="modal-body text-center exam-done-modal">
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ asset('image/icon/exam-done.png') }}" alt="">
+                        </div>
+                        <h4 class="mb-0 mt-3">Exam completed</h4>
+                        <p>The test has been completed successfully.</p>
+                    </div>
+                </div>
+            </div>
+        </div>  
+
+        {{-- end exam modal --}}
+        <div class="modal fade" id="endExamdModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center"  style="border-radius: 15px;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">
+                            <img src="{{ asset('image/icon/end-exam.png') }}" alt="">
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="font-size: 42px;">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-left">
+                        <h4 class="mb-0 mt-3">End exam</h4>
+                        <p>In case of completion of the test, the questions that were not answered by mistake will be counted.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn submit-exam" style="background-color:#D92D20 ;border-radius: 8px; color:#fff">End Exam</button>
                     </div>
                 </div>
             </div>
@@ -271,7 +317,7 @@
                 });
 
                 // End Exam button functionality
-                $('.btn').filter(':contains("End Exam")').on('click', function () {
+                $('.submit-exam').filter(':contains("End Exam")').on('click', function () {
                     if (confirm('Are you sure you want to end the exam?')) {
                         submitExam();
                     }

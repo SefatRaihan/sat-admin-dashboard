@@ -31,7 +31,7 @@
                                         <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">80</span></p>
                                         <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">1hr 15min</span></p>
                                         <div class="d-flex justify-content-between">
-                                            <button class="btn btn-start" style="width: 100%">Start Exam</button>
+                                            <a href="/student-exams" class="btn btn-start" style="width: 100%">Start Exam</a>
                                         </div>
                                     </div>
                                 </div>
@@ -43,7 +43,7 @@
                                         <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">80</span></p>
                                         <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">1hr 15min</span></p>
                                         <div class="d-flex justify-content-between">
-                                            <button class="btn btn-start">Re-take Exam</button>
+                                            <a href="/student-exams" class="btn btn-start">Re-take Exam</a>
                                             <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
                                         </div>
                                     </div>

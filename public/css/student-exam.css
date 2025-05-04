@@ -75,11 +75,6 @@
 }
 
 /* ইনপুট ও বাটন hide */
-#timeInput,
-button,
-h2 {
-    display: none;
-}
 
 #clock {
     font-size: 18px;
@@ -195,4 +190,63 @@ h2 {
 .custom-radio:has(.form-check-input:checked) {
     background-color: #F0F9FF;
     border: 1px solid #1570EF;;
+}
+
+.exam-title {
+    color: #101828;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.exam-card .card-text {
+    font-size: 14px;
+    font-weight: 400;
+    color: #475467;
+    margin-bottom: 10px;
+}
+.exam-card .card-text i {
+    color: #6c757d;
+    margin-right: 10px;
+}
+
+.card-text-value{
+    color: #475467;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.exam-done-modal h4 {
+    color: #101828;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.exam-done-modal p {
+    color: #475467;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+#expiredModal .modal-body h4{
+    color: #101828;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#expiredModal .modal-body p{
+    color: #475467;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+#endExamdModal .modal-body h4{
+    color: #101828;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#endExamdModal .modal-body p{
+    color: #475467;
+    font-size: 14px;
+    font-weight: 400;
 }

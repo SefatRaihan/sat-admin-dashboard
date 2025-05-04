@@ -20,4 +20,9 @@ class StudentController extends Controller
     {
         return view('backend.students.create');
     }
+
+    public function studentProfile()
+    {
+        return view('backend.students.profile');
+    }
 }

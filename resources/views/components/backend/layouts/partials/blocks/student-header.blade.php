@@ -66,6 +66,9 @@
                         <!-- Profile Dropdown -->
                         <ul id="profile-dropdown" class="position-absolute mt-2 bg-white shadow p-2 rounded d-none" style="width: 150px; right: 0; z-index:100; margin-top: 24px !important; padding: 0px !important;">
                             <li style="list-style-type: none;">
+                                <a class="dropdown-item p-2 text-dark hover:bg-gray-100" href="/student-profile"><i class="fas fa-user"></i> Profile</a>
+                            </li>
+                            <li style="list-style-type: none;">
                                 <a class="dropdown-item p-2 text-dark hover:bg-gray-100" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-power-off"></i> Logout</a>
                             </li>
                         </ul>
