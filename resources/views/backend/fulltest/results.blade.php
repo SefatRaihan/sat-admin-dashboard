@@ -397,7 +397,7 @@
             .floating-sidebar {
                 position: absolute;
                 top: 0;
-                right: -900px;
+                right: -9000px;
                 width: 400px;
                 height: auto;
                 background-color: #fff;

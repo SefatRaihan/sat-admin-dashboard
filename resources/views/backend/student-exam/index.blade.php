@@ -11,9 +11,10 @@
             </div>
         </div>
         <div id="timer-container">
-            <h2>Digital Countdown Timer</h2>
-            <input type="number" id="timeInput" placeholder="Enter time in minutes" />
-            <button onclick="startTimer()">Start</button>
+            <div class="d-none">
+                <input type="number" id="timeInput" placeholder="Enter time in minutes" />
+                <button onclick="startTimer()">Start</button>
+            </div>
             <div id="clock-wrapper" style="display: flex; align-items: center; gap: 10px;">
                 <i class="fas fa-stopwatch" style="font-size: 20px; "></i>
                 <div id="clock">00:00:00</div>
