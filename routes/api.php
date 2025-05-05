@@ -99,5 +99,6 @@ Route::group([ 'as' => 'api'], function () {
     Route::patch('/exams/{id}/update-status', [ExamController::class, 'toggleStatus']);
 
     Route::post('/registrations', [RegistrationController::class, 'store']);
+    Route::get('/registrations', [RegistrationController::class, 'index']);
 
 });
