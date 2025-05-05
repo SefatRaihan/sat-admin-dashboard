@@ -97,6 +97,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('results', [FullTestController::class, 'results'])->name('results');
 
     Route::get('student-profile', [StudentController::class, 'studentProfile'])->name('student.profile');
+    Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
 });
 
 

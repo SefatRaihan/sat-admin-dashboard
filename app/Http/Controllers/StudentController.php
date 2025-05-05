@@ -23,6 +23,12 @@ class StudentController extends Controller
 
     public function studentProfile()
     {
-        return view('backend.students.profile');
+        $user = auth()->user();
+        return view('backend.students.profile', compact('user'));
+    }
+
+    public function checkout()
+    {
+        return view('backend.students.checkout');
     }
 }

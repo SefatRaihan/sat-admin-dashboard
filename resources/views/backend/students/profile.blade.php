@@ -15,18 +15,53 @@
             <div class="col-9">
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                        <div class="card" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                        <div class="card edit-card d-none" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                            <div class="card-header border-bottom">
+                                <h4 class="mb-0" style="font-size:20px; font-weight:600">My Profile</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mt-2">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Personal info</p>
+                                                <p style="color:#475467; font-size:14px; font-weight:400">Update your photo and personal details.</p>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div style="width: 80%">
+                                                    @include('profile.partials.update-profile-information-form')
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Password</p>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div style="width: 80%">
+                                                    @include('profile.partials.update-password-form')
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card information-card" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                             <div class="card-header border-bottom">
                                 <h4 class="mb-0" style="font-size:20px">My Profile</h4>
                             </div>
                             <div class="card-body">
                                 <div class="row mt-3">
-                                    <div class="col-md-7">
+                                    <div class="col-md-8">
                                         <div class="card" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                                             <div class="card-body">
                                                 <div class="d-flex">
                                                     <div>
-                                                        <img src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : asset('image/profile.jpeg') }}" alt="Avatar" style="height: 48px; width:48px; border-radius:50%; object-fit: cover;">
+                                                        <img src="{{ auth()->user()->profile_image ? asset('uploads/profile_images/' . auth()->user()->profile_image) : asset('image/profile.jpeg') }}" alt="Avatar" style="height: 48px; width:48px; border-radius:50%; object-fit: cover;">
                                                     </div>
                                                     <div class="ml-2">
                                                         <h4 class="mb-0" style="font-size: 16px; font-weight:600">{{ auth()->user()->full_name }}</h4>
@@ -39,31 +74,31 @@
                                                     <table class="table table-striped custom-table profileTable" style="border: 1px solid #EAECF0">
                                                         <tr>
                                                             <td style="width: 25%">Name</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="studentName">: </td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentName">: {{ auth()->user()->full_name }}</td>
                 
                                                             <td style="width: 25%">Date of Birth</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="studentDob">: </td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentDob">: {{ \Carbon\Carbon::parse(auth()->user()->student->date_of_birth)->format('d-M-Y') }}</td>                                                             </td>
                                                         </tr>
                 
                                                         <tr>
                                                             <td style="width: 25%">Email</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="StudentEmail">: </td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="StudentEmail">: {{ auth()->user()->email }}</td>
                 
                                                             <td style="width: 25%">Audience Type</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="studentAudience">: </td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentAudience">: {{ auth()->user()->student->audience }}</td>
                                                         </tr>
                 
                                                         <tr>
                                                             <td style="width: 25%">Gender</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="studentGender">: </td>
+                                                            <td class="font-weight-bold text-capitalize" style="width: 25%" id="studentGender">: {{ auth()->user()->student->gender }}</td>
                 
                                                             <td style="width: 25%">Active Status</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="studentStatus">: </td>
+                                                            <td class="font-weight-bold text-capitalize" style="width: 25%" id="studentStatus">: {{ auth()->user()->student->status }}</td>
                                                         </tr>
                 
                                                         <tr>
                                                             <td style="width: 25%">Phone Number</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="studentPhone">: </td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentPhone">: {{ auth()->user()->student->phone }}</td>
                 
                                                             <td style="width: 25%">-</td>
                                                             <td class="font-weight-bold" style="width: 25%">: -</td>
@@ -71,7 +106,7 @@
                                                     </table>
                                                 </div>
                                                 <div class="d-flex justify-content-end mt-3">
-                                                    <a href="" type="button" class="btn btn-outline-dark mr-2 edit" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-pen"></i> Edit</a>
+                                                    <a href="" type="button" class="btn btn-outline-dark mr-2 edit-student" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-pen"></i> Edit</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -80,7 +115,135 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="v-pills-package" role="tabpanel" aria-labelledby="v-pills-package-tab">...</div>
+                    <div class="tab-pane fade" id="v-pills-package" role="tabpanel" aria-labelledby="v-pills-package-tab">
+                        <div class="card" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                            <div class="card-header border-bottom">
+                                <h4 class="mb-0" style="font-size:20px; font-weight:600">Packages</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mt-2">
+                                    <!-- Current Plan -->
+                                    <div class="row mb-4">
+                                       <div class="col-md-4">
+                                            <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Current plan</p>
+                                            <p style="color:#475467; font-size:14px; font-weight:400">We’ll credit your account if you need to downgrade during the billing cycle.</p>
+                                       </div>
+                                       <div class="col-md-8">
+                                          <div class="card" style="border-radius: 15PX">
+                                             <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                       <h5 class="mb-0" style="font-size: 18px; font-weight:600">3 months Plan <span class="badge bg-light text-dark border ms-1" style="border-radius: 8px">Monthly</span></h5>
+                                                       <p class="mb-1" style="color: #475467; font-size:14px; font-weight:400">Perfect for starting your journey</p>
+                                                       <p class="small" style="color: #475467; font-size:14px; font-weight:400">Expire: 20 Jun 2025</p>
+                                                    </div>
+                                                    <div class="text-end">
+                                                       <p class="plan-price mb-0" style="font-size:48px; font-weight:600">199 SAR <span class="fs-6 fw-normal" style="font-size:16px; font-weight:500; color:#475467">per month</span></p>
+                                                    </div>
+                                                 </div>
+                                             </div>
+                                             <div class="card-footer pt-1 d-flex justify-content-end" style="background: transparent">
+                                                 <button class="btn btn-link text-decoration-none upgrade-plan" style="font-size:14px; font-weight:600; color:#521749">Upgrade plan <i class="fas fa-arrow-right" style="rotate: -30deg;"></i></button>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Billing and invoicing</p>
+                                            <p style="color:#475467; font-size:14px; font-weight:400">Pick an account plan that fits your workflow.</p>
+                                        </div>
+                                        <div class="col-md-8 d-flex justify-content-end">
+                                            <button type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i> Download All</button>
+                                        </div>
+                                    </div>
+                                    <!-- Billing and Invoicing -->
+                                    <div class="row mt-3">
+                                       <div class="col-md-4">
+                                            <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Billing history</p>
+                                            <p style="color:#475467; font-size:14px; font-weight:400">Please reach out to our friendly team via <a href="mailto:billing@mubhir.com">billing@mubhir.com</a> with questions.</p>
+                                       </div>
+                                       <div class="col-md-8">
+                                           <div class="profileTableWrapper">
+                                               <table class="table custom-table profileTable" style="border: 1px solid #EAECF0">
+                                                   <thead>
+                                                       <tr class="bg-light">
+                                                          <th><input type="checkbox"></th>
+                                                          <th>Invoice</th>
+                                                          <th>Amount</th>
+                                                          <th>Date</th>
+                                                          <th>Status</th>
+                                                          <th></th>
+                                                       </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       <!-- Sample row -->
+                                                       <tr>
+                                                          <td><input type="checkbox"></td>
+                                                          <td>Basic Plan – Dec 2022</td>
+                                                          <td>SAR 10.00</td>
+                                                          <td>Dec 1, 2022</td>
+                                                          <td><span class="badge badge-pill badge-easy">Easy</span></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                       </tr>
+                                                       <tr>
+                                                          <td><input type="checkbox"></td>
+                                                          <td>Basic Plan – Dec 2022</td>
+                                                          <td>SAR 10.00</td>
+                                                          <td>Dec 1, 2022</td>
+                                                          <td><span class="badge badge-pill badge-easy">Easy</span></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                       </tr>
+                                                       <tr>
+                                                          <td><input type="checkbox"></td>
+                                                          <td>Basic Plan – Dec 2022</td>
+                                                          <td>SAR 10.00</td>
+                                                          <td>Dec 1, 2022</td>
+                                                          <td><span class="badge badge-pill badge-easy">Easy</span></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                       </tr>
+                                                       <tr>
+                                                          <td><input type="checkbox"></td>
+                                                          <td>Basic Plan – Dec 2022</td>
+                                                          <td>SAR 10.00</td>
+                                                          <td>Dec 1, 2022</td>
+                                                          <td><span class="badge badge-pill badge-easy">Easy</span></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                       </tr>
+                                                       <tr>
+                                                          <td><input type="checkbox"></td>
+                                                          <td>Basic Plan – Dec 2022</td>
+                                                          <td>SAR 10.00</td>
+                                                          <td>Dec 1, 2022</td>
+                                                          <td><span class="badge badge-pill badge-easy">Easy</span></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                       </tr>
+                                                       <tr>
+                                                          <td><input type="checkbox"></td>
+                                                          <td>Basic Plan – Dec 2022</td>
+                                                          <td>SAR 10.00</td>
+                                                          <td>Dec 1, 2022</td>
+                                                          <td><span class="badge badge-pill badge-easy">Easy</span></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                       </tr>
+                                                       <tr>
+                                                          <td><input type="checkbox"></td>
+                                                          <td>Basic Plan – Dec 2022</td>
+                                                          <td>SAR 10.00</td>
+                                                          <td>Dec 1, 2022</td>
+                                                          <td><span class="badge badge-pill badge-easy">Easy</span></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                       </tr>
+                                                       <!-- Add more rows as needed -->
+                                                    </tbody>
+                                               </table>
+                                           </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="tab-pane fade" id="v-pills-billing" role="tabpanel" aria-labelledby="v-pills-billing-tab">
                         <div class="card" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                             <div class="card-header border-bottom">
@@ -433,8 +596,101 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="pricingModal" tabindex="-1" aria-labelledby="pricingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 50% !important;">
+           <div class="modal-content" style="border-radius: 20px;">
+              <div class="modal-header d-flex justify-content-center border-0">
+                 <div>
+                    <h5 class="text-center mb-0" style="color:#101828; font-size:24px; font-weight:600">Flexible Pricing for Every Learner</h5>
+                    <p class="text-center text-muted" style="color:#475467; font-size:14px; font-weight:400">Choose the plan that fits your goals and budget</p>
+                 </div>
+              </div>
+              <div class="modal-body">
+                <div class="d-flex justify-content-center">
+                    <div class="payment-tab-section p-2">
+                        <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                            <li class="nav-item">
+                              <a class="nav-link active" id="exam-all-tab" data-toggle="tab" href="#exam-all" role="tab" aria-controls="exam-all" aria-selected="true">Hi school</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" id="unattempted-tab" data-toggle="tab" href="#unattempted" role="tab" aria-controls="unattempted" aria-selected="false">College</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="attempted-tab" data-toggle="tab" href="#attempted" role="tab" aria-controls="attempted" aria-selected="false">Graduate</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="attempted-tab" data-toggle="tab" href="#attempted" role="tab" aria-controls="attempted" aria-selected="false">SAT 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="row text-center mt-4">
+                    <div class="col-md-4 mb-3">
+                       <div class="card card-body text-left" style="border-radius: 15px">
+                        <div class="pricing-card">
+                            <h6 class="mb-0" style="color:#101828; font-size:16px; font-weight:600">Monthly Plan</h6>
+                            <p class="text-muted small" style="color:#667085; font-size:14px; font-weight:500">Perfect for starting your journey</p>
+                            <p class="plan-price mb-0 mt-3" style="font-size:24px; font-weight:600; color:#671E5A">99 <span class="fs-6 fw-normal" style="font-size:16px; font-weight:500; color:#727272">SAR</span></p>
+                            <p class="text-muted small" style="color:#050505; font-size:14px; font-weight:500">Per user per month</p>
+                            <a href="/checkout" class="btn btn-block btn-outline-dark mr-2" style="border: 1px solid #A16A99; border-radius: 8px;">Buy Now</a>
+                         </div>
+                       </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-body active text-left" style="border-radius: 15px">
+                            <div class="pricing-card">
+                                <h6 class="mb-0" style="color:#101828; font-size:16px; font-weight:600">3 Months Plan</h6>
+                                <p class="text-muted small" style="color:#667085; font-size:14px; font-weight:500">Perfect for starting your journey</p>
+                                <p class="plan-price mb-0 mt-3" style="font-size:24px; font-weight:600; color:#671E5A">199 <span class="fs-6 fw-normal" style="font-size:16px; font-weight:500; color:#727272">SAR</span></p>
+                                <p class="text-muted small" style="color:#050505; font-size:14px; font-weight:500">Per user per month</p>
+                                <a href="/checkout" class="btn btn-block mr-2" style="border: 1px solid #691D5E;; background-color:  #691D5E; border-radius: 8px; color:#fff">Buy Now</a>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-body text-left" style="border-radius: 15px">
+                            <div class="pricing-card">
+                                <h6 class="mb-0" style="color:#101828; font-size:16px; font-weight:600">6 Months Plan</h6>
+                                <p class="text-muted small" style="color:#667085; font-size:14px; font-weight:500">Perfect for starting your journey</p>
+                                <p class="plan-price mb-0 mt-3" style="font-size:24px; font-weight:600; color:#671E5A">299 <span class="fs-6 fw-normal" style="font-size:16px; font-weight:500; color:#727272">SAR</span></p>
+                                <p class="text-muted small" style="color:#050505; font-size:14px; font-weight:500">Per user per month</p>
+                                <a href="/checkout" class="btn btn-block btn-outline-dark mr-2" style="border: 1px solid #A16A99; border-radius: 8px;">Buy Now</a>
+                             </div>
+                        </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+    </div> 
+
     @push('css')
         <link rel="stylesheet" href="{{ asset('css/student-profile.css') }}">   
+    @endpush
+
+    @push('js')
+        <script>
+            $(document).ready(function() {
+                // Edit button click
+                $('.edit-student').on('click', function(e) {
+                    e.preventDefault();
+                    $('.information-card').addClass('d-none');
+                    $('.edit-card').removeClass('d-none');
+                });
+
+                // Cancel button click
+                $('.cancel').on('click', function(e) {
+                    e.preventDefault();
+                    $('.edit-card').addClass('d-none');
+                    $('.information-card').removeClass('d-none');
+                });
+
+                $(document).on('click', '.upgrade-plan', function () {
+                    $('#pricingModal').modal('show');
+                });
+            });
+        </script>
     @endpush
 
 </x-backend.layouts.student-master>
