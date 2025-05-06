@@ -31,4 +31,9 @@ class StudentController extends Controller
     {
         return view('backend.students.checkout');
     }
+
+    public function explanation()
+    {
+        return view('backend.students.explanation');
+    }
 }

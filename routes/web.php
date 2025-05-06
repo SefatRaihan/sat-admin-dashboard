@@ -98,6 +98,8 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
 
     Route::get('student-profile', [StudentController::class, 'studentProfile'])->name('student.profile');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
+    Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
+    Route::get('/explanation', [StudentController::class, 'explanation'])->name('student.explanation');
 });
 
 
