@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Historiable;
+use App\Traits\UserTrackable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
-use App\Traits\UserTrackable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class ExamAttemptQuestion extends Model
 {
-    use HasFactory, SoftDeletes, UserTrackable;
+    use HasFactory, SoftDeletes, UserTrackable, Historiable;
 
     protected $table = 'exam_attempt_questions';
     protected $primaryKey = 'id';

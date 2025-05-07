@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\Historiable;
 use App\Traits\UserTrackable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Exam extends Model
 {
-    use HasFactory, SoftDeletes, UserTrackable;
+    use HasFactory, SoftDeletes, Historiable, UserTrackable;
 
     /**
      * The table associated with the model.

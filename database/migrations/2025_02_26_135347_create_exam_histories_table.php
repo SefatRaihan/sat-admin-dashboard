@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exams', function (Blueprint $table) {
+        Schema::create('exam_histories', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique()->index();
+            $table->unsignedBigInteger('exam_id')->index();
             $table->string('title')->index();
             $table->text('description')->nullable();
             $table->integer('section')->nullable()->index();
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->unsignedBigInteger('deleted_by')->nullable();
 
             $table->softDeletes();
+            $table->string('action', 100);
             $table->timestamps();
 
             // Foreign key constraints
@@ -41,6 +43,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('exams');
+        Schema::dropIfExists('exam_histories');
     }
 };

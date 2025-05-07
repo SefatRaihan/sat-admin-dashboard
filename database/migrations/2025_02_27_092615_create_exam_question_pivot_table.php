@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_question_pivot', function (Blueprint $table) {
-            $table->unsignedBigInteger('question_id'); // Changed from UUID to BIGINT
-            $table->unsignedBigInteger('exam_id');
+            $table->unsignedBigInteger('question_id')->index(); // Changed from UUID to BIGINT
+            $table->unsignedBigInteger('exam_id')->index();
 
             // Composite primary key for ensuring uniqueness
             $table->primary(['exam_id', 'question_id']);
