@@ -93,6 +93,7 @@ Route::middleware(['auth','web', ])->group(function () {
 
     Route::resource('full-tests', FullTestController::class);
     Route::resource('student-exams', StudentExamController::class)->names('student-exams');
+    Route::get('student-exam/start', [StudentExamController::class, 'startExam'])->names('student-exam.start');
     Route::get('student-open-exam/{examId}', [StudentExamController::class, 'openExam'])->name('student-exam.open');
     Route::get('student-exam/histories', [StudentExamController::class, 'histories'])->name('student-exam.histories');
     Route::get('results', [FullTestController::class, 'results'])->name('results');

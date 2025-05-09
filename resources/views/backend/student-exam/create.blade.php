@@ -135,7 +135,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
     @push('css')
         <link rel="stylesheet" href="{{ asset('css/student-exam.css') }}">
     @endpush

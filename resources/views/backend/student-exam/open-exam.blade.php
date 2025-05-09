@@ -44,7 +44,7 @@
             </div>
             <div class="footer-right">
                 <a href="/full-tests/create" class="btn mr-2" style="width: 108px; height: 44px; border-radius: 8px; border: 1px solid #A16A99; color: #521749; padding: 11px .875rem !important;">Cancel</a>
-                <a href="/student-exams/create" type="button" class="btn" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</a>
+                <a href="{{ route('student-exam.start', $exam->id) }}" type="button" class="btn" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</a>
             </div>
         </div>
     </div>
