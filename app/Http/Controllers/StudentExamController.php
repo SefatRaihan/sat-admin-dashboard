@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exam;
 use Illuminate\Http\Request;
 
 class StudentExamController extends Controller
 {
+
+    public function openExam($examId)
+    {
+        // dd($examId);
+        $exam = Exam::with(['questions', 'sections'])->find($examId);
+        return view('backend.student-exam.open-exam', compact('exam'));
+    }
+
     public function index()
     {
         return view('backend.student-exam.index');

@@ -35,16 +35,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- @dd($exams) --}}
                                 @foreach ($exams as $exam)
+                                {{-- @dd($exam->formatted_duration) --}}
                                 <div class="col-md-3 exam-card">
                                     <div class="card">
                                         <h5 class="card-title">{{ $exam->title }}</h5>
                                         <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
                                         <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
-                                        <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->duration }}</span></p>
+                                        <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->formatted_duration }}</span></p>
                                         <div class="d-flex justify-content-between">
-                                            <a href="/student-exams" class="btn btn-start">Re-take Exam</a>
+                                            <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">Re-take Exam</a>
                                             <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
                                         </div>
                                     </div>
@@ -56,14 +56,42 @@
 
                     <div class="tab-pane fade" id="unattempted" role="tabpanel" aria-labelledby="unattempted-tab">
                         <div class="p-3">
-                            <h5>Non Appeared</h5>
-                            <p>Details about non-appeared exams will be displayed here.</p>
+                           <div class="row">
+                             @foreach ($unattemptedExams as $exam)
+                                <div class="col-md-3 exam-card">
+                                    <div class="card">
+                                        <h5 class="card-title">{{ $exam->title }}</h5>
+                                        <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
+                                        <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
+                                        <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->duration }}</span></p>
+                                        <div class="d-flex justify-content-between">
+                                            <a href="/student-exams" class="btn btn-start">{{ 'Start Exam' }}</a>
+                                            <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                           </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="attempted" role="tabpanel" aria-labelledby="attempted-tab">
                         <div class="p-3">
-                            <h5>Appeared</h5>
-                            <p>Details about appeared exams will be displayed here.</p>
+                           <div class="row">
+                             @foreach ($attemptedExams as $exam)
+                                <div class="col-md-3 exam-card">
+                                    <div class="card">
+                                        <h5 class="card-title">{{ $exam->title }}</h5>
+                                        <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
+                                        <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
+                                        <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->duration }}</span></p>
+                                        <div class="d-flex justify-content-between">
+                                            <a href="/student-exams" class="btn btn-start">{{ 'Start Exam' }}</a>
+                                            <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                           </div>
                         </div>
                     </div>
 

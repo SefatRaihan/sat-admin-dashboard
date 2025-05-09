@@ -78,4 +78,21 @@ class Exam extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function getFormattedDurationAttribute(): string
+    {
+        $hours = floor($this->duration / 60);
+        $minutes = $this->duration % 60;
+
+        $parts = [];
+        if ($hours) $parts[] = "{$hours}hr";
+        if ($minutes) $parts[] = "{$minutes}min";
+
+        return implode(' ', $parts);
+    }
+
+    public function userAttempt()
+    {
+        return $this->hasOne(ExamAttempt::class)->where('user_id', auth()->id());
+    }
 }

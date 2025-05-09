@@ -53,8 +53,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-Route::middleware(['auth','web', 'check.permission'])->group(function () {
+// 'check.permission'
+Route::middleware(['auth','web', ])->group(function () {
 
     // Route::resource('roles', RoleController::class);
     Route::resource('navitems', NavItemController::class);
@@ -92,7 +92,8 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     })->name('markAsRead');
 
     Route::resource('full-tests', FullTestController::class);
-    Route::resource('student-exams', StudentExamController::class);
+    Route::resource('student-exams', StudentExamController::class)->names('student-exams');
+    Route::get('student-open-exam/{examId}', [StudentExamController::class, 'openExam'])->name('student-exam.open');
     Route::get('student-exam/histories', [StudentExamController::class, 'histories'])->name('student-exam.histories');
     Route::get('results', [FullTestController::class, 'results'])->name('results');
 
