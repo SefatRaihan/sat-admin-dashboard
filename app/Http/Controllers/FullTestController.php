@@ -24,13 +24,16 @@ class FullTestController extends Controller
                 ->get()
                 ->groupBy('exam_id'); // Grouped by exam ID for easy lookup
 
-        $attemptedExams = $attempts->filter(function ($attemptList) {
-            return $attemptList->contains('status', 'completed');
-        });
 
-        $unattemptedExams = $exams->reject(function ($exam) use ($attempts) {
-            return $attempts->has($exam->id) && $attempts[$exam->id]->contains('status', 'completed');
-        });
+        $attemptedExamId = $attempts->where('status', 'completed')->pluck('exam_id')->toArray();
+        $unattemptedExamId = $attempts->where('status', 'paused')->pluck('exam_id')->toArray();
+        
+        $attemptedExams = $exams->whereIn('id', $attemptedExamId);
+        $unattemptedExams = $exams->whereIn('id', $unattemptedExamId);
+
+        // $unattemptedExams = $exams->reject(function ($exam) use ($attempts) {
+        //     return $attempts->has($exam->id) && $attempts[$exam->id]->contains('status', 'completed');
+        // });
         
         return view('backend.fulltest.create', compact('exams', 'attemptedExams', 'unattemptedExams'));
     }

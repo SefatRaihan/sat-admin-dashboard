@@ -11,7 +11,7 @@ use App\Traits\UserTrackable;
 
 class ExamAttemptQuestion extends Model
 {
-    use HasFactory, SoftDeletes, UserTrackable;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'exam_attempt_questions';
     protected $primaryKey = 'id';
@@ -88,15 +88,5 @@ class ExamAttemptQuestion extends Model
             'question_id' => $this->question_id,
             'is_correct' => $this->is_correct,
         ]);
-    }
-
-    public function createdBy()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function updatedBy()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
     }
 }

@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                                 @foreach ($exams as $exam)
-                                {{-- @dd($exam->formatted_duration) --}}
+                                {{-- @dd($exam) --}}
                                 <div class="col-md-3 exam-card">
                                     <div class="card">
                                         <h5 class="card-title">{{ $exam->title }}</h5>
@@ -78,6 +78,7 @@
                         <div class="p-3">
                            <div class="row">
                              @foreach ($attemptedExams as $exam)
+                             @dd($exam)
                                 <div class="col-md-3 exam-card">
                                     <div class="card">
                                         <h5 class="card-title">{{ $exam->title }}</h5>

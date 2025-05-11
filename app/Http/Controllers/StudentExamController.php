@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Exam;
 use App\Models\ExamAttempt;
-use App\Models\ExamAttemptQuestion;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ExamAttemptQuestion;
 
 class StudentExamController extends Controller
 {
@@ -86,9 +86,10 @@ class StudentExamController extends Controller
            $attempt = ExamAttempt::where('id', $examAttemptId)
                 ->where('user_id', auth()->id())
                 ->where('status', 'in_progress')
-                ->firstOrFail();
+                ->first();
 
             $responses = collect($request->responses);
+                // dd($responses);
 
             // Count correct answers
             $correctCount = $responses->where('is_correct', 1)->count();
@@ -99,6 +100,8 @@ class StudentExamController extends Controller
             });
 
             // dd($answers, $correctCount);
+            // Optional: Clear previous answers for this attempt (if retake)
+            ExamAttemptQuestion::where('attempt_id', $attempt->id)->delete();
 
             foreach ($responses as $response) {
                 ExamAttemptQuestion::create([
@@ -121,7 +124,7 @@ class StudentExamController extends Controller
             ]);
 
 
-        return redirect()->route('student-exams.index')->with('success', 'Exam submitted successfully!');
+        return response()->json(['msg' => 'Exam submitted successfully!'], 201);
     }
 
     public function histories()
