@@ -16,12 +16,10 @@ class ExamAttempt extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'exam_attempts';
-    protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'string';
 
     protected $fillable = [
         'id',
+        'uuid',
         'user_id',
         'exam_id',
         'start_time',

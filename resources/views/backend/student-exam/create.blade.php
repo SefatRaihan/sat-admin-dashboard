@@ -5,16 +5,17 @@
                 <h5 style="color: #344054;font: Inter;font-size: 20px;font-weight: 600;">Exam Name</h5>
                 <div class="heading-summary d-flex justify-content-center">
                     <ul class="p-0 m-0 text-center">
-                        <li id="audience" style="list-style: none">Hi School</li>
-                        <li id="total-section">{{ count($data) }} sections</li>
-                        <li id="total-question">{{ collect($data)->flatten(1)->count() }} Questions</li>
+                        <li id="audience" style="list-style: none">{{ $exam->sections[0]->audience  }}</li>
+                        <li id="total-section">{{ $exam->sections->count() }} sections</li>
+                        <li id="total-question">{{ collect($exam->duration)->flatten(1)->count() }} Questions</li>
                     </ul>
                 </div>
             </div>
 
             <div class="header-pagination">
-                @php $flatQuestions = collect($data)->flatten(1)->values(); @endphp
-                @foreach ($data as $key => $group)
+                @php $flatQuestions = collect($questions)->flatten(1)->values(); @endphp
+
+                @foreach ($questions as $key => $group)
                 <div class="pagination-1">
                     <p class="p-0 m-0 text-center text-capitalize groupActive">{{ $key }}</p>
                     <div class="box-pagination">
@@ -44,6 +45,10 @@
                 <div id="question-context">
                     
                 </div>
+                <h4><b>Explanation</b></h4>
+                <div id="question-explanation" style="padding-bottom:100px">
+                    
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="d-flex justify-content-between align-items-center">
@@ -64,7 +69,7 @@
             </div>
         </div>
 
-        <div class="footer m-0 p-0" style="border-top: 1px solid #ddd;">
+        <div class="footer m-0 p-0" style="border-top: 1px solid #ddd; bottom: 0; position: fixed; width: 100%; left: 0; background: #fff;">
             <div class="footer-content p-4">
                 <div class="footer-left">
                     <button type="button" class="btn" style="width: 112px; height: 44px; border-radius: 5px; border: 1px solid #FDA29B; color: #B42318;" data-toggle="modal" data-target="#endExamdModal">End Exam</button>
@@ -143,6 +148,8 @@
     @push('js')
         <script>
             let questions = @json($flatQuestions);
+            let examAttempt = @json($examAttempt);
+            let exam = @json($exam);
             let currentIndex = 0;
             let answers = {};
 
@@ -150,7 +157,7 @@
                 return n.toString().padStart(2, '0');
             }
 
-            function startTimer(minutes = 60) {
+            function startTimer(minutes) {
                 clearInterval(window.timerInterval);
                 let totalSeconds = minutes * 60;
 
@@ -177,22 +184,32 @@
 
             function renderQuestion(index) {
                 let question = questions[index];
+                
                 $('.box').removeClass('active');
                 $(`.question-${question.id}`).addClass('active');
 
                 $('#question-context').html(`
-                    <p>${question.context || 'No context provided.'}</p>
+                    <p>${question.question_description || 'No context provided.'}</p>
+                `);
+                $('#question-explanation').html(`
+                    <p>${question.explanation || 'No explanation provided.'}</p>
                 `);
 
-                let options = Array.isArray(question.options) ? question.options : Object.values(question.options || {});
+                let options;
+                if (typeof question.options === 'string') {
+                    options = JSON.parse(question.options);
+                } else {
+                    options = Array.isArray(question.options) ? question.options : Object.values(question.options || {});
+                }
+                
                 let selected = answers[question.id] || null;
-                $('#question-title').html(`${question.question}`);
+                $('#question-title').html(`${question.question_title}`);
                 $('#question-option').html(
                     options.map((opt, i) => `
                         <div class="col-md-12 mt-2">
                             <div class="form-check custom-radio" onclick="selectOption('question_${question.id}_${i}', '${opt}', ${question.id})">
                                 <input class="form-check-input" type="radio" name="question_${question.id}" id="question_${question.id}_${i}" value="${opt}" ${selected === opt ? 'checked' : ''}>
-                                <label class="form-check-label" for="question_${question.id}_${i}">
+                                <label class="form-check-label" style="padding-top:8px" for="question_${question.id}_${i}">
                                     ${opt}
                                 </label>
                             </div>
@@ -216,6 +233,7 @@
 
             function saveAnswerAndColor(index) {
                 let q = questions[index];
+                
                 let selectedOption = $(`input[name="question_${q.id}"]:checked`).val();
                 let boxEl = $(`.question-${q.id}`);
 
@@ -228,47 +246,29 @@
                 updateAnsweredCount();
             }
 
-            // function submitExam() {
-            //     saveAnswerAndColor(currentIndex);
-
-            //     // need all quedtion ids and his answer
-                
-              
-
-            //     $.ajax({
-            //         url: '/student-exams', // Replace with your actual endpoint
-            //         type: 'POST',
-            //         data: JSON.stringify(submissionData),
-            //         contentType: 'application/json',
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Include CSRF token
-            //         },
-            //         success: function (response) {
-            //             alert('Exam submitted successfully!');
-            //             window.location.href = '/exam-result'; // Redirect to result page or another page
-            //         },
-            //         error: function (xhr) {
-            //             alert('Error submitting exam: ' + (xhr.responseJSON?.message || 'Unknown error'));
-            //         }
-            //     });
-            // }
 
             function submitExam() {
                 saveAnswerAndColor(currentIndex);
                 let q = questions[currentIndex];
+                
                 let selectedOption = $(`input[name="question_${q.id}"]:checked`).val();
+                
                 if (selectedOption) answers[q.id] = selectedOption;
 
                 
                 let submissionData = questions.map(q => ({
                     question_id: q.id,
-                    answer: answers[q.id] ?? null
+                    answer: answers[q.id] ?? null,
+                    is_correct: answers[q.id] === q.correct_answer ? 1 : 0,
                 }));
-
+                let examAttemptId = examAttempt.id;
+                let examId = exam.id;
+                console.log(submissionData);
+                // return false;
                 $.ajax({
-                    url: '/student-exams',
+                    url: '/student-exams/' + examAttemptId, // Replace with your actual endpoint
                     type: 'POST',
-                    data: JSON.stringify({ responses: submissionData }),
+                    data: JSON.stringify({ exam_id: examId, responses: submissionData }),
                     contentType: 'application/json',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -281,11 +281,11 @@
                         alert('Error submitting exam: ' + (xhr.responseJSON?.message || 'Unknown error'));
                     }
                 });
-}
+            }
 
 
             $(document).ready(function () {
-                startTimer(60);
+                startTimer(exam.duration);
                 renderQuestion(currentIndex);
 
                 $('#nextBtn').on('click', function () {

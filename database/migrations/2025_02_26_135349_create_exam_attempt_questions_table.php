@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('exam_attempt_questions', function (Blueprint $table) {
             // Primary Key
-            $table->uuid('id')->primary();
+            $table->id('id')->primary();
+            $table->uuid('uuid')->unique();
 
             // Foreign Keys: Links to an exam attempt and a question
             $table->foreignId('attempt_id')->index();

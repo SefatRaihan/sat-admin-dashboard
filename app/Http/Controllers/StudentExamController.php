@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
+use App\Models\ExamAttempt;
+use App\Models\ExamAttemptQuestion;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class StudentExamController extends Controller
@@ -15,75 +18,108 @@ class StudentExamController extends Controller
         return view('backend.student-exam.open-exam', compact('exam'));
     }
 
+    public function startExam(Request $request, $examId)
+    {
+        // dd($examId);
+        $exam = Exam::with(['questions', 'sections'])->find($examId);
+
+        $userId = auth()->id();
+        $ip = $request->ip();
+        $device = $request->header('User-Agent');
+        $durationSeconds = $exam->duration * 60;
+
+        $examAttempt = ExamAttempt::where('user_id', $userId)
+            ->where('exam_id', $exam->id)
+            ->where('status', 'in_progress')
+            ->first();
+
+        $metadata = [
+            'exam_name'       => $exam->name,
+            'total_questions' => $exam->questions->count(),
+            'total_duration'  => $exam->duration,
+            'scheduled_at'    => $exam->scheduled_at,
+        ];
+
+        // Retake logic
+        if ($request->has('retake') && $examAttempt) {
+            $examAttempt->increment('attempt_number');
+            $examAttempt->update([
+                'status'         => 'in_progress',
+                'remaining_time' => $durationSeconds,
+                'answers'        => null,
+                'metadata'       => $metadata,
+            ]);
+        }
+
+        // If no in-progress attempt exists (or after retake reset), create new attempt
+        if (!$examAttempt) {
+            $examAttempt = ExamAttempt::create([
+                'uuid'           => Str::uuid(),
+                'exam_id'        => $exam->id,
+                'user_id'        => $userId,
+                'ip_address'     => $ip,
+                'start_time'     => now(),
+                'device_info'    => $device,
+                'status'         => 'in_progress',
+                'remaining_time' => $durationSeconds,
+                'metadata'       => $metadata,
+            ]);
+        }
+
+
+        $questions = $exam->questions->groupBy('sat_question_type');
+        // ->map(function ($group) {
+        //     return $group->groupBy('sat_question_type');
+        // });
+        // dd($nestedGrouped);
+        return view('backend.student-exam.create', compact('exam', 'questions', 'examAttempt'));
+    }
+
     public function index()
     {
         return view('backend.student-exam.index');
     }
 
-    public function create()
-    {
-        $data = [
-            "bangla" => [
-                "question1" => [
-                    "id" => 1,
-                    "context" => "প্রশ্ন ১ এর বিষয়বস্তু",
-                    "question" => "প্রশ্ন ১",
-                    "options" => [
-                        "option1" => "অপশন ১",
-                        "option2" => "অপশন ২",
-                        "option3" => "অপশন ৩",
-                        "option4" => "অপশন ৪"
-                    ],
-                    "answer" => "অপশন ১"
-                ],
-                "question2" => [
-                    "id" => 2,
-                    "context" => "প্রশ্ন ২ এর বিষয়বস্তু",
-                    "question" => "প্রশ্ন ২",
-                    "options" => [
-                        "option1" => "অপশন ১",
-                        "option2" => "অপশন ২",
-                        "option3" => "অপশন ৩",
-                        "option4" => "অপশন ৪"
-                    ],
-                    "answer" => "অপশন ২"
-                ]
-            ],
-            "english" => [
-                "question1" => [
-                    "id" => 3,
-                    "context" => "Content of Question 1",
-                    "question" => "Question 1",
-                    "options" => [
-                        "option1" => "Option 1",
-                        "option2" => "Option 2",
-                        "option3" => "Option 3",
-                        "option4" => "Option 4"
-                    ],
-                    "answer" => "Option 1"
-                ],
-                "question2" => [
-                    "id" => 4,
-                    "context" => "Content of Question 2",
-                    "question" => "Question 2",
-                    "options" => [
-                        "option1" => "Option 1",
-                        "option2" => "Option 2",
-                        "option3" => "Option 3",
-                        "option4" => "Option 4"
-                    ],
-                    "answer" => "Option 2"
-                ]
-            ]
-        ];
-        
-        
-        return view('backend.student-exam.create', compact('data'));
-    }
 
-    public function store(Request $request)
+    public function update(Request $request, $examAttemptId)
     {
-        dd($request->all());
+           $attempt = ExamAttempt::where('id', $examAttemptId)
+                ->where('user_id', auth()->id())
+                ->where('status', 'in_progress')
+                ->firstOrFail();
+
+            $responses = collect($request->responses);
+
+            // Count correct answers
+            $correctCount = $responses->where('is_correct', 1)->count();
+            $inCorrectCount = $responses->where('is_correct', 0)->count();
+
+            $answers = collect($request->responses)->mapWithKeys(function ($item) {
+                return [$item['question_id'] => $item['answer']];
+            });
+
+            // dd($answers, $correctCount);
+
+            foreach ($responses as $response) {
+                ExamAttemptQuestion::create([
+                    'uuid'           => Str::uuid(),
+                    'attempt_id'     => $attempt->id,
+                    'question_id'    => $response['question_id'],
+                    'student_answer' => $response['answer'],
+                    'is_correct'     => $response['is_correct'],
+                    'time_spent'     => $response['time_spent'] ?? null, // Optional if tracked
+                ]);
+            }
+
+            $attempt->update([
+                'answers'         => $answers,
+                'status'          => 'completed',
+                'score'           => $correctCount,
+                'correct_answers' => $correctCount,
+                'wrong_answers'   => $inCorrectCount,
+                'end_time'        => now(),
+            ]);
+
 
         return redirect()->route('student-exams.index')->with('success', 'Exam submitted successfully!');
     }

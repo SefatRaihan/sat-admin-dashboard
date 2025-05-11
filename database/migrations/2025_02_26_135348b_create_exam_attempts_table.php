@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_attempts', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id('id')->primary();
+            $table->uuid('uuid')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('exam_id')->constrained('exams')->onDelete('cascade');
             $table->timestamp('start_time')->nullable();

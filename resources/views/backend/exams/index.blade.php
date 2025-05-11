@@ -263,7 +263,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="label-header" for="">No of Exams (Verbal)</label>
+                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
                                                     <input type="text" class="form-control no_of_exams" id="no_of_exams" name="no_of_questions" placeholder="20">
                                                 </div>
                                             </div>
@@ -469,7 +469,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="label-header" for="">No of Exams (Verbal)</label>
+                                                    <label class="label-header" for="">No of Questions (Verbal)</label>
                                                     <input type="text" class="form-control no_of_exams" id="no_of_exams" name="no_of_questions" placeholder="20">
                                                 </div>
                                             </div>
@@ -572,7 +572,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="label-header" for="">No of Exams (Verbal)</label>
+                                                    <label class="label-header" for="">No of Question (Verbal)</label>
                                                     <input type="text" class="form-control no_of_exams" id="no_of_exams" name="no_of_questions" placeholder="20">
                                                 </div>
                                             </div>
