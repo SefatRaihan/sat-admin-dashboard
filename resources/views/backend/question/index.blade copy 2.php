@@ -15,7 +15,7 @@
         ';
     @endphp
 
-    <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'All Questions'" :prependContent="$prependHtml">
+    <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'All Question'" :prependContent="$prependHtml">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
     <div class="d-none" id="questionNullList">
@@ -41,12 +41,18 @@
                             style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img
                                 src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
 
-                        <div class="form-group mb-0">
-                            <select class="form-control" id="sortSelect">
-                                <option value="Latest" selected>Latest</option>
+                        {{-- <div class="form-group mb-0">
+                            <select class="form-control select-questions multiselect" multiple="multiple" data-fouc>
+                                <option value="All">All</option>
+                                <option value="Unread">Unread</option>
+                                <option value="Audience">Audience</option>
+                                <option value="Audience">Question Type</option>
+                                <option value="Audience">Difficulty</option>
+                                <option data-role="divider"></option>
+                                <option value="Latest">Latest</option>
                                 <option value="Oldest">Oldest</option>
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="card-body p-0 m-0 table-responsive">
@@ -131,7 +137,7 @@
                             <div class="d-flex justify-content-between">
                                 <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span
                                         style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
-                                <button class="reset-slider reset-filter-btn"><u>Reset</u></button>
+                                <button class="reset-slider"><u>Reset</u></button>
                             </div>
                             <div class="mt-1 mb-2 d-flex justify-content-between">
                                 <div style="width: 49%">
@@ -177,36 +183,44 @@
                                 <div id="all_sat_type_1">
                                     <div class="filter-group">
                                         <div class="form-check">
-                                            <input class="form-check-input toggle-parent" type="checkbox" class="All SAT 1" id="allSet1Toggle">
+                                            <input class="form-check-input toggle-parent" type="checkbox"
+                                                id="allSet1Toggle">
                                             <label class="form-check-label" for="allSet1Toggle">
                                                 All SAT 1
                                             </label>
-                                            <span class="toggle-icon" data-target="allSet1"><i class="fas fa-chevron-down"></i></span>
+                                            <span class="toggle-icon" data-target="allSet1"><i
+                                                    class="fas fa-chevron-down"></i></span>
                                         </div>
                                         <div class="nested-options collapse" id="allSet1">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="High School-Verbal" id="exam1">
-                                                <label class="form-check-label" for="exam1">High School : Verbal</label>
+                                                <input class="form-check-input" type="checkbox" id="exam1">
+                                                <label class="form-check-label" for="exam1">Hight School :
+                                                    Verbal</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="High School-Quant" id="exam2">
-                                                <label class="form-check-label" for="exam2">High School : Quant</label>
+                                                <input class="form-check-input" type="checkbox" id="exam2">
+                                                <label class="form-check-label" for="exam2">Hight School :
+                                                    Quant</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="College-Verbal" id="exam3">
-                                                <label class="form-check-label" for="exam3">College : Verbal</label>
+                                                <input class="form-check-input" type="checkbox" id="exam3">
+                                                <label class="form-check-label" for="exam3">College :
+                                                    Verbal</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="College-Verbal" id="exam3">
-                                                <label class="form-check-label" for="exam3">College : Verbal</label>
+                                                <input class="form-check-input" type="checkbox" id="exam3">
+                                                <label class="form-check-label" for="exam3">College :
+                                                    Verbal</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="Graduate-Verbal" id="exam3">
-                                                <label class="form-check-label" for="exam3">Graduate : Verbal</label>
+                                                <input class="form-check-input" type="checkbox" id="exam3">
+                                                <label class="form-check-label" for="exam3">Graduate :
+                                                    Verbal</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="Graduate-Quant" id="exam3">
-                                                <label class="form-check-label" for="exam3">Graduate : Quant</label>
+                                                <input class="form-check-input" type="checkbox" id="exam3">
+                                                <label class="form-check-label" for="exam3">Graduate :
+                                                    Quant</label>
                                             </div>
                                         </div>
                                     </div>
@@ -214,10 +228,23 @@
                                 <div id="all_sat_type_2">
                                     <div class="filter-group">
                                         <div class="form-check">
-                                            <input class="form-check-input toggle-parent" type="checkbox" value="All SAT 2" id="allSet2Toggle">
+                                            <input class="form-check-input toggle-parent" type="checkbox"
+                                                id="allSet2Toggle">
                                             <label class="form-check-label" for="allSet2Toggle">
                                                 All SAT 2
                                             </label>
+                                            <span class="toggle-icon" data-target="allSet2"><i
+                                                    class="fas fa-chevron-down"></i></span>
+                                        </div>
+                                        <div class="nested-options collapse" id="allSet2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="exam1">
+                                                <label class="form-check-label" for="exam1">Verbal</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="exam2">
+                                                <label class="form-check-label" for="exam2">Quant</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -227,9 +254,10 @@
                                     <h6><b>Exam Appearance:</b> All Result</h6>
                                 </div>
                                 <div class="mb-1">
-                                    <input type="text" class="form-control question_search_input w-100 pl-4" placeholder="Search Questions">
+                                    <input type="text" class="form-control search_input w-100 pl-4"
+                                        placeholder="Search Questions">
                                 </div>
-                                {{-- <div class="filter-group">
+                                <div class="filter-group">
                                     <div class="form-check">
                                         <input class="form-check-input toggle-parent" type="checkbox"
                                             id="highSchoolToggle">
@@ -278,7 +306,7 @@
                                             <label class="form-check-label" for="college2">College Quant Exam</label>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
@@ -310,7 +338,7 @@
                                     <div class="slider-header">
                                         <span>Average Time:</span>
                                         <span id="slider-value">1m 00s - 2m 00s</span>
-                                        <button class="reset-slider reset-filter-btn" id="reset-slider">Reset</button>
+                                        <button class="reset-slider" id="reset-slider">Reset</button>
                                     </div>
                                     <div class="range-slider">
                                         <input type="range" min="1" max="120" value="1"
@@ -710,7 +738,7 @@
 
                         <div class="step step-3 d-none">
                             <div id="question-container"
-                                style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB; overflow: scroll;">
+                                style="border: 1px solid #D0D5DD; border-radius:8px; padding:10px; background:#F9FAFB">
                             </div>
                             <div class="mt-3">
                                 <h5><strong>5. Select the Right Answer</h5>
@@ -1813,11 +1841,6 @@
                     fetchQuestions(1, perPage);
                 });
 
-                $('#sortSelect').on('change', function() {
-                    let sortOption = $(this).val();
-                    fetchQuestions(1, perPage, sortOption);
-                });
-
                 //end datatable code
 
                 $(document).on('change', '.toggle-status', updateState);
@@ -1861,13 +1884,10 @@
                     $('.search_input').val('');
                     $('input[name="crated_start_at"]').val('');
                     $('input[name="crated_end_at"]').val('');
-                    $('.question_search_input').val('');
-
                     $('input[name="status"][value="All"]').prop('checked', true);
                     $('.filter-group input:checkbox').prop('checked', false);
                     $('.custom-checkbox input:checkbox').prop('checked', false);
                     $('.multiselect').val([]).trigger('change');
-
 
                     // Fetch with reset filters
                     fetchQuestions(1, $('#rowsPerPage').val());
@@ -1969,9 +1989,9 @@
                 }
             }
 
-            // Function to Copy Step 2 Data into Step 3
-            function updateStep3Content() {
-                let context = $("#context .ql-editor").html();
+             // Function to Copy Step 2 Data into Step 3
+             function updateStep3Content() {
+                let context = $("#context .ql-editor").text();
                 let mcq_question = $("#mcq_question .ql-editor").text();
 
                 // if (context === "" || mcq_question === "") {
@@ -1983,13 +2003,14 @@
                         <p>${context}</p>
                         <div>
                             <p><strong>Question:</strong></p>
-                            <p style="padding:0">${$("#mcq_question .ql-editor").html()}</p>
+                            <p style="padding:0">${mcq_question}</p>
                         </div>
                     `
                 );
                 let optionsHtml = ``;
 
                 let correctAnswer = $('#questionCorrectAnswer').val(); // Get the correct answer from the hidden input
+                console.log(correctAnswer);
 
 
                 $("#option-container .option-block .parent-editor").each(function(index) {
@@ -2088,7 +2109,7 @@
                     sat_question_type: $('input[name="question_type"]:checked').val() || $('input[name="subjects"]:checked').val(),
                     question_title: $('#mcq_question .ql-editor').html(),
                     question_description: $('#context .ql-editor').html(),
-                    question_text: $('#mcq_question .ql-editor').html(),
+                    question_text: $('#mcq_question').text().trim(),
                     question_type: 'MCQ',
                     options: JSON.stringify(getOptions()),
                     correct_answer: $('input[name="mcq_options"]:checked').val(),
@@ -2158,8 +2179,7 @@
                     },
                     error: function(error) {
                         console.log(error.responseJSON.errors);
-                        // Reset button text and enable it on error
-                        submitButton.text('Save Question').prop('disabled', false);
+
                         let errors = error.responseJSON.errors;
                         let errorMessage = "";
 
@@ -2182,6 +2202,8 @@
 
                         checkbox.prop('checked', !checkbox.is(':checked'));
 
+                        // Reset button text and enable it on error
+                        submitButton.text('Save Question').prop('disabled', false);
                     }
                 });
             };
@@ -2200,7 +2222,7 @@
 
             // start datatable code
             // get all questions
-            function fetchQuestions(page = 1, perPage = 10, sort = 'Latest') {
+            function fetchQuestions(page = 1, perPage = 10) {
                 let filters = {
                     search: $('.search_input').val() || '', // Search input value, default to empty string if undefined
                     difficulty: $('.difficulty:checked').map((_, el) => el.value).get(), // Get all checked difficulty levels
@@ -2208,14 +2230,13 @@
                     crated_end_at: $('input[name="crated_end_at"]').val() || '', // End date, default to empty string
                     status: $('input[name="status"]:checked').val() || 'All', // Selected status, default to 'All'
                     audience: $('#all_sat_type_1 .nested-options input:checked').map((_, el) => el.value).get(), // Checked SAT 1 options
-                    audienceSat: $('#all_sat_type_2 #allSet2Toggle:checked').map((_, el) => el.value).get(), // Checked SAT 2 options
-                    questionSearch: $('.question_search_input').val() || '',
+                    sat_type: $('#all_sat_type_2 .nested-options input:checked').map((_, el) => el.value).get(), // Checked SAT 2 options
+                    exam_appearance: $('.filter-group .nested-options input:checked').map((_, el) => el.value).get(), // Checked exam appearance options
                     created_by: $('.custom-checkbox .created_by:checked').map((_, el) => el.value).get(), // Checked created_by values
                     average_time: {
                         min: $('#min-range').val() || 1, // Minimum time from slider
                         max: $('#max-range').val() || 120 // Maximum time from slider
-                    },
-                    sort: sort
+                    }
                 };
 
                 $.ajax({
@@ -2228,16 +2249,23 @@
                         let questionNullList = $('#questionNullList');
                         let tableBody = $("#question-table-body");
 
-                        console.log(response.data.length);
-                        
+                        if (response.data.length === 0) {
+                            // console.log(Object.values(filters));
 
-                        if (response.data.length == 0) {
-                            questionNullList.removeClass('d-none');
-                            questionList.addClass('d-none');
+                            if (page === 1 && Object.values(filters).every(val => val === '' || (Array.isArray(val) && val.length === 0))) {
+                                // If no data exists in API (no filters applied)
+                                questionNullList.removeClass('d-none');
+                                questionList.addClass('d-none');
+                            } else {
+                                // Filters applied but no match
+                                questionNullList.addClass('d-none');
+                                questionList.removeClass('d-none');
+                                tableBody.html(""); // Keep table visible but empty body
+                            }
                         } else {
+                            // Data exists, show table
                             questionNullList.addClass('d-none');
                             questionList.removeClass('d-none');
-                            tableBody.html("");
 
                             let rows = '';
                             $.each(response.data, function(index, question) {

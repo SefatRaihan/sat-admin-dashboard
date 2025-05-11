@@ -61,7 +61,7 @@
                                             <div class="card-body">
                                                 <div class="d-flex">
                                                     <div>
-                                                        <img src="{{ auth()->user()->profile_image ? asset('uploads/profile_images/' . auth()->user()->profile_image) : asset('image/profile.jpeg') }}" alt="Avatar" style="height: 48px; width:48px; border-radius:50%; object-fit: cover;">
+                                                        <img src="{{ auth()->user()->student->image ? asset('storage/' . auth()->user()->student->image) : asset('image/default-avatar.png') }}" alt="Avatar" style="height: 48px; width:48px; border-radius:50%; object-fit: cover;">
                                                     </div>
                                                     <div class="ml-2">
                                                         <h4 class="mb-0" style="font-size: 16px; font-weight:600">{{ auth()->user()->full_name }}</h4>
@@ -74,7 +74,7 @@
                                                     <table class="table table-striped custom-table profileTable" style="border: 1px solid #EAECF0">
                                                         <tr>
                                                             <td style="width: 25%">Name</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="studentName">: {{ auth()->user()->full_name }}</td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentName">: {{ auth()->user()->student->name }}</td>
                 
                                                             <td style="width: 25%">Date of Birth</td>
                                                             <td class="font-weight-bold" style="width: 25%" id="studentDob">: {{ \Carbon\Carbon::parse(auth()->user()->student->date_of_birth)->format('d-M-Y') }}</td>                                                             </td>
@@ -82,7 +82,7 @@
                 
                                                         <tr>
                                                             <td style="width: 25%">Email</td>
-                                                            <td class="font-weight-bold" style="width: 25%" id="StudentEmail">: {{ auth()->user()->email }}</td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="StudentEmail">: {{ auth()->user()->student->email }}</td>
                 
                                                             <td style="width: 25%">Audience Type</td>
                                                             <td class="font-weight-bold" style="width: 25%" id="studentAudience">: {{ auth()->user()->student->audience }}</td>

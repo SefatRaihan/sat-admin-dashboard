@@ -29,6 +29,7 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         try {
+
             $user = $request->user();
     
             // Fill user with validated data
@@ -47,29 +48,56 @@ class ProfileController extends Controller
                 ]);
 
                 $user->password = Hash::make($validated['password']);
-            }            
-    
-            // Handle profile image upload
-            if ($request->hasFile('profile_image')) {
-                $request->validate([
-                    'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
-                ]);
-    
-                // Delete old image if exists
-                if ($user->profile_image && file_exists(public_path('uploads/profile_images/' . $user->profile_image))) {
-                    unlink(public_path('uploads/profile_images/' . $user->profile_image));
+            }    
+            
+            if (auth()->user()->student) {
+                if ($request->hasFile('profile_image')) {
+
+                    $request->validate([
+                        'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+                    ]);
+        
+                    // Delete old image if exists
+                    if ($user->profile_image && file_exists(public_path('student_photos/' . $user->profile_image))) {
+                        unlink(public_path('student_photos/' . $user->profile_image));
+                    }
+                    
+                    $photoPath = $request->file('profile_image')->store('student_photos', 'public');
+                    $user->profile_image = $photoPath;
+                    auth()->user()->student->update([
+                        'image' =>  $photoPath
+                    ]);
                 }
-    
-                // Save new image
-                $imageName = time() . '.' . $request->profile_image->extension();
-                $request->profile_image->move(public_path('uploads/profile_images'), $imageName);
-    
-                $user->profile_image = $imageName;
+                auth()->user()->student->update([
+                    'name' => $request->first_name,
+                    'email' => $request->email,
+                    'date_of_birth' => $request->date_of_birth,
+                 ]);
+                 
+            } else {
+                // Handle profile image upload
+                if ($request->hasFile('profile_image')) {
+                    $request->validate([
+                        'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+                    ]);
+        
+                    // Delete old image if exists
+                    if ($user->profile_image && file_exists(public_path('uploads/profile_images/' . $user->profile_image))) {
+                        unlink(public_path('uploads/profile_images/' . $user->profile_image));
+                    }
+        
+                    // Save new image
+                    $imageName = time() . '.' . $request->profile_image->extension();
+                    $request->profile_image->move(public_path('uploads/profile_images'), $imageName);
+        
+                    $user->profile_image = $imageName;
+                }
             }
+    
             // Save user once after all changes
             $user->save();
     
-            return Redirect::route('profile.edit')->with('status', 'Profile Updated');
+            return Redirect::back()->with('status', 'Profile Updated');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {

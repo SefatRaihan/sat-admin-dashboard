@@ -3,8 +3,9 @@
     <x-backend.layouts.partials.blocks.contentwrapper 
         :headerTitle="'All Supervisors'"
         :prependContent="'
+
             <a href=\'/supervisors/create\' data-toggle=\'modal\' data-target=\'#createModalCenter\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
-                <i class=\'fas fa-plus\' style=\'font-size: 12px; margin-right: 5px; margin-top: 5px;\'></i> Create Supervisor
+                <i class=\'fas fa-plus\' style=\'font-size: 12px; margin-right: 5px; margin-top: 5px;\'></i> Add Supervisor
             </a>
         '">
     </x-backend.layouts.partials.blocks.contentwrapper>
@@ -168,12 +169,8 @@
                     <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
 
                     <div class="form-group mb-0">
-                        <select class="form-control multiselect" multiple="multiple" data-fouc>
-                            <option value="All">All</option>
-                            <option value="Unread">Unread</option>
-                            <option value="Audience">Audience</option>
-                            <option data-role="divider"></option>
-                            <option value="Latest">Latest</option>
+                        <select class="form-control" id="sortSelect">
+                            <option value="Latest" selected>Latest</option>
                             <option value="Oldest">Oldest</option>
                         </select>
                     </div>
@@ -650,6 +647,11 @@
                 });
             });
 
+            $('#sortSelect').on('change', function() {
+                let sortOption = $(this).val();
+                fetchSupervisors(1, sortOption);
+            });
+
             function toggleDeleteButton() {
                 let anyChecked = document.querySelectorAll(".row-checkbox:checked").length > 0;
                 document.querySelector(".delete-btn").classList.toggle("d-none", !anyChecked);
@@ -720,7 +722,7 @@
                 });
             });
 
-            function fetchSupervisors(page = 1) {
+            function fetchSupervisors(page = 1, sort = 'Latest') {
                 const search = document.getElementById('search').value;
                 const perPage = document.getElementById('per_page').value;
 
@@ -730,7 +732,8 @@
                 // Construct the URL with filter parameters
                 const url = `/api/supervisors?search=${search}&per_page=${perPage}&page=${page}` +
                     `&role=${role.join(',')}` +
-                    `&status=${status.join(',')}`;
+                    `&status=${status.join(',')}` +
+                    `&sort=${encodeURIComponent(sort)}`;
 
                 fetch(url)
                     .then(response => response.json())

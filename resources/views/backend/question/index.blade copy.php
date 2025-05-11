@@ -131,7 +131,7 @@
                             <div class="d-flex justify-content-between">
                                 <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span
                                         style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
-                                <button class="reset-slider reset-filter-btn"><u>Reset</u></button>
+                                <button class="reset-slider"><u>Reset</u></button>
                             </div>
                             <div class="mt-1 mb-2 d-flex justify-content-between">
                                 <div style="width: 49%">
@@ -310,7 +310,7 @@
                                     <div class="slider-header">
                                         <span>Average Time:</span>
                                         <span id="slider-value">1m 00s - 2m 00s</span>
-                                        <button class="reset-slider reset-filter-btn" id="reset-slider">Reset</button>
+                                        <button class="reset-slider" id="reset-slider">Reset</button>
                                     </div>
                                     <div class="range-slider">
                                         <input type="range" min="1" max="120" value="1"
@@ -1813,11 +1813,6 @@
                     fetchQuestions(1, perPage);
                 });
 
-                $('#sortSelect').on('change', function() {
-                    let sortOption = $(this).val();
-                    fetchQuestions(1, perPage, sortOption);
-                });
-
                 //end datatable code
 
                 $(document).on('change', '.toggle-status', updateState);
@@ -1861,13 +1856,10 @@
                     $('.search_input').val('');
                     $('input[name="crated_start_at"]').val('');
                     $('input[name="crated_end_at"]').val('');
-                    $('.question_search_input').val('');
-
                     $('input[name="status"][value="All"]').prop('checked', true);
                     $('.filter-group input:checkbox').prop('checked', false);
                     $('.custom-checkbox input:checkbox').prop('checked', false);
                     $('.multiselect').val([]).trigger('change');
-
 
                     // Fetch with reset filters
                     fetchQuestions(1, $('#rowsPerPage').val());
@@ -1972,36 +1964,30 @@
             // Function to Copy Step 2 Data into Step 3
             function updateStep3Content() {
                 let context = $("#context .ql-editor").html();
-                let mcq_question = $("#mcq_question .ql-editor").text();
+                let mcq_question = $("#mcq_question .ql-editor").html();
 
-                // if (context === "" || mcq_question === "") {
-                //     alert('Please fill all the fields');
-                //     // $('.step-3').html('');
-                // }
-                $('#question-container').html(
-                    `
-                        <p>${context}</p>
-                        <div>
-                            <p><strong>Question:</strong></p>
-                            <p style="padding:0">${$("#mcq_question .ql-editor").html()}</p>
-                        </div>
-                    `
-                );
+                // Update the question container with context and question
+                $('#question-container').html(`
+                    <p>${context}</p>
+                    <div>
+                        <p><strong>Question:</strong></p>
+                        <p style="padding:0">${mcq_question}</p>
+                    </div>
+                `);
+
                 let optionsHtml = ``;
+                let correctAnswer = $('#questionCorrectAnswer').val(); // Get the stored correct answer
 
-                let correctAnswer = $('#questionCorrectAnswer').val(); // Get the correct answer from the hidden input
-
-
+                // Loop through each option and generate HTML for radio buttons
                 $("#option-container .option-block .parent-editor").each(function(index) {
-                    let optionText = $(this).find(".ql-editor").html(); // Get raw HTML content
-                    let optionPlainText = $(this).find(".ql-editor").text();
-                    let isCorrect = (optionPlainText == correctAnswer); // Compare with correct answer
+                    let optionHtml = $(this).find(".ql-editor").html().trim(); // Get full HTML content
+                    let isCorrect = (optionHtml === correctAnswer); // Compare with correct answer (HTML content)
 
                     optionsHtml += `
                         <div class="form-check col-md-6 row" style="margin-left:3px">
                             <label class="radio-container col-md-12" style="padding-top:2px" for="option-${index}">
-                                <input class="form-check-input" type="radio" name="mcq_options" value="${optionText}" id="option-${index}" style="display: inline-block; visibility: visible;" ${isCorrect ? 'checked' : ''}>
-                                ${optionText}
+                                <input class="form-check-input" type="radio" name="mcq_options" value="${encodeURIComponent(optionHtml)}" id="option-${index}" style="display: inline-block; visibility: visible;" ${isCorrect ? 'checked' : ''}>
+                                ${optionHtml}
                             </label>
                         </div>
                     `;

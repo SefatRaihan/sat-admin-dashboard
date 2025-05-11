@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
+use App\Traits\Historiable;
+use App\Traits\UserTrackable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
-use App\Traits\UserTrackable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class ExamSection extends Model
 {
-    use HasFactory, UserTrackable;
+    use HasFactory, UserTrackable, Historiable, SoftDeletes;
 
     /**
      * Indicates that the primary key is not auto-incrementing.

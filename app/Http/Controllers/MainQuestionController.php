@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 class MainQuestionController extends Controller
 {
@@ -17,7 +19,7 @@ class MainQuestionController extends Controller
      */
     public function index(Request $request)
     {
-        $query = ExamQuestion::latest()->with('createdBy');
+        $query = ExamQuestion::with('createdBy');
     
         // Search filter
         if ($request->filled('search')) {
@@ -38,7 +40,7 @@ class MainQuestionController extends Controller
         }
     
         // Status filter
-        if ($request->filled('status')) {
+        if ($request->filled('status') && $request->status !== 'All') {
             switch ($request->status) {
                 case 'Active only':
                     $query->where('status', 'active');
@@ -46,26 +48,49 @@ class MainQuestionController extends Controller
                 case 'Inactive only':
                     $query->where('status', '!=', 'active');
                     break;
-                // 'All' case doesn't need additional where clause
+            }
+        }
+    
+        // Average time filter
+        // if ($request->filled('average_time')) {
+        //     $minTime = (int) $request->average_time['min'];
+        //     $maxTime = (int) $request->average_time['max'];
+        //     $query->whereBetween('average_time', [$minTime, $maxTime]);
+        // }
+    
+        // Audience filter
+        if ($request->filled('audience')) {
+            $audiences = $request->audience;
+            $audienceValues = array_unique(
+                array_map(
+                    fn($value) => explode('-', $value)[0],
+                    array_filter($audiences, fn($value) => strpos($value, '-') !== false)
+                )
+            );
+            $satQuestionTypes = array_unique(
+                array_map(
+                    fn($value) => explode('-', $value)[1],
+                    array_filter($audiences, fn($value) => strpos($value, '-') !== false)
+                )
+            );
+    
+            if (!empty($audienceValues)) {
+                $query->whereIn('audience', $audienceValues);
+            }
+    
+            if (!empty($satQuestionTypes)) {
+                $query->whereIn('sat_question_type', $satQuestionTypes);
             }
         }
     
         // Audience and Type filters
-        if ($request->filled('audience')) {
-            $query->where('audience', $request->audience);
-        }
-    
-        if ($request->filled('sat_type')) {
-            $query->where('sat_type', $request->sat_type);
-        }
-    
-        if ($request->filled('sat_question_type')) {
-            $query->where('sat_question_type', $request->sat_question_type);
+        if ($request->filled('audienceSat') && $request->audienceSat[0] === 'All SAT 2') {
+            $query->orWhere('audience', 'SAT 2');
         }
     
         // Exam appearance filter
-        if ($request->filled('exam_appearance')) {
-            $query->whereIn('audience', $request->exam_appearance);
+        if ($request->filled('questionSearch')) {
+            $query->where('question_title', 'LIKE', '%' . $request->questionSearch . '%');
         }
     
         // Difficulty filter
@@ -84,6 +109,12 @@ class MainQuestionController extends Controller
             $query->where('question_type', $request->question_type);
         }
     
+        // Sorting
+        if ($request->filled('sort')) {
+            $sort = $request->sort == 'Oldest' ? 'asc' : 'desc';
+            $query->orderBy('id', $sort);
+        }
+    
         // Pagination
         $perPage = $request->get('per_page', 10);
         $questions = $query->paginate($perPage);
@@ -98,81 +129,94 @@ class MainQuestionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'question_title' => 'required|string|max:255',
-            'question_description' => 'nullable|string',
-            'question_text' => 'required|string',
+            'question_title' => 'required',
+            'question_description' => 'nullable',
+            'question_text' => 'required',
             'question_type' => ['required', Rule::in(['MCQ', 'Fill-in-the-Blank', 'Paragraph'])],
             'audience' => ['required', Rule::in(['High School', 'College', 'Graduation', 'SAT 2'])],
             'sat_type' => ['nullable', Rule::in(['SAT 1', 'SAT 2'])],
             'sat_question_type' => ['nullable', Rule::in(['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])],
             'options' => 'nullable',
-            'correct_answer' => 'required|string|max:255',
+            'correct_answer' => 'required',
             'difficulty' => ['required', Rule::in(['Easy', 'Medium', 'Hard', 'Very Hard'])],
             'tags' => 'nullable|array',
-            'explanation' => 'nullable|string',
+            'explanation' => 'nullable',
             'images' => 'nullable|array',
             'videos' => 'nullable|array',
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
 
-        if ($request->questionId != null) {
-            $question = ExamQuestion::find($request->questionId);
-            $question->update([
-                'audience'             => $request->audience,
-                'question_title'       => $request->question_title,
-                'question_description' => $request->question_description,
-                'question_text'        => $request->question_text,
-                'question_type'        => $request->question_type,
-                'sat_type'             => $request->sat_type,
-                'sat_question_type'    => $request->sat_question_type,
-                'options'              => $request->options,
-                'correct_answer'       => strip_tags($request->correct_answer),
-                'difficulty'           => $request->difficulty,
-                'explanation'          => $request->explanation,
-                'status'               => $request->status,
-                'updated_by'           => auth()->id() ?? '1'
-            ]);
+        DB::beginTransaction(); // Start Transaction
+    
+        try {
 
-            $message = 'Question updated successfully.';
-        } else {
-
-            $latestStudent = ExamQuestion::latest('id')->first();
-            if ($latestStudent && preg_match('/Q(\d+)/', $latestStudent->question_code, $matches)) {
-                $nextCoded = (int)$matches[1] + 1; // Extract numeric part (002) and increment to 3
-            } else {
-                $nextCoded = 1; // Start from 1 if no question exists
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
             }
-            
-            $questionCode = 'Q' . str_pad($nextCoded, 4, '0', STR_PAD_LEFT);
-            
-            $question = ExamQuestion::create([
-                'question_code'        => $questionCode, 
-                'audience'             => $request->audience,
-                'question_title'       => $request->question_title,
-                'question_description' => $request->question_description,
-                'question_text'        => $request->question_text,
-                'question_type'        => $request->question_type,
-                'sat_type'             => $request->sat_type,
-                'sat_question_type'    => $request->sat_question_type,
-                'options'              => $request->options,
-                'correct_answer'       => strip_tags($request->correct_answer),
-                'difficulty'           => $request->difficulty,
-                'explanation'          => $request->explanation,
-                'status'               => $request->status,
-                'created_by'           => auth()->id() ?? '1'
-            ]);
 
-            $message = 'Question created successfully.';
+            if ($request->questionId != null) {
+                $question = ExamQuestion::find($request->questionId);
+                $question->update([
+                    'audience'             => $request->audience,
+                    'question_title'       => $request->question_title,
+                    'question_description' => $request->question_description,
+                    'question_text'        => $request->question_text,
+                    'question_type'        => $request->question_type,
+                    'sat_type'             => $request->sat_type,
+                    'sat_question_type'    => $request->sat_question_type,
+                    'options'              => $request->options,
+                    'correct_answer'       => strip_tags($request->correct_answer),
+                    'difficulty'           => $request->difficulty,
+                    'explanation'          => $request->explanation,
+                    'status'               => $request->status,
+                    'updated_by'           => auth()->id() ?? '1'
+                ]);
+
+                $message = 'Question updated successfully.';
+            } else {
+
+                $latestStudent = ExamQuestion::latest('id')->first();
+                if ($latestStudent && preg_match('/Q(\d+)/', $latestStudent->question_code, $matches)) {
+                    $nextCoded = (int)$matches[1] + 1; // Extract numeric part (002) and increment to 3
+                } else {
+                    $nextCoded = 1; // Start from 1 if no question exists
+                }
+                
+                $questionCode = 'Q' . str_pad($nextCoded, 4, '0', STR_PAD_LEFT);
+                
+                $question = ExamQuestion::create([
+                    'question_code'        => $questionCode, 
+                    'audience'             => $request->audience,
+                    'question_title'       => $request->question_title,
+                    'question_description' => $request->question_description,
+                    'question_text'        => $request->question_text,
+                    'question_type'        => $request->question_type,
+                    'sat_type'             => $request->sat_type,
+                    'sat_question_type'    => $request->sat_question_type,
+                    'options'              => $request->options,
+                    'correct_answer'       => strip_tags($request->correct_answer),
+                    'difficulty'           => $request->difficulty,
+                    'explanation'          => $request->explanation,
+                    'status'               => $request->status,
+                    'created_by'           => auth()->id() ?? '1'
+                ]);
+
+                $message = 'Question created successfully.';
+            }
+
+
+            Log::info('New question created', ['question_id' => $question->id, 'created_by' => $question->created_by]);
+            DB::commit();
+            return response()->json(['success' => true, 'message' => $message ,'data' => $question, 201]);
+        } catch (\Exception | QueryException $e) {
+            DB::rollBack(); // Rollback on Error
+    
+            return response()->json([
+                'status' => false,
+                'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
+            ], 500);
         }
-
-
-        Log::info('New question created', ['question_id' => $question->id, 'created_by' => $question->created_by]);
-
-        return response()->json(['success' => true, 'message' => $message ,'data' => $question, 201]);
     }
 
     /**
@@ -197,7 +241,7 @@ class MainQuestionController extends Controller
             $question = ExamQuestion::findOrFail($id);
 
             $validator = Validator::make($request->all(), [
-                'question_title' => 'sometimes|string|max:255',
+                'question_title' => 'sometimes',
                 'question_description' => 'sometimes|string|nullable',
                 'question_text' => 'sometimes|string',
                 'question_type' => ['sometimes', Rule::in(['MCQ', 'Fill-in-the-Blank', 'Paragraph'])],
@@ -205,7 +249,7 @@ class MainQuestionController extends Controller
                 'sat_type' => ['sometimes', Rule::in(['SAT 1', 'SAT 2'])],
                 'sat_question_type' => ['sometimes', Rule::in(['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])],
                 'options' => 'nullable|array',
-                'correct_answer' => 'sometimes|string|max:255',
+                'correct_answer' => 'sometimes',
                 'difficulty' => ['sometimes', Rule::in(['Easy', 'Medium', 'Hard', 'Very Hard'])],
                 'tags' => 'nullable|array',
                 'explanation' => 'nullable|string',
