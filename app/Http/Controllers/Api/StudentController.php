@@ -57,11 +57,10 @@ class StudentController extends Controller
         // Audience type filter
         if ($request->filled('audience_type')) {
             $audiences = explode(',', $request->audience_type);
-
             if (in_array('All-SAT-2', $audiences)) {
-                $query->orWhere('audience', 'sate-2');
+                $query->orWhere('audience', 'sat-2');
             }
-
+            
             if (in_array('All-SAT-1', $audiences)) {
                 $query->orWhereIn('audience', ['high-school', 'graduate', 'college']);
             }

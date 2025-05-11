@@ -489,14 +489,9 @@
 
                 <div class="d-flex">
                     <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
-
                     <div class="form-group mb-0">
-                        <select class="form-control multiselect" multiple="multiple" data-fouc>
-                            <option value="All">All</option>
-                            <option value="Unread">Unread</option>
-                            <option value="Audience">Audience</option>
-                            <option data-role="divider"></option>
-                            <option value="Latest">Latest</option>
+                        <select class="form-control" id="sortSelect">
+                            <option value="Latest" selected>Latest</option>
                             <option value="Oldest">Oldest</option>
                         </select>
                     </div>
@@ -591,7 +586,7 @@
                         <div class="p-3">
                             <div class="d-flex justify-content-between">
                                 <p style="font-size: 12px"> <span style="color: #344054"><b>Created on:</b></span> <span style="color: #475467">06 Jan 25 - 12 Jan 25</span></p>
-                                <button class="btn p-0 m-0"><u>Reset</u></button>
+                                <button type="button" class="btn p-0 m-0 reset-date"><u>Reset</u></button>
                             </div>
                             <div class="mt-1 mb-2 d-flex justify-content-between">
                                 <div style="width: 49%">
@@ -1334,8 +1329,20 @@
 
         <!-- /Fetch Data -->
         <script>
+
+            $('#sortSelect').on('change', function() {
+                let sortOption = $(this).val();
+                fetchStudents(1, sortOption);
+            });
+
+            document.querySelector('.reset-date').addEventListener('click', function() {
+                document.querySelector('input[name="create_from"]').value = '';
+                document.querySelector('input[name="create_to"]').value = '';
+            });
+
             document.addEventListener('DOMContentLoaded', () => {
                 fetchStudents(1); // Initial Load
+                
 
                 // Search on Enter key
                 document.getElementById('search').addEventListener('keypress', function(e) {
@@ -1362,27 +1369,25 @@
                 });
             });
 
-            function fetchStudents(page = 1) {
-                const search = document.getElementById('search').value;
-                const perPage = document.getElementById('per_page').value;
+            function fetchStudents(page = 1, sort = 'Latest') {
+            let search = $('#search').val();
+            let perPage = $('#per_page').val();
+            let createFrom = $('input[name="create_from"]').val();
+            let createTo = $('input[name="create_to"]').val();
+            let status = $('input[name="status"]:checked').val();
+            let audienceType = $('input[name="audience_type"]:checked').map(function() { return this.id; }).get();
+            let package = $('input[name="package"]:checked').map(function() { return this.id; }).get();
+            let duration = $('input[name="duration"]:checked').map(function() { return this.id; }).get();
+            let gender = $('input[name="gender"]:checked').map(function() { return this.id; }).get();
 
-                // Get filter values from the form
-                const createFrom = document.querySelector('input[name="create_from"]').value;
-                const createTo = document.querySelector('input[name="create_to"]').value;
-                const status = document.querySelector('input[name="status"]:checked').value;
-                const audienceType = Array.from(document.querySelectorAll('input[name="audience_type"]:checked')).map(el => el.id);
-                const package = Array.from(document.querySelectorAll('input[name="package"]:checked')).map(el => el.id);
-                const duration = Array.from(document.querySelectorAll('input[name="duration"]:checked')).map(el => el.id);
-                const gender = Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(el => el.id);
-
-                // Construct the URL with filter parameters
-                const url = `/api/students?search=${search}&per_page=${perPage}&page=${page}` +
-                    `&create_from=${createFrom}&create_to=${createTo}` +
-                    `&status=${status}` +
-                    `&audience_type=${audienceType.join(',')}` +
-                    `&package=${package.join(',')}` +
-                    `&duration=${duration.join(',')}` +
-                    `&gender=${gender.join(',')}`;
+            let url = `/api/students?search=${encodeURIComponent(search)}&per_page=${perPage}&page=${page}` +
+                `&create_from=${encodeURIComponent(createFrom)}&create_to=${encodeURIComponent(createTo)}` +
+                `&status=${encodeURIComponent(status)}` +
+                `&audience_type=${encodeURIComponent(audienceType.join(','))}` +
+                `&package=${encodeURIComponent(package.join(','))}` +
+                `&duration=${encodeURIComponent(duration.join(','))}` +
+                `&gender=${encodeURIComponent(gender.join(','))}` +
+                `&sort=${encodeURIComponent(sort)}`;
 
                 fetch(url)
                     .then(response => response.json())
