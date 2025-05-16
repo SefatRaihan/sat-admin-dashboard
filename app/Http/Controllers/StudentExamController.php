@@ -6,6 +6,7 @@ use App\Models\Exam;
 use App\Models\ExamAttempt;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\ExamAttemptQuestion;
 
 class StudentExamController extends Controller
@@ -83,13 +84,13 @@ class StudentExamController extends Controller
 
     public function update(Request $request, $examAttemptId)
     {
+        DB::beginTransaction();
            $attempt = ExamAttempt::where('id', $examAttemptId)
                 ->where('user_id', auth()->id())
                 ->where('status', 'in_progress')
                 ->first();
 
             $responses = collect($request->responses);
-                // dd($responses);
 
             // Count correct answers
             $correctCount = $responses->where('is_correct', 1)->count();
@@ -100,9 +101,7 @@ class StudentExamController extends Controller
             });
 
             // dd($answers, $correctCount);
-            // Optional: Clear previous answers for this attempt (if retake)
-            ExamAttemptQuestion::where('attempt_id', $attempt->id)->delete();
-
+       
             foreach ($responses as $response) {
                 ExamAttemptQuestion::create([
                     'uuid'           => Str::uuid(),
@@ -123,8 +122,8 @@ class StudentExamController extends Controller
                 'end_time'        => now(),
             ]);
 
-
-        return response()->json(['msg' => 'Exam submitted successfully!'], 201);
+        DB::commit();
+        return response()->json(['msg' => 'Exam submitted successfully!', 'data' => $attempt], 201);
     }
 
     public function histories()

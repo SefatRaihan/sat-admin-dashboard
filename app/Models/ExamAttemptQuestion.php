@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Historiable;
+use Illuminate\Support\Str;
 use App\Traits\UserTrackable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
@@ -15,27 +16,26 @@ class ExamAttemptQuestion extends Model
     use HasFactory, SoftDeletes, Historiable;
 
     protected $table = 'exam_attempt_questions';
-    protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'uuid';
 
-    protected $fillable = [
-        'id',
-        'attempt_id',
-        'question_id',
-        'student_answer',
-        'is_correct',
-        'time_spent',
-        'image_urls',
-        'video_urls',
-        'created_at',
-        'updated_at'
+
+    protected $guarded = [
+        // 'id',
+        // 'uuid',
+        // 'attempt_id',
+        // 'question_id',
+        // 'student_answer',
+        // 'is_correct',
+        // 'time_spent',
+        // 'image_urls',
+        // 'video_urls',
+        // 'created_at',
+        // 'updated_at'
     ];
 
     protected $casts = [
         'id' => 'string',
-        'attempt_id' => 'string',
-        'question_id' => 'string',
+        'attempt_id' => 'integer',
+        'question_id' => 'integer',
         'is_correct' => 'boolean',
         'time_spent' => 'integer',
         'image_urls' => 'array',
@@ -78,6 +78,17 @@ class ExamAttemptQuestion extends Model
     {
         return $query->where('attempt_id', $attemptId);
     }
+
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::creating(function ($model) {
+    //         if (empty($model->uuid)) {
+    //             $model->uuid = (string) Str::uuid();
+    //         }
+    //     });
+    // }
 
     /**
      * Log answer submission details.

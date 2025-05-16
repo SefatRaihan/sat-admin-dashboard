@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('exam_attempt_question_histories', function (Blueprint $table) {
             // Primary Key
-            $table->uuid('id')->primary();
-
+            $table->id();
+            $table->uuid('uuid')->index();
             // Foreign Keys: Links to an exam attempt and a question
-            $table->foreignUuid('uuid')->index();
-            $table->foreignUuid('attempt_id')->index();
+            // $table->foreignId('exam_attempt_question_id')->index();
+            $table->unsignedBigInteger('exam_attempt_question_id')->index();
+            $table->foreignId('attempt_id')->index();
             $table->foreignId('question_id')->index();
 
             // Answer Details

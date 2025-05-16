@@ -1,4 +1,5 @@
 <x-backend.layouts.student-master>
+    @dd();
     <section>
         <div id="questionList">
             <div class="card"

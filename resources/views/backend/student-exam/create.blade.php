@@ -152,6 +152,8 @@
             let exam = @json($exam);
             let currentIndex = 0;
             let answers = {};
+            let timeTracking = {}; // { [question_id]: seconds }
+            let questionStartTime = Date.now();
 
             function pad(n) {
                 return n.toString().padStart(2, '0');
@@ -233,7 +235,13 @@
 
             function saveAnswerAndColor(index) {
                 let q = questions[index];
-                
+                let now = Date.now();
+                let timeSpent = Math.floor((now - questionStartTime) / 1000); // in seconds
+                timeTracking[q.id] = (timeTracking[q.id] || 0) + timeSpent;
+
+                // Reset start time for next question
+                questionStartTime = now;
+
                 let selectedOption = $(`input[name="question_${q.id}"]:checked`).val();
                 let boxEl = $(`.question-${q.id}`);
 
@@ -260,22 +268,27 @@
                     question_id: q.id,
                     answer: answers[q.id] ?? null,
                     is_correct: answers[q.id] === q.correct_answer ? 1 : 0,
+                    time_spent: timeTracking[q.id] || 0,
                 }));
                 let examAttemptId = examAttempt.id;
                 let examId = exam.id;
-                console.log(submissionData);
+                // console.log(submissionData);
                 // return false;
+                
                 $.ajax({
-                    url: '/student-exams/' + examAttemptId, // Replace with your actual endpoint
+                    url: '/student-exams/' + examAttemptId,
                     type: 'POST',
                     data: JSON.stringify({ exam_id: examId, responses: submissionData }),
                     contentType: 'application/json',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function () {
-                        alert('Exam submitted successfully!');
-                        window.location.href = '/exam-result';
+                    success: function (response) {
+                        console.log(response);
+                        
+                        return false;
+                        Swal.fire("Success", "Your exam has been submitted successfully", "success");
+                        window.location.href = '/result/'+response.data.id;
                     },
                     error: function (xhr) {
                         alert('Error submitting exam: ' + (xhr.responseJSON?.message || 'Unknown error'));

@@ -54,7 +54,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // 'check.permission'
-Route::middleware(['auth','web', ])->group(function () {
+Route::middleware(['auth','web'])->group(function () {
 
     // Route::resource('roles', RoleController::class);
     Route::resource('navitems', NavItemController::class);
@@ -97,7 +97,7 @@ Route::middleware(['auth','web', ])->group(function () {
     Route::post('student-exam/start/{examId}', [StudentExamController::class, 'startExam'])->name('student-exam.start');
     Route::get('student-open-exam/{examId}', [StudentExamController::class, 'openExam'])->name('student-exam.open');
     Route::get('student-exam/histories', [StudentExamController::class, 'histories'])->name('student-exam.histories');
-    Route::get('results', [FullTestController::class, 'results'])->name('results');
+    Route::get('result/{id}', [FullTestController::class, 'results'])->name('result');
 
     Route::get('student-profile', [StudentController::class, 'studentProfile'])->name('student.profile');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');

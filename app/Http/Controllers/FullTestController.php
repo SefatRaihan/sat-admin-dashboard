@@ -38,8 +38,23 @@ class FullTestController extends Controller
         return view('backend.fulltest.create', compact('exams', 'attemptedExams', 'unattemptedExams'));
     }
 
-    public function results()
+    public function results($id)
     {
-        return view('backend.fulltest.results');
+        // dd($id);
+        // $exam = Exam::with(['sections', 'questions', 'userAttempt'])->find($id);
+        // dd($exam);
+        $examAttempt = ExamAttempt::where('user_id', Auth::user()->id)
+            ->where('exam_id', $id)
+            ->where('status', 'completed')
+            ->first();
+
+   
+        $examAttemptQuestions = $examAttempt->questions()->with(['question'])->get();
+        $examAttemptQuestions->each(function ($question) {
+            $question->is_correct = $question->is_correct ? 'Correct' : 'Incorrect';
+            $question->student_answer = $question->student_answer ?? 'Not Attempted';
+        });
+
+        return view('backend.fulltest.results', compact('exam', 'examAttempt', 'examAttemptQuestions'));
     }
 }

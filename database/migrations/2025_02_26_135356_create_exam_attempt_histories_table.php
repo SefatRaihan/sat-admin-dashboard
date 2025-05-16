@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_attempt_histories', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('exam_attempt_id')->index()->comment('References the exam attempt this history belongs to');
+            $table->id();
+            $table->uuid('uuid')->index();
+            $table->unsignedBigInteger('exam_attempt_id')->index()->comment('References the exam attempt this history belongs to');
             $table->timestamp('start_time')->nullable()->index();
             $table->timestamp('end_time')->nullable()->index();
             $table->integer('remaining_time')->nullable()->comment('Remaining time in seconds');

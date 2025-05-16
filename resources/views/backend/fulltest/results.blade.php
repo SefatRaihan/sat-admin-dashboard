@@ -1,4 +1,5 @@
 <x-backend.layouts.student-master>
+    {{-- @dd($exam.$examAttempt, $examAttemptQuestions) --}}
     <div class="mt-3">
         <h4 class="text-center score-title">Your score: <span class="scoreValue">75</span></h4>
         <p class="text-center score-text">Your performance is better than <b><span class="scoreValue">75</span>% of <span class="studentName">Mubhir</span> student</b> who have <br> completed this exam</p>
