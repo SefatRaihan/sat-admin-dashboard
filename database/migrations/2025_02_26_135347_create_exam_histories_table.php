@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('exam_histories', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique()->index();
+            $table->uuid('uuid')->index();
             $table->unsignedBigInteger('exam_id')->index();
             $table->string('title')->index();
             $table->text('description')->nullable();

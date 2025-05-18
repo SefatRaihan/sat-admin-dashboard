@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             
             // Unique Identifier
-            $table->uuid('uuid')->unique()->index();
+            $table->uuid('uuid')->index();
             $table->unsignedBigInteger('exam_section_id')->index()->comment('References the exam section this history belongs to');
             
             // Foreign Key: Associated Exam
