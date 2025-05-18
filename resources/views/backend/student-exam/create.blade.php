@@ -2,7 +2,7 @@
     <div class="">
         <div class="header p-4">
             <div class="header-content">
-                <h5 style="color: #344054;font: Inter;font-size: 20px;font-weight: 600;">Exam Name</h5>
+                <h5 style="color: #344054;font: Inter;font-size: 20px;font-weight: 600;">{{ $exam->title }}</h5>
                 <div class="heading-summary d-flex justify-content-center">
                     <ul class="p-0 m-0 text-center">
                         <li id="audience" style="list-style: none">{{ $exam->sections[0]->audience  }}</li>
