@@ -18,7 +18,6 @@
 
         '">
     </x-backend.layouts.partials.blocks.contentwrapper>
-{{-- @dd($exam->sections->sum('num_of_question')) --}}
     <div>
         <div class="row">
             <div class="col-md-9" style="background-color:#fff; padding: 16px; padding-left: 45px !important; border-bottom:1px solid #EAECF0">

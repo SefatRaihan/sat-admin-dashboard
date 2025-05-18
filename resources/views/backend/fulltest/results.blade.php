@@ -21,8 +21,8 @@
                     
                         <div class="col-md-4 text-center">
                             <p class="summary-text">Others' Average Pace</p>
-                            <p class="summary-value"><b class="other_avg_time">0:45</b></p>
-                            <p class="summary-description">(<span class="others-total-time">2:16</span> total)</p>
+                            <p class="summary-value"><b class="other_avg_time">0:00</b></p>
+                            <p class="summary-description">(<span class="others-total-time">0:00</span> total)</p>
                         </div>
                     </div>
                 </div>
