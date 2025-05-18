@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Traits\Historiable;
 use App\Traits\UserTrackable;
 use Illuminate\Support\Facades\DB;
+use App\Models\ExamAttemptQuestion;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -59,6 +60,12 @@ class ExamAttempt extends Model
     public function exam()
     {
         return $this->belongsTo(Exam::class, 'exam_id');
+    }
+
+
+    public function examAttemptQuestions()
+    {
+        return $this->hasMany(ExamAttemptQuestion::class, 'attempt_id');
     }
 
     /**

@@ -84,6 +84,7 @@ class StudentExamController extends Controller
 
     public function update(Request $request, $examAttemptId)
     {
+        // dd($examAttemptId);
         DB::beginTransaction();
            $attempt = ExamAttempt::where('id', $examAttemptId)
                 ->where('user_id', auth()->id())
@@ -100,7 +101,6 @@ class StudentExamController extends Controller
                 return [$item['question_id'] => $item['answer']];
             });
 
-            // dd($answers, $correctCount);
        
             foreach ($responses as $response) {
                 ExamAttemptQuestion::create([

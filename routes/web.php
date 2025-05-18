@@ -98,6 +98,7 @@ Route::middleware(['auth','web'])->group(function () {
     Route::get('student-open-exam/{examId}', [StudentExamController::class, 'openExam'])->name('student-exam.open');
     Route::get('student-exam/histories', [StudentExamController::class, 'histories'])->name('student-exam.histories');
     Route::get('result/{id}', [FullTestController::class, 'results'])->name('result');
+    Route::get('/other-student-score', [FullTestController::class, 'otherExamScore'])->name('other-student-score');
 
     Route::get('student-profile', [StudentController::class, 'studentProfile'])->name('student.profile');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');

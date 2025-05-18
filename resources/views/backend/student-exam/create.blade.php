@@ -286,7 +286,7 @@
                     success: function (response) {
                         console.log(response);
                         
-                        return false;
+                        // return false;
                         Swal.fire("Success", "Your exam has been submitted successfully", "success");
                         window.location.href = '/result/'+response.data.id;
                     },

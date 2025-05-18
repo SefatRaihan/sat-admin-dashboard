@@ -6,13 +6,13 @@
                     <div class="exam-tab-section p-2">
                         <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
                             <li class="nav-item">
-                              <a class="nav-link active" id="exam-all-tab" data-toggle="tab" href="#exam-all" role="tab" aria-controls="exam-all" aria-selected="true">Exam All (<span class="examAll">100</span>)</a>
+                              <a class="nav-link active" id="exam-all-tab" data-toggle="tab" href="#exam-all" role="tab" aria-controls="exam-all" aria-selected="true">Exam All (<span class="examAll">{{ $allExamCount }}</span>)</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" id="unattempted-tab" data-toggle="tab" href="#unattempted" role="tab" aria-controls="unattempted" aria-selected="false">Unattempted (<span class="unattempted">80</span>)</a>
+                              <a class="nav-link" id="unattempted-tab" data-toggle="tab" href="#unattempted" role="tab" aria-controls="unattempted" aria-selected="false">Unattempted (<span class="unattempted">{{ $unattemptedCount }}</span>)</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="attempted-tab" data-toggle="tab" href="#attempted" role="tab" aria-controls="attempted" aria-selected="false">Attempted (<span class="attempted">20</span>)</a>
+                                <a class="nav-link" id="attempted-tab" data-toggle="tab" href="#attempted" role="tab" aria-controls="attempted" aria-selected="false">Attempted (<span class="attempted">{{ $attemptedCount }}</span>)</a>
                               </li>
                         </ul>
                     </div>
@@ -24,19 +24,7 @@
                     <div class="tab-pane fade show active" id="exam-all" role="tabpanel" aria-labelledby="exam-all-tab">
                         <div class="pt-2">
                             <div class="row">
-                                <div class="col-md-3 exam-card">
-                                    <div class="card">
-                                        <h5 class="card-title">Stress Endurance Test for Student (SAT 2)</h5>
-                                        <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">4</span></p>
-                                        <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">80</span></p>
-                                        <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">1hr 15min</span></p>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="/student-exams" class="btn btn-start" style="width: 100%">Start Exam</a>
-                                        </div>
-                                    </div>
-                                </div>
                                 @foreach ($exams as $exam)
-                                {{-- @dd($exam) --}}
                                 <div class="col-md-3 exam-card">
                                     <div class="card">
                                         <h5 class="card-title">{{ $exam->title }}</h5>
@@ -44,7 +32,7 @@
                                         <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
                                         <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->formatted_duration }}</span></p>
                                         <div class="d-flex justify-content-between">
-                                            <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">Re-take Exam</a>
+                                            <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">{{ $exam->userAttempt && $exam->userAttempt->status ? 'Re-take Exam' : 'Start Exam' }}</a>
                                             <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
                                         </div>
                                     </div>
@@ -78,7 +66,6 @@
                         <div class="p-3">
                            <div class="row">
                              @foreach ($attemptedExams as $exam)
-                             @dd($exam)
                                 <div class="col-md-3 exam-card">
                                     <div class="card">
                                         <h5 class="card-title">{{ $exam->title }}</h5>
@@ -86,7 +73,7 @@
                                         <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
                                         <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->duration }}</span></p>
                                         <div class="d-flex justify-content-between">
-                                            <a href="/student-exams" class="btn btn-start">{{ 'Start Exam' }}</a>
+                                            <a href="/student-exams" class="btn btn-start">{{ 'Re-take Exam' }}</a>
                                             <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
                                         </div>
                                     </div>

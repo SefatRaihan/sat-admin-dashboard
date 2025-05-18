@@ -94,6 +94,7 @@ class Exam extends Model
 
     public function userAttempt()
     {
-        return $this->hasOne(ExamAttempt::class)->where('user_id', auth()->id());
+         return $this->hasOne(ExamAttempt::class, 'exam_id', 'id')
+                        ->where('user_id', auth()->id());
     }
 }

@@ -1,27 +1,27 @@
 <x-backend.layouts.student-master>
     {{-- @dd($exam.$examAttempt, $examAttemptQuestions) --}}
     <div class="mt-3">
-        <h4 class="text-center score-title">Your score: <span class="scoreValue">75</span></h4>
-        <p class="text-center score-text">Your performance is better than <b><span class="scoreValue">75</span>% of <span class="studentName">Mubhir</span> student</b> who have <br> completed this exam</p>
+        <h4 class="text-center score-title">Your score: <span class="scoreValue">{{ $correctAnswers }}</span></h4>
+        <p class="text-center score-text">Your performance is better than <b><span class="scoreValue">{{ $betterThanPercent }}</span>% of <span class="studentName">Mubhir</span> student</b> who have <br> completed this exam</p>
         <div class="mt-4">
             <div class="row d-flex justify-content-center">
                 <div class="col-md-5">
                     <div class="row">
                         <div class="col-md-4 text-center">
                             <p class="summary-text">Your Percent Correct</p>
-                            <p class="summary-value"><b>0%</b></p>
-                            <p class="summary-description">(<span class="correct-answers">0</span> of <span class="total-questions">3</span>)</p>
+                            <p class="summary-value"><b>{{ $percentCorrect }}%</b></p>
+                            <p class="summary-description">(<span class="correct-answers">{{ $correctAnswers }}</span> of <span class="total-questions">{{ $totalQuestions }}</span>)</p>
                         </div>
                     
                         <div class="col-md-4 text-center">
                             <p class="summary-text">Your Average Pace</p>
-                            <p class="summary-value"><b>0:03</b></p>
-                            <p class="summary-description">(<span class="total-time">0:10</span> total)</p>
+                            <p class="summary-value"><b>{{ $averagePaceFormatted }}</b></p>
+                            <p class="summary-description">(<span class="total-time">{{ $totalTimeFormatted }}</span> total)</p>
                         </div>
                     
                         <div class="col-md-4 text-center">
                             <p class="summary-text">Others' Average Pace</p>
-                            <p class="summary-value"><b>0:45</b></p>
+                            <p class="summary-value"><b class="other_avg_time">0:45</b></p>
                             <p class="summary-description">(<span class="others-total-time">2:16</span> total)</p>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="mt-4">
+    <div class="mt-4" style="height: 100vh;">
         <div class="row">
             <div class="col-md-8">
 
@@ -45,9 +45,9 @@
                                 </tr>
                                 <tr style="border-top: 1px solid #ddd">
                                     <td colspan="2">
-                                        <input type="text" id="search" class="form-control search__input" placeholder="Search Notification" style="padding-left: 35px; margin-right:13px; width:100% !important;">
+                                        <input type="text" id="search" class="form-control search__input" placeholder="Search Question" style="padding-left: 35px; margin-right:13px; width:100% !important;">
                                     </td>
-                                    <td colspan="2"></td>
+                                    <td colspan="3"></td>
                                     <td class="text-right">
                                         <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px; width:95px; height: 38px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
                                         {{-- filter side modal --}}
@@ -145,7 +145,7 @@
                                     </td>
                                 </tr>
                                 <tr class="bg-light">
-                                    <th>Question</th>
+                                    <th colspan="2">Question</th>
                                     <th>Section</th>
                                     <th>Difficulty</th>
                                     <th>Your Time</th>
@@ -153,32 +153,36 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <span class="correct-answer"><i class="fas fa-check"></i></span>
-                                        Sample Title
-                                    </td>
-                                    <td>Sample Section</td>
-                                    <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                    <td>10:00</td>
-                                    <td>
-                                        <button type="button" class="btn view" style="background-color:#691D5E ;border-radius: 8px; color:#fff">View</button>
-                                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="wrong-answer"><i class="fas fa-check"></i></span>
-                                        Sample Title
-                                    </td>
-                                    <td>Sample Section</td>
-                                    <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                    <td>10:00</td>
-                                    <td>
-                                        <button type="button" class="btn view" style="background-color:#691D5E ;border-radius: 8px; color:#fff">View</button>
-                                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
-                                    </td>
-                                </tr>
+                                @foreach ($examAttemptQuestions as $item)
+                                {{-- @dd($item->question->question_title) --}}
+                                    <tr>
+                                        <td width="5%">
+                                            <span class="{{ $item->is_correct === 1 ?  'correct-answer' : 'wrong-answer' }}"><i class="fas fa-check"></i></span>
+                                        </td>
+                                        <td width="20%">
+                                            <span>{{ strip_tags($item->question->question_title) }}</span>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                             @php
+                                                $difficulty = strtolower($item->question->difficulty);
+                                                $badgeClass = match($difficulty) {
+                                                    'easy' => 'badge-easy',
+                                                    'medium' => 'badge-medium',
+                                                    'hard' => 'badge-hard',
+                                                    'very_hard' => 'badge-very-hard',
+                                                    default => 'badge-default'
+                                                };
+                                            @endphp
+                                            <span class="badge badge-pill {{ $badgeClass }}">{{ $difficulty }}</span>
+                                        </td>
+                                        <td>10:00</td>
+                                        <td>
+                                            <button type="button" class="btn view" style="background-color:#691D5E ;border-radius: 8px; color:#fff">View</button>
+                                            <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -187,30 +191,16 @@
             <div class="col-md-4">
                 <ul class="list-group">
                     <li class="list-group-item" style="color: #101828">Leaderboard</li>
-                    <li class="list-group-item d-flex align-items-center">
-                        <span class="mr-3">1</span>
-                        <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
-                        <div>
-                            <p class="p-0 m-0">Andi Lane</p>
-                            <p>75%</p>
-                        </div>
-                    </li>
-                    <li class="list-group-item d-flex align-items-center">
-                        <span class="mr-3">2</span>
-                        <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
-                        <div>
-                            <p class="p-0 m-0">Andi Lane</p>
-                            <p>75%</p>
-                        </div>
-                    </li>
-                    <li class="list-group-item d-flex align-items-center">
-                        <span class="mr-3">3</span>
-                        <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
-                        <div>
-                            <p class="p-0 m-0">Andi Lane</p>
-                            <p>75%</p>
-                        </div>
-                    </li>
+                    @foreach($leadBoard as $key => $data)
+                        <li class="list-group-item d-flex align-items-center leaderboard-item {{ $key === 0 ? 'auto-click' : '' }}" style="cursor: pointer;" data-user-id="{{ $data['user_id'] }}" data-exam-id="{{ $examAttempt->exam_id }}">
+                            <span class="mr-3">{{ ++$key }}</span>
+                            <img src="{{ $data['profile_image'] }}" class="rounded-circle me-3" alt="Avatar">
+                            <div>
+                                <p class="p-0 m-0">{{ $data['user_name'] }}</p>
+                                <p>{{ $data['score'] }}%</p>
+                            </div>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
         </div>
@@ -362,6 +352,11 @@
                 margin-right: 12px;
             }
 
+            .leaderboard-item.selected {
+                background-color: #F1E9F0; /* light blue */
+                color: #101828; /* blue text */
+            }
+
             .correct-answer {
                 padding: 4px;
                 border-radius: 6px;
@@ -413,7 +408,7 @@
                 flex-grow: 1;
                 overflow-y: auto;
                 padding-left: 15px;
-                padding-bottom: 60px;
+                /* padding-bottom: 60px; */
             }
 
             .sidebar-overlay {
@@ -561,22 +556,55 @@
 
     @push('js')
     <script>
-        $(document).ready(function() {
-            $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
-                $('#taskSidebar').removeClass('open');
-                $('#taskSidebarOverlay').removeClass('active');
-                $('#boardHiddenInputSection').html('');
+            $(document).ready(function() {
+                $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
+                    $('#taskSidebar').removeClass('open');
+                    $('#taskSidebarOverlay').removeClass('active');
+                    $('#boardHiddenInputSection').html('');
+                });
+
+                $('.leaderboard-item').on('click', otherStudentScore);
+                $('.leaderboard-item.auto-click').trigger('click');
             });
 
-        });
+            function filter(button) {
+                const filter = $('.filter');
+                filter.show();
+                $('#taskSidebar').addClass('open');
+                $('#taskSidebarOverlay').addClass('active');
+            }
 
-        function filter(button) {
-            const filter = $('.filter');
-            filter.show();
-            $('#taskSidebar').addClass('open');
-            $('#taskSidebarOverlay').addClass('active');
-        }
 
+            function otherStudentScore() {
+
+                const userId = $(this).data('user-id');
+                const examId = $(this).data('exam-id');
+
+                // Remove previous selection
+                $('.leaderboard-item').removeClass('selected');
+
+                // Highlight the clicked one
+                $(this).addClass('selected');
+
+                // Send AJAX request
+                $.ajax({
+                    url: '/other-student-score',
+                    type: 'GET',
+                    data: {
+                        user_id: userId,
+                        exam_id: examId
+                    },
+                    success: function(response) {
+                        $('.other_avg_time').text(response.averagePaceFormatted)
+                        $('.others-total-time').text(response.totalTimeFormatted)
+
+
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    }
+                });
+            }
     </script>
     @endpush
 </x-backend.layouts.student-master>
