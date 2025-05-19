@@ -72,7 +72,7 @@
         <div class="footer m-0 p-0" style="border-top: 1px solid #ddd; bottom: 0; position: fixed; width: 100%; left: 0; background: #fff;">
             <div class="footer-content p-4">
                 <div class="footer-left">
-                    <button type="button" class="btn" style="width: 112px; height: 44px; border-radius: 5px; border: 1px solid #FDA29B; color: #B42318;" data-toggle="modal" data-target="#endExamdModal">End Exam</button>
+                    <button type="button" class="btn" style="width: 112px; height: 44px; border-radius: 5px; border: 1px solid #FDA29B; color: #B42318;" data-toggle="modal" data-target="#endExamModal">End Exam</button>
                 </div>
                 <div class="footer-right">
                     <button type="button" id="prevBtn" class="btn btn-prev d-none mr-2" style="width: 108px; height: 44px; border-radius: 8px; border: 1px solid #A16A99; color: #521749;">Previous</button>
@@ -118,7 +118,7 @@
         </div>  
 
         {{-- end exam modal --}}
-        <div class="modal fade" id="endExamdModal" tabindex="-1">
+        <div class="modal fade" id="endExamModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content text-center"  style="border-radius: 15px;">
                     <div class="modal-header">
@@ -172,7 +172,10 @@
                         clearInterval(window.timerInterval);
                         $('#clock').text("Time Expired!");
                         $('#expiredModal').modal('show');
-                        submitExam(); // Auto-submit when time expires
+                            setTimeout(() => {
+                                $('#expiredModal').modal('hide'); // Optional: hide modal after showing
+                                    $('#submitBtn').trigger('click');
+                            }, 3000)
                     }
                     totalSeconds--;
                 }, 1000);
@@ -333,6 +336,7 @@
                 $('.submit-exam').filter(':contains("End Exam")').on('click', function () {
                     if (confirm('Are you sure you want to end the exam?')) {
                         submitExam();
+                        // ('#endExamModal').modal('hide');
                     }
                 });
 
