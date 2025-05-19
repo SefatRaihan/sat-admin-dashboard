@@ -72,7 +72,7 @@
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
                         <li class="nav-item"><a href="/question" title="All Question" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Questions</span></a></li>
-                        <li class="nav-item"><a href="" title="All Question Exam" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
+                        <li class="nav-item"><a href="/exams" title="All Question Exam" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
                     </ul>
                 </li>
 
@@ -82,7 +82,7 @@
                         <span>Manage Tests</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <li class="nav-item"><a href="/exams" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Exam</span></a></li>
+                        <li class="nav-item"><a href="/all-result" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Exam</span></a></li>
                     </ul>
                 </li>
 
