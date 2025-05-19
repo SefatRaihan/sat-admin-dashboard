@@ -484,7 +484,7 @@
         <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
             <div class="card-header border-bottom d-flex justify-content-between">
                 <div>
-                    <input type="text" id="search" class="form-control search__input" placeholder="Search Notification" style="padding-left: 35px">
+                    <input type="text" id="search" class="form-control search__input" placeholder="Search Student" style="padding-left: 35px">
                 </div>
 
                 <div class="d-flex">

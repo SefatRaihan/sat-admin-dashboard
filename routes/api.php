@@ -101,4 +101,6 @@ Route::group([ 'as' => 'api'], function () {
     Route::post('/registrations', [RegistrationController::class, 'store']);
     Route::get('/registrations', [RegistrationController::class, 'index']);
 
+    Route::get('/results', [ExamController::class, 'results']);
+
 });

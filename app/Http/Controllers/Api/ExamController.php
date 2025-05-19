@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\ExamAttempt;
+use App\Models\ExamAttemptQuestion;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -300,5 +302,203 @@ class ExamController extends Controller
         Exam::whereIn('uuid', $request->exams)->delete();
         return response()->json(['message' => 'Exams deleted successfully']);
     }
+
+    public function results(Request $request)
+    {
+        // Validate request inputs
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+            'create_from' => 'nullable|date',
+            'create_to' => 'nullable|date|after_or_equal:create_from',
+            'status' => 'nullable|in:all,active,inactive', // Adjusted to match frontend
+            'audience_type' => 'nullable|string',
+            'package' => 'nullable|string',
+            'duration' => 'nullable|string',
+            'gender' => 'nullable|string',
+            'sort' => 'nullable|in:Latest,Oldest',
+            'per_page' => 'nullable|integer|min:1|max:100',
+        ]);
+    
+        // Base query with eager loading
+        $query = ExamAttempt::with([
+            'exam.sections' => function ($query) {
+                $query->orderBy('id', 'asc');
+            },
+            'user.student',
+        ]);
+    
+        // Apply status filter (adjusted to match frontend)
+        if ($status = $request->input('status')) {
+            if ($status === 'active') {
+                $query->where('status', 'completed');
+            } elseif ($status === 'inactive') {
+                $query->where('status', 'in_progress');
+            }
+            // If 'all', no status filter is applied
+        } else {
+            $query->whereIn('status', ['completed', 'in_progress']);
+        }
+    
+        // Search by exam name or student name
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('exam', function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%");
+                })->orWhereHas('user', function ($q) use ($search) {
+                    $q->where('full_name', 'like', "%{$search}%");
+                });
+            });
+        }
+    
+        // Date range filter
+        if ($createFrom = $request->input('create_from')) {
+            $query->whereDate('created_at', '>=', $createFrom);
+        }
+        if ($createTo = $request->input('create_to')) {
+            $query->whereDate('created_at', '<=', $createTo);
+        }
+    
+        // Audience type filter
+        if ($audienceTypes = $request->input('audience_type')) {
+            $audienceTypes = array_filter(explode(',', trim($audienceTypes)));
+            if (!empty($audienceTypes)) {
+                $query->whereHas('exam.sections', function ($q) use ($audienceTypes) {
+                    $q->whereIn('audience', $audienceTypes);
+                });
+            }
+        }
+
+    
+        // Sorting
+        $sort = $request->input('sort', 'Latest');
+        $query->orderBy('created_at', $sort === 'Latest' ? 'desc' : 'asc');
+    
+        // Pagination
+        $perPage = $request->input('per_page', 10);
+        $results = $query->paginate($perPage);
+    
+        // Transform results
+        $transformedResults = $results->getCollection()->map(function ($attempt) {
+            // Calculate total questions from exam sections
+            $totalQuestions = ExamSection::where('exam_id', $attempt->exam_id)
+                ->sum('num_of_question');
+    
+            // Calculate time taken
+            $timeTaken = ($attempt->end_time && $attempt->start_time)
+                ? $attempt->end_time->diffInMinutes($attempt->start_time)
+                : null;
+    
+            // Optimized ranking calculation
+            $currentCorrectAnswers = ExamAttemptQuestion::where('attempt_id', $attempt->id)
+                ->where('is_correct', true)
+                ->count();
+    
+            $rank = ExamAttempt::where('exam_id', $attempt->exam_id)
+                ->where('status', 'completed')
+                ->select('user_id', \DB::raw('MIN(attempt_number) as attempt_number'))
+                ->groupBy('user_id')
+                ->get()
+                ->map(function ($otherAttempt) use ($attempt, $currentCorrectAnswers) {
+                    $otherAttemptId = ExamAttempt::where('user_id', $otherAttempt->user_id)
+                        ->where('exam_id', $attempt->exam_id)
+                        ->where('status', 'completed')
+                        ->orderBy('attempt_number', 'asc')
+                        ->first()?->id;
+    
+                    if (!$otherAttemptId) {
+                        return null;
+                    }
+    
+                    $otherCorrectAnswers = ExamAttemptQuestion::where('attempt_id', $otherAttemptId)
+                        ->where('is_correct', true)
+                        ->count();
+    
+                    return [
+                        'correct_answers' => $otherCorrectAnswers,
+                        'attempt_number' => $otherAttempt->attempt_number,
+                        'is_higher' => ($otherCorrectAnswers > $currentCorrectAnswers) ||
+                            ($otherCorrectAnswers === $currentCorrectAnswers &&
+                             $otherAttempt->attempt_number < $attempt->attempt_number),
+                    ];
+                })
+                ->filter()
+                ->filter(fn($result) => $result['is_higher'])
+                ->count() + 1;
+    
+            return [
+                'uuid' => $attempt->uuid ?? 'N/A',
+                'exam_name' => $attempt->exam->title ?? 'N/A',
+                'audience' => $attempt->exam->sections->first()->audience ?? 'N/A',
+                'student_name' => $attempt->user->student->name ?? $attempt->user->full_name ?? 'N/A',
+                'ranking' => $rank ?? 'N/A',
+                'total_questions' => $totalQuestions ?? 'N/A',
+                'result' => ($attempt->correct_answers && $totalQuestions)
+                    ? number_format(($attempt->correct_answers / $totalQuestions) * 100, 2) . '%'
+                    : 'N/A',
+                'duration' => $attempt->exam->duration ? $attempt->exam->duration . ' min' : 'N/A',
+                'timing' => $timeTaken ? $timeTaken . ' min' : 'N/A',
+                'created_at' => $attempt->created_at ? $attempt->created_at->format('d-M-y') : 'N/A',
+            ];
+        });
+    
+        return response()->json([
+            'totalResult' => $results->total(),
+            'results' => [
+                'data' => $transformedResults,
+                'current_page' => $results->currentPage(),
+                'last_page' => $results->lastPage(),
+                'from' => $results->firstItem(),
+                'to' => $results->lastItem(),
+                'total' => $results->total(),
+            ],
+        ]);
+    }
+
+    public function resultDetails($uuid)
+    {
+        $attempt = ExamAttempt::with([
+            'exam.sections',
+            'user.student'
+        ])->where('uuid', $uuid)->firstOrFail();
+
+        // Fetch performance data from exam_attempt_questions
+        $performance = ExamAttemptQuestion::where('attempt_id', $attempt->id)
+            ->with(['question' => function ($query) {
+                $query->with(['course', 'section']); // Assumes question has course and section relationships
+            }])
+            ->get()
+            ->groupBy('question.section_id') // Group by section
+            ->map(function ($questions, $sectionId) use ($attempt) {
+                $section = $questions->first()->question->section;
+                $course = $questions->first()->question->course;
+                $totalQuestions = $questions->count();
+                $correctAnswers = $questions->where('is_correct', true)->count();
+                $score = $correctAnswers; // Or use a custom scoring logic
+                $percentage = $totalQuestions ? ($correctAnswers / $totalQuestions) * 100 : 0;
+
+                return [
+                    'course' => $course ? $course->name : 'N/A',
+                    'date' => $attempt->created_at->format('d-M-y'),
+                    'section' => $section ? $section->name : 'Not found',
+                    'score' => $score,
+                    'percentage' => number_format($percentage, 2),
+                ];
+            })->values();
+
+        return response()->json([
+            'data' => [
+                'result_code' => 'SID' . str_pad($attempt->id, 3, '0', STR_PAD_LEFT),
+                'name' => $attempt->user->student->name ?? $attempt->user->name ?? 'N/A',
+                'date_of_birth' => $attempt->user->date_of_birth,
+                'email' => $attempt->user->email,
+                'audience' => $attempt->exam->sections->first()->audience ?? 'N/A',
+                'gender' => $attempt->user->gender,
+                'status' => $attempt->status ?? 'completed',
+                'phone' => $attempt->user->phone,
+                'performance' => $performance,
+            ],
+        ]);
+    }
+    
 
 }

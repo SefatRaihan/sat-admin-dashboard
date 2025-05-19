@@ -104,6 +104,8 @@ Route::middleware(['auth','web'])->group(function () {
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
     Route::get('/explanation', [StudentController::class, 'explanation'])->name('student.explanation');
+
+    Route::get('/all-result', [ExamController::class, 'allResult'])->name('all-result');
 });
 
 

@@ -57,4 +57,9 @@ class ExamController extends Controller
         // Pass data to the Blade view
         return view('backend.exams.edit', compact('exam'));
     }
+
+    public function allResult()
+    {
+        return view('backend.exams.all-result');
+    }
 }
