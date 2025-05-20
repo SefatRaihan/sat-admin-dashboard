@@ -102,5 +102,6 @@ Route::group([ 'as' => 'api'], function () {
     Route::get('/registrations', [RegistrationController::class, 'index']);
 
     Route::get('/results', [ExamController::class, 'results']);
+    // Route::middleware('auth')->get('/student-history', [StudentController::class, 'history']);
 
 });

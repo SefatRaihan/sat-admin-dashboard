@@ -1,5 +1,5 @@
 <x-backend.layouts.student-master>
-    @dd();
+
     <section>
         <div id="questionList">
             <div class="card"
@@ -24,7 +24,7 @@
                         <table class="table table-hover align-middle">
                             <thead>
                                 <tr class="bg-light" style="border-top: 1px solid #D0D5DD;">
-                                    <th class="text-left">Exam Name</th>
+                                    <th class="text-center">Exam Name</th>
                                     <th class="text-center">Date</th>
                                     <th class="text-center">Total Section</th>
                                     <th class="text-center">Total Question</th>
@@ -38,7 +38,7 @@
                                 {{-- <tr>
                                     <td colspan="9" class="text-center">Loading...</td>
                                 </tr> --}}
-                                <tr>
+                                {{-- <tr>
                                     <td>Stress Endurance Test for SAT 2</td>
                                     <td class="text-center">12-12-2025</td>
                                     <td class="text-center">4</td>
@@ -50,7 +50,7 @@
                                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Detail</button>
                                         <button type="button" class="btn start-exam" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Re-take Exam</button>
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -362,6 +362,68 @@
                     $('#boardHiddenInputSection').html('');
                 });
 
+
+                // start datatable code
+                let currentPage = 1;
+                let perPage = $('#rowsPerPage').val();
+
+                fetchQuestions(currentPage, perPage);
+
+                // Handle pagination clicks
+                $(document).on('click', '.pagination a', function(e) {
+                    e.preventDefault();
+                    let page = $(this).data('page');
+                    if (page) {
+                        currentPage = page;
+                        fetchQuestions(currentPage, perPage);
+                    }
+                });
+
+                // Handle "Rows per page" change
+                $('#rowsPerPage').change(function() {
+                    perPage = $(this).val();
+                    fetchQuestions(1, perPage);
+                });
+
+                $('#sortSelect').on('change', function() {
+                    let sortOption = $(this).val();
+                    fetchQuestions(1, perPage, sortOption);
+                });
+
+                //end datatable code
+
+
+                let searchTimeout;
+                $('.search_input').on('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        fetchQuestions(1, $('#rowsPerPage').val());
+                    }, 300); // 300ms debounce
+                });
+
+                // Apply filters button click
+                $('.apply-filter-btn').on('click', function() {
+                    fetchQuestions(1, $('#rowsPerPage').val());
+                });
+
+                // Reset filters button click
+                $('.reset-filter-btn').on('click', function() {
+                    // Reset all filter inputs
+                    $('.search_input').val('');
+                    $('input[name="crated_start_at"]').val('');
+                    $('input[name="crated_end_at"]').val('');
+                    $('.question_search_input').val('');
+
+                    $('input[name="status"][value="All"]').prop('checked', true);
+                    $('.filter-group input:checkbox').prop('checked', false);
+                    $('.custom-checkbox input:checkbox').prop('checked', false);
+                    $('.multiselect').val([]).trigger('change');
+
+
+                    // Fetch with reset filters
+                    fetchQuestions(1, $('#rowsPerPage').val());
+                });
+
             });
 
             function filter(button) {
@@ -370,6 +432,135 @@
                 $('#taskSidebar').addClass('open');
                 $('#taskSidebarOverlay').addClass('active');
             }
+
+            // start datatable code
+            // get all questions
+            function fetchQuestions(page = 1, perPage = 10, sortColumn, sortOrder, sort = 'Latest') {
+                let filters = {
+                    search: $('.search_input').val() || '', // Search input value, default to empty string if undefined
+                    difficulty: $('.difficulty:checked').map((_, el) => el.value).get(), // Get all checked difficulty levels
+                    crated_start_at: $('input[name="crated_start_at"]').val() || '', // Start date, default to empty string
+                    crated_end_at: $('input[name="crated_end_at"]').val() || '', // End date, default to empty string
+                    status: $('input[name="status"]:checked').val() || 'All', // Selected status, default to 'All'
+                    audience: $('#all_sat_type_1 .nested-options input:checked').map((_, el) => el.value).get(), // Checked SAT 1 options
+                    audienceSat: $('#all_sat_type_2 #allSet2Toggle:checked').map((_, el) => el.value).get(), // Checked SAT 2 options
+                    questionSearch: $('.question_search_input').val() || '',
+                    created_by: $('.custom-checkbox .created_by:checked').map((_, el) => el.value).get(), // Checked created_by values
+                    average_time: {
+                        min: $('#min-range').val() || 1, // Minimum time from slider
+                        max: $('#max-range').val() || 120 // Maximum time from slider
+                    },
+                    sort: sort
+                };
+
+                $.ajax({
+                    url: "/student-history?page=" + page + "&per_page=" + perPage,
+                    type: "GET",
+                    data: filters,
+                    success: function(response) {
+                        console.log(response);
+                        
+
+                        let questionList = $('#questionList');
+                        let questionNullList = $('#questionNullList');
+                        let tableBody = $("#question-table-body");
+
+                        console.log(response.data.length);
+                        
+
+                        if (response.data.length == 0) {
+                            questionNullList.removeClass('d-none');
+                            questionList.addClass('d-none');
+                        } else {
+                            questionNullList.addClass('d-none');
+                            questionList.removeClass('d-none');
+                            tableBody.html("");
+
+                            let rows = '';
+                            $.each(response.data, function(index, question) {
+                                let difficultyColor = getDifficultyColor(question.difficulty);
+                                let statusChecked = question.status ? "checked" : "";
+
+                                // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
+                                rows += `<tr>
+                                    <td><input type="checkbox" class="row-checkbox question-row" value="${question.uuid}"></td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.question_title}</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.audience}</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.sat_question_type}</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.exam || ''}</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}"><span class="badge badge-pill ${difficultyColor}">${question.difficulty}</span></td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.avg_time || '00:00'} min</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${formatDate(question.created_at)} ${question.created_by.full_name}</td>
+                                    <td class="text-center">
+                                        <label class="switch">
+                                            <input type="checkbox" class="toggle-status" data-id="${question.id}" ${question.status === 'active' ? 'checked' : '' }>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                         <button data-toggle="modal" data-id="${question.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
+                                    </td>
+                                </tr>`;
+                            });
+                            tableBody.html(rows);
+                            updatePagination(response, page);
+                        }
+
+                    },
+                    error: function() {
+                        alert("Error fetching questions.");
+                    }
+                });
+            }
+
+            function updatePagination(response, currentPage) {
+                let totalResults = response.total;
+                let perPage = response.per_page;
+                let totalPages = response.last_page;
+                let start = (response.from || 0);
+                let end = (response.to || 0);
+
+                $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
+                $('#total-questions').text(`${totalResults} Questions`);
+
+                let paginationHtml = '';
+
+                // First & Previous
+                paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" data-page="1">«</a></li>`;
+                paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" data-page="${currentPage - 1}">‹</a></li>`;
+
+                // Page Numbers
+                if (currentPage > 2) {
+                    paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`;
+                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                }
+
+                for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages, currentPage + 1); i++) {
+                    paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                                            <a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+                }
+
+                if (currentPage < totalPages - 1) {
+                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                    paginationHtml +=
+                        `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
+                }
+
+                // Next & Last
+                paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" data-page="${currentPage + 1}">›</a></li>`;
+                paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" data-page="${totalPages}">»</a></li>`;
+
+                $('#pagination-links').html(paginationHtml);
+            }
+            // end datatable code
+
+
+
+
 
         </script>
     @endpush

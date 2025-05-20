@@ -259,10 +259,11 @@ class ExamController extends Controller
 
     public function toggleStatus(Request $request, $id)
     {
+        // dd($request->status);
         try {
             $exam = Exam::findOrFail($id);
 
-            $exam->update(['status' => $request->status]);
+            $exam->update(['status' => $request->status, 'scheduled_at' => $request->status == "active" ? now() : null]);
 
              // Retrieve all sections belonging to this exam
             $sections = ExamSection::where('exam_id', $exam->id)->get();

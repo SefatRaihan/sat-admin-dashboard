@@ -1,23 +1,24 @@
 <?php
 
-use App\Http\Controllers\RoleManagementController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\NavItemController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\FullTestController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ExamController;
-use App\Http\Controllers\FullTestController;
 use App\Http\Controllers\MakeModelController;
+use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\RoleNavItemController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\PackageGenerateController;
 use App\Http\Controllers\StudentExamController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RoleManagementController;
+use App\Http\Controllers\PackageGenerateController;
+use App\Http\Controllers\Api\StudentController as StudentApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,8 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// 'check.permission'
-Route::middleware(['auth','web'])->group(function () {
+
+Route::middleware(['auth','web', 'check.permission'])->group(function () {
 
     // Route::resource('roles', RoleController::class);
     Route::resource('navitems', NavItemController::class);
@@ -106,6 +107,8 @@ Route::middleware(['auth','web'])->group(function () {
     Route::get('/explanation', [StudentController::class, 'explanation'])->name('student.explanation');
 
     Route::get('/all-result', [ExamController::class, 'allResult'])->name('all-result');
+    Route::get('/student-history', [StudentApiController::class, 'history']);
+
 });
 
 

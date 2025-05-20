@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Student;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
+use App\Models\Exam;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Student;
+use App\Models\ExamAttempt;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Exports\StudentsExport;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
+use App\Models\StudentNotification;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\StudentsExport;
-use App\Models\StudentNotification;
 use Illuminate\Support\Facades\Notification;
 
 class StudentController extends Controller
@@ -364,12 +368,12 @@ class StudentController extends Controller
         // Multiple students-এর জন্য নোটিফিকেশন তৈরি করা হবে
         foreach ($request->students as $studentId) {
             StudentNotification::create([
-                'uuid'              => Str::uuid(),
-                'student_id' => $studentId,
-                'title' => $request->title,
+                'uuid'        => Str::uuid(),
+                'student_id'  => $studentId,
+                'title'       => $request->title,
                 'description' => $request->description,
-                'date' => $request->date,
-                'time' => $request->time,
+                'date'        => $request->date,
+                'time'        => $request->time,
             ]);
         }
 
@@ -403,6 +407,27 @@ class StudentController extends Controller
         return response()->json(['success' => true, 'message' => 'Status updated successfully']);
     }
     
+
+    public function history()
+    {
+
+        $examAttempts = ExamAttempt::whereNotNull('status')
+        ->selectRaw('
+            exam_attempts.*, 
+            exams.title as exam_title,
+            exams.section,
+            exams.duration,
+            exams.scheduled_at,
+            exam_attempts.score
+        ')
+        ->where('user_id', Auth::user()->id)
+        ->with(['exam', 'exam.questions'])
+        ->get();
+        return response()->json([
+            'status' => true,
+            'data' => $examAttempts
+        ]);
+    }
 
     //another methods
 }

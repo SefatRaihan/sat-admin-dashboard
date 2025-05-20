@@ -70,14 +70,14 @@
                             <thead>
                                 <tr align="center">
                                     <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
-                                    <th data-column="question" class="sortable text-center">Question</th>
-                                    <th data-column="audience" class="sortable text-center">Audience</th>
-                                    <th data-column="question_type" class="sortable text-center">Q. Type</th>
-                                    <th data-column="exam" class="sortable text-center">Exam</th>
-                                    <th data-column="difficulty" class="sortable text-center">Difficulty</th>
-                                    <th data-column="avg_time" class="sortable text-center">Avg. Time</th>
-                                    <th data-column="created_at" class="sortable text-center">Created</th>
-                                    <th class="text-center">State</th>
+                                    <th data-order="asc" data-name="Question" data-column="question" class="sortable text-center">Question</th>
+                                    <th data-order="asc" data-name="Audience" data-column="audience" class="sortable text-center">Audience</th>
+                                    <th data-order="asc" data-name="Question Type" data-column="question_type" class="sortable text-center">Q. Type</th>
+                                    <th data-order="asc" data-name="Exam" data-column="exam" class="sortable text-center">Exam</th>
+                                    <th data-order="asc" data-name="Difficulty" data-column="difficulty" class="sortable text-center">Difficulty</th>
+                                    <th data-order="asc" data-name="AVGTime" data-column="avg_time" class="sortable text-center">Avg. Time</th>
+                                    <th data-order="asc" data-name="Created" data-column="created_at" class="sortable text-center">Created</th>
+                                    <th data-order="asc" data-name="State" class="text-center">State</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -1874,8 +1874,8 @@
                 });
 
                 $(document).on("click", ".openDetailModal", detailModal);
-
             });
+
 
             function updateButtons() {
                 if (currentStep === 1) {
@@ -1974,10 +1974,6 @@
                 let context = $("#context .ql-editor").html();
                 let mcq_question = $("#mcq_question .ql-editor").text();
 
-                // if (context === "" || mcq_question === "") {
-                //     alert('Please fill all the fields');
-                //     // $('.step-3').html('');
-                // }
                 $('#question-container').html(
                     `
                         <p>${context}</p>
@@ -2200,7 +2196,7 @@
 
             // start datatable code
             // get all questions
-            function fetchQuestions(page = 1, perPage = 10, sort = 'Latest') {
+            function fetchQuestions(page = 1, perPage = 10, sortColumn, sortOrder, sort = 'Latest') {
                 let filters = {
                     search: $('.search_input').val() || '', // Search input value, default to empty string if undefined
                     difficulty: $('.difficulty:checked').map((_, el) => el.value).get(), // Get all checked difficulty levels
@@ -2219,7 +2215,7 @@
                 };
 
                 $.ajax({
-                    url: "/api/questions?page=" + page + "&per_page=" + perPage,
+                    url: "/api/?page=" + page + "&per_page=" + perPage,
                     type: "GET",
                     data: filters,
                     success: function(response) {
