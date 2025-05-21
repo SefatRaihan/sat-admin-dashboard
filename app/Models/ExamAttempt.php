@@ -5,7 +5,9 @@ namespace App\Models;
 
 
 use Carbon\Carbon;
+use App\Models\Exam;
 use App\Traits\Historiable;
+use App\Models\ExamQuestion;
 use App\Traits\UserTrackable;
 use Illuminate\Support\Facades\DB;
 use App\Models\ExamAttemptQuestion;
@@ -128,6 +130,18 @@ class ExamAttempt extends Model
         static::deleting(function ($attempt) {
             Log::warning('Exam attempt deleted', ['attempt_id' => $attempt->id]);
         });
+    }
+
+    public function questions()
+    {
+        return $this->hasManyThrough(
+            ExamQuestion::class, // Final model
+            Exam::class,     // Intermediate model
+            'question_id',            // Foreign key on Exam (local key in ExamAttempt)
+            'exam_id',       // Foreign key on Question
+            'exam_id',       // Foreign key on ExamAttempt
+            'question_id'             // Local key on Exam
+        );
     }
 
 }

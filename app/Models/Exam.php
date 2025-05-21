@@ -62,6 +62,11 @@ class Exam extends Model
         return $this->belongsToMany(ExamQuestion::class, 'exam_question_pivot', 'exam_id', 'question_id');
     }
 
+    public function examAttempts()
+    {
+        return $this->hasMany(ExamAttempt::class);
+    }
+
     /**
      * Scope a query to only include published exams.
      */

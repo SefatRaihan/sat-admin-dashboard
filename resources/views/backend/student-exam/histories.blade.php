@@ -134,7 +134,7 @@
                                         <input type="range" min="1" max="100" value="1" id="min-range">
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="mt-4">
                                 <div class="slider-container" style="max-width: 100% !important;">
                                     <div class="slider-header">
@@ -145,7 +145,7 @@
                                         <input type="range" min="1" max="120" value="120" id="max-range">
                                     </div>
                                 </div>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -182,7 +182,7 @@
                 transform-style: preserve-3d;
                 padding-left: 36px; /* Ensures the placeholder doesn't overlap with the icon */
             }
-            
+
             .search_input::placeholder {
                 padding-left: 30px;
             }
@@ -350,6 +350,32 @@
 
             /* avg time slider end */
             /* filter section end */
+
+
+             .btn-start {
+                background-color: #691D5E;
+                border: 1px solid #691D5E;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-weight: bold;
+                width: 50%;
+                margin-right: 4px;
+            }
+            .btn-details {
+                background-color: white;
+                color: #6c757d;
+                border: 1px solid #ced4da;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-weight: bold;
+                width: 50%;
+                margin-left: 4px;
+            }
+            .btn-details:hover {
+                background-color: #f8f9fa;
+            }
         </style>
     @endpush
 
@@ -459,14 +485,13 @@
                     data: filters,
                     success: function(response) {
                         console.log(response);
-                        
 
                         let questionList = $('#questionList');
                         let questionNullList = $('#questionNullList');
                         let tableBody = $("#question-table-body");
 
                         console.log(response.data.length);
-                        
+
 
                         if (response.data.length == 0) {
                             questionNullList.removeClass('d-none');
@@ -477,28 +502,18 @@
                             tableBody.html("");
 
                             let rows = '';
-                            $.each(response.data, function(index, question) {
-                                let difficultyColor = getDifficultyColor(question.difficulty);
-                                let statusChecked = question.status ? "checked" : "";
-
-                                // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
+                            $.each(response.data, function(index, attemptExam) {
                                 rows += `<tr>
-                                    <td><input type="checkbox" class="row-checkbox question-row" value="${question.uuid}"></td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.question_title}</td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.audience}</td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.sat_question_type}</td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.exam || ''}</td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}"><span class="badge badge-pill ${difficultyColor}">${question.difficulty}</span></td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.avg_time || '00:00'} min</td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${formatDate(question.created_at)} ${question.created_by.full_name}</td>
-                                    <td class="text-center">
-                                        <label class="switch">
-                                            <input type="checkbox" class="toggle-status" data-id="${question.id}" ${question.status === 'active' ? 'checked' : '' }>
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </td>
-                                    <td class="text-center">
-                                         <button data-toggle="modal" data-id="${question.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
+                                    <td class="text-left">${attemptExam.title}</td>
+                                    <td class="text-center">${attemptExam.start_time}</td>
+                                    <td class="text-center">${attemptExam.section}</td>
+                                    <td class="text-center">${attemptExam.total_questions}</td>
+                                    <td class="text-center">${attemptExam.score || 0}%</td>
+                                    <td class="text-center">${attemptExam.duration}</td>
+                                    <td class="text-center">${attemptExam.total_user_attempts}</td>
+                                    <td class="text-center d-flex justify-content-between">
+                                        <a href="/student-open-exam/${attemptExam.exam_id}"  target="_blank" class="btn btn-start">{{ 'Re-take Exam' }}</a>
+                                        <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
                                     </td>
                                 </tr>`;
                             });
@@ -514,11 +529,11 @@
             }
 
             function updatePagination(response, currentPage) {
-                let totalResults = response.total;
-                let perPage = response.per_page;
-                let totalPages = response.last_page;
-                let start = (response.from || 0);
-                let end = (response.to || 0);
+                let totalResults = response.meta.total;
+                let perPage = response.meta.per_page;
+                let totalPages = response.meta.last_page;
+                let start = (response.meta.from || 0);
+                let end = (response.meta.to || 0);
 
                 $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
                 $('#total-questions').text(`${totalResults} Questions`);

@@ -33,7 +33,7 @@
                                         <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->formatted_duration }}</span></p>
                                         <div class="d-flex justify-content-between">
                                             <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">{{ $exam->userAttempt && $exam->userAttempt->status ? 'Re-take Exam' : 'Start Exam' }}</a>
-                                            <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
+                                            <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
                                         </div>
                                     </div>
                                 </div>
@@ -53,8 +53,8 @@
                                         <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
                                         <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->duration }}</span></p>
                                         <div class="d-flex justify-content-between">
-                                            <a href="/student-exams" class="btn btn-start">{{ 'Start Exam' }}</a>
-                                            <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
+                                            <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">{{ 'Start Exam' }}</a>
+                                            <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
                                         </div>
                                     </div>
                                 </div>
@@ -73,8 +73,8 @@
                                         <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
                                         <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->duration }}</span></p>
                                         <div class="d-flex justify-content-between">
-                                            <a href="/student-exams" class="btn btn-start">{{ 'Re-take Exam' }}</a>
-                                            <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
+                                            <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">{{ 'Re-take Exam' }}</a>
+                                            <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
                                         </div>
                                     </div>
                                 </div>
@@ -167,7 +167,7 @@
         </div>
     </div>
 
-    <!-- Create Modal -->
+    <!-- Exam Detail Modal -->
     <div class="modal fade" id="detailsModelCenter" tabindex="-1" role="dialog" aria-labelledby="detailsModelCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 43%;">
             <div class="modal-content student-create-section" style="border-radius: 24px; height:100%">
@@ -680,6 +680,8 @@
                     $('#boardHiddenInputSection').html('');
                 });
 
+                $(document).on('click', '.btn-details', detailModalData)
+
             });
 
             function filter(button) {
@@ -687,6 +689,15 @@
                 filter.show();
                 $('#taskSidebar').addClass('open');
                 $('#taskSidebarOverlay').addClass('active');
+            }
+
+            function detailModalData()
+            {
+                let examId = $(this).data('exam');
+                console.log(examId);
+                
+
+                
             }
 
         </script>
