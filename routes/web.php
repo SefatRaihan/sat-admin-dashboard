@@ -97,9 +97,10 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::post('student-exams/{id}', [StudentExamController::class, 'update']);
     Route::post('student-exam/start/{examId}', [StudentExamController::class, 'startExam'])->name('student-exam.start');
     Route::get('student-open-exam/{examId}', [StudentExamController::class, 'openExam'])->name('student-exam.open');
-    Route::get('student-exam/histories', [StudentExamController::class, 'histories'])->name('student-exam.histories');
+    Route::get('student-open-exam/{examId}', [StudentExamController::class, 'openExam'])->name('student-exam.open');
     Route::get('result/{id}', [FullTestController::class, 'results'])->name('result');
     Route::get('/other-student-score', [FullTestController::class, 'otherExamScore'])->name('other-student-score');
+    Route::get('/exams/{id}/details', [FullTestController::class, 'examDetails']);
 
     Route::get('student-profile', [StudentController::class, 'studentProfile'])->name('student.profile');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');

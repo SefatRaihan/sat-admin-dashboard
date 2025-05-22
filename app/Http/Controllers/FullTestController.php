@@ -199,4 +199,37 @@ class FullTestController extends Controller
             'betterThanPercent' => $betterThanPercent,
         ];
     }
+
+    public function examDetails(Exam $exam)
+    {
+        // Fetch all the related info needed for modal, e.g.:
+        $leaderboard = $exam->examAttempts()
+            ->with('user')
+            ->orderByDesc('score')
+            ->limit(10)
+            ->get()
+            ->map(function($attempt) {
+                return [
+                    'name'       => $attempt->user->name,
+                    'score'      => $attempt->score,
+                    'avatar_url' => $attempt->user->avatar_url ?? asset('image/profile.jpeg'),
+                ];
+            });
+
+        return response()->json([
+            'data' => [
+                'title'            => $exam->title,
+                'audience'         => 'Hi School',  // customize as needed
+                'sections_count'   => $exam->sections()->count(),
+                'total_questions'  => $exam->questions()->count(),
+                'score'            => 75,            // or calculate user's score
+                'student_name'     => auth()->user()->name,
+                'correct_answers'  => 60,            // calculate accordingly
+                'percent_correct'  => '75%',
+                'total_time'       => '0:10',
+                'others_average_time' => '0:45',
+                'leaderboard'      => $leaderboard,
+            ]
+        ]);
+    }
 }

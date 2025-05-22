@@ -696,9 +696,57 @@
                 let examId = $(this).data('exam');
                 console.log(examId);
                 
-
+                $.ajax({
+                    url: `/api/exams/${examId}/details`,  /
+                    method: 'GET',
+                    success: function(response) {
+                        // Assuming response is JSON with needed exam info
+                        populateDetailsModal(response.data);
+                    },
+                    error: function(err) {
+                        console.error('Error fetching exam details:', err);
+                        alert('Failed to load exam details.');
+                    }
+                });
                 
             }
+
+            function populateDetailsModal(data) {
+                $('#detailsModelCenter h5#exampleModalLongTitle').text(data.title || 'Exam Name');
+                $('#audience').text(data.audience || 'Hi School');
+                $('#total-section').text(data.sections_count ? data.sections_count + ' sections' : '');
+                $('#total-question').text(data.total_questions ? data.total_questions + ' Questions' : '');
+
+                $('.scoreValue').text(data.score || '0');
+                $('.studentName').text(data.student_name || 'Student');
+                $('.correct-answers').text(data.correct_answers || '0');
+                $('.total-questions').text(data.total_questions || '0');
+                $('.summary-value b').first().text(data.percent_correct || '0%');
+                $('.total-time').text(data.total_time || '0:00');
+                $('.others-total-time').text(data.others_average_time || '0:00');
+
+                // Fill leaderboard (clear existing first)
+                const leaderboardList = $('#detailsModelCenter .list-group').empty();
+
+                if(data.leaderboard && data.leaderboard.length) {
+                    leaderboardList.append(`<li class="list-group-item" style="color: #101828">Leaderboard</li>`);
+                    data.leaderboard.forEach(function(item, idx) {
+                        leaderboardList.append(`
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="mr-3">${idx + 1}</span>
+                                <img src="${item.avatar_url}" class="rounded-circle me-3" alt="Avatar">
+                                <div>
+                                    <p class="p-0 m-0">${item.name}</p>
+                                    <p>${item.score}%</p>
+                                </div>
+                            </li>
+                        `);
+                    });
+                }
+
+                // Fill any other dynamic info as needed
+            }
+
 
         </script>
     @endpush
