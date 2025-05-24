@@ -1530,7 +1530,7 @@
     @endpush
 
     @push('js')
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script>
+        {{-- <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script> --}}
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
         <!-- Theme JS files -->
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/uploaders/dropzone.min.js"></script>
@@ -2211,11 +2211,11 @@
                         min: $('#min-range').val() || 1, // Minimum time from slider
                         max: $('#max-range').val() || 120 // Maximum time from slider
                     },
-                    sort: sort
+                    sort: sort,
                 };
 
                 $.ajax({
-                    url: "/api/?page=" + page + "&per_page=" + perPage,
+                    url: "/api/questions?page=" + page + "&per_page=" + perPage,
                     type: "GET",
                     data: filters,
                     success: function(response) {

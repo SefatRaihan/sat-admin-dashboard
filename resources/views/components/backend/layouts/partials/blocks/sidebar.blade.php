@@ -82,7 +82,8 @@
                         <span>Manage Tests</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <li class="nav-item"><a href="/all-result" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Exam</span></a></li>
+                        <li class="nav-item"><a href="/all-result" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Results</span></a></li>
+                        <li class="nav-item"><a href="#" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Test Ranking</span></a></li>
                     </ul>
                 </li>
 

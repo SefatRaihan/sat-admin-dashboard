@@ -196,13 +196,13 @@
                                                     <p class="summary-value"><b>0%</b></p>
                                                     <p class="summary-description">(<span class="correct-answers">0</span> of <span class="total-questions">3</span>)</p>
                                                 </div>
-                                            
+
                                                 <div class="col-md-12 text-center">
                                                     <p class="summary-text">Your Average Pace</p>
                                                     <p class="summary-value"><b>0:03</b></p>
                                                     <p class="summary-description">(<span class="total-time">0:10</span> total)</p>
                                                 </div>
-                                            
+
                                                 <div class="col-md-12 text-center">
                                                     <p class="summary-text">Others' Average Pace</p>
                                                     <p class="summary-value"><b>0:45</b></p>
@@ -286,7 +286,7 @@
                 transform-style: preserve-3d;
                 padding-left: 36px; /* Ensures the placeholder doesn't overlap with the icon */
             }
-            
+
             .search__input::placeholder {
                 padding-left: 30px;
             }
@@ -579,7 +579,7 @@
             /* filter section end */
 
             /* timeline */
-            
+
             main {
                 min-width: 300px;
                 max-width: 500px;
@@ -695,9 +695,9 @@
             {
                 let examId = $(this).data('exam');
                 console.log(examId);
-                
+
                 $.ajax({
-                    url: `/api/exams/${examId}/details`,  /
+                    url: `/exams/${examId}/details`,
                     method: 'GET',
                     success: function(response) {
                         // Assuming response is JSON with needed exam info
@@ -708,7 +708,7 @@
                         alert('Failed to load exam details.');
                     }
                 });
-                
+
             }
 
             function populateDetailsModal(data) {

@@ -84,7 +84,7 @@ class StudentExamController extends Controller
 
     public function update(Request $request, $examAttemptId)
     {
-    
+
         DB::beginTransaction();
            $attempt = ExamAttempt::where('id', $examAttemptId)
                 ->where('user_id', auth()->id())
@@ -101,7 +101,7 @@ class StudentExamController extends Controller
                 return [$item['question_id'] => $item['answer']];
             });
 
-       
+
             foreach ($responses as $response) {
                 ExamAttemptQuestion::create([
                     'uuid'           => Str::uuid(),
@@ -128,7 +128,6 @@ class StudentExamController extends Controller
 
     public function histories()
     {
-        // dd(auth()->user()->id);
         return view('backend.student-exam.histories');
     }
 }

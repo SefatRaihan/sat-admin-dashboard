@@ -41,17 +41,17 @@ class FullTestController extends Controller
             ->paginate(12);
 
         $attemptedExams = $exams->whereIn('id', $attemptedExamIds);
-        
-        
+
+
         $allExamCount = $allExamIds->count();
         $attemptedCount = $attemptedExamIds->count();
         $unattemptedCount = $allExamIds->diff($attemptedExamIds)->count();
 
         // dd($exams, $attemptedExams, $unattemptedExams);
         return view('backend.fulltest.create', compact(
-            'exams', 
-            'attemptedExams', 
-            'unattemptedExams', 
+            'exams',
+            'attemptedExams',
+            'unattemptedExams',
             'allExamCount',
             'attemptedCount',
             'unattemptedCount'
@@ -73,7 +73,7 @@ class FullTestController extends Controller
         $averagePaceFormatted = $scoreData['averagePaceFormatted'];
         $totalTimeFormatted = $scoreData['totalTimeFormatted'];
         $betterThanPercent = $scoreData['betterThanPercent'];
-        
+
         // Update each question display status
         $examAttemptQuestions->each(function ($question) {
             $question->is_correct = $question->is_correct ? 'Correct' : 'Incorrect';
@@ -95,7 +95,7 @@ class FullTestController extends Controller
 
 
     public function otherExamScore(Request $request)
-    {     
+    {
         $userId = $request->query('user_id');
         $examId = $request->query('exam_id');
         $attemptedExam = ExamAttempt::where('exam_id', $examId)
@@ -110,7 +110,7 @@ class FullTestController extends Controller
 
         $averagePaceFormatted = $scoreData['averagePaceFormatted'];
         $totalTimeFormatted = $scoreData['totalTimeFormatted'];
-    
+
         return response()->json([
             'averagePaceFormatted' => $averagePaceFormatted,
             'totalTimeFormatted' => $totalTimeFormatted
@@ -169,8 +169,8 @@ class FullTestController extends Controller
                         'score' => $percentCorrect,
                         'time' => sprintf("%d:%02d", $minutes, $seconds),
                         'submitted_at' => $attempt->end_time,
-                        'profile_image' => $attempt->user->student->image 
-                                ? Storage::disk('public')->url($attempt->user->student->image) 
+                        'profile_image' => $attempt->user->student->image
+                                ? Storage::disk('public')->url($attempt->user->student->image)
                                 : asset('images/default-avatar.png'),
                     ];
                 });
@@ -202,6 +202,7 @@ class FullTestController extends Controller
 
     public function examDetails(Exam $exam)
     {
+        dd($exam);
         // Fetch all the related info needed for modal, e.g.:
         $leaderboard = $exam->examAttempts()
             ->with('user')
