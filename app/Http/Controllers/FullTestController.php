@@ -47,7 +47,6 @@ class FullTestController extends Controller
         $attemptedCount = $attemptedExamIds->count();
         $unattemptedCount = $allExamIds->diff($attemptedExamIds)->count();
 
-        // dd($exams, $attemptedExams, $unattemptedExams);
         return view('backend.fulltest.create', compact(
             'exams',
             'attemptedExams',
@@ -61,7 +60,7 @@ class FullTestController extends Controller
     public function results($id)
     {
 
-       $scoreData = self::getExamScore($id, auth()->id());
+        $scoreData = self::getExamScore($id, auth()->id());
 
 
         $leadBoard = $scoreData['leadBoard'];
@@ -98,12 +97,12 @@ class FullTestController extends Controller
     {
         $userId = $request->query('user_id');
         $examId = $request->query('exam_id');
-        $attemptedExam = ExamAttempt::where('exam_id', $examId)
-            ->where('user_id', $userId)
-            ->where('status', 'completed')
-            ->orderByDesc('score')
-            ->orderByRaw('TIMESTAMPDIFF(SECOND, start_time, end_time) ASC')
-            ->firstOrFail();
+        $attemptedExam = ExamAttempt::completed()
+                    ->where('exam_id', $examId)
+                    ->where('user_id', $userId)
+                    ->orderByDesc('score')
+                    ->orderByRaw('TIMESTAMPDIFF(SECOND, start_time, end_time) ASC')
+                    ->firstOrFail();
 
 
         $scoreData = self::getExamScore($attemptedExam->id, $userId);
@@ -117,10 +116,62 @@ class FullTestController extends Controller
         ],200);
     }
 
+    public function view_details($id)
+    {
+        $scoreData = self::getExamScore($id, auth()->id());
+
+        $examAttempt          = $scoreData['examAttempt'];
+        $percentCorrect       = $scoreData['percentCorrect'];
+        $correctAnswers       = $scoreData['correctAnswers'];
+        $totalQuestions       = $scoreData['totalQuestions'];
+        $averagePaceFormatted = $scoreData['averagePaceFormatted'];
+        $totalTimeFormatted   = $scoreData['totalTimeFormatted'];
+        $betterThanPercent    = $scoreData['betterThanPercent'];
+
+        return response()->json([
+            'examAttempt'          => $examAttempt,
+            'percentCorrect'       => $percentCorrect,
+            'correctAnswers'       => $correctAnswers,
+            'totalQuestions'       => $totalQuestions,
+            'averagePaceFormatted' => $averagePaceFormatted,
+            'totalTimeFormatted'   => $totalTimeFormatted,
+            'betterThanPercent'    => $betterThanPercent,
+        ]);
+    }
+
+    public function examDetails($id)
+    {
+
+        $exam = Exam::find($id);
+        // $totalQuestion = $exam->questions->count();
+        $attemptId = ExamAttempt::completed()
+                        ->where('exam_id', $id)
+                        ->orderByDesc('score')
+                        ->first()->id;
+
+        $scoreData = self::getExamScore($attemptId, auth()->id());
+
+
+        $previousAttempts = ExamAttempt::completed()->where('exam_id', $id)->select('id','start_time', 'exam_id')->latest()->take(5)->get();
+
+        return response()->json([
+            'leadBoard' => $scoreData['leadBoard'],
+            'examAttempt' => $scoreData['examAttempt'],
+            'percentCorrect' => $scoreData['percentCorrect'],
+            'correctAnswers' => $scoreData['correctAnswers'],
+            'totalQuestions' =>  $scoreData['totalQuestions'],
+            'averagePaceFormatted' => $scoreData['averagePaceFormatted'],
+            'totalTimeFormatted' => $scoreData['totalTimeFormatted'],
+            'betterThanPercent' => $scoreData['betterThanPercent'],
+            'previousAttempts' => $previousAttempts,
+            'exam' => $exam,
+        ]);
+    }
+
     private static function getExamScore($attemptId, $userId)
     {
-        $examAttempt = ExamAttempt::where('id', $attemptId)
-                        ->where('status', 'completed')
+        $examAttempt = ExamAttempt::completed()
+                        ->where('id', $attemptId)
                         ->where('user_id', $userId)
                         ->firstOrFail();
 
@@ -149,8 +200,8 @@ class FullTestController extends Controller
         };
 
         // Exam LeadBoard
-        $leadBoard =  ExamAttempt::where('exam_id', $examAttempt->exam_id)
-                ->where('status', 'completed')
+        $leadBoard =  ExamAttempt::completed()
+                ->where('exam_id', $examAttempt->exam_id)
                 ->where('correct_answers', '>', 0)
                 ->orderByDesc('correct_answers')
                 ->orderByRaw('TIMESTAMPDIFF(SECOND, start_time, end_time) ASC')
@@ -177,14 +228,13 @@ class FullTestController extends Controller
 
         // Calculate the percentage of other users who scored less than the current user
         $currentUserScore = $examAttempt->correct_answers;
-        $otherAttempts = \App\Models\ExamAttempt::where('exam_id', $examAttempt->exam_id)
+        $otherAttempts = ExamAttempt::completed()
+            ->where('exam_id', $examAttempt->exam_id)
             ->where('user_id', '!=', auth()->id())
-            ->where('status', 'completed')
             ->get();
 
         $totalOthers = $otherAttempts->count();
         $scoredLess = $otherAttempts->where('correct_answers', '<', $currentUserScore)->count();
-
         $betterThanPercent = $totalOthers > 0 ? round(($scoredLess / $totalOthers) * 100) : 0;
 
         return [
@@ -198,39 +248,5 @@ class FullTestController extends Controller
             'totalTimeFormatted' => $formatTime($totalTimeSpent),
             'betterThanPercent' => $betterThanPercent,
         ];
-    }
-
-    public function examDetails(Exam $exam)
-    {
-        dd($exam);
-        // Fetch all the related info needed for modal, e.g.:
-        $leaderboard = $exam->examAttempts()
-            ->with('user')
-            ->orderByDesc('score')
-            ->limit(10)
-            ->get()
-            ->map(function($attempt) {
-                return [
-                    'name'       => $attempt->user->name,
-                    'score'      => $attempt->score,
-                    'avatar_url' => $attempt->user->avatar_url ?? asset('image/profile.jpeg'),
-                ];
-            });
-
-        return response()->json([
-            'data' => [
-                'title'            => $exam->title,
-                'audience'         => 'Hi School',  // customize as needed
-                'sections_count'   => $exam->sections()->count(),
-                'total_questions'  => $exam->questions()->count(),
-                'score'            => 75,            // or calculate user's score
-                'student_name'     => auth()->user()->name,
-                'correct_answers'  => 60,            // calculate accordingly
-                'percent_correct'  => '75%',
-                'total_time'       => '0:10',
-                'others_average_time' => '0:45',
-                'leaderboard'      => $leaderboard,
-            ]
-        ]);
     }
 }

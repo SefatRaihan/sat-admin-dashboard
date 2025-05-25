@@ -290,11 +290,12 @@
                         console.log(response);
                         
                         // return false;
-                        Swal.fire("Success", "Your exam has been submitted successfully", "success");
+                        Swal.fire("Submitted", "Your exam has been submitted successfully", "success");
                         window.location.href = '/result/'+response.data.id;
                     },
                     error: function (xhr) {
-                        alert('Error submitting exam: ' + (xhr.responseJSON?.message || 'Unknown error'));
+                        Swal.fire("Error", "Something Went Wrong!", "error");
+                        // alert('Error submitting exam: ' + (xhr.responseJSON?.message || 'Unknown error'));
                     }
                 });
             }
@@ -321,9 +322,20 @@
                 });
 
                 $('#submitBtn').on('click', function () {
-                    if (confirm('Are you sure you want to submit the exam?')) {
-                        submitExam();
-                    }
+                      Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you really want to submit the exam?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, submit it!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            submitExam(); // your existing function
+                        }
+                    });
                 });
 
                 $('.box').on('click', function () {
@@ -334,10 +346,20 @@
 
                 // End Exam button functionality
                 $('.submit-exam').filter(':contains("End Exam")').on('click', function () {
-                    if (confirm('Are you sure you want to end the exam?')) {
-                        submitExam();
-                        // ('#endExamModal').modal('hide');
-                    }
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you really want to submit the exam?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, submit it!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            submitExam(); // your existing function
+                        }
+                    });
                 });
 
                 $('.total-questions').text(questions.length);

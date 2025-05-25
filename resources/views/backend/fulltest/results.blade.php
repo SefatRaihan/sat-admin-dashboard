@@ -191,16 +191,18 @@
             <div class="col-md-4">
                 <ul class="list-group">
                     <li class="list-group-item" style="color: #101828">Leaderboard</li>
-                    @foreach($leadBoard as $key => $data)
+                    @forelse($leadBoard as $key => $data)
                         <li class="list-group-item d-flex align-items-center leaderboard-item {{ $key === 0 ? 'auto-click' : '' }}" style="cursor: pointer;" data-user-id="{{ $data['user_id'] }}" data-exam-id="{{ $examAttempt->exam_id }}">
-                            <span class="mr-3">{{ ++$key }}</span>
+                            <span class="mr-3">{{ $key + 1 }}</span>
                             <img src="{{ $data['profile_image'] }}" class="rounded-circle me-3" alt="Avatar">
                             <div>
                                 <p class="p-0 m-0">{{ $data['user_name'] }}</p>
                                 <p>{{ $data['score'] }}%</p>
                             </div>
                         </li>
-                    @endforeach
+                    @empty
+                        <li class="list-group-item text-center text-muted">No leaderboard data available.</li>
+                    @endforelse
                 </ul>
             </div>
         </div>

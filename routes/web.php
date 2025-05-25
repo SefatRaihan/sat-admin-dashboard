@@ -100,6 +100,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('student-open-exam/{examId}', [StudentExamController::class, 'openExam'])->name('student-exam.open');
     Route::get('student-exam/histories', [StudentExamController::class, 'histories'])->name('student-exam.histories');
     Route::get('result/{id}', [FullTestController::class, 'results'])->name('result');
+    Route::get('view-details/{id}', [FullTestController::class, 'view_details']);
     Route::get('/other-student-score', [FullTestController::class, 'otherExamScore'])->name('other-student-score');
     Route::get('/exams/{id}/details', [FullTestController::class, 'examDetails']);
 

@@ -35,22 +35,7 @@
                                 </tr>
                             </thead>
                             <tbody id="question-table-body">
-                                {{-- <tr>
-                                    <td colspan="9" class="text-center">Loading...</td>
-                                </tr> --}}
-                                {{-- <tr>
-                                    <td>Stress Endurance Test for SAT 2</td>
-                                    <td class="text-center">12-12-2025</td>
-                                    <td class="text-center">4</td>
-                                    <td class="text-center">80</td>
-                                    <td class="text-center">73%</td>
-                                    <td class="text-center">1 hr 28 min</td>
-                                    <td class="text-center">25</td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Detail</button>
-                                        <button type="button" class="btn start-exam" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Re-take Exam</button>
-                                    </td>
-                                </tr> --}}
+                               
                             </tbody>
                         </table>
                     </div>
@@ -161,6 +146,74 @@
             </div>
         </div>
     </section>
+
+
+    <!-- Exam Detail Modal -->
+    <div class="modal fade" id="detailsModelCenter" tabindex="-1" role="dialog" aria-labelledby="detailsModelCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 43%;">
+            <div class="modal-content student-create-section" style="border-radius: 24px; height:100%">
+                <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
+                    <h5 class="" id="exampleModalLongTitle"><b>Exam Name</b></h5>
+                    <div class="heading-summary d-flex justify-content-center">
+                        <ul class="pl-4 m-0">
+                            <li id="audience" style="list-style: none"></li>
+                            <li id="total-section"></li>
+                            <li id="total-question"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mt-3">
+                                <h4 class="text-center score-title">Your score: <span class="scoreValue">0</span></h4>
+                                <p class="text-center score-text">Your performance is better than <b><span class="betterPercent">0</span>% of <span class="studentName">Mubhir</span> student</b> who have <br> completed this exam</p>
+                                <div class="mt-4">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12 text-center">
+                                                    <p class="summary-text">Your Percent Correct</p>
+                                                    <p class="summary-value"><b id="correct_percent">0%</b></p>
+                                                    <p class="summary-description">(<span class="correct-answers">0</span> of <span class="total-questions">3</span>)</p>
+                                                </div>
+
+                                                <div class="col-md-12 text-center">
+                                                    <p class="summary-text">Your Average Pace</p>
+                                                    <p class="summary-value"><b id="avg_pace_time">0:00</b></p>
+                                                    <p class="summary-description">(<span class="total-time">0:00</span> total)</p>
+                                                </div>
+
+                                                <div class="col-md-12 text-center">
+                                                    <p class="summary-text">Others' Average Pace</p>
+                                                    <p class="summary-value"><b class="other_avg_time">0:00</b></p>
+                                                    <p class="summary-description">(<span class="others-total-time">0:00</span> total)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <ul class="list-group">
+                                <li class="list-group-item" style="color: #101828">Leaderboard</li>
+                                <li class="list-group-item text-center text-muted">No leaderboard data available.</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <main>
+                            </main>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top pt-3">
+                    <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn start-exam" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Start Exam</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     @push('css')
         <style>
@@ -376,6 +429,95 @@
             .btn-details:hover {
                 background-color: #f8f9fa;
             }
+
+             /* Timeline vertical line */
+            
+            main {
+                counter-reset: section;
+                max-width: 500px;
+                margin: auto;
+                padding-left: 17px;
+                position: relative;
+            }
+
+            /* vertical line */
+            main::before {
+                content: "";
+                position: absolute;
+                left: 16px; /* aligns with circle center */
+                top: 40px;  /* start below top */
+                bottom: 40px; /* end above bottom */
+                width: 3px;
+                background-color: #EAECF0;
+                z-index: 0;
+            }
+
+            /* Each timeline item */
+            main p {
+                position: relative;
+                padding: 10px 0 10px 30px;
+                margin: 0;
+                font-size: 1em;
+                color: #34435e;
+            }
+
+            /* Circle number */
+            main p::before {
+                margin-top:15px;
+                counter-increment: section;
+                content: counter(section);
+                position: absolute;
+                left: -14px;
+                top: 0;
+                width: 2.25em;
+                height: 2.25em;
+                background-color: #F1E9F0;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 2.25em;
+                color: #667085;
+                font-size: 1em;
+                border: 1px solid #A16A99;
+                z-index: 1;
+            }
+            main{
+                counter-reset: section;
+            }
+            .summary-text {
+                color:#344054;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .leaderboard-item.selected {
+                background-color: #F1E9F0; /* light blue */
+                color: #101828; /* blue text */
+            }
+        </style>
+        <style>
+            .list-group {
+                border-radius: 12px;
+            }
+            .list-group-item {
+                border-bottom: 1px solid #ddd;
+            }
+            .list-group-item:last-child {
+                border-bottom: none;
+            }
+            .list-group-item img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 12px;
+            }
+            .heading-summary ul {
+                display: flex;
+                gap: 25px;
+            }
+            .heading-summary li {
+                color: #667085;
+                font-size: 14px;
+            }
         </style>
     @endpush
 
@@ -450,6 +592,10 @@
                     fetchQuestions(1, $('#rowsPerPage').val());
                 });
 
+
+                $(document).on('click', '.btn-details', detailModalData);
+                $(document).on('click', '.view_details', viewDetails);
+
             });
 
             function filter(button) {
@@ -513,7 +659,7 @@
                                     <td class="text-center">${attemptExam.total_user_attempts}</td>
                                     <td class="text-center d-flex justify-content-between">
                                         <a href="/student-open-exam/${attemptExam.exam_id}"  target="_blank" class="btn btn-start">{{ 'Re-take Exam' }}</a>
-                                        <button class="btn btn-details" data-toggle="modal" data-target="#detailsModelCenter">Details</button>
+                                        <button class="btn btn-details" data-toggle="modal" data-exam="${attemptExam.exam_id}" data-target="#detailsModelCenter">Details</button>
                                     </td>
                                 </tr>`;
                             });
@@ -575,6 +721,141 @@
 
 
 
+            function detailModalData()
+            {
+                let examId = $(this).data('exam');
+                $('main').html(' ');
+
+                $.ajax({
+                    url: `/exams/${examId}/details`,
+                    method: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        
+                        // Assuming response is JSON with needed exam info
+                        populateDetailsModal(response);
+
+                        $(document).on('click', '.leaderboard-item', otherStudentScore);
+                        $('.leaderboard-item.auto-click').trigger('click');
+                    },
+                    error: function(err) {
+                        console.error('Error fetching exam details:', err);
+                        alert('Failed to load exam details.');
+                    }
+                });
+
+            }
+
+            function populateDetailsModal(data) {
+
+                $('#detailsModelCenter h5#exampleModalLongTitle').text(data.exam.title);
+                $('#audience').text(data.exam.audience || 'Hi School');
+                $('#total-section').text(data.exam.section ? data.exam.section + ' sections' : '');
+                $('#total-question').text(data.totalQuestions ? data.totalQuestions + ' Questions' : '');
+
+                $('.scoreValue').text(data.examAttempt.score || '0');
+                $('.betterPercent').text(data.betterThanPercent || '0');
+                $('.studentName').text(data.student_name || 'Student');
+                $('.correct-answers').text(data.correctAnswers || '0');
+                $('.total-questions').text(data.totalQuestions || '0');
+                $('#correct_percent').text(data.percentCorrect || '0%');
+                $('#avg_pace_time').text(data.averagePaceFormatted || '0%');
+                $('.total-time').text(data.totalTimeFormatted || '0:00');
+                // $('.others-total-time').text(data.others_average_time || '0:00');
+
+                // Fill leaderboard (clear existing first)
+                const leaderboardList = $('#detailsModelCenter .list-group').empty();
+
+                if(data.leadBoard && data.leadBoard.length) {
+                    leaderboardList.append(`<li class="list-group-item" style="color: #101828">Leaderboard</li>`);
+                    data.leadBoard.forEach(function(item, idx) {
+                        leaderboardList.append(`
+                            <li class="list-group-item d-flex align-items-center leaderboard-item ${idx === 0 ? 'auto-click' : ''}" style="cursor: pointer;" data-user-id="${item.user_id}" data-exam-id="${ data.examAttempt.exam_id }">
+                                <span class="mr-3">${idx + 1}</span>
+                                <img src="${item.profile_image}" class="rounded-circle me-3" alt="Avatar">
+                                <div>
+                                    <p class="p-0 m-0">${item.user_name}</p>
+                                    <p>${item.score}%</p>
+                                </div>
+                            </li>
+                        `);
+                    });
+                }
+
+                const main = $('main');
+                
+                if (data.previousAttempts.length > 0) {
+                    data.previousAttempts.forEach((item, index) => {
+                        const dateOnly = item.start_time.split('T')[0];
+    
+                        const $p = $('<p></p>').html(`
+                            ${dateOnly}<br>
+                            <b data-id="${item.id}" data-examId="${item.exam_id}" class="view_details" style="color:#521749; cursor:pointer;"><u>View detail</u></b>
+                        `);
+    
+                        main.append($p);
+                    });
+                }
+            }
+
+            function viewDetails()
+            {
+                let attemptId = $(this).data('id');
+
+                $.ajax({
+                    url: `/view-details/${attemptId}/`,
+                    method: 'GET',
+                    success: function(response) {
+                        console.log(response, 'hhhh');
+                        $('.scoreValue').text(response.examAttempt.score || '0');
+                        $('.betterPercent').text(response.betterThanPercent || '0');
+                        $('.studentName').text(response.student_name || 'Student');
+                        $('.correct-answers').text(response.correctAnswers || '0');
+                        $('.total-questions').text(response.totalQuestions || '0');
+                        $('#correct_percent').text(response.percentCorrect || '0%');
+                        $('#avg_pace_time').text(response.averagePaceFormatted || '0%');
+                        $('.total-time').text(response.totalTimeFormatted || '0:00');
+                        
+                    },
+                    error: function(err) {
+                        console.error('Error fetching exam details:', err);
+                        alert('Failed to load exam details.');
+                    }
+                });
+
+            }
+
+            function otherStudentScore() 
+            {
+                const userId = $(this).data('user-id');
+                const examId = $(this).data('exam-id');
+                console.log(userId, examId, 'jii');
+                
+                // Remove previous selection
+                $('.leaderboard-item').removeClass('selected');
+
+                // Highlight the clicked one
+                $(this).addClass('selected');
+
+                // Send AJAX request
+                $.ajax({
+                    url: '/other-student-score',
+                    type: 'GET',
+                    data: {
+                        user_id: userId,
+                        exam_id: examId
+                    },
+                    success: function(response) {
+                        $('.other_avg_time').text(response.averagePaceFormatted)
+                        $('.others-total-time').text(response.totalTimeFormatted)
+
+
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    }
+                });
+            }
 
 
         </script>

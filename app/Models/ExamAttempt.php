@@ -144,4 +144,9 @@ class ExamAttempt extends Model
         );
     }
 
+    public function scopeOrdered($query, $column = 'created_at', $direction = 'desc')
+    {
+        return $query->orderBy($column, $direction);
+    }
+
 }

@@ -175,9 +175,9 @@
                     <h5 class="" id="exampleModalLongTitle"><b>Exam Name</b></h5>
                     <div class="heading-summary d-flex justify-content-center">
                         <ul class="pl-4 m-0">
-                            <li id="audience" style="list-style: none">Hi School</li>
-                            <li id="total-section">4 sections</li>
-                            <li id="total-question">80 Questions</li>
+                            <li id="audience" style="list-style: none"></li>
+                            <li id="total-section"></li>
+                            <li id="total-question"></li>
                         </ul>
                     </div>
                 </div>
@@ -185,28 +185,28 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="mt-3">
-                                <h4 class="text-center score-title">Your score: <span class="scoreValue">75</span></h4>
-                                <p class="text-center score-text">Your performance is better than <b><span class="scoreValue">75</span>% of <span class="studentName">Mubhir</span> student</b> who have <br> completed this exam</p>
+                                <h4 class="text-center score-title">Your score: <span class="scoreValue">0</span></h4>
+                                <p class="text-center score-text">Your performance is better than <b><span class="betterPercent">0</span>% of <span class="studentName">Mubhir</span> student</b> who have <br> completed this exam</p>
                                 <div class="mt-4">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-12 text-center">
                                                     <p class="summary-text">Your Percent Correct</p>
-                                                    <p class="summary-value"><b>0%</b></p>
+                                                    <p class="summary-value"><b id="correct_percent">0%</b></p>
                                                     <p class="summary-description">(<span class="correct-answers">0</span> of <span class="total-questions">3</span>)</p>
                                                 </div>
 
                                                 <div class="col-md-12 text-center">
                                                     <p class="summary-text">Your Average Pace</p>
-                                                    <p class="summary-value"><b>0:03</b></p>
-                                                    <p class="summary-description">(<span class="total-time">0:10</span> total)</p>
+                                                    <p class="summary-value"><b id="avg_pace_time">0:00</b></p>
+                                                    <p class="summary-description">(<span class="total-time">0:00</span> total)</p>
                                                 </div>
 
                                                 <div class="col-md-12 text-center">
                                                     <p class="summary-text">Others' Average Pace</p>
-                                                    <p class="summary-value"><b>0:45</b></p>
-                                                    <p class="summary-description">(<span class="others-total-time">2:16</span> total)</p>
+                                                    <p class="summary-value"><b class="other_avg_time">0:00</b></p>
+                                                    <p class="summary-description">(<span class="others-total-time">0:00</span> total)</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -216,50 +216,17 @@
 
                             <ul class="list-group">
                                 <li class="list-group-item" style="color: #101828">Leaderboard</li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <span class="mr-3">1</span>
-                                    <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
-                                    <div>
-                                        <p class="p-0 m-0">Andi Lane</p>
-                                        <p>75%</p>
-                                    </div>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <span class="mr-3">2</span>
-                                    <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
-                                    <div>
-                                        <p class="p-0 m-0">Andi Lane</p>
-                                        <p>75%</p>
-                                    </div>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <span class="mr-3">3</span>
-                                    <img src="{{ asset('image/profile.jpeg') }}" class="rounded-circle me-3" alt="Avatar">
-                                    <div>
-                                        <p class="p-0 m-0">Andi Lane</p>
-                                        <p>75%</p>
-                                    </div>
-                                </li>
+                                <li class="list-group-item text-center text-muted">No leaderboard data available.</li>
                             </ul>
                         </div>
                         <div class="col-md-4">
                             <main>
-                                <p>
-                                    10-05-2025
-                                    <br>
-                                    <a href="" style="color:#521749"><u>View detail</u></a>
-                                </p>
-                                <p>
-                                    10-05-2025
-                                    <br>
-                                    <a href="" style="color:#521749"><u>View detail</u></a>
-                                </p>
                             </main>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer border-top pt-3">
-                    <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-dark" id="cancel" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn start-exam" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Start Exam</button>
                 </div>
             </div>
@@ -268,6 +235,10 @@
 
     @push('css')
         <style>
+            .leaderboard-item.selected {
+                background-color: #F1E9F0; /* light blue */
+                color: #101828; /* blue text */
+            }
             .search__input {
                 width: 400px;
                 padding: 12px 24px;
@@ -578,64 +549,58 @@
             /* avg time slider end */
             /* filter section end */
 
-            /* timeline */
+            /* Timeline vertical line */
 
             main {
-                min-width: 300px;
+                counter-reset: section;
                 max-width: 500px;
                 margin: auto;
-            }
-            main p {
-                font-size: 1em;
-                line-height: 1.75em;
-                border-image: linear-gradient(to right, #EAECF0 0%, #EAECF0 100%);
-                border-image-slice: 1;
-                border-width: 3px;
-                margin: 0;
-                padding: 40px;
-                counter-increment: section;
+                padding-left: 17px;
                 position: relative;
+            }
+
+            /* vertical line */
+            main::before {
+                content: "";
+                position: absolute;
+                left: 16px; /* aligns with circle center */
+                top: 40px;  /* start below top */
+                bottom: 40px; /* end above bottom */
+                width: 3px;
+                background-color: #EAECF0;
+                z-index: 0;
+            }
+
+            /* Each timeline item */
+            main p {
+                position: relative;
+                padding: 10px 0 10px 30px;
+                margin: 0;
+                font-size: 1em;
                 color: #34435e;
             }
-            main p:before {
+
+            /* Circle number */
+            main p::before {
+                margin-top:15px;
+                counter-increment: section;
                 content: counter(section);
                 position: absolute;
-                border-radius: 50%;
-                padding: 6px;
-                height: 2.25em;
+                left: -14px;
+                top: 0;
                 width: 2.25em;
+                height: 2.25em;
                 background-color: #F1E9F0;
+                border-radius: 50%;
                 text-align: center;
-                line-height: 1.25em;
+                line-height: 2.25em;
                 color: #667085;
                 font-size: 1em;
                 border: 1px solid #A16A99;
+                z-index: 1;
             }
-            main p:nth-child(odd) {
-                border-left: 3px solid;
-                padding-right: 0;
-                padding-top: 0px;
-            }
-            main p:nth-child(odd):before {
-                right: 100%;
-                margin-right: -14px;
-            }
-            main p:nth-child(even) {
-                border-left: 3px solid;
-                padding-right: 0;
-            }
-            main p:nth-child(even):before {
-                right: 100%;
-                margin-right: -14px;
-            }
-            main p:first-child {
-                border-top: 0;
-                border-top-right-radius: 0;
-                border-top-left-radius: 0;
-            }
-            main p:last-child {
-                border-bottom-right-radius: 0;
-                border-bottom-left-radius: 0;
+            main{
+                counter-reset: section;
             }
             .summary-text {
                 color:#344054;
@@ -680,7 +645,9 @@
                     $('#boardHiddenInputSection').html('');
                 });
 
-                $(document).on('click', '.btn-details', detailModalData)
+                $(document).on('click', '.btn-details', detailModalData);
+                $(document).on('click', '.view_details', viewDetails);
+
 
             });
 
@@ -694,14 +661,98 @@
             function detailModalData()
             {
                 let examId = $(this).data('exam');
-                console.log(examId);
+                $('main').html(' ');
 
                 $.ajax({
                     url: `/exams/${examId}/details`,
                     method: 'GET',
                     success: function(response) {
+                        console.log(response);
+
                         // Assuming response is JSON with needed exam info
-                        populateDetailsModal(response.data);
+                        populateDetailsModal(response);
+
+                        $(document).on('click', '.leaderboard-item', otherStudentScore);
+                        $('.leaderboard-item.auto-click').trigger('click');
+                    },
+                    error: function(err) {
+                        console.error('Error fetching exam details:', err);
+                        Swal.fire("Sorry", "Record Not Found", "warning");
+                    }
+                });
+
+            }
+
+            function populateDetailsModal(data) {
+
+                $('#detailsModelCenter h5#exampleModalLongTitle').text(data.exam.title);
+                $('#audience').text(data.exam.audience || 'Hi School');
+                $('#total-section').text(data.exam.section ? data.exam.section + ' sections' : '');
+                $('#total-question').text(data.totalQuestions ? data.totalQuestions + ' Questions' : '');
+
+                $('.scoreValue').text(data.examAttempt.score || '0');
+                $('.betterPercent').text(data.betterThanPercent || '0');
+                $('.studentName').text(data.student_name || 'Student');
+                $('.correct-answers').text(data.correctAnswers || '0');
+                $('.total-questions').text(data.totalQuestions || '0');
+                $('#correct_percent').text(data.percentCorrect || '0%');
+                $('#avg_pace_time').text(data.averagePaceFormatted || '0%');
+                $('.total-time').text(data.totalTimeFormatted || '0:00');
+                // $('.others-total-time').text(data.others_average_time || '0:00');
+
+                // Fill leaderboard (clear existing first)
+                const leaderboardList = $('#detailsModelCenter .list-group').empty();
+
+                if(data.leadBoard && data.leadBoard.length) {
+                    leaderboardList.append(`<li class="list-group-item" style="color: #101828">Leaderboard</li>`);
+                    data.leadBoard.forEach(function(item, idx) {
+                        leaderboardList.append(`
+                            <li class="list-group-item d-flex align-items-center leaderboard-item ${idx === 0 ? 'auto-click' : ''}" style="cursor: pointer;" data-user-id="${item.user_id}" data-exam-id="${ data.examAttempt.exam_id }">
+                                <span class="mr-3">${idx + 1}</span>
+                                <img src="${item.profile_image}" class="rounded-circle me-3" alt="Avatar">
+                                <div>
+                                    <p class="p-0 m-0">${item.user_name}</p>
+                                    <p>${item.score}%</p>
+                                </div>
+                            </li>
+                        `);
+                    });
+                }
+
+                const main = $('main');
+
+                if (data.previousAttempts.length > 0) {
+                    data.previousAttempts.forEach((item, index) => {
+                        const dateOnly = item.start_time.split('T')[0];
+
+                        const $p = $('<p></p>').html(`
+                            ${dateOnly}<br>
+                            <b data-id="${item.id}" data-examId="${item.exam_id}" class="view_details" style="color:#521749; cursor:pointer;"><u>View detail</u></b>
+                        `);
+
+                        main.append($p);
+                    });
+                }
+            }
+
+            function viewDetails()
+            {
+                let attemptId = $(this).data('id');
+
+                $.ajax({
+                    url: `/view-details/${attemptId}/`,
+                    method: 'GET',
+                    success: function(response) {
+                        console.log(response, 'hhhh');
+                        $('.scoreValue').text(response.examAttempt.score || '0');
+                        $('.betterPercent').text(response.betterThanPercent || '0');
+                        $('.studentName').text(response.student_name || 'Student');
+                        $('.correct-answers').text(response.correctAnswers || '0');
+                        $('.total-questions').text(response.totalQuestions || '0');
+                        $('#correct_percent').text(response.percentCorrect || '0%');
+                        $('#avg_pace_time').text(response.averagePaceFormatted || '0%');
+                        $('.total-time').text(response.totalTimeFormatted || '0:00');
+
                     },
                     error: function(err) {
                         console.error('Error fetching exam details:', err);
@@ -711,42 +762,37 @@
 
             }
 
-            function populateDetailsModal(data) {
-                $('#detailsModelCenter h5#exampleModalLongTitle').text(data.title || 'Exam Name');
-                $('#audience').text(data.audience || 'Hi School');
-                $('#total-section').text(data.sections_count ? data.sections_count + ' sections' : '');
-                $('#total-question').text(data.total_questions ? data.total_questions + ' Questions' : '');
+            function otherStudentScore()
+            {
+                const userId = $(this).data('user-id');
+                const examId = $(this).data('exam-id');
+                console.log(userId, examId, 'jii');
 
-                $('.scoreValue').text(data.score || '0');
-                $('.studentName').text(data.student_name || 'Student');
-                $('.correct-answers').text(data.correct_answers || '0');
-                $('.total-questions').text(data.total_questions || '0');
-                $('.summary-value b').first().text(data.percent_correct || '0%');
-                $('.total-time').text(data.total_time || '0:00');
-                $('.others-total-time').text(data.others_average_time || '0:00');
+                // Remove previous selection
+                $('.leaderboard-item').removeClass('selected');
 
-                // Fill leaderboard (clear existing first)
-                const leaderboardList = $('#detailsModelCenter .list-group').empty();
+                // Highlight the clicked one
+                $(this).addClass('selected');
 
-                if(data.leaderboard && data.leaderboard.length) {
-                    leaderboardList.append(`<li class="list-group-item" style="color: #101828">Leaderboard</li>`);
-                    data.leaderboard.forEach(function(item, idx) {
-                        leaderboardList.append(`
-                            <li class="list-group-item d-flex align-items-center">
-                                <span class="mr-3">${idx + 1}</span>
-                                <img src="${item.avatar_url}" class="rounded-circle me-3" alt="Avatar">
-                                <div>
-                                    <p class="p-0 m-0">${item.name}</p>
-                                    <p>${item.score}%</p>
-                                </div>
-                            </li>
-                        `);
-                    });
-                }
+                // Send AJAX request
+                $.ajax({
+                    url: '/other-student-score',
+                    type: 'GET',
+                    data: {
+                        user_id: userId,
+                        exam_id: examId
+                    },
+                    success: function(response) {
+                        $('.other_avg_time').text(response.averagePaceFormatted)
+                        $('.others-total-time').text(response.totalTimeFormatted)
 
-                // Fill any other dynamic info as needed
+
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    }
+                });
             }
-
 
         </script>
     @endpush
