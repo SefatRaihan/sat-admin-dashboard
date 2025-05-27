@@ -416,41 +416,17 @@ class StudentController extends Controller
                         ->join('exams', 'exam_attempts.exam_id', '=', 'exams.id')
                         ->with('exam.questions')
                         ->select(
-                            'exam_attempts.score', 
+                            'exam_attempts.score',
                             'exam_attempts.start_time',
-                            'exams.title', 
-                            'exams.scheduled_at', 
+                            'exams.title',
+                            'exams.scheduled_at',
                             'exams.section',
                             'exams.duration',
                             'exams.id as exam_id'
                         );
-                        // ->withCount('questions')
 
         $examIds = $examAttempts->pluck('exam_id')->unique();
         $exams = Exam::whereIn('id', $examIds)->with('questions')->get();
-        // dd($exams[2]->questions->count());
-        // $examAttempts = ExamAttempt::whereNotNull('exam_attempts.status')
-        //     ->where('exam_attempts.user_id', Auth::id())
-        //     ->with([
-        //         'exam' => function ($query) {
-        //             $query->withCount(['questions', 'examAttempts']);
-        //         }
-        //     ])
-        //     ->get();
-
-        // $data = $examAttempts->map(function ($attempt) {
-        //     return [
-        //         'score'          => $attempt->score,
-        //         'start_time'     => $attempt->start_time,
-        //         'exam_id'        => $attempt->exam->id,
-        //         'title'          => $attempt->exam->title,
-        //         'scheduled_at'   => $attempt->exam->scheduled_at,
-        //         'section'        => $attempt->exam->section,
-        //         'duration'       => $attempt->exam->duration,
-        //         'total_questions'=> $attempt->exam->questions_count,
-        //         'total_attempts'   => $attempt->exam->exam_attempts_count,
-        //     ];
-        // });
 
 
         $userId = Auth::id();
@@ -472,7 +448,7 @@ class StudentController extends Controller
             $userAttempt = $exam->examAttempts()->where('user_id', $userId)->first();
 
             return [
-                'score'                 => round(($userAttempt->score / $exam->questions_count) * 100),
+                'score'                 => round(($userAttempt->score / $exam->questions_count) * 100) ?? 0,
                 'start_time'            => $userAttempt->start_time ?? null,
                 'exam_id'               => $exam->id,
                 'title'                 => $exam->title,
@@ -484,7 +460,6 @@ class StudentController extends Controller
             ];
         });
 
-        // dd($data);
         return response()->json([
             'data' => $data,
             'meta' => [
@@ -498,5 +473,4 @@ class StudentController extends Controller
         ]);
     }
 
-    //another methods
 }
