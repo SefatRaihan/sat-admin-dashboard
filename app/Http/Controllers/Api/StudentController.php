@@ -448,7 +448,7 @@ class StudentController extends Controller
             $userAttempt = $exam->examAttempts()->where('user_id', $userId)->first();
 
             return [
-                'score'                 => round(($userAttempt->score / $exam->questions_count) * 100) ?? 0,
+                'score'                 => $exam->questions_count > 0 ? round(($userAttempt->score / $exam->questions_count) * 100) : 0,
                 'start_time'            => $userAttempt->start_time ?? null,
                 'exam_id'               => $exam->id,
                 'title'                 => $exam->title,
