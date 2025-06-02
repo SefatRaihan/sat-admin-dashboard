@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Exam;
 use App\Models\ExamAttempt;
+use App\Models\ExamAttemptQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class FullTestController extends Controller
 {
@@ -248,5 +250,149 @@ class FullTestController extends Controller
             'totalTimeFormatted' => $formatTime($totalTimeSpent),
             'betterThanPercent' => $betterThanPercent,
         ];
+    }
+
+    public function getExamQuestions(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'attempt_id' => 'required|integer|exists:exam_attempts,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+
+        $questions = ExamAttempt::where('exam_attempt_id', $request->attempt_id)
+            ->whereHas('question') // Ensure question exists
+            ->with('question')
+            ->get()
+            ->map(function ($question) {
+                return [
+                    'is_correct' => $question->is_correct ? 'Correct' : 'Incorrect',
+                    'question' => [
+                        'question_title' => $question->question->question_title ?? 'N/A',
+                        'difficulty' => $question->question->difficulty ?? 'Unknown',
+                        'section' => $question->question->section ?? null,
+                    ],
+                    'time_spent' => $this->formatTime($question->time_spent),
+                    'student_answer' => $question->student_answer ?? 'Not Attempted',
+                ];
+            });
+
+        return response()->json(['questions' => $questions]);
+    }
+
+    /**
+     * Filter exam questions via API.
+     */
+    public function filterExamQuestions(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'attempt_id' => 'required|integer|exists:exam_attempts,id',
+            'correct' => 'boolean',
+            'incorrect' => 'boolean',
+            'difficulties' => 'array',
+            'difficulties.*' => 'in:Easy,Medium,Hard,Very Hard',
+            'minDuration' => 'numeric|min:1',
+            'maxDuration' => 'numeric|min:1',
+            'search' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+
+        $query = ExamAttemptQuestion::where('attempt_id', $request->attempt_id)
+            ->whereHas('question')
+            ->with('question');
+
+        // Correct/Incorrect filter
+        if ($request->correct && !$request->incorrect) {
+            $query->where('is_correct', 1);
+        } elseif (!$request->correct && $request->incorrect) {
+            $query->where('is_correct', 0);
+        }
+
+        // Difficulty filter
+        if ($request->difficulties && !empty($request->difficulties)) {
+            $query->whereHas('question', function ($q) use ($request) {
+                $q->whereIn('difficulty', $request->difficulties);
+            });
+        }
+
+        // Duration filter
+        $query->whereBetween('time_spent', [
+            $request->minDuration ?? 1,
+            $request->maxDuration ?? 120,
+        ]);
+
+        // Search filter
+        if ($request->search) {
+            $query->whereHas('question', function ($q) use ($request) {
+                $q->where('question_title', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $questions = $query->get()->map(function ($question) {
+            return [
+                'is_correct' => $question->is_correct ? 'Correct' : 'Incorrect',
+                'question' => [
+                    'question_title' => $question->question->question_title ?? 'N/A',
+                    'difficulty' => $question->question->difficulty ?? 'Unknown',
+                    'section' => $question->question->section ?? null,
+                    'id' => $question->question->id ?? null,
+                ],
+                'time_spent' => $this->formatTime($question->time_spent),
+                'student_answer' => $question->student_answer ?? 'Not Attempted',
+            ];
+        });
+
+        return response()->json(['questions' => $questions]);
+    }
+
+    /**
+     * Get other student's score via API.
+     */
+    public function otherStudentScore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer|exists:users,id',
+            'exam_id' => 'required|integer|exists:exam_attempts,exam_id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+
+        $attempt = ExamAttempt::completed()
+            ->where('exam_id', $request->exam_id)
+            ->where('user_id', $request->user_id)
+            ->first();
+
+        if (!$attempt) {
+            return response()->json(['error' => 'No attempt found for this user.'], 404);
+        }
+
+        $totalQuestions = $attempt->examAttemptQuestions()->count();
+        $totalTimeSpent = $attempt->examAttemptQuestions()->sum('time_spent');
+        $averagePaceSeconds = $totalQuestions > 0 ? round($totalTimeSpent / $totalQuestions) : 0;
+
+        return response()->json([
+            'averagePaceFormatted' => $this->formatTime($averagePaceSeconds),
+            'totalTimeFormatted' => $this->formatTime($totalTimeSpent),
+        ]);
+    }
+
+    /**
+     * Format time from seconds to mm:ss.
+     */
+    private function formatTime($seconds)
+    {
+        if (!$seconds) {
+            return '0:00';
+        }
+        $minutes = floor($seconds / 60);
+        $secs = $seconds % 60;
+        return sprintf('%d:%02d', $minutes, $secs);
     }
 }

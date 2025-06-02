@@ -227,7 +227,10 @@
                 </div>
                 <div class="modal-footer border-top pt-3">
                     <button type="button" class="btn btn-outline-dark" id="cancel" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn start-exam" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Start Exam</button>
+                    <form method="POST" id="start-exam-form" action="">
+                        @csrf
+                        <button type="submit" class="btn" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</button>
+                    </form>                
                 </div>
             </div>
         </div>
@@ -662,6 +665,7 @@
             {
                 let examId = $(this).data('exam');
                 $('main').html(' ');
+                $('#start-exam-form').attr('action', `/student-exam/start/${examId}`);
 
                 $.ajax({
                     url: `/exams/${examId}/details`,

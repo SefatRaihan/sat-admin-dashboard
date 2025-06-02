@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +28,9 @@ use App\Http\Controllers\RegistrationController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 // 'middleware' => ['api', 'auth', 'web'],
-Route::group([ 'as' => 'api'], function () {
+Route::group([ 'as' => 'api','middleware' => ['auth', 'web', 'check.permission']], function () {
     Route::get('get-role-navitems-with-selected/{id}', [RoleNavItemApiController::class,'getnavitemWithSelected']);
     Route::post('/profile/update', [ProfileController::class, 'update']);
     Route::post('/students/{uuid}/update', [StudentController::class, 'update']);
@@ -103,5 +105,6 @@ Route::group([ 'as' => 'api'], function () {
 
     Route::get('/results', [ExamController::class, 'results']);
     // Route::middleware('auth')->get('/student-history', [StudentController::class, 'history']);
+    Route::post('/feedback', [FeedbackController::class, 'store']);
 
 });

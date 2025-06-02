@@ -176,64 +176,7 @@
         </div>
     </div>
 
-         {{-- feadback modal --}}
-     <div class="modal fade" id="feedBackModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="feedBackModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 15px;">
-                <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                    <h5 class="" id="exampleModalLongTitle"><b>Provide Feedback</b></h5>
-                    <p>Your feedback helps us create a great experience. Please let us know what went wrong.</p>
-                </div>
-                <div class="modal-body text-center feedback-modal">
-                    <div class="row">
-                        <input type="hidden" name="question_id" id="question-id">
-                        <div class="col-md-12 feedback-option mt-2">
-                            <div class="form-check custom-radio">
-                                <input class="form-check-input" type="radio" name="feedback" id="" value="The answer choice is incorrect">
-                                <label class="form-check-label" for="">
-                                    The answer choice is incorrect
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-12 feedback-option mt-2">
-                            <div class="form-check custom-radio">
-                                <input class="form-check-input" type="radio" name="feedback" id="" value="The question contains an issue">
-                                <label class="form-check-label" for="">
-                                    The question contains an issue
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-12 feedback-option mt-2">
-                            <div class="form-check custom-radio">
-                                <input class="form-check-input" type="radio" name="feedback" id="" value="No relevance between context and question">
-                                <label class="form-check-label" for="">
-                                    No relevance between context and question
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-12 feedback-option mt-2">
-                            <div class="form-check custom-radio">
-                                <input class="form-check-input" type="radio" name="feedback" id="" value="Something else went wrong">
-                                <label class="form-check-label" for="">
-                                    Something else went wrong
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mt-2">
-                            <textarea name="description" class="form-control" cols="30" rows="5"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer pb-0 pt-3">
-                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn save" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @push('css')
-        <link rel="stylesheet" href="{{ asset('css/explanation.css') }}">
         <style>
             .score-title {
                 color: #101828;
@@ -278,7 +221,7 @@
                 transform-style: preserve-3d;
                 padding-left: 36px; /* Ensures the placeholder doesn't overlap with the icon */
             }
-
+            
             .search__input::placeholder {
                 padding-left: 30px;
             }
@@ -601,10 +544,6 @@
                 // Load questions on page load
                 loadQuestions();
 
-                $(document).on('click', '.feedback-option', function() {
-                    $(this).find('input[type="radio"]').prop('checked', true);
-                });
-
                 // Sidebar open/close
                 $('#closeSidebar, #taskSidebarOverlay').on('click', closeFilterSidebar);
 
@@ -627,74 +566,6 @@
                 // Leaderboard click
                 $('.leaderboard-item').on('click', fetchOtherStudentScore);
                 $('.leaderboard-item.auto-click').trigger('click');
-
-                // Feedback button click handler
-                $(document).on('click', '.btn.btn-outline-dark.feedback-btn', function() {
-                    const questionId = $(this).data('question-id'); // Get from button's data-question-id
-                    if (!questionId) {
-                        Swal.fire('Error','Question ID is missing. Please try again.', 'error');
-                        return;
-                    }
-                    $('#question-id').val(questionId); // Store in input field
-                    $('#feedBackModal').modal('show');
-                });
-
-                // Feedback submit handler
-                $('.feedback-modal .save').on('click', function() {
-                    const $button = $(this);
-                    $button.prop('disabled', true); // Disable button to prevent multiple clicks
-                    const feedbackType = $('input[name="feedback"]:checked').val();
-                    const description = $('textarea[name="description"]').val();
-                    const questionId = $('#question-id').val(); // Get from input field
-                    const examAttemptId = '{{ $examAttempt->id }}';
-
-                    if (!feedbackType) {
-                        Swal.fire( 'Error', 'Please select a feedback type', 'error');
-                        $button.prop('disabled', false);
-                        return;
-                    }
-                    if (!questionId) {
-                        Swal.fire( 'Error', 'Question ID is missing. Please try again.', 'error');
-                        $button.prop('disabled', false);
-                        return;
-                    }
-
-                    $.ajax({
-                        url: '/api/feedback',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            question_id: questionId,
-                            feedback_type: feedbackType,
-                            description: description,
-                            exam_attempt_id: examAttemptId
-                        }),
-                        success: function(response) {
-                            $('#feedBackModal').modal('hide');
-                            Swal.fire('Success',response.message, 'success');
-                            $('input[name="feedback"]').prop('checked', false);
-                            $('textarea[name="description"]').val('');
-                            $('#question-id').val(''); // Clear the input
-                        },
-                        error: function(xhr) {
-                            let message = 'Failed to submit feedback. Please try again.';
-                            if (xhr.status === 422) {
-                                message = xhr.responseJSON?.error || message;
-                            }
-                            Swal.fire('Error', message, 'error');
-                        },
-                        complete: function() {
-                            $button.prop('disabled', false); // Re-enable button
-                        }
-                    });
-                });
-
-                // Clear modal when closed
-                $('#feedBackModal').on('hidden.bs.modal', function() {
-                    $('input[name="feedback"]').prop('checked', false);
-                    $('textarea[name="description"]').val('');
-                });
-
             });
 
             function openFilterSidebar() {
@@ -793,7 +664,6 @@
             function updateQuestionTable(questions) {
                 const tbody = $('#questionTableBody');
                 tbody.empty();
-                let examAttemptId = '{{ $examAttempt->id }}';
 
                 if (!questions || questions.length === 0) {
                     tbody.append('<tr><td colspan="6" class="text-center">No questions found.</td></tr>');
@@ -801,10 +671,6 @@
                 }
 
                 questions.forEach(item => {
-
-                    console.log(item);
-
-
                     const difficultyClass = {
                         'easy': 'badge-easy',
                         'medium': 'badge-medium',
@@ -816,7 +682,7 @@
                         <tr>
                             <td width="5%">
                                 <span class="${item.is_correct === 'Correct' ? 'correct-answer' : 'wrong-answer'}">
-                                    ${item.is_correct === 'Correct' ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>'}
+                                    <i class="fas fa-check"></i>
                                 </span>
                             </td>
                             <td width="20%">${stripTags(item.question.question_title)}</td>
@@ -826,8 +692,8 @@
                             </td>
                             <td>${item.time_spent || '0:00'}</td>
                             <td>
-                                <a href="/explanation/${examAttemptId}/${item.question.id}" class="btn view" style="background-color:#691D5E; border-radius: 8px; color:#fff">View</a>
-                                <button type="button" class="btn btn-outline-dark feedback-btn" data-question-id="${item.question.id}" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
+                                <button type="button" class="btn view" style="background-color:#691D5E; border-radius: 8px; color:#fff">View</button>
+                                <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
                             </td>
                         </tr>`;
                     tbody.append(row);

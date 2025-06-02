@@ -107,11 +107,13 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('student-profile', [StudentController::class, 'studentProfile'])->name('student.profile');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
-    Route::get('/explanation', [StudentController::class, 'explanation'])->name('student.explanation');
+    Route::get('/explanation/{examattemptid}/{questionid}', [StudentController::class, 'explanation'])->name('student.explanation');
 
     Route::get('/all-result', [ExamController::class, 'allResult'])->name('all-result');
     Route::get('/student-history', [StudentApiController::class, 'history']);
-
+    Route::get('/api/other-student-score', [FullTestController::class, 'otherStudentScore'])->name('other.student.score');
+    Route::post('/api/exam-questions', [FullTestController::class, 'getExamQuestions'])->name('exam.questions');
+    Route::post('/api/filter-exam-questions', [FullTestController::class, 'filterExamQuestions'])->name('filter.exam.questions');
 });
 
 

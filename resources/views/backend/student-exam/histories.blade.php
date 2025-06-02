@@ -99,7 +99,7 @@
                                     <h6><b>Section:</b> All Result</h6>
                                 </div>
                                 <div class="mb-1">
-                                    <input type="text" class="form-control seaction-search w-100 pl-2" placeholder="Section number">
+                                    <input type="text" class="form-control section-search w-100 pl-2" placeholder="Section number">
                                 </div>
                             </div>
                             <div class="mt-4">
@@ -116,7 +116,7 @@
                                         <span>Correct Percentage: All Result</span>
                                     </div>
                                     <div class="range-slider">
-                                        <input type="range" min="1" max="100" value="1" id="min-range">
+                                        <input type="range" class="correcct-percentage" min="1" max="100" value="1" id="min-range">
                                     </div>
                                 </div>
                             </div>
@@ -126,8 +126,8 @@
                                         <span>Duration: All Result</span>
                                     </div>
                                     <div class="range-slider">
-                                        <input type="range" min="1" max="120" value="1" id="min-range">
-                                        <input type="range" min="1" max="120" value="120" id="max-range">
+                                        <input type="range" min="1" max="120" value="1" id="duration-min-range">
+                                        <input type="range" min="1" max="120" value="120" id="duration-max-range">
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +208,10 @@
                 </div>
                 <div class="modal-footer border-top pt-3">
                     <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn start-exam" style="background-color:#691D5E ;border-radius: 8px; color:#fff">Start Exam</button>
+                    <form method="POST" id="start-exam-form" action="">
+                        @csrf
+                        <button type="submit" class="btn" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -609,20 +612,15 @@
             // get all questions
             function fetchQuestions(page = 1, perPage = 10, sortColumn, sortOrder, sort = 'Latest') {
                 let filters = {
-                    search: $('.search_input').val() || '', // Search input value, default to empty string if undefined
-                    difficulty: $('.difficulty:checked').map((_, el) => el.value).get(), // Get all checked difficulty levels
                     crated_start_at: $('input[name="crated_start_at"]').val() || '', // Start date, default to empty string
                     crated_end_at: $('input[name="crated_end_at"]').val() || '', // End date, default to empty string
-                    status: $('input[name="status"]:checked').val() || 'All', // Selected status, default to 'All'
-                    audience: $('#all_sat_type_1 .nested-options input:checked').map((_, el) => el.value).get(), // Checked SAT 1 options
-                    audienceSat: $('#all_sat_type_2 #allSet2Toggle:checked').map((_, el) => el.value).get(), // Checked SAT 2 options
-                    questionSearch: $('.question_search_input').val() || '',
-                    created_by: $('.custom-checkbox .created_by:checked').map((_, el) => el.value).get(), // Checked created_by values
-                    average_time: {
-                        min: $('#min-range').val() || 1, // Minimum time from slider
-                        max: $('#max-range').val() || 120 // Maximum time from slider
+                    sectionSearch: $('.section-search').val() || '',
+                    questionSearch: $('.question-search').val() || '',
+                    correct_percentage: $('.correcct-percentage').val() || '', // Duration, default to empty string
+                    duration: {
+                        min: $('#duration-min-range').val() || 1, // Minimum percentage from slider
+                        max: $('#duration-max-range').val() || 100 // Maximum percentage from slider
                     },
-                    sort: sort
                 };
 
                 $.ajax({
@@ -725,7 +723,7 @@
             {
                 let examId = $(this).data('exam');
                 $('main').html(' ');
-
+                $('#start-exam-form').attr('action', `/student-exam/start/${examId}`);
                 $.ajax({
                     url: `/exams/${examId}/details`,
                     method: 'GET',
