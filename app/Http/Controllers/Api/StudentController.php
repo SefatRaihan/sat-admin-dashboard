@@ -271,6 +271,8 @@ class StudentController extends Controller
             $photoPath = null;
             if ($request->hasFile('photo')) {
                 $photoPath = $request->file('photo')->store('student_photos', 'public');
+            } else {
+                $photoPath = $student->image;
             }
 
             $student->update([

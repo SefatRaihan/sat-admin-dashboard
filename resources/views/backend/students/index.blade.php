@@ -1,6 +1,6 @@
 <x-backend.layouts.master>
 
-    <x-backend.layouts.partials.blocks.contentwrapper 
+    <x-backend.layouts.partials.blocks.contentwrapper
         :headerTitle="'All Students'"
         :prependContent="'
             <a href=\'/students/create\' data-toggle=\'modal\' data-target=\'#studentCreateModelCenter\' class=\'btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm\' style=\'background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px\'>
@@ -10,8 +10,8 @@
     </x-backend.layouts.partials.blocks.contentwrapper>
 
     <div class="d-none" id="studentNullList">
-        <x-backend.layouts.partials.blocks.empty-state 
-        title="You haven't added any students yet." 
+        <x-backend.layouts.partials.blocks.empty-state
+        title="You haven't added any students yet."
         message="Start building your student list."
         buttonText="Add Student"
         buttonRoute="#studentCreateModelCenter"
@@ -100,7 +100,7 @@
                                 <option value="">Please Select</option>
                                 <option value="monthly">Monthly</option>
                                 <option value="annual">Annual</option>
-                            </select>                        
+                            </select>
                         </div>
                         <div class="col-md-12 mt-2">
                             <label for="">Audience</label>
@@ -133,7 +133,7 @@
                                     <div class="form-check custom-radio">
                                         <input class="form-check-input" type="radio" name="audience" id="sat-2" value="sat-2">
                                         <label class="form-check-label" for="sat-2">
-                                        SAt 2
+                                        SAT 2
                                         </label>
                                     </div>
                                 </div>
@@ -143,22 +143,22 @@
                                     <div class="photosection" ondragover="allowDrop(event)" ondrop="dropImage(event)">
                                         <!-- Profile Image Preview -->
                                         <img id="previewImage" src="">
-                                    
+
                                         <!-- Upload Area -->
                                         <label for="profileImage" style="cursor: pointer; position: relative;">
                                             <div class="upload-icon">
                                                 <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
                                             </div>
                                             <h5 style="font-size: 14px;">
-                                                <span style="color: #521749">Click to upload</span> 
+                                                <span style="color: #521749">Click to upload</span>
                                                 <span style="color: #475467"> or drag and drop</span>
                                             </h5>
                                         </label>
-                                    
+
                                         <!-- Hidden File Input -->
                                         <input type="file" id="profileImage" name="profile_image" accept="image/*" style="display: none;" onchange="previewImage(event)">
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                                 <option value="">Please Select</option>
                                 <option value="monthly">Monthly</option>
                                 <option value="annual">Annual</option>
-                            </select>                        
+                            </select>
                         </div>
                         <div class="col-md-12 mt-2">
                             <label for="">Audience</label>
@@ -268,7 +268,7 @@
                                     <div class="form-check custom-radio">
                                         <input class="form-check-input" type="radio" name="audience" id="sat-2" value="sat-2">
                                         <label class="form-check-label" for="sat-2">
-                                        SAt 2
+                                        SAT 2
                                         </label>
                                     </div>
                                 </div>
@@ -278,22 +278,22 @@
                                     <div class="editPhotosection" ondragover="editAllowDrop(event)" ondrop="editDropImage(event)">
                                         <!-- Profile Image Preview -->
                                         <img id="editPreviewImage" src="">
-                                    
+
                                         <!-- Upload Area -->
                                         <label for="editProfileImage" style="cursor: pointer; position: relative;">
                                             <div class="upload-icon">
                                                 <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
                                             </div>
                                             <h5 style="font-size: 14px;">
-                                                <span style="color: #521749">Click to upload</span> 
+                                                <span style="color: #521749">Click to upload</span>
                                                 <span style="color: #475467"> or drag and drop</span>
                                             </h5>
                                         </label>
-                                    
+
                                         <!-- Hidden File Input -->
                                         <input type="file" id="editProfileImage" name="profile_image" accept="image/*" style="display: none;" onchange="editPreviewImage(event)">
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -346,7 +346,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog" aria-labelledby="detailModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 60%">
@@ -462,7 +462,7 @@
                             <div class="tab-pane fade" id="ratings" role="tabpanel" aria-labelledby="ratings-tab">
                                 <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
                                     <p><b>Waiting for content</b></p>
-                                </div>   
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="test-result" role="tabpanel" aria-labelledby="test-result-tab">
                                 <div class="d-flex justify-content-center align-items-center" style="background: #F5F5F5; width:100%; height:300px">
@@ -497,7 +497,7 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="card-body table-responsive">
                 <table class="table datatable-basic" id="studentsTable" role="grid" aria-describedby="DataTables_Table_0_info">
                     <thead>
@@ -552,7 +552,7 @@
                                 @endforeach
                             </select>
                         </form>
-                    
+
                         <div class="d-flex align-items-center">
                             <span class="fs-13 fw-medium me-2" id="paginationInfo">
                                 <!-- Pagination info will be dynamically updated here -->
@@ -564,8 +564,8 @@
                     </div>
                 </div>
                 <!-- Pagination -->
-    
-                
+
+
             </div>
         </div>
     </div>
@@ -972,7 +972,7 @@
                 margin-top: 0.00002rem;
             }
             .fixed-bottom-buttons {
-                position: absolute;
+                /* position: absolute; */
                 bottom: 0;
                 left: 0;
                 width: 100%; /* Full width of parent */
@@ -1098,6 +1098,13 @@
                 top: 24%;
                 left: 17px;
             }
+
+            #editPreviewImage {
+                height: 104px;
+                position: absolute;
+                top: 24%;
+                left: 17px;
+            }
         </style>
         <style>
             .switch {
@@ -1106,13 +1113,13 @@
                 width: 50px;
                 height: 23px;
             }
-    
-            .switch input { 
+
+            .switch input {
                 opacity: 0;
                 width: 0;
                 height: 0;
             }
-    
+
             .slider {
                 position: absolute;
                 cursor: pointer;
@@ -1124,7 +1131,7 @@
                 -webkit-transition: .4s;
                 transition: .4s;
             }
-    
+
             .slider:before {
                 position: absolute;
                 content: "";
@@ -1136,26 +1143,26 @@
                 -webkit-transition: .4s;
                 transition: .4s;
             }
-    
+
             input:checked + .slider {
                 background-color: #2196F3;
             }
-    
+
             input:focus + .slider {
                 box-shadow: 0 0 1px #2196F3;
             }
-    
+
             input:checked + .slider:before {
                 -webkit-transform: translateX(26px);
                 -ms-transform: translateX(26px);
                 transform: translateX(26px);
             }
-    
+
             /* Rounded sliders */
             .slider.round {
                 border-radius: 34px;
             }
-    
+
             .slider.round:before {
                 border-radius: 50%;
             }
@@ -1179,7 +1186,7 @@
                     element.addEventListener("click", function() {
                         let input = document.querySelector(this.getAttribute("toggle"));
                         let icon = this.querySelector("i");
-            
+
                         if (input.type === "password") {
                             input.type = "text";
                             icon.classList.remove("fa-eye");
@@ -1194,14 +1201,14 @@
             });
 
             function toggleDeleteButton() {
-                
-                
+
+
                 let anyChecked = document.querySelectorAll(".row-checkbox:checked").length > 0;
                 document.querySelector(".delete-btn").classList.toggle("d-none", !anyChecked);
             }
 
             document.querySelectorAll(".row-checkbox").forEach(checkbox => {
-                
+
                 checkbox.addEventListener("change", function() {
                     this.closest("tr").classList.toggle("selected", this.checked);
                     toggleDeleteButton();
@@ -1223,8 +1230,140 @@
 
         <!-- /Photo, Filter -->
         <script>
-            $(document).ready(function () {
+            // Allow drop for Add Student
+            function allowDrop(event) {
+                event.preventDefault();
+                document.querySelector('.photosection').classList.add('dragover');
+            }
 
+            // Remove dragover style on leave for Add Student
+            document.querySelector('.photosection').addEventListener('dragleave', function () {
+                this.classList.remove('dragover');
+            });
+
+            // Handle dropped image for Add Student
+            function dropImage(event) {
+                event.preventDefault();
+                document.querySelector('.photosection').classList.remove('dragover');
+                const file = event.dataTransfer.files[0];
+                const maxSizeKB = 2048; // Maximum file size in KB (2MB)
+
+                if (file && file.type.startsWith('image/')) {
+                    if (file.size > maxSizeKB * 1024) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'File Too Large',
+                            text: 'The image file size exceeds 2MB. Please upload a smaller file.',
+                        });
+                        document.getElementById('previewImage').src = '';
+                        return;
+                    }
+                    previewFile(file);
+                }
+            }
+
+            // Handle click upload for Add Student
+            function previewImage(event) {
+                const file = event.target.files[0];
+                const maxSizeKB = 2048; // Maximum file size in KB (2MB)
+
+                if (file) {
+                    if (file.size > maxSizeKB * 1024) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'File Too Large',
+                            text: 'The image file size exceeds 2MB. Please upload a smaller file.',
+                        });
+                        document.getElementById('profileImage').value = '';
+                        document.getElementById('previewImage').src = '';
+                        return;
+                    }
+                    previewFile(file);
+                }
+            }
+
+            // Preview image for Add Student
+            function previewFile(file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('previewImage');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Allow drop for Edit Student
+            function editAllowDrop(event) {
+                event.preventDefault();
+                document.querySelector('.editPhotosection').classList.add('dragover');
+            }
+
+            // Remove dragover style on leave for Edit Student
+            document.querySelector('.editPhotosection').addEventListener('dragleave', function () {
+                this.classList.remove('dragover');
+            });
+
+            // Handle dropped image for Edit Student
+            function editDropImage(event) {
+                event.preventDefault();
+                document.querySelector('.editPhotosection').classList.remove('dragover');
+                const file = event.dataTransfer.files[0];
+                const maxSizeKB = 2048; // Maximum file size in KB (2MB)
+
+                if (file && file.type.startsWith('image/')) {
+                    if (file.size > maxSizeKB * 1024) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'File Too Large',
+                            text: 'The image file size exceeds 2MB. Please upload a smaller file.',
+                        });
+                        document.getElementById('editPreviewImage').src = '';
+                        return;
+                    }
+                    editPreviewFile(file);
+                }
+            }
+
+            // Handle click upload for Edit Student
+            function editPreviewImage(event) {
+                const file = event.target.files[0];
+                const maxSizeKB = 2048; // Maximum file size in KB (2MB)
+
+                if (file) {
+                    if (file.size > maxSizeKB * 1024) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'File Too Large',
+                            text: 'The image file size exceeds 2MB. Please upload a smaller file.',
+                        });
+                        document.getElementById('editProfileImage').value = '';
+                        document.getElementById('editPreviewImage').src = '';
+                        return;
+                    }
+                    editPreviewFile(file);
+                }
+            }
+
+            // Preview image for Edit Student
+            function editPreviewFile(file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('editPreviewImage');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function filter(button) {
+                const filter = $('.filter');
+                filter.show();
+                $('#taskSidebar').addClass('open');
+                $('#taskSidebarOverlay').addClass('active');
+            }
+
+            $(document).ready(function () {
                 $(".custom-radio").click(function() {
                     $(this).find("input[type='radio']").prop("checked", true);
                 });
@@ -1235,96 +1374,6 @@
                     $('#boardHiddenInputSection').html('');
                 });
             });
-            function filter(button) {
-                const filter = $('.filter');
-                filter.show();
-                $('#taskSidebar').addClass('open');
-                $('#taskSidebarOverlay').addClass('active');
-            }
-
-            // Allow drop
-            function allowDrop(event) {
-                event.preventDefault();
-                document.querySelector('.photosection').classList.add('dragover');
-            }
-
-            // Remove dragover style on leave
-            document.querySelector('.photosection').addEventListener('dragleave', function () {
-                this.classList.remove('dragover');
-            });
-
-            // Handle dropped image
-            function dropImage(event) {
-                event.preventDefault();
-                document.querySelector('.photosection').classList.remove('dragover');
-                const file = event.dataTransfer.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    previewFile(file);
-                }
-            }
-
-            // Handle click upload
-            function previewImage(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    previewFile(file);
-                }
-            }
-
-            // Preview image
-            function previewFile(file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    console.log('in');
-                    
-                    const preview = document.getElementById('previewImage');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-
-            //edit
-            // Allow drop
-            function editAllowDrop(event) {
-                event.preventDefault();
-                
-                document.querySelector('.editPhotosection').classList.add('dragover');
-            }
-
-            // Remove dragover style on leave
-            document.querySelector('.editPhotosection').addEventListener('dragleave', function () {
-                this.classList.remove('dragover');
-            });
-
-            // Handle dropped image
-            function editDropImage(event) {
-                event.preventDefault();
-                document.querySelector('.editPhotosection').classList.remove('dragover');
-                const file = event.dataTransfer.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    editPreviewFile(file);
-                }
-            }
-
-            // Handle click upload
-            function editPreviewImage(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    editPreviewFile(file);
-                }
-            }
-
-            // Preview image
-            function editPreviewFile(file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const preview = document.getElementById('editPreviewImage');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
         </script>
 
         <!-- /Fetch Data -->
@@ -1342,7 +1391,7 @@
 
             document.addEventListener('DOMContentLoaded', () => {
                 fetchStudents(1); // Initial Load
-                
+
 
                 // Search on Enter key
                 document.getElementById('search').addEventListener('keypress', function(e) {
@@ -1356,7 +1405,7 @@
                 document.querySelector('.filter-submit-btn').addEventListener('click', () => fetchStudents(1));
 
                 // Reset filters
-                
+
                 document.querySelector('.reset-filter').addEventListener('click', () => {
                     document.querySelector('input[name="create_from"]').value = '';
                     document.querySelector('input[name="create_to"]').value = '';
@@ -1395,7 +1444,7 @@
                         const tbody = document.getElementById('studentsBody');
                         tbody.innerHTML = '';
                         console.log(data);
-                        
+
 
                         if (data.students.data.length === 0) {
                             document.getElementById('studentNullList').classList.remove('d-none');
@@ -1415,7 +1464,7 @@
                             data.students.data.forEach(student => {
                                 const firstWord = student.name.trim().split(/\s+/)[0];
                                 const firstLetter = firstWord.replace(/\W/g, '').charAt(0);
-                                
+
                                 tbody.innerHTML += `
                                     <tr>
                                         <td><input type="checkbox" class="row-checkbox student-row" value="${student.uuid}"></td>
@@ -1430,7 +1479,7 @@
                                                     <a href="#" class="text-default font-weight-semibold letter-icon-title">${student.name}</a>
                                                     <div class="text-muted font-size-sm">${student.email}</div>
                                                 </div>
-                                            </div>  
+                                            </div>
                                         </td>
                                         <td class="openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">${student.phone}</td>
                                         <td class="openDetailModal" data-uuid="${student.uuid}" data-toggle="modal" data-target="#detailModalCenter">${student.date_of_birth}</td>
@@ -1495,7 +1544,7 @@
             function formatDate(dateString) {
                 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                 const date = new Date(dateString);
-                
+
                 let day = date.getDate().toString().padStart(2, "0"); // 22
                 let month = months[date.getMonth()]; // Jan
                 let year = date.getFullYear().toString().slice(-2); // 24
@@ -1506,9 +1555,9 @@
                 $(document).on('click', '.save-student', function () {
                     let $button = $(this);
                     $button.prop('disabled', true).html('Processing...');
-        
+
                     let formData = new FormData();
-        
+
                     // Collect form data
                     const name = $('.student-create-section').find('input[name="name"]').val();
                     const email = $('.student-create-section').find('input[name="email"]').val();
@@ -1521,11 +1570,11 @@
                     const confirmPassword = $('.student-create-section').find('input[name="confirm_password"]').val();
                     const audience = $('.student-create-section').find('input[name="audience"]:checked').val();
                     const photo = $('.student-create-section').find('#profileImage')[0].files ? $('#profileImage')[0].files[0] : null;
-        
+
                     // Validate required fields
                     if (!name || !email || !phone || !gender || !dob || !password || !confirmPassword || !audience || !package || !duration) {
                         let missingFields = [];
-        
+
                         if (!name) missingFields.push('Name');
                         if (!email) missingFields.push('Email');
                         if (!phone) missingFields.push('Phone');
@@ -1536,7 +1585,7 @@
                         if (!password) missingFields.push('Password');
                         if (!confirmPassword) missingFields.push('Confirm Password');
                         if (!audience) missingFields.push('Audience');
-        
+
                         Swal.fire({
                             icon: 'warning',
                             title: 'Missing Fields',
@@ -1545,7 +1594,7 @@
                         $button.prop('disabled', false).html('Save'); // Re-enable button
                         return;
                     }
-        
+
                     // Validate password match
                     if (password !== confirmPassword) {
                         Swal.fire({
@@ -1556,7 +1605,7 @@
                         $button.prop('disabled', false).html('Save'); // Re-enable button
                         return;
                     }
-        
+
                     // Append data to FormData
                     formData.append('_token', $('meta[name="csrf-token"]').attr('content')); // CSRF token
                     formData.append('name', name);
@@ -1569,11 +1618,11 @@
                     formData.append('audience', audience);
                     formData.append('package', package);
                     formData.append('duration', duration);
-        
+
                     if (photo) {
                         formData.append('photo', photo);
                     }
-        
+
                     // AJAX Request
                     $.ajax({
                         url: '/api/students',
@@ -1638,7 +1687,7 @@
 
                 $(document).on('click', '.edit-student-btn', function () {
                     let uuid = $(this).data("uuid");
-        
+
                     $.ajax({
                         url: "/api/students/" + uuid,  // Adjust the route as per your Laravel API
                         type: "GET",
@@ -1649,17 +1698,17 @@
                             $('.student-edit-section').find("input[name='email']").val(response.data.email);
                             $('.student-edit-section').find("input[name='phone']").val(response.data.phone);
                             $('.student-edit-section').find("input[name='date_of_birth']").val(response.data.date_of_birth);
-                            
+
                             // Set gender radio button
                             $('.student-edit-section').find("input[name='gender'][value='" + response.data.gender + "']").prop("checked", true);
-                            
+
                             // Set audience radio button
                             $('.student-edit-section').find("input[name='audience'][value='" + response.data.audience + "']").prop("checked", true);
-        
+
                             // Set package and duration dropdowns
                             $('.student-edit-section').find("select[name='package']").val(response.data.package);
                             $('.student-edit-section').find("select[name='duration']").val(response.data.duration);
-        
+
                             // Profile Image Preview
                             if (response.data.profile_image) {
                                 $('.student-edit-section').find("#editPreviewImage").attr("src", response.data.profile_image);
@@ -1674,11 +1723,11 @@
                 $(document).on('click', '.update-student', function () {
                     let $button = $(this);
                     $button.prop('disabled', true).html('Processing...');
-        
+
                     let formData = new FormData();
-        
+
                     // Collect form data
-                    
+
                     const student_uuid = $('.student-edit-section').find('input[name="student_uuid"]').val();
                     const name = $('.student-edit-section').find('input[name="name"]').val();
                     const email = $('.student-edit-section').find('input[name="email"]').val();
@@ -1689,11 +1738,11 @@
                     const duration = $('.student-edit-section').find('select[name="duration"]').val();
                     const audience = $('.student-edit-section').find('input[name="audience"]:checked').val();
                     const photo = $('#editProfileImage')[0].files ? $('#editProfileImage')[0].files[0] : null;
-        
+
                     // Validate required fields
                     if (!name || !email || !phone || !gender || !dob || !audience || !package || !duration) {
                         let missingFields = [];
-        
+
                         if (!name) missingFields.push('Name');
                         if (!email) missingFields.push('Email');
                         if (!phone) missingFields.push('Phone');
@@ -1702,7 +1751,7 @@
                         if (!duration) missingFields.push('Duration');
                         if (!dob) missingFields.push('Date of Birth');
                         if (!audience) missingFields.push('Audience');
-        
+
                         Swal.fire({
                             icon: 'warning',
                             title: 'Missing Fields',
@@ -1711,7 +1760,7 @@
                         $button.prop('disabled', false).html('Save'); // Re-enable button
                         return;
                     }
-        
+
                     // Append data to FormData
                     formData.append('_token', $('meta[name="csrf-token"]').attr('content')); // CSRF token
                     formData.append('name', name);
@@ -1722,11 +1771,11 @@
                     formData.append('audience', audience);
                     formData.append('package', package);
                     formData.append('duration', duration);
-        
+
                     if (photo) {
                         formData.append('photo', photo);
                     }
-        
+
                     // AJAX Request
                     $.ajax({
                         url: `/api/students/${student_uuid}/update`,
@@ -1982,7 +2031,7 @@
                     let checkbox = $(this);
                     let status = checkbox.is(':checked') ? 'active' : 'inactive';
                     let studentUuid = checkbox.closest('tr').find('.student-row').val();
-                    
+
                     $.ajax({
                         url: '/api/students/update-status',
                         type: 'POST',
@@ -2023,10 +2072,10 @@
                                 $(sectionRow).find('.value-of-checkbox').val(0);
                             }
                     });
-                    
+
                 });
             })(jQuery)
         </script>
-       
+
     @endpush
 </x-backend.layouts.master>
