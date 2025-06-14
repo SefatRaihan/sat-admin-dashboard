@@ -62,4 +62,14 @@ class ExamController extends Controller
     {
         return view('backend.exams.all-result');
     }
+
+    public function ranking()
+    {
+        $exams = Exam::with('createdBy')
+        ->select('created_by') // Select only the created_by column
+        ->distinct()           // Get unique created_by values
+        ->get();
+
+        return view('backend.exams.ranking', compact('exams'));
+    }
 }

@@ -48,12 +48,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified', 'check.permission'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
 
 Route::middleware(['auth','web', 'check.permission'])->group(function () {
 
@@ -114,6 +108,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/api/other-student-score', [FullTestController::class, 'otherStudentScore'])->name('other.student.score');
     Route::post('/api/exam-questions', [FullTestController::class, 'getExamQuestions'])->name('exam.questions');
     Route::post('/api/filter-exam-questions', [FullTestController::class, 'filterExamQuestions'])->name('filter.exam.questions');
+    Route::get('/ranking', [ExamController::class, 'ranking'])->name('ranking');
 });
 
 
