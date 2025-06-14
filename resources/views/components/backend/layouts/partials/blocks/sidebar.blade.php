@@ -83,7 +83,7 @@
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
                         <li class="nav-item"><a href="/all-result" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Results</span></a></li>
-                        <li class="nav-item"><a href="#" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Test Ranking</span></a></li>
+                        <li class="nav-item"><a href="/ranking" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Test Ranking</span></a></li>
                     </ul>
                 </li>
 
@@ -176,7 +176,7 @@
         var parentNavItem = $this.closest('.nav-item-submenu');
         var isSubmenuLink = $this.closest('.nav-group-sub').length > 0;
         console.log(isSubmenuLink);
-        
+
 
         // Prevent default for parent menu links that toggle submenus
         if (parentNavItem.length && !isSubmenuLink && $this.attr('href') === '#') {
@@ -186,7 +186,7 @@
         // Handle submenu toggle for parent menu items
         if (parentNavItem.length && !isSubmenuLink) {
             var isOpen = parentNavItem.hasClass('nav-item-open');
-            
+
         } else {
             // For regular links or submenu links, set active state
             removeAllActive();
