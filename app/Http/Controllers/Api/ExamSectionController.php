@@ -93,21 +93,6 @@ class ExamSectionController extends Controller
         return response()->json(['code' => 200, 'data' => $questions]);
     }
 
-    // public function getQuestionsWithExamSection(Request $request)
-    // {
-    //     dd($request->all());
-    //     if ($request->section_type == 'Mixed') {
-    //         $questions =  ExamQuestion::where('audience', $request->audience)
-    //                                     ->where('status', 'active')
-    //                                     ->get();
-    //     } else {
-    //         $questions =  ExamQuestion::where('sat_question_type', $request->section_type)
-    //                                     ->where('audience', $request->audience)
-    //                                     ->where('status', 'active')
-    //                                     ->get();
-    //     }
-    //     return response()->json(['code' => 200, 'data' => $questions]);
-    // }
 
     /**
      * Assign a question to a section (Drag & Drop).

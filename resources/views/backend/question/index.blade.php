@@ -229,56 +229,6 @@
                                 <div class="mb-1">
                                     <input type="text" class="form-control question_search_input w-100 pl-4" placeholder="Search Questions">
                                 </div>
-                                {{-- <div class="filter-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input toggle-parent" type="checkbox"
-                                            id="highSchoolToggle">
-                                        <label class="form-check-label" for="highSchoolToggle">
-                                            View all High School Exams
-                                        </label>
-                                        <span class="toggle-icon" data-target="highSchoolOptions"><i
-                                                class="fas fa-chevron-down"></i></span>
-                                    </div>
-                                    <div class="nested-options collapse" id="highSchoolOptions">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="exam1">
-                                            <label class="form-check-label" for="exam1">High School Verbal Exam
-                                                1</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="exam2">
-                                            <label class="form-check-label" for="exam2">High School Verbal Exam
-                                                2</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="exam3">
-                                            <label class="form-check-label" for="exam3">High School Verbal Exam
-                                                3</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="filter-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input toggle-parent" type="checkbox"
-                                            id="collegeToggle">
-                                        <label class="form-check-label" for="collegeToggle">
-                                            View all College Exams
-                                        </label>
-                                        <span class="toggle-icon" data-target="collegeOptions"><i
-                                                class="fas fa-chevron-down"></i></span>
-                                    </div>
-                                    <div class="nested-options collapse" id="collegeOptions">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="college1">
-                                            <label class="form-check-label" for="college1">College Verbal Exam</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="college2">
-                                            <label class="form-check-label" for="college2">College Quant Exam</label>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             </div>
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
@@ -820,7 +770,6 @@
                     <div class="modal-body">
                         <div class="mt-2">
                             <x-input-label for="photo" :value="__('Photo')" />
-                            {{-- <form action="#" class="dropzone" id="dropzone_single"></form> --}}
                             <div class="photosection" ondragover="allowDrop(event)" ondrop="dropImage(event)">
                                 <!-- Profile Image Preview -->
                                 <img id="previewImage" src="">
@@ -863,7 +812,6 @@
 
     @push('css')
         <!-- DataTables -->
-        {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"> --}}
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 
         <style>
@@ -1530,7 +1478,6 @@
     @endpush
 
     @push('js')
-        {{-- <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script> --}}
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
         <!-- Theme JS files -->
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/uploaders/dropzone.min.js"></script>
@@ -1996,7 +1943,7 @@
                     optionsHtml += `
                         <div class="form-check col-md-6 row" style="margin-left:3px">
                             <label class="radio-container col-md-12" style="padding-top:2px" for="option-${index}">
-                                <input class="form-check-input" type="radio" name="mcq_options" value="${optionText}" id="option-${index}" style="display: inline-block; visibility: visible;" ${isCorrect ? 'checked' : ''}>
+                                <input class="form-check-input" type="radio" name="mcq_options" value="${optionText}" id="option-${index}" style="margin-top: 0px;display: inline-block; visibility: visible;" ${isCorrect ? 'checked' : ''}>
                                 ${optionText}
                             </label>
                         </div>
@@ -2054,7 +2001,7 @@
                                     }]
                                 ]
                             },
-                            placeholder: 'Compose an epic...',
+                            placeholder: 'Type your content here...',
                             theme: 'snow'
                         });
                         // console.log('Before condition check: content.trim() is', content);
@@ -2153,7 +2100,7 @@
                         submitButton.text('Save Question').prop('disabled', false);
                     },
                     error: function(error) {
-                        console.log(error.responseJSON.errors);
+                        // console.log(error.responseJSON.errors);
                         // Reset button text and enable it on error
                         submitButton.text('Save Question').prop('disabled', false);
                         let errors = error.responseJSON.errors;
@@ -2225,7 +2172,7 @@
                         let tableBody = $("#question-table-body");
 
                         console.log(response.data.length);
-                        
+
 
                         if (response.data.length == 0) {
                             questionNullList.removeClass('d-none');
@@ -2248,7 +2195,7 @@
                                     <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.sat_question_type}</td>
                                     <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.exam || ''}</td>
                                     <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}"><span class="badge badge-pill ${difficultyColor}">${question.difficulty}</span></td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${question.avg_time || '00:00'} min</td>
+                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${formatDuration(question.avg_time_spent) || '00:00'}</td>
                                     <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${question.id}">${formatDate(question.created_at)} ${question.created_by.full_name}</td>
                                     <td class="text-center">
                                         <label class="switch">
@@ -2321,6 +2268,20 @@
                 let date = new Date(dateString);
                 let options = { day: '2-digit', month: 'short', year: 'numeric' };
                 return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
+            }
+
+            function formatDuration(minutes) {
+                const totalSeconds = Math.round(minutes * 60);
+                const hours = Math.floor(totalSeconds / 3600);
+                const remainingSeconds = totalSeconds % 3600;
+                const mins = Math.floor(remainingSeconds / 60);
+                const secs = remainingSeconds % 60;
+
+                let result = '';
+                if (hours > 0) result += hours + "hr ";
+                if (mins > 0) result += mins + "min ";
+                if (secs > 0) result += secs + "sec";
+                return result.trim();
             }
 
             function getDifficultyColor(difficulty) {

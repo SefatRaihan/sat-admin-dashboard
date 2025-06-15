@@ -109,7 +109,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" style="border-radius: 8px;">Cancel</button>
-                <button type="button" class="btn btn-primary" id="publishExamBtn" style="background:#691D5E; color:#EAECF0;  border-radius: 8px;">Save & Publish Exam</button>
+                <button type="button" class="btn btn-primary" id="publishExamBtn" style="background:#691D5E; color:#EAECF0;  border-radius: 8px;">Save Exam</button>
             </div>
         </div>
         </div>

@@ -12,13 +12,13 @@
                             <p class="summary-value"><b>{{ $percentCorrect }}%</b></p>
                             <p class="summary-description">(<span class="correct-answers">{{ $correctAnswers }}</span> of <span class="total-questions">{{ $totalQuestions }}</span>)</p>
                         </div>
-                    
+
                         <div class="col-md-4 text-center">
                             <p class="summary-text">Your Average Pace</p>
                             <p class="summary-value"><b>{{ $averagePaceFormatted }}</b></p>
                             <p class="summary-description">(<span class="total-time">{{ $totalTimeFormatted }}</span> total)</p>
                         </div>
-                    
+
                         <div class="col-md-4 text-center">
                             <p class="summary-text">Others' Average Pace</p>
                             <p class="summary-value"><b class="other_avg_time">0:00</b></p>
@@ -154,10 +154,10 @@
                             </thead>
                             <tbody>
                                 @foreach ($examAttemptQuestions as $item)
-                                {{-- @dd($item->question->question_title) --}}
+                                {{-- @dd($item->is_correct) --}}
                                     <tr>
                                         <td width="5%">
-                                            <span class="{{ $item->is_correct === 1 ?  'correct-answer' : 'wrong-answer' }}"><i class="fas fa-check"></i></span>
+                                            <span class="{{ $item->is_correct == true ?  'correct-answer' : 'wrong-answer' }}"><i class="fas {{ $item->is_correct ? 'fa-check' : 'fa-times' }}"></i></span>
                                         </td>
                                         <td width="20%">
                                             <span>{{ strip_tags($item->question->question_title) }}</span>
@@ -208,7 +208,7 @@
         </div>
     </div>
 
-    
+
 
     @push('css')
         <style>
@@ -255,7 +255,7 @@
                 transform-style: preserve-3d;
                 padding-left: 36px; /* Ensures the placeholder doesn't overlap with the icon */
             }
-            
+
             .search__input::placeholder {
                 padding-left: 30px;
             }
