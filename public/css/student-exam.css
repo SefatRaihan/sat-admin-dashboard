@@ -1,3 +1,16 @@
+.content {
+    background-color: #FCFAFF;
+    padding: 0px !important;
+}
+
+.page-header {
+    display: none;
+}
+
+.header {
+    background-color: #fff !important;
+    padding: 16px !important;
+}
 
 .box-pagination {
     display: flex;
@@ -128,12 +141,18 @@
     cursor: pointer;
 }
 
+.answered-count {
+    color: #691D5E;
+}
+
 .question-box{
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
+    border-radius: 20px;
     padding: 20px;
     border: 1px solid #ddd;
+    background-color: #fff;
+
 }
 
 .footer{
@@ -165,6 +184,30 @@
 }
 
 .groupActive {
+    color: #079455;
+}
+
+.verbalGroupActive {
+    color: #BA24D5;
+}
+
+.quantGroupActive {
+    color: #444CE7;
+}
+
+.chemistryGroupActive {
+    color: #ff04b4;
+}
+
+.biologyGroupActive {
+    color: #DC6803;
+}
+
+.mathGroupActive {
+    color: #0086C9;
+}
+
+.physicsGroupActive {
     color: #079455;
 }
 

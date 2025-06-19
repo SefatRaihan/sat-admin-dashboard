@@ -1,6 +1,6 @@
 <x-backend.layouts.student-master>
     <div class="">
-        <div class="header p-4">
+        <div class="header p-2">
             <div class="header-content">
                 <h5 style="color: #344054;font: Inter;font-size: 20px;font-weight: 600;">{{ $exam->title }}</h5>
                 <div class="heading-summary d-flex justify-content-center">
@@ -17,7 +17,23 @@
 
                 @foreach ($questions as $key => $group)
                 <div class="pagination-1">
-                    <p class="p-0 m-0 text-center text-capitalize groupActive">{{ $key }}</p>
+                    @php
+                        $groupColor = 'groupActive'; // Default color
+                        if ($key == 'Verbal') {
+                            $groupColor = 'verbalGroupActive';
+                        } elseif ($key == 'Quant') {
+                            $groupColor = 'quantGroupActive';
+                        } elseif ($key == 'Chemistry') {
+                            $groupColor = 'chemistryGroupActive';
+                        } elseif ($key == 'Biology') {
+                            $groupColor = 'biologyGroupActive';
+                        } elseif ($key == 'Math') {
+                            $groupColor = 'mathGroupActive';
+                        } elseif ($key == 'Physics') {
+                            $groupColor = 'physicsGroupActive';
+                        }
+                    @endphp
+                    <p class="p-0 m-0 text-center text-capitalize {{ $groupColor }}">{{ $key }}</p>
                     <div class="box-pagination">
                         @foreach ($group as $index => $question)
                             <span class="box question-{{ $question['id'] }}" data-question='@json($question)'></span>
@@ -26,7 +42,7 @@
                 </div>
                 @endforeach
             </div>
-        
+
             <div id="timer-container">
                 <div class="d-none">
                     <input type="number" id="timeInput" placeholder="Enter time in minutes" />
@@ -42,13 +58,15 @@
         <div class="row p-4">
             <div class="col-md-6 pl-4 pr-4">
                 <h4><b>Context</b></h4>
-                <div id="question-context">
-                    
+                <div class="card p-2" style="border-radius: 25px">
+                    <div id="question-context">
+
+                    </div>
                 </div>
-                <h4><b>Explanation</b></h4>
+                {{-- <h4><b>Explanation</b></h4>
                 <div id="question-explanation" style="padding-bottom:100px">
-                    
-                </div>
+
+                </div> --}}
             </div>
             <div class="col-md-6">
                 <div class="d-flex justify-content-between align-items-center">
@@ -72,12 +90,12 @@
         <div class="footer m-0 p-0" style="border-top: 1px solid #ddd; bottom: 0; position: fixed; width: 100%; left: 0; background: #fff;">
             <div class="footer-content p-4">
                 <div class="footer-left">
-                    <button type="button" class="btn" style="width: 112px; height: 44px; border-radius: 5px; border: 1px solid #FDA29B; color: #B42318;" data-toggle="modal" data-target="#endExamModal">End Exam</button>
+                    <button type="button" class="btn" style="width: 112px; height: 44px; border-radius: 25px; border: 1px solid #FDA29B; color: #B42318;" data-toggle="modal" data-target="#endExamModal">End Exam</button>
                 </div>
                 <div class="footer-right">
-                    <button type="button" id="prevBtn" class="btn btn-prev d-none mr-2" style="width: 108px; height: 44px; border-radius: 8px; border: 1px solid #A16A99; color: #521749;">Previous</button>
-                    <button type="button" id="nextBtn" class="btn btn-next" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF;">Next</button>
-                    <button type="button" id="submitBtn" class="btn btn-submit submit-exam d-none" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF;">Submit</button>
+                    <button type="button" id="prevBtn" class="btn btn-prev d-none mr-2" style="width: 108px; height: 44px; border-radius: 25px; border: 1px solid #A16A99; color: #521749;">Previous</button>
+                    <button type="button" id="nextBtn" class="btn btn-next" style="width: 108px; height: 44px; border-radius: 25px; background: #691D5E; color: #FFFF;">Next</button>
+                    <button type="button" id="submitBtn" class="btn btn-submit submit-exam d-none" style="width: 108px; height: 44px; border-radius: 25px; background: #691D5E; color: #FFFF;">Submit</button>
                 </div>
             </div>
         </div>
@@ -115,7 +133,7 @@
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
 
         {{-- end exam modal --}}
         <div class="modal fade" id="endExamModal" tabindex="-1">
@@ -134,8 +152,8 @@
                         <p>In case of completion of the test, the questions that were not answered by mistake will be counted.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn submit-exam" style="background-color:#D92D20 ;border-radius: 8px; color:#fff">End Exam</button>
+                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="border: 1px solid #D0D5DD; border-radius: 25px;" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn submit-exam" style="background-color:#D92D20 ; border-radius: 25px; color:#fff">End Exam</button>
                     </div>
                 </div>
             </div>
@@ -189,7 +207,7 @@
 
             function renderQuestion(index) {
                 let question = questions[index];
-                
+
                 $('.box').removeClass('active');
                 $(`.question-${question.id}`).addClass('active');
 
@@ -206,7 +224,7 @@
                 } else {
                     options = Array.isArray(question.options) ? question.options : Object.values(question.options || {});
                 }
-                
+
                 let selected = answers[question.id] || null;
                 $('#question-title').html(`${question.question_title}`);
                 $('#question-option').html(
@@ -261,12 +279,12 @@
             function submitExam() {
                 saveAnswerAndColor(currentIndex);
                 let q = questions[currentIndex];
-                
+
                 let selectedOption = $(`input[name="question_${q.id}"]:checked`).val();
-                
+
                 if (selectedOption) answers[q.id] = selectedOption;
 
-                
+
                 let submissionData = questions.map(q => ({
                     question_id: q.id,
                     answer: answers[q.id] ?? null,
@@ -277,7 +295,7 @@
                 let examId = exam.id;
                 // console.log(submissionData);
                 // return false;
-                
+
                 $.ajax({
                     url: '/student-exams/' + examAttemptId,
                     type: 'POST',
@@ -288,7 +306,7 @@
                     },
                     success: function (response) {
                         console.log(response);
-                        
+
                         // return false;
                         Swal.fire("Submitted", "Your exam has been submitted successfully", "success");
                         window.location.href = '/result/'+response.data.id;

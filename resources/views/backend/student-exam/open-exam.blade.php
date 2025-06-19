@@ -1,5 +1,5 @@
 <x-backend.layouts.student-master>
-    <div class="header p-2" style="border-bottom: 1px solid #ddd">
+    <div class="header p-3" style="border-bottom: 1px solid #ddd">
         <div class="header-content">
             <h5 class="p-0 m-0" style="color: #344054;font: Inter;font-size: 20px;font-weight: 600;">{{ $exam->title }}</h5>
             <div class="heading-summary d-flex justify-content-center">
@@ -43,12 +43,12 @@
             <div class="footer-left">
             </div>
             <div class="footer-right d-flex justify-content-end">
-                <a href="/full-tests/create" class="btn mr-2" style="width: 108px; height: 44px; border-radius: 8px; border: 1px solid #A16A99; color: #521749; padding: 11px .875rem !important;">Cancel</a>
+                <a href="/full-tests/create" class="btn mr-2" style="width: 108px; height: 44px; border-radius: 25px; border: 1px solid #A16A99; color: #521749; padding: 11px .875rem !important;">Cancel</a>
                 <form method="POST" action="{{ route('student-exam.start', $exam->id) }}">
                     @csrf
-                    <button type="submit" class="btn" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</button>
+                    <button type="submit" class="btn" style="width: 108px; height: 44px; border-radius: 25px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</button>
                 </form>
-                {{-- <a href="{{ route('student-exam.start', $exam->id) }}" type="button" class="btn" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</a> --}}
+                {{-- <a href="{{ route('student-exam.start', $exam->id) }}" type="button" class="btn" style="width: 108px; height: 44px; border-radius: 25px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</a> --}}
             </div>
         </div>
     </div>

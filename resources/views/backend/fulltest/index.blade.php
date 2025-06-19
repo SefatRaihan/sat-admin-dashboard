@@ -17,15 +17,17 @@
             </div>
             <!-- Card 2 -->
             <div class="col-md-12 mb-4">
-                <div class="custom-card" data-toggle="modal" data-target="#drillExamModelCenter">
-                    <div class="image-placeholder">
-                        <img src="{{ asset('image/drill-exam.png') }}" alt="">
+                <a href="/drill-exam">
+                    <div class="custom-card">
+                        <div class="image-placeholder">
+                            <img src="{{ asset('image/drill-exam.png') }}" alt="">
+                        </div>
+                        <div>
+                            <h3 class="card-title">Drill Exam</h3>
+                            <p class="card-text">Pick questions and set a timer. Get quick feedback on what you’re good at and where you can improve!</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="card-title">Drill Exam</h3>
-                        <p class="card-text">Pick questions and set a timer. Get quick feedback on what you’re good at and where you can improve!</p>
-                    </div>
-                </div>
+                </a>
             </div>
             <!-- Card 3 -->
             <div class="col-md-12 mb-4">
@@ -171,11 +173,16 @@
 
     @push('css')
     <style>
+        .content {
+            background-color: #FCFAFF;
+            display: flex;
+        }
+
         .custom-card {
-            border-radius: 8px;
+            border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            background-color: #F9FAFB;
+            background-color: #fff;
             display: flex;
             align-items: center;
             border: 1px solid #D0D5DD;

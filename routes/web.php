@@ -43,6 +43,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('/profile/image', [ProfileController::class, 'updateImage'])->name('profile.update.image');
+    Route::patch('/profile/name', [ProfileController::class, 'updateName'])->name('profile.update.name');
+    Route::patch('/profile/dob', [ProfileController::class, 'updateDob'])->name('profile.update.dob');
+    Route::patch('/profile/email', [ProfileController::class, 'updateEmail'])->name('profile.update.email');
+    Route::patch('/profile/phone', [ProfileController::class, 'updatePhone'])->name('profile.update.phone');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 });
 
 
@@ -87,6 +93,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     })->name('markAsRead');
 
     Route::resource('full-tests', FullTestController::class);
+    Route::get('drill-exam', [FullTestController::class, 'drillExam'])->name('drill-exam');
     Route::resource('student-exams', StudentExamController::class)->names('student-exams');
     Route::post('student-exams/{id}', [StudentExamController::class, 'update']);
     Route::post('student-exam/start/{examId}', [StudentExamController::class, 'startExam'])->name('student-exam.start');

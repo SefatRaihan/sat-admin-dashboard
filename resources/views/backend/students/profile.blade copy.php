@@ -7,7 +7,6 @@
                     <button class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="true">My Profile</button>
                     <button class="nav-link" id="v-pills-package-tab" data-toggle="pill" data-target="#v-pills-package" type="button" role="tab" aria-controls="v-pills-package" aria-selected="false">Package</button>
                     <button class="nav-link" id="v-pills-billing-tab" data-toggle="pill" data-target="#v-pills-billing" type="button" role="tab" aria-controls="v-pills-billing" aria-selected="false">Billing</button>
-                    <button class="nav-link" id="v-pills-referral-program-tab" data-toggle="pill" data-target="#v-pills-referral-program" type="button" role="tab" aria-controls="v-pills-referral-program" aria-selected="false">Referral Program</button>
                     <button class="nav-link" id="v-pills-notification-tab" data-toggle="pill" data-target="#v-pills-notification" type="button" role="tab" aria-controls="v-pills-notification" aria-selected="false">Notification</button>
                     <button class="nav-link" id="v-pills-term-condition-tab" data-toggle="pill" data-target="#v-pills-term-condition" type="button" role="tab" aria-controls="v-pills-term-condition" aria-selected="false">Terms & Conditions</button>
                     <button class="nav-link" id="v-pills-privacy-policy-tab" data-toggle="pill" data-target="#v-pills-privacy-policy" type="button" role="tab" aria-controls="v-pills-privacy-policy" aria-selected="false">Privacy Policy</button>
@@ -16,16 +15,101 @@
             <div class="col-9">
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-
+                        <div class="card edit-card d-none" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                            <div class="card-header border-bottom">
+                                <h4 class="mb-0" style="font-size:20px; font-weight:600">My Profile</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mt-2">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Personal info</p>
+                                                <p style="color:#475467; font-size:14px; font-weight:400">Update your photo and personal details.</p>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div style="width: 80%">
+                                                    @include('profile.partials.update-profile-information-form')
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Password</p>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div style="width: 80%">
+                                                    @include('profile.partials.update-password-form')
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="card information-card" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                             <div class="card-header border-bottom">
                                 <h4 class="mb-0" style="font-size:20px">My Profile</h4>
                             </div>
                             <div class="card-body">
-                                <div class="row d-flex justify-content-center mt-3">
+                                <div class="row mt-3">
                                     <div class="col-md-8">
-                                        @include('profile.partials.update-profile-information-form')
+                                        <div class="card" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                                            <div class="card-body">
+                                                <div class="d-flex">
+                                                    <div>
+                                                        <img src="{{ auth()->user()->student->image ? asset('storage/' . auth()->user()->student->image) : asset('image/default-avatar.png') }}" alt="Avatar" style="height: 48px; width:48px; border-radius:50%; object-fit: cover;">
+                                                    </div>
+                                                    <div class="ml-2">
+                                                        <h4 class="mb-0" style="font-size: 16px; font-weight:600">{{ auth()->user()->full_name }}</h4>
+                                                        <p style="font-size: 14px; font-weight:400; color:#6B7280">{{ auth()->user()->email }}</p>
+                                                    </div>
+                                                </div>
+                                                <hr class="mt-0">
+                                                <h4 style="font-size: 16px; font-weight:600">Student Details</h4>
+                                                <div class="profileTableWrapper">
+                                                    <table class="table table-striped custom-table profileTable" style="border: 1px solid #EAECF0">
+                                                        <tr>
+                                                            <td style="width: 25%">Name</td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentName">: {{ auth()->user()->student->name }}</td>
+                
+                                                            <td style="width: 25%">Date of Birth</td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentDob">: {{ \Carbon\Carbon::parse(auth()->user()->student->date_of_birth)->format('d-M-Y') }}</td>                                                             </td>
+                                                        </tr>
+                
+                                                        <tr>
+                                                            <td style="width: 25%">Email</td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="StudentEmail">: {{ auth()->user()->student->email }}</td>
+                
+                                                            <td style="width: 25%">Audience Type</td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentAudience">: {{ auth()->user()->student->audience }}</td>
+                                                        </tr>
+                
+                                                        <tr>
+                                                            <td style="width: 25%">Gender</td>
+                                                            <td class="font-weight-bold text-capitalize" style="width: 25%" id="studentGender">: {{ auth()->user()->student->gender }}</td>
+                
+                                                            <td style="width: 25%">Active Status</td>
+                                                            <td class="font-weight-bold text-capitalize" style="width: 25%" id="studentStatus">: {{ auth()->user()->student->status }}</td>
+                                                        </tr>
+                
+                                                        <tr>
+                                                            <td style="width: 25%">Phone Number</td>
+                                                            <td class="font-weight-bold" style="width: 25%" id="studentPhone">: {{ auth()->user()->student->phone }}</td>
+                
+                                                            <td style="width: 25%">-</td>
+                                                            <td class="font-weight-bold" style="width: 25%">: -</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="d-flex justify-content-end mt-3">
+                                                    <a href="" type="button" class="btn btn-outline-dark mr-2 edit-student" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-pen"></i> Edit</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -49,7 +133,7 @@
                                              <div class="card-body">
                                                 <div class="d-flex justify-content-between align-items-start">
                                                     <div>
-                                                       <h5 class="mb-0" style="font-size: 18px; font-weight:600">3 months Plan <span class="badge bg-light text-dark border ms-1" style="border-radius: 25px">Monthly</span></h5>
+                                                       <h5 class="mb-0" style="font-size: 18px; font-weight:600">3 months Plan <span class="badge bg-light text-dark border ms-1" style="border-radius: 8px">Monthly</span></h5>
                                                        <p class="mb-1" style="color: #475467; font-size:14px; font-weight:400">Perfect for starting your journey</p>
                                                        <p class="small" style="color: #475467; font-size:14px; font-weight:400">Expire: 20 Jun 2025</p>
                                                     </div>
@@ -58,7 +142,7 @@
                                                     </div>
                                                  </div>
                                              </div>
-                                             <div class="card-footer pt-1 d-flex justify-content-end" style="background: #F2F4F7; border-radius: 0px 0px 15px 15px;">
+                                             <div class="card-footer pt-1 d-flex justify-content-end" style="background: transparent">
                                                  <button class="btn btn-link text-decoration-none upgrade-plan" style="font-size:14px; font-weight:600; color:#521749">Upgrade plan <i class="fas fa-arrow-right" style="rotate: -30deg;"></i></button>
                                              </div>
                                           </div>
@@ -70,7 +154,7 @@
                                             <p style="color:#475467; font-size:14px; font-weight:400">Pick an account plan that fits your workflow.</p>
                                         </div>
                                         <div class="col-md-8 d-flex justify-content-end">
-                                            <button type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px; width: 183px; height: 42px;"><i class="fas fa-cloud-download-alt"></i> Download All</button>
+                                            <button type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i> Download All</button>
                                         </div>
                                     </div>
                                     <!-- Billing and Invoicing -->
@@ -83,13 +167,13 @@
                                            <div class="profileTableWrapper">
                                                <table class="table custom-table profileTable" style="border: 1px solid #EAECF0">
                                                    <thead>
-                                                       <tr style="background: #F2F4F7;">
-                                                          <th style="background: #F2F4F7;"><input type="checkbox"></th>
-                                                          <th style="background: #F2F4F7;">Invoice</th>
-                                                          <th style="background: #F2F4F7;">Amount</th>
-                                                          <th style="background: #F2F4F7;">Date</th>
-                                                          <th style="background: #F2F4F7;">Status</th>
-                                                          <th style="background: #F2F4F7;"></th>
+                                                       <tr class="bg-light">
+                                                          <th><input type="checkbox"></th>
+                                                          <th>Invoice</th>
+                                                          <th>Amount</th>
+                                                          <th>Date</th>
+                                                          <th>Status</th>
+                                                          <th></th>
                                                        </tr>
                                                     </thead>
                                                     <tbody>
@@ -100,7 +184,7 @@
                                                           <td>SAR 10.00</td>
                                                           <td>Dec 1, 2022</td>
                                                           <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
                                                        </tr>
                                                        <tr>
                                                           <td><input type="checkbox"></td>
@@ -108,7 +192,7 @@
                                                           <td>SAR 10.00</td>
                                                           <td>Dec 1, 2022</td>
                                                           <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
                                                        </tr>
                                                        <tr>
                                                           <td><input type="checkbox"></td>
@@ -116,7 +200,7 @@
                                                           <td>SAR 10.00</td>
                                                           <td>Dec 1, 2022</td>
                                                           <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
                                                        </tr>
                                                        <tr>
                                                           <td><input type="checkbox"></td>
@@ -124,7 +208,7 @@
                                                           <td>SAR 10.00</td>
                                                           <td>Dec 1, 2022</td>
                                                           <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
                                                        </tr>
                                                        <tr>
                                                           <td><input type="checkbox"></td>
@@ -132,7 +216,7 @@
                                                           <td>SAR 10.00</td>
                                                           <td>Dec 1, 2022</td>
                                                           <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
                                                        </tr>
                                                        <tr>
                                                           <td><input type="checkbox"></td>
@@ -140,7 +224,7 @@
                                                           <td>SAR 10.00</td>
                                                           <td>Dec 1, 2022</td>
                                                           <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
                                                        </tr>
                                                        <tr>
                                                           <td><input type="checkbox"></td>
@@ -148,7 +232,7 @@
                                                           <td>SAR 10.00</td>
                                                           <td>Dec 1, 2022</td>
                                                           <td><span class="badge badge-pill badge-easy">Easy</span></td>
-                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px;"><i class="fas fa-cloud-download-alt"></i></a></td>
+                                                          <td><a type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;"><i class="fas fa-cloud-download-alt"></i></a></td>
                                                        </tr>
                                                        <!-- Add more rows as needed -->
                                                     </tbody>
@@ -168,7 +252,7 @@
                             <div class="card-body">
                                 <div class="row mt-2">
                                     <!-- Left Column -->
-                                    <div class="col-md-12" style="background-color: #F9FAFB; border-radius: 25px; padding: 22px; border:1px solid #EAECF0">
+                                    <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Card details</p>
@@ -176,8 +260,8 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <!-- Visa Card Selected -->
-                                                <div class="p-3 mb-3 card-selected" style="background-color: #fff">
-                                                    <div class="d-flex justify-content-between align-items-start">
+                                                <div class="p-3 mb-3 card-selected">
+                                                    <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex align-items-start">
                                                             <div class="mr-2">
                                                                 <span class="icon-box visa-icon me-2"></span>
@@ -191,15 +275,15 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="d-flex align-items-start">
-                                                            <button class="btn">Remove</button>
+                                                        <div class="d-flex align-items-center">
+                                                            <input class="form-check-input" type="checkbox" name="defaultCard" checked>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Mastercard Unselected -->
-                                                <div class="p-3 mb-3 card-unselected"  style="background-color: #fff">
-                                                    <div class="d-flex justify-content-between align-items-start">
+                                                <div class="p-3 mb-3 card-unselected">
+                                                    <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex align-items-start">
                                                             <div class="mr-2">
                                                                 <span class="icon-box mastercard-icon me-2"></span>
@@ -213,8 +297,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="d-flex align-items-start">
-                                                            <button class="btn">Remove</button>
+                                                        <div class="d-flex align-items-center">
+                                                            <input class="form-check-input" type="checkbox" name="defaultCard">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -223,9 +307,9 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                
                                     <!-- Right Column -->
-                                    <div class="col-md-12 mt-4" style="background-color: #F9FAFB; border-radius: 25px; padding: 22px; border:1px solid #EAECF0">
+                                    <div class="col-md-12 mt-4">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">Contact email</p>
@@ -239,14 +323,14 @@
                                                     <small class="text-muted">olivia@mubhir.com</small>
                                                   </label>
                                                 </div>
-
+                                          
                                                 <div class="form-check custom-radio mb-3">
                                                   <input class="form-check-input" type="radio" name="emailOption" id="altEmail" checked>
                                                   <label class="form-check-label" for="altEmail">
                                                     Send to an alternative email
                                                   </label>
                                                 </div>
-
+                                          
                                                 <input type="email" class="form-control" value="billing@mubhir.com">
                                             </div>
                                         </div>
@@ -297,21 +381,21 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                        
                                                 <div class="form-section">
                                                     <h4 class="label-title">Street address</h4>
                                                     <div class="mb-3">
                                                         <input type="text" class="form-control" placeholder="Address">
                                                     </div>
                                                 </div>
-
+                                        
                                                 <div class="form-section border-bottom">
                                                     <h4 class="label-title">City</h4>
                                                     <div class="mb-3">
                                                         <input type="text" class="form-control" placeholder="City name">
                                                     </div>
                                                 </div>
-
+                                        
                                                 <div class="form-section border-bottom mt-2">
                                                     <h4 class="label-title">State / Province</h4>
                                                     <div class="row">
@@ -327,7 +411,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                        
                                                 <div class="form-section mt-2">
                                                     <h4 class="label-title">Country</h4>
                                                     <div class="mb-3">
@@ -341,121 +425,10 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer border-top d-flex justify-content-between pt-2">
-                                                <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="border: 1px solid #A16A99; border-radius: 25px; color:#A16A99" data-dismiss="modal">Cancel</button>
-                                                <button type="button" class="btn submit-exam" style="background-color:#691D5E ;border-radius: 25px; color:#fff">End Exam</button>
+                                                <button type="button" class="btn btn-outline-dark" data-dismiss="modal" style="border: 1px solid #A16A99; border-radius: 8px; color:#A16A99" data-dismiss="modal">Cancel</button>
+                                                <button type="button" class="btn submit-exam" style="background-color:#691D5E ;border-radius: 8px; color:#fff">End Exam</button>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="v-pills-referral-program" role="tabpanel" aria-labelledby="v-pills-referral-program-tab">
-                        <div class="card" style="border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                            <div class="card-header border-bottom">
-                                <h4 class="mb-0" style="font-size:20px; font-weight:600">Referral Program</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="mt-3">
-                                    <h2 style="font-size:20px; font-weight:500">Referral Stats</h2>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <div class="stat-box">
-                                                    <h5>Invitations</h5>
-                                                    <h3>4</h3>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="stat-box">
-                                                    <h5>Subscribed</h5>
-                                                    <h3>2</h3>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="stat-box">
-                                                    <h5 class="text-right">Credits Earned</h5>
-                                                    <h3 class="text-right">SAR 80.00</h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="referral-code">
-                                                <h4>Share Referral Code</h4>
-                                                <p>Invite friends and earn rewards!</p>
-                                                <div class="row">
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control mb-2" style="border-radius: 25px !important" value="ABCDKSHIE1058" readonly>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <button class="btn btn-custom me-2"><i class="far fa-copy"></i> Copy</button>
-                                                        <button class="btn btn-custom"><i class="fas fa-share-square"></i> Share</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4" style="border:1px solid #D0D5DD; border-radius:25px">
-                                            <div class="how-it-works mt-4">
-                                                <h4>How it Works</h4>
-                                                <ul>
-                                                    <li>Refer anyone using your referral code.</li>
-                                                    <li>Invite friends easily via WhatsApp, email, or social media.</li>
-                                                    <li>They get a [10%] discount on first subscription.</li>
-                                                    <li>Your friends register & take their first SAT mock test.</li>
-                                                    <li>Get discounts, bonus test credits, or cashback as they engage.</li>
-                                                    <li>You earn [SAR 40] credit per redemption.</li>
-                                                    <li>Your credits can be used to pay your subscription.</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-                                    <div class="referral-activity-log">
-                                    <h4 style="font-size: 20px">Referral Activity Log</h4>
-                                    <table class="table table-custom">
-                                        <thead>
-                                        <tr>
-                                            <th style="background-color: #F1E9F0; border-radius: 25px 0px 0px 25px; border: none;">Date</th>
-                                            <th style="background-color: #F1E9F0; border: none;">Redeemer Name</th>
-                                            <th style="background-color: #F1E9F0; border: none;">Discount Given</th>
-                                            <th style="background-color: #F1E9F0; border: none;">Credits Earned</th>
-                                            <th style="background-color: #F1E9F0; border-radius:0px 25px 25px 0px; border: none;">Status</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td style="border-top: none !important">12 Jun 2025</td>
-                                            <td style="border-top: none !important">Shanto Islam</td>
-                                            <td style="border-top: none !important">10%</td>
-                                            <td style="border-top: none !important">SAR 40</td>
-                                            <td style="border-top: none !important"><span class="status-completed">Completed</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>09 Jun 2025</td>
-                                            <td>Amir Khan</td>
-                                            <td>20%</td>
-                                            <td>SAR 40</td>
-                                            <td><span class="status-pending">Pending</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>05 Jun 2025</td>
-                                            <td>Md Borhan Uddin</td>
-                                            <td>10%</td>
-                                            <td>SAR 40</td>
-                                            <td><span class="status-completed">Completed</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>01 Jun 2025</td>
-                                            <td>Aslam Uddin</td>
-                                            <td>15%</td>
-                                            <td>SAR 40</td>
-                                            <td><span class="status-pending">Pending</span></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
                                     </div>
                                 </div>
                             </div>
@@ -466,8 +439,8 @@
                             <div class="card-header border-bottom">
                                 <h4 class="mb-0" style="font-size:20px; font-weight:600">Notification</h4>
                             </div>
-                            <div class="card-body p-3">
-                                <div class="row p-3" style="background-color: #F9FAFB; border:1px solid #EAECF0; border-radius:25px">
+                            <div class="card-body">
+                                <div class="row mt-3">
                                     <div class="col-md-4">
                                         <p class="mb-0" style="color:#344054; font-size:14px; font-weight:600">General notifications</p>
                                         <p style="color:#475467; font-size:14px; font-weight:400">Select when and how you’ll be notified</p>
@@ -488,7 +461,7 @@
                                             <div>
                                                 <div class="btn-group mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px; background-color: transparent !important;">
                                                     <button type="button" class="btn btn-light legitRipple" style="background-color: transparent !important;">Non</button>
-                                                    <button type="button" class="btn btn-light border-left border-right legitRipple" style="background-color: #691D5E !important; color:#fff">In-app</button>
+                                                    <button type="button" class="btn btn-light border-left border-right legitRipple" style="background-color: #F9FAFB !important;">In-app</button>
                                                     <button type="button" class="btn btn-light legitRipple" style="background-color: transparent !important;">Email</button>
                                                 </div>
                                             </div>
@@ -501,7 +474,7 @@
                                                 <div class="btn-group mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px; background-color: transparent !important;">
                                                     <button type="button" class="btn btn-light legitRipple" style="background-color: transparent !important;">Non</button>
                                                     <button type="button" class="btn btn-light border-left border-right legitRipple" style="background-color: transparent !important;">In-app</button>
-                                                    <button type="button" class="btn btn-light border-left legitRipple" style="background-color: #691D5E !important; border-radius: 0px 8px 8px 0px; color:#fff">Email</button>
+                                                    <button type="button" class="btn btn-light border-left legitRipple" style="background-color: #F9FAFB !important; border-radius: 8px;">Email</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -515,8 +488,8 @@
                             <div class="card-header border-bottom">
                                 <h4 class="mb-0" style="font-size:20px; font-weight:600">Terms & Conditions</h4>
                             </div>
-                            <div class="card-body term-condition-section" style="background-color:#f7f9fa">
-                                <div class="m-2 p-4" style="background-color: #FFFFFF; border:1px solid #D0D5DD; border-radius:25px">
+                            <div class="card-body term-condition-section">
+                                <div class="mt-2">
                                     <p>Welcome to the "Mubhir" platform! Please read the following terms and conditions carefully before using the site. By using this site, you agree to be bound by the following terms and conditions:</p>
 
                                     <h2>1. Acceptance of Terms</h2>
@@ -568,10 +541,10 @@
                             <div class="card-header border-bottom">
                                 <h4 class="mb-0" style="font-size:20px; font-weight:600">Privacy Policy</h4>
                             </div>
-                            <div class="card-body privacy-policy-section" style="background-color:#f7f9fa">
-                                <div class="m-2 p-4" style="background-color: #FFFFFF; border:1px solid #D0D5DD; border-radius:25px">
+                            <div class="card-body privacy-policy-section">
+                                <div class="mt-2">
                                     <p>We at Mubehr are committed to protecting your privacy. This Privacy Policy explains how we collect, use and protect the personal information you provide to us when you use our website.</p>
-
+                                  
                                     <h2>1. Information We Collect</h2>
                                     <p>We may collect the following information when you use the Site:</p>
                                     <ul>
@@ -579,7 +552,7 @@
                                       <li>Technical information: such as IP address, browser type, and operating system</li>
                                       <li>Behavioral information: such as the pages you visit, the time you spend on the site, and the activities you undertake</li>
                                     </ul>
-
+                                  
                                     <h2>2. How we use the information</h2>
                                     <p>We use the information we collect for the following purposes:</p>
                                     <ul>
@@ -588,7 +561,7 @@
                                       <li>Security</li>
                                       <li>Marketing</li>
                                     </ul>
-
+                                  
                                     <h2>3. Sharing Information</h2>
                                     <p>We do not sell or rent your personal information to third parties. We may share your information in the following cases:</p>
                                     <ul>
@@ -596,22 +569,22 @@
                                       <li>To comply with law</li>
                                       <li>To protect our rights</li>
                                     </ul>
-
+                                  
                                     <h2>4. Content</h2>
                                     <p>The content on the Site is provided for educational and training purposes only. Mubehr is not responsible for the accuracy or completeness of the information provided. The Site reserves the right to modify or delete any content at any time without prior notice.</p>
-
+                                  
                                     <h2>5. Subscriptions and Payment</h2>
                                     <p>The Platform offers a variety of subscription plans. Subscriptions are automatically renewed unless you cancel them before the renewal date. All payments are non-refundable, unless otherwise stated.</p>
-
+                                  
                                     <h2>6. Privacy</h2>
                                     <p>All personal information you provide is subject to our Privacy Policy. By using this Site, you agree to the collection and use of information in accordance with the Privacy Policy.</p>
-
+                                  
                                     <h2>7. Intellectual Property</h2>
                                     <p>All intellectual property rights in and to the Site and its contents are owned by Mubehr or its licensors. You may not use any trademarks or logos of the Site without prior written permission.</p>
-
+                                  
                                     <h2>8. Modifications to the Terms</h2>
                                     <p>Mubehr reserves the right to modify these Terms and Conditions at any time. Continued use of the site after posting of modifications will be deemed acceptance of the modified Terms.</p>
-
+                                  
                                     <h2>9. Disclaimer</h2>
                                     <p>The Site is provided on an "as is" and "as available" basis without warranties of any kind. Mubehr does not warrant that the Site will be error free or available at all times.</p>
                                 </div>
@@ -660,7 +633,7 @@
                             <p class="text-muted small" style="color:#667085; font-size:14px; font-weight:500">Perfect for starting your journey</p>
                             <p class="plan-price mb-0 mt-3" style="font-size:24px; font-weight:600; color:#671E5A">99 <span class="fs-6 fw-normal" style="font-size:16px; font-weight:500; color:#727272">SAR</span></p>
                             <p class="text-muted small" style="color:#050505; font-size:14px; font-weight:500">Per user per month</p>
-                            <a href="/checkout" class="btn btn-block btn-outline-dark mr-2" style="border: 1px solid #A16A99; border-radius: 25px;">Buy Now</a>
+                            <a href="/checkout" class="btn btn-block btn-outline-dark mr-2" style="border: 1px solid #A16A99; border-radius: 8px;">Buy Now</a>
                          </div>
                        </div>
                     </div>
@@ -671,7 +644,7 @@
                                 <p class="text-muted small" style="color:#667085; font-size:14px; font-weight:500">Perfect for starting your journey</p>
                                 <p class="plan-price mb-0 mt-3" style="font-size:24px; font-weight:600; color:#671E5A">199 <span class="fs-6 fw-normal" style="font-size:16px; font-weight:500; color:#727272">SAR</span></p>
                                 <p class="text-muted small" style="color:#050505; font-size:14px; font-weight:500">Per user per month</p>
-                                <a href="/checkout" class="btn btn-block mr-2" style="border: 1px solid #691D5E;; background-color:  #691D5E; border-radius: 25px; color:#fff">Buy Now</a>
+                                <a href="/checkout" class="btn btn-block mr-2" style="border: 1px solid #691D5E;; background-color:  #691D5E; border-radius: 8px; color:#fff">Buy Now</a>
                              </div>
                         </div>
                     </div>
@@ -682,7 +655,7 @@
                                 <p class="text-muted small" style="color:#667085; font-size:14px; font-weight:500">Perfect for starting your journey</p>
                                 <p class="plan-price mb-0 mt-3" style="font-size:24px; font-weight:600; color:#671E5A">299 <span class="fs-6 fw-normal" style="font-size:16px; font-weight:500; color:#727272">SAR</span></p>
                                 <p class="text-muted small" style="color:#050505; font-size:14px; font-weight:500">Per user per month</p>
-                                <a href="/checkout" class="btn btn-block btn-outline-dark mr-2" style="border: 1px solid #A16A99; border-radius: 25px;">Buy Now</a>
+                                <a href="/checkout" class="btn btn-block btn-outline-dark mr-2" style="border: 1px solid #A16A99; border-radius: 8px;">Buy Now</a>
                              </div>
                         </div>
                     </div>
@@ -690,10 +663,10 @@
               </div>
            </div>
         </div>
-    </div>
+    </div> 
 
     @push('css')
-        <link rel="stylesheet" href="{{ asset('css/student-profile.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/student-profile.css') }}">   
     @endpush
 
     @push('js')
