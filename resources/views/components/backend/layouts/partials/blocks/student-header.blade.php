@@ -93,15 +93,18 @@
     }
 
     .student-navbar .nav-item .nav-link.active {
-        color: #28235B;
+        color: #fff;
         font-weight: 700;
-        background-color: #F2F4F7;
+        border-radius: 25px;
+        background-color: #691D5E;
     }
 
     .student-navbar .nav-item .nav-link:hover {
         border:1px solid #732066;
         background: #fff;
+        border-radius: 25px;
         font-weight: 700;
+        color: #000;
     }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

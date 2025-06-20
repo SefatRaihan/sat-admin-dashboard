@@ -395,4 +395,9 @@ class FullTestController extends Controller
         $secs = $seconds % 60;
         return sprintf('%d:%02d', $minutes, $secs);
     }
+
+    public function drillExam()
+    {
+        return view('backend.fulltest.drill-exam');
+    }
 }

@@ -1,90 +1,104 @@
 <x-backend.layouts.student-master>
     <div>
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div class="exam-tab-section p-2">
-                        <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
-                            <li class="nav-item">
-                              <a class="nav-link active" id="exam-all-tab" data-toggle="tab" href="#exam-all" role="tab" aria-controls="exam-all" aria-selected="true">Exam All (<span class="examAll">{{ $allExamCount }}</span>)</a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" id="unattempted-tab" data-toggle="tab" href="#unattempted" role="tab" aria-controls="unattempted" aria-selected="false">Unattempted (<span class="unattempted">{{ $unattemptedCount }}</span>)</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="attempted-tab" data-toggle="tab" href="#attempted" role="tab" aria-controls="attempted" aria-selected="false">Attempted (<span class="attempted">{{ $attemptedCount }}</span>)</a>
-                              </li>
-                        </ul>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px; width:150px; height: 44px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
-                    </div>
-                </div>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="exam-all" role="tabpanel" aria-labelledby="exam-all-tab">
-                        <div class="pt-2">
-                            <div class="row">
-                                @foreach ($exams as $exam)
-                                <div class="col-md-3 exam-card">
-                                    <div class="card">
-                                        <h5 class="card-title">{{ $exam->title }}</h5>
-                                        <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
-                                        <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
-                                        <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->formatted_duration }}</span></p>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">{{ $exam->userAttempt && $exam->userAttempt->status ? 'Re-take Exam' : 'Start Exam' }}</a>
-                                            <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
-                                        </div>
+        <div class="d-flex justify-content-between">
+            <div class="exam-tab-section p-2">
+                <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="exam-all-tab" data-toggle="tab" href="#exam-all" role="tab" aria-controls="exam-all" aria-selected="true">Exam All (<span class="examAll">{{ $allExamCount }}</span>)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="unattempted-tab" data-toggle="tab" href="#unattempted" role="tab" aria-controls="unattempted" aria-selected="false">Unattempted (<span class="unattempted">{{ $unattemptedCount }}</span>)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="attempted-tab" data-toggle="tab" href="#attempted" role="tab" aria-controls="attempted" aria-selected="false">Attempted (<span class="attempted">{{ $attemptedCount }}</span>)</a>
+                        </li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px; width:150px; height: 44px;" onclick="filter(this)"><img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters</button>
+            </div>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="exam-all" role="tabpanel" aria-labelledby="exam-all-tab">
+                <div class="pt-2">
+                    <div class="row">
+                        @foreach ($exams as $exam)
+                        <div class="col-md-3 exam-card">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">{{ $exam->title }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
+                                    <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
+                                    <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->formatted_duration }}</span></p>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start" style="width:{{ $exam->userAttempt && $exam->userAttempt->status ? '50%' : '100%' }}">{{ $exam->userAttempt && $exam->userAttempt->status ? 'Re-take Exam' : 'Start Exam' }}</a>
+                                        @if ($exam->userAttempt && $exam->userAttempt?->status)
+                                        <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
+                                        @endif
                                     </div>
                                 </div>
-                                @endforeach
                             </div>
                         </div>
+                        @endforeach
                     </div>
-
-                    <div class="tab-pane fade" id="unattempted" role="tabpanel" aria-labelledby="unattempted-tab">
-                        <div class="p-3">
-                           <div class="row">
-                             @foreach ($unattemptedExams as $exam)
-                                <div class="col-md-3 exam-card">
-                                    <div class="card">
-                                        <h5 class="card-title">{{ $exam->title }}</h5>
-                                        <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
-                                        <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
-                                        <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->duration }}</span></p>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">{{ 'Start Exam' }}</a>
-                                            <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                           </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="attempted" role="tabpanel" aria-labelledby="attempted-tab">
-                        <div class="p-3">
-                           <div class="row">
-                             @foreach ($attemptedExams as $exam)
-                                <div class="col-md-3 exam-card">
-                                    <div class="card">
-                                        <h5 class="card-title">{{ $exam->title }}</h5>
-                                        <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
-                                        <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
-                                        <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->duration }}</span></p>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start">{{ 'Re-take Exam' }}</a>
-                                            <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                           </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
+
+            <div class="tab-pane fade" id="unattempted" role="tabpanel" aria-labelledby="unattempted-tab">
+                <div class="p-3">
+                    <div class="row">
+                        @foreach ($unattemptedExams as $exam)
+                        <div class="col-md-3 exam-card">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">{{ $exam->title }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
+                                    <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
+                                    <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->formatted_duration }}</span></p>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start" style="width:{{ $exam->userAttempt && $exam->userAttempt->status ? '50%' : '100%' }}">{{ $exam->userAttempt && $exam->userAttempt->status ? 'Re-take Exam' : 'Start Exam' }}</a>
+                                        @if ($exam->userAttempt && $exam->userAttempt?->status)
+                                        <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="attempted" role="tabpanel" aria-labelledby="attempted-tab">
+                <div class="p-3">
+                    <div class="row">
+                        @foreach ($attemptedExams as $exam)
+                        <div class="col-md-3 exam-card">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">{{ $exam->title }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><i class="fas fa-th-large"></i> Section <span class="card-text-value">{{ $exam->sections->count() }}</span></p>
+                                    <p class="card-text"><i class="fas fa-file-alt"></i> Question <span class="card-text-value">{{ $exam->questions->count()  }}</span></p>
+                                    <p class="card-text"><i class="fas fa-clock"></i> Duration <span class="card-text-value">{{ $exam->formatted_duration }}</span></p>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{{ route('student-exam.open', $exam->id) }}" class="btn btn-start" style="width:{{ $exam->userAttempt && $exam->userAttempt->status ? '50%' : '100%' }}">{{ $exam->userAttempt && $exam->userAttempt->status ? 'Re-take Exam' : 'Start Exam' }}</a>
+                                        @if ($exam->userAttempt && $exam->userAttempt?->status)
+                                        <button class="btn btn-details" data-toggle="modal" data-exam="{{ $exam->id }}" data-target="#detailsModelCenter">Details</button>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -102,17 +116,15 @@
                 <div class="task-form">
                     <div class="pr-3 pb-3 pl-0">
                         <div class="mt-2">
-                            <div class="d-flex justify-content-between">
-                                <h6><b>Exam:</b> All Result</h6>
-                                <a href="" style="color: #101828"><u><b>Reset</b></u></a>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6><b>Exam:</b> <span id="exam-title">All Result</span></h6>
+                                <span class="reset-btn" style="display: none; cursor: pointer; color: #101828; text-decoration: underline; font-weight: bold; margin-right: 10px;" onclick="resetExam()">Reset</span>
                             </div>
                             <div id="all_sat_type_1">
                                 <div class="filter-group">
                                     <div class="form-check">
                                         <input class="form-check-input toggle-parent" type="checkbox" id="attempted" value="attempted" checked>
-                                        <label class="form-check-label" for="attempted">
-                                            Attempted
-                                        </label>
+                                        <label class="form-check-label" for="attempted">Attempted</label>
                                     </div>
                                 </div>
                             </div>
@@ -120,41 +132,47 @@
                                 <div class="filter-group">
                                     <div class="form-check">
                                         <input class="form-check-input toggle-parent" type="checkbox" id="unattempted" value="unattempted" checked>
-                                        <label class="form-check-label" for="unattempted">
-                                            Unattempted
-                                        </label>
+                                        <label class="form-check-label" for="unattempted">Unattempted</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <div class="d-flex justify-content-between">
-                                <h6><b>Section:</b> All Result</h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6><b>Section:</b> <span id="section-title">All Result</span></h6>
+                                <span class="reset-btn" style="display: none; cursor: pointer; color: #101828; text-decoration: underline; font-weight: bold; margin-right: 10px;" onclick="resetSection()">Reset</span>
                             </div>
                             <div class="mb-1">
-                                <input type="text" class="form-control seaction-search search_input w-100 pl-4" placeholder="Section number">
+                                <input type="text" class="form-control seaction-search search_input w-100 pl-4" placeholder="Section number" id="section-input">
                             </div>
                         </div>
                         <div class="mt-4">
-                            <div class="d-flex justify-content-between">
-                                <h6><b>Question::</b> All Result</h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6><b>Question:</b> <span id="question-title">All Result</span></h6>
+                                <span class="reset-btn" style="display: none; cursor: pointer; color: #101828; text-decoration: underline; font-weight: bold; margin-right: 10px;" onclick="resetQuestion()">Reset</span>
                             </div>
                             <div class="mb-1">
-                                <input type="text" class="form-control question-search search_input w-100 pl-4" placeholder="Question number">
+                                <input type="text" class="form-control question-search search_input w-100 pl-4" placeholder="Question number" id="question-input">
                             </div>
                         </div>
                         <div class="mt-4">
                             <div class="slider-container" style="max-width: 100% !important;">
-                                <div class="slider-header">
-                                    <span>Exam Duration:: All Result</span>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="slider-header">
+                                        <span><b>Exam Duration:</b> <span id="range-title">All Result</span></span>
+                                    </div>
+                                    <span class="reset-btn" style="display: none; cursor: pointer; color: #101828; text-decoration: underline; font-weight: bold; margin-right: 10px;" onclick="resetRange()">Reset</span>
                                 </div>
                                 <div class="range-slider">
+                                    <div class="track-active"></div>
                                     <input type="range" min="1" max="120" value="1" id="min-range">
                                     <input type="range" min="1" max="120" value="120" id="max-range">
+                                    <div class="thumb-value" id="min-value">1</div>
+                                    <div class="thumb-value" id="max-value">120</div>
+                                    {{-- <div class="range-distance">Distance: <span id="distance-value">119</span> minutes</div> --}}
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -230,7 +248,7 @@
                     <form method="POST" id="start-exam-form" action="">
                         @csrf
                         <button type="submit" class="btn" style="width: 108px; height: 44px; border-radius: 8px; background: #691D5E; color: #FFFF; padding: 11px .875rem !important;">Start Exam</button>
-                    </form>                
+                    </form>
                 </div>
             </div>
         </div>
@@ -296,7 +314,7 @@
 
             .exam-tab-section .nav-tabs {
                 border: 1px solid #ddd;
-                border-radius: 9px !important;
+                border-radius: 25px !important;
                 display: inline-flex;
                 width: auto;
                 background-color: #F9FAFB;
@@ -310,25 +328,27 @@
             }
 
             .exam-tab-section .nav-tabs .nav-link.active {
-                color: #344054;
-                background-color: #FFFFFF;
+                color: #fff;
+                background-color: #732066;
                 border-color: #fff #fff #fff;
                 padding: 8px;
                 margin-top: 3px;
                 margin-left: 3px !important;
-                border-radius: 7px !important;
+                border-radius: 25px !important;
                 font-weight: 600;
                 font-size: 16px;
+                padding-left: 30px;
+                padding-right: 30px;
             }
 
             .exam-tab-section .nav-tabs .nav-link:hover {
                 color: #344054;
+                border: 1px solid #732066;
                 background-color: #FFFFFF;
-                border-color: #fff #fff #fff;
                 padding: 8px;
                 margin-top: 3px;
                 margin-left: 3px !important;
-                border-radius: 7px !important;
+                border-radius: 25px !important;
                 font-weight: 600;
                 font-size: 16px;
             }
@@ -338,12 +358,17 @@
                 border-radius: 15px;
                 border: 1px solid #EAECF0;
                 box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-                padding: 20px;
+                background-color: #efebff;
+            }
+            .exam-card .card .card-body {
+                background-color: #fff;
+                border-radius: 14px;
+                padding-top: 14px !important;
             }
             .exam-card .card-title {
                 font-size: 18px;
                 font-weight: 600;
-                margin-bottom: 20px;
+                margin-bottom: 0px;
                 color:#101828;
             }
             .exam-card .card-text {
@@ -353,7 +378,7 @@
                 margin-bottom: 10px;
             }
             .exam-card .card-text i {
-                color: #6c757d;
+                color: #A16A99;
                 margin-right: 10px;
             }
 
@@ -368,7 +393,7 @@
                 border: 1px solid #691D5E;
                 color: white;
                 border: none;
-                border-radius: 8px;
+                border-radius: 25px;
                 padding: 10px 20px;
                 font-weight: bold;
                 width: 50%;
@@ -378,7 +403,7 @@
                 background-color: white;
                 color: #6c757d;
                 border: 1px solid #ced4da;
-                border-radius: 8px;
+                border-radius: 25px;
                 padding: 10px 20px;
                 font-weight: bold;
                 width: 50%;
@@ -513,6 +538,7 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
+                height: 30px;
             }
 
             .range-slider input {
@@ -521,6 +547,7 @@
                 position: absolute;
                 background: transparent;
                 pointer-events: none;
+                margin: 0;
             }
 
             .range-slider input::-webkit-slider-runnable-track {
@@ -539,6 +566,33 @@
                 cursor: pointer;
                 pointer-events: auto;
                 margin-top: -6px;
+                z-index: 4;
+            }
+
+            .track-active {
+                position: absolute;
+                height: 4px;
+                background: #69275C;
+                z-index: 1;
+                pointer-events: none;
+            }
+
+            .thumb-value {
+                position: absolute;
+                top: 20px;
+                font-size: 12px;
+                color: #101828;
+                z-index: 5;
+                transform: translateX(-50%);
+            }
+
+            .range-distance {
+                position: absolute;
+                top: 40px;
+                width: 100%;
+                text-align: center;
+                font-size: 12px;
+                color: #101828;
             }
 
             .slider-labels {
@@ -798,6 +852,118 @@
                 });
             }
 
+        </script>
+        <script>
+            const minRange = document.getElementById('min-range');
+            const maxRange = document.getElementById('max-range');
+            const trackActive = document.querySelector('.track-active');
+            const minValue = document.getElementById('min-value');
+            const maxValue = document.getElementById('max-value');
+            const sectionInput = document.getElementById('section-input');
+            const questionInput = document.getElementById('question-input');
+            const examTitle = document.getElementById('exam-title');
+            const sectionTitle = document.getElementById('section-title');
+            const questionTitle = document.getElementById('question-title');
+            const rangeTitle = document.getElementById('range-title');
+            const resetButtons = document.querySelectorAll('.reset-btn');
+            const attemptedCheckbox = document.getElementById('attempted');
+            const unattemptedCheckbox = document.getElementById('unattempted');
+            const resetAllButton = document.querySelector('.reset-filter-btn');
+
+            function updateTrack() {
+                const min = Number(minRange.value);
+                const max = Number(maxRange.value);
+                const minPercent = ((min - minRange.min) / (minRange.max - minRange.min)) * 100;
+                const maxPercent = ((max - maxRange.min) / (maxRange.max - maxRange.min)) * 100;
+
+                // Update active track
+                trackActive.style.left = `${minPercent}%`;
+                trackActive.style.width = `${maxPercent - minPercent}%`;
+
+                // Update thumb values
+                minValue.textContent = min;
+                maxValue.textContent = max;
+                minValue.style.left = `${minPercent}%`;
+                maxValue.style.left = `${maxPercent}%`;
+
+                // Update range title
+                rangeTitle.textContent = (min !== 1 || max !== 120) ? `${min}-${max}` : 'All Result';
+
+                // Show reset button for range
+                resetButtons[3].style.display = (min !== 1 || max !== 120) ? 'inline' : 'none';
+            }
+
+            // Update section title and reset button
+            function updateSection() {
+                const value = sectionInput.value.trim();
+                sectionTitle.textContent = value || 'All Result';
+                resetButtons[1].style.display = value ? 'inline' : 'none';
+            }
+
+            // Update question title and reset button
+            function updateQuestion() {
+                const value = questionInput.value.trim();
+                questionTitle.textContent = value || 'All Result';
+                resetButtons[2].style.display = value ? 'inline' : 'none';
+            }
+
+            // Update exam title and reset button
+            function updateExam() {
+                const attempted = attemptedCheckbox.checked;
+                const unattempted = unattemptedCheckbox.checked;
+                let title = 'All Result';
+                if (attempted && !unattempted) title = 'Attempted';
+                else if (!attempted && unattempted) title = 'Unattempted';
+                else if (attempted && unattempted) title = 'Attempted, Unattempted';
+                examTitle.textContent = title;
+                resetButtons[0].style.display = (attempted && unattempted) ? 'none' : 'inline';
+            }
+
+            // Reset functions
+            function resetExam() {
+                attemptedCheckbox.checked = true;
+                unattemptedCheckbox.checked = true;
+                updateExam();
+            }
+
+            function resetSection() {
+                sectionInput.value = '';
+                updateSection();
+            }
+
+            function resetQuestion() {
+                questionInput.value = '';
+                updateQuestion();
+            }
+
+            function resetRange() {
+                minRange.value = 1;
+                maxRange.value = 120;
+                updateTrack();
+            }
+
+            // Reset all filters
+            function resetAll() {
+                resetExam();
+                resetSection();
+                resetQuestion();
+                resetRange();
+            }
+
+            // Event listeners
+            minRange.addEventListener('input', updateTrack);
+            maxRange.addEventListener('input', updateTrack);
+            sectionInput.addEventListener('input', updateSection);
+            questionInput.addEventListener('input', updateQuestion);
+            attemptedCheckbox.addEventListener('change', updateExam);
+            unattemptedCheckbox.addEventListener('change', updateExam);
+            resetAllButton.addEventListener('click', resetAll);
+
+            // Initial updates
+            updateTrack();
+            updateSection();
+            updateQuestion();
+            updateExam();
         </script>
     @endpush
 </x-backend.layouts.student-master>
