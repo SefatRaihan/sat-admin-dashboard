@@ -1,5 +1,5 @@
 <x-backend.layouts.student-master>
-    <div class="container d-flex align-items-center justify-content-center" style="width: 33%; height:80vh; overflow:hidden">
+    <div class="container d-flex align-items-center justify-content-center" style="width: 33%;">
         <div class="row">
             <!-- Card 1 -->
             <div class="col-md-12 mb-4">
@@ -158,7 +158,7 @@
                             <label for="">5. Total duration</label>
                             <input type="number" name="total_duration" class="form-control total-duration" placeholder="">
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="modal-footer border-top pt-3">
@@ -186,7 +186,7 @@
             font-weight: 600;
             margin-bottom: 10px;
             color: #000000;
-            
+
         }
         .card-text {
             font-size: 16px;

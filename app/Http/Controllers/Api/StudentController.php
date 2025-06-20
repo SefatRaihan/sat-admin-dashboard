@@ -271,6 +271,8 @@ class StudentController extends Controller
             $photoPath = null;
             if ($request->hasFile('photo')) {
                 $photoPath = $request->file('photo')->store('student_photos', 'public');
+            } else {
+                $photoPath = $student->image;
             }
 
             $student->update([
@@ -408,34 +410,73 @@ class StudentController extends Controller
     }
 
 
-    public function history()
+    public function history(Request $request)
     {
-
-        $examAttempts = ExamAttempt::whereNotNull('exam_attempts.status')
-                        ->where('exam_attempts.user_id', Auth::id())
-                        ->join('exams', 'exam_attempts.exam_id', '=', 'exams.id')
-                        ->with('exam.questions')
-                        ->select(
-                            'exam_attempts.score',
-                            'exam_attempts.start_time',
-                            'exams.title',
-                            'exams.scheduled_at',
-                            'exams.section',
-                            'exams.duration',
-                            'exams.id as exam_id'
-                        );
-
-        $examIds = $examAttempts->pluck('exam_id')->unique();
-        $exams = Exam::whereIn('id', $examIds)->with('questions')->get();
-
-
         $userId = Auth::id();
 
-        $examIds = ExamAttempt::whereNotNull('status')
-            ->where('user_id', $userId)
-            ->select('exam_id')
-            ->distinct();
+        // Base query for exam attempts
+        $examAttempts = ExamAttempt::whereNotNull('exam_attempts.status')
+            ->where('exam_attempts.user_id', $userId)
+            ->join('exams', 'exam_attempts.exam_id', '=', 'exams.id')
+            ->with('exam.questions')
+            ->select(
+                'exam_attempts.score',
+                'exam_attempts.start_time',
+                'exams.title',
+                'exams.scheduled_at',
+                'exams.section',
+                'exams.duration',
+                'exams.id as exam_id'
+            );
 
+        // Apply date filters based on exam_attempts start_time and end_time
+        if ($request->has('crated_start_at') && $request->input('crated_start_at')) {
+            $examAttempts->where('exam_attempts.start_time', '>=', $request->input('crated_start_at'));
+        }
+
+        if ($request->has('crated_end_at') && $request->input('crated_end_at')) {
+            $examAttempts->where('exam_attempts.end_time', '<=', $request->input('crated_end_at'));
+        }
+
+        // Apply section filter based on sections.title (hasMany relationship with exams)
+        if ($request->has('sectionSearch') && $request->input('sectionSearch')) {
+            $examAttempts->whereHas('exam.sections', function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->input('sectionSearch') . '%');
+            });
+        }
+
+        // Apply question filter based on questions.question_title (via exam_attempt_questions)
+        if ($request->has('questionSearch') && $request->input('questionSearch')) {
+            $examAttempts->whereHas('examAttemptQuestions.question', function ($query) use ($request) {
+                $query->where('question_title', 'like', '%' . $request->input('questionSearch') . '%');
+            });
+        }
+
+        // Apply correct percentage filter
+        if ($request->has('correct_percentage') && $request->input('correct_percentage')) {
+            $examAttempts->where('exam_attempts.score', '>=', $request->input('correct_percentage'));
+        }
+
+        // Apply duration filter
+        if ($request->has('duration') && is_array($request->input('duration'))) {
+            $duration = $request->input('duration');
+            if (isset($duration['min']) && $duration['min']) {
+                $examAttempts->where('exams.duration', '>=', $duration['min']);
+            }
+            if (isset($duration['max']) && $duration['max']) {
+                $examAttempts->where('exams.duration', '<=', $duration['max']);
+            }
+        }
+
+        // Apply sorting
+        $sortColumn = $request->input('sortColumn', 'exam_attempts.start_time');
+        $sortOrder = $request->input('sortOrder', 'desc');
+        $examAttempts->orderBy($sortColumn, $sortOrder);
+
+        // Get exam IDs
+        $examIds = $examAttempts->pluck('exam_id')->unique();
+
+        // Fetch exams with pagination
         $exams = Exam::whereIn('id', $examIds)
             ->withCount([
                 'questions',
@@ -443,12 +484,14 @@ class StudentController extends Controller
                     $q->select(DB::raw('COUNT(DISTINCT user_id)'));
                 }
             ])
-            ->paginate(10);
+            ->paginate($request->input('per_page', 10));
+
+        // Map the data
         $data = $exams->getCollection()->map(function ($exam) use ($userId) {
             $userAttempt = $exam->examAttempts()->where('user_id', $userId)->first();
 
             return [
-                'score'                 => $exam->questions_count > 0 ? round(($userAttempt->score / $exam->questions_count) * 100) : 0,
+                'score'                 => $exam->questions_count > 0 ? round(($userAttempt->score / $exam->questions_count) * 100, 2) : 0,
                 'start_time'            => $userAttempt->start_time ?? null,
                 'exam_id'               => $exam->id,
                 'title'                 => $exam->title,

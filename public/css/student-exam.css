@@ -57,9 +57,10 @@
 
 .header-pagination {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     width: 50%;
+    gap: 30px;
 }
 
 .header{

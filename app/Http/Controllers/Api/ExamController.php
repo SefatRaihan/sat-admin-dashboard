@@ -319,7 +319,7 @@ class ExamController extends Controller
             'sort' => 'nullable|in:Latest,Oldest',
             'per_page' => 'nullable|integer|min:1|max:100',
         ]);
-    
+
         // Base query with eager loading
         $query = ExamAttempt::with([
             'exam.sections' => function ($query) {
@@ -327,7 +327,7 @@ class ExamController extends Controller
             },
             'user.student',
         ]);
-    
+
         // Apply status filter (adjusted to match frontend)
         if ($status = $request->input('status')) {
             if ($status === 'active') {
@@ -339,7 +339,7 @@ class ExamController extends Controller
         } else {
             $query->whereIn('status', ['completed', 'in_progress']);
         }
-    
+
         // Search by exam name or student name
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
@@ -350,7 +350,7 @@ class ExamController extends Controller
                 });
             });
         }
-    
+
         // Date range filter
         if ($createFrom = $request->input('create_from')) {
             $query->whereDate('created_at', '>=', $createFrom);
@@ -358,7 +358,7 @@ class ExamController extends Controller
         if ($createTo = $request->input('create_to')) {
             $query->whereDate('created_at', '<=', $createTo);
         }
-    
+
         // Audience type filter
         if ($audienceTypes = $request->input('audience_type')) {
             $audienceTypes = array_filter(explode(',', trim($audienceTypes)));
@@ -369,31 +369,31 @@ class ExamController extends Controller
             }
         }
 
-    
+
         // Sorting
         $sort = $request->input('sort', 'Latest');
         $query->orderBy('created_at', $sort === 'Latest' ? 'desc' : 'asc');
-    
+
         // Pagination
         $perPage = $request->input('per_page', 10);
         $results = $query->paginate($perPage);
-    
+
         // Transform results
         $transformedResults = $results->getCollection()->map(function ($attempt) {
             // Calculate total questions from exam sections
             $totalQuestions = ExamSection::where('exam_id', $attempt->exam_id)
                 ->sum('num_of_question');
-    
+
             // Calculate time taken
             $timeTaken = ($attempt->end_time && $attempt->start_time)
                 ? $attempt->end_time->diffInMinutes($attempt->start_time)
                 : null;
-    
+
             // Optimized ranking calculation
             $currentCorrectAnswers = ExamAttemptQuestion::where('attempt_id', $attempt->id)
                 ->where('is_correct', true)
                 ->count();
-    
+
             $rank = ExamAttempt::where('exam_id', $attempt->exam_id)
                 ->where('status', 'completed')
                 ->select('user_id', \DB::raw('MIN(attempt_number) as attempt_number'))
@@ -405,15 +405,15 @@ class ExamController extends Controller
                         ->where('status', 'completed')
                         ->orderBy('attempt_number', 'asc')
                         ->first()?->id;
-    
+
                     if (!$otherAttemptId) {
                         return null;
                     }
-    
+
                     $otherCorrectAnswers = ExamAttemptQuestion::where('attempt_id', $otherAttemptId)
                         ->where('is_correct', true)
                         ->count();
-    
+
                     return [
                         'correct_answers' => $otherCorrectAnswers,
                         'attempt_number' => $otherAttempt->attempt_number,
@@ -425,7 +425,7 @@ class ExamController extends Controller
                 ->filter()
                 ->filter(fn($result) => $result['is_higher'])
                 ->count() + 1;
-    
+
             return [
                 'uuid' => $attempt->uuid ?? 'N/A',
                 'exam_name' => $attempt->exam->title ?? 'N/A',
@@ -441,7 +441,7 @@ class ExamController extends Controller
                 'created_at' => $attempt->created_at ? $attempt->created_at->format('d-M-y') : 'N/A',
             ];
         });
-    
+
         return response()->json([
             'totalResult' => $results->total(),
             'results' => [
@@ -500,6 +500,171 @@ class ExamController extends Controller
             ],
         ]);
     }
-    
 
+
+    public function ranking(Request $request)
+    {
+        $query = Exam::with([
+            'sections' => function ($query) {
+                $query->withCount('questions');
+            },
+            'createdBy'
+        ])->withCount('sections');
+
+        // Apply filters
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('section', 'like', "%{$search}%")
+                  ->orWhere('status', 'like', "%{$search}%")
+                  ->orWhere('duration', 'like', "%{$search}%");
+            });
+        }
+
+        // Date range filter
+        if ($request->filled('crated_start_at')) {
+            $query->whereDate('created_at', '>=', $request->crated_start_at);
+        }
+        if ($request->filled('crated_end_at')) {
+            $query->whereDate('created_at', '<=', $request->crated_end_at);
+        }
+
+        // Status filter
+        if ($request->filled('status') && $request->status !== 'All') {
+            $status = $request->status === 'Active only' ? 'active' : 'inactive';
+            $query->where('status', $status);
+        }
+
+        // Audience filter
+        if ($request->filled('audience')) {
+            $query->whereHas('sections', function ($q) use ($request) {
+                $q->whereIn('audience', $request->audience);
+            });
+        }
+
+        // Section type filter
+        if ($request->filled('sat_type')) {
+            $query->whereHas('sections', function ($q) use ($request) {
+                $q->whereIn('section_type', $request->sat_type);
+            });
+        }
+
+        // Difficulty filter
+        if ($request->filled('difficulty')) {
+            $query->whereIn('difficulty', $request->difficulty);
+        }
+
+        // Created by filter
+        if ($request->filled('created_by')) {
+            $query->whereIn('created_by', $request->created_by);
+        }
+
+        // Average time filter
+        // if ($request->filled('average_time')) {
+        //     $query->whereBetween('avg_time', [$request->average_time['min'], $request->average_time['max']]);
+        // }
+
+        // Custom sorting: non-null rankings in ascending order, then null rankings
+        $query->orderByRaw('ranking IS NOT NULL DESC, ranking ASC, created_at ASC');
+
+        $perPage = $request->get('per_page', 10);
+        $exams = $query->paginate($perPage);
+
+        // Append total question count
+        $exams->getCollection()->transform(function ($exam) {
+            $exam->total_question_count = $exam->sections->sum('questions_count');
+            return $exam;
+        });
+
+        return response()->json($exams);
+    }
+
+    public function updateRanking(Request $request, $id)
+    {
+        $request->validate([
+            'ranking' => 'required|integer|min:1',
+        ]);
+
+        $newRanking = $request->ranking;
+        $exam = Exam::findOrFail($id);
+        $currentRanking = $exam->ranking;
+
+        \DB::beginTransaction();
+        try {
+            if ($newRanking === $currentRanking) {
+                return response()->json(['success' => true, 'message' => 'No change in ranking.']);
+            }
+
+            // Shift other exams' rankings
+            if ($currentRanking) {
+                // If exam had a previous ranking
+                if ($newRanking < $currentRanking) {
+                    // Moving up (e.g., from 5 to 3)
+                    Exam::whereBetween('ranking', [$newRanking, $currentRanking - 1])
+                        ->increment('ranking');
+                } elseif ($newRanking > $currentRanking) {
+                    // Moving down (e.g., from 3 to 5)
+                    Exam::whereBetween('ranking', [$currentRanking + 1, $newRanking])
+                        ->decrement('ranking');
+                }
+            } else {
+                // If exam had no ranking (null)
+                Exam::where('ranking', '>=', $newRanking)
+                    ->increment('ranking');
+            }
+
+            // Update the exam's ranking
+            $exam->ranking = $newRanking;
+            $exam->save();
+
+            \DB::commit();
+            return response()->json(['success' => true, 'message' => 'Ranking updated successfully.']);
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return response()->json(['success' => false, 'message' => 'Failed to update ranking.'], 500);
+        }
+    }
+
+    public function moveRanking(Request $request, $id)
+    {
+        $direction = $request->input('direction'); // Get direction from request body
+        $exam = Exam::findOrFail($id);
+        $currentRanking = $exam->ranking;
+
+        \DB::beginTransaction();
+        try {
+            if ($direction === 'up' && $currentRanking > 1) {
+                // Swap with the exam ranked immediately above
+                $previousExam = Exam::where('ranking', $currentRanking - 1)->first();
+                if ($previousExam) {
+                    $previousExam->ranking = $currentRanking;
+                    $previousExam->save();
+                    $exam->ranking = $currentRanking - 1;
+                    $exam->save();
+                }
+            } elseif ($direction === 'down') {
+                // Swap with the exam ranked immediately below
+                $nextExam = Exam::where('ranking', $currentRanking + 1)->first();
+                if (!$currentRanking) {
+                    // If no ranking, assign the next available rank
+                    $maxRanking = Exam::max('ranking') ?? 0;
+                    $exam->ranking = $maxRanking + 1;
+                    $exam->save();
+                } elseif ($nextExam) {
+                    $nextExam->ranking = $currentRanking;
+                    $nextExam->save();
+                    $exam->ranking = $currentRanking + 1;
+                    $exam->save();
+                }
+            }
+
+            \DB::commit();
+            return response()->json(['success' => true, 'message' => 'Ranking updated successfully.']);
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return response()->json(['success' => false, 'message' => 'Failed to update ranking.'], 500);
+        }
+    }
 }

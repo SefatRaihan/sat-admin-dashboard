@@ -48,12 +48,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified', 'check.permission'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
 
 Route::middleware(['auth','web', 'check.permission'])->group(function () {
 
@@ -107,11 +101,14 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('student-profile', [StudentController::class, 'studentProfile'])->name('student.profile');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
     Route::get('/checkout', [StudentController::class, 'checkout'])->name('student.checkout');
-    Route::get('/explanation', [StudentController::class, 'explanation'])->name('student.explanation');
+    Route::get('/explanation/{examattemptid}/{questionid}', [StudentController::class, 'explanation'])->name('student.explanation');
 
     Route::get('/all-result', [ExamController::class, 'allResult'])->name('all-result');
     Route::get('/student-history', [StudentApiController::class, 'history']);
-
+    Route::get('/api/other-student-score', [FullTestController::class, 'otherStudentScore'])->name('other.student.score');
+    Route::post('/api/exam-questions', [FullTestController::class, 'getExamQuestions'])->name('exam.questions');
+    Route::post('/api/filter-exam-questions', [FullTestController::class, 'filterExamQuestions'])->name('filter.exam.questions');
+    Route::get('/ranking', [ExamController::class, 'ranking'])->name('ranking');
 });
 
 

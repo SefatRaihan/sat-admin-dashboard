@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +28,9 @@ use App\Http\Controllers\RegistrationController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 // 'middleware' => ['api', 'auth', 'web'],
-Route::group([ 'as' => 'api'], function () {
+Route::group([ 'as' => 'api.','middleware' => ['auth', 'web', 'check.permission']], function () {
     Route::get('get-role-navitems-with-selected/{id}', [RoleNavItemApiController::class,'getnavitemWithSelected']);
     Route::post('/profile/update', [ProfileController::class, 'update']);
     Route::post('/students/{uuid}/update', [StudentController::class, 'update']);
@@ -102,6 +104,10 @@ Route::group([ 'as' => 'api'], function () {
     Route::get('/registrations', [RegistrationController::class, 'index']);
 
     Route::get('/results', [ExamController::class, 'results']);
+    Route::get('/ranking', [ExamController::class, 'ranking']);
+    Route::patch('/exams/{id}/ranking', [ExamController::class, 'updateRanking']);
+    Route::post('/exams/{id}/move-ranking', [ExamController::class, 'moveRanking']);
     // Route::middleware('auth')->get('/student-history', [StudentController::class, 'history']);
+    Route::post('/feedback', [FeedbackController::class, 'store']);
 
 });
