@@ -1,0 +1,401 @@
+.content {
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  position: relative;
+}
+.header {
+  display: flex;
+  padding: 10px;
+  background-color: #790a72;
+  color: white;
+  width: 100%;
+  height: 200px;
+  justify-content: center;
+}
+.header h2 {
+  text-align: center;
+}
+
+/* chart  */
+.chart-box {
+    top: 113px;
+    gap: 20px;
+    position: absolute;
+}
+
+
+/* pie chart */
+.pie-chart {
+  width: 500px;
+  height: 364px;
+  background: white;
+  border-radius: 10px;
+  position: absolute;
+  top: 10%;
+}
+
+
+.pie-content{
+  display: flex;
+  align-items: center;
+  gap : 40px;
+}
+.pie-content canvas{
+  width: 200px !important;
+  height: 200px !important;
+}
+
+.pie-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 3px;
+}
+
+.pie-header h3{
+    font-size: 18px;
+    font-weight: 600;
+    color: #300D2B;
+}
+
+.pie-header p{
+  border: 1px solid #D0D5DD;
+  padding: 5px;
+  border-radius: 15px;
+}
+.dashboard .active {
+  color: #6c247e;
+  cursor: pointer;
+  border-bottom: 2px solid #6c247e;
+  border-radius: 0px !important;
+}
+
+ul li {
+  cursor: pointer;
+}
+
+
+#allTimeBox ul {
+  list-style-type: none;
+
+}
+
+#allTimeBox li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+/* dot style */
+#allTimeBox .dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.verbal-correct .dot {
+  background: #6c247e;
+}
+.verbal-incorrect .dot {
+  background: #c490d1;
+}
+.quant-correct .dot {
+  background: #3f8efc;
+}
+.quant-incorrect .dot {
+  background: #90caf9;
+}
+
+.label {
+  flex: 1; /* pushes value to right */
+  margin-right: 15px;
+}
+
+.value {
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ber chart */
+.ber-chart{
+  width: 600px;
+  background: white;
+  border-radius: 10px;
+  position: absolute;
+  top: 10%;
+  left: 524px;
+  box-sizing: border-box;
+  padding: 20px;
+}
+.ber-chart canvas{
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+
+/* persent box */
+
+.persent-box {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 300px;
+
+}
+
+/* frist box */
+.first-box {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 20px 30px;
+  flex: 1;   /* responsive width */
+  min-width: 250px;
+}
+
+.first-box p {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: #790A72;
+}
+
+.persent-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.persent-info h3 {
+  margin: 0;
+  font-size: 24px;
+  color: #790a72;
+  font-weight: bold;
+}
+
+.progress-bar {
+  background: #e0e0e0;
+  border-radius: 20px;
+  height: 12px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: #790a72;
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+/* second box */
+.second-box {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 20px 30px;
+  flex: 1;   /* responsive width */
+  min-width: 250px;
+}
+
+.second-box p {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: #790A72;
+}
+
+.second-box .persent-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.second-box .persent-info h3 {
+  margin: 0;
+  font-size: 24px;
+  color: #019664;
+}
+
+.second-box .progress-bar {
+  background: #e0e0e0;
+  border-radius: 20px;
+  height: 12px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.second-box .progress {
+  height: 100%;
+  background: #019664;
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+/* table container */
+
+.tables-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.table-card {
+  border-radius: 12px;
+  margin-bottom: 30px;
+  flex: 1;
+  min-width: 300px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+
+}
+
+.table-content {
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #D0D5DD;
+  padding: 15px;
+}
+
+.table-header h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #000;
+  font-weight: 600;
+}
+
+.see-more {
+  background: #fff;
+  color: #691D5E;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 25px;
+  border: 1px solid #A16A99;
+}
+
+.table-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-card th {
+  text-align: left;
+  font-weight: 600;
+  padding: 10px 5px;
+  color: #555;
+}
+
+table {
+  border-collapse: separate !important;
+  border-spacing: 0px 5px
+}
+
+.table-card td {
+  padding: 10px 5px;
+  background-color: #F9FAFB;
+  color: #333;
+}
+
+.table-card tbody tr td:first-child {
+    border-radius: 12px 0px 0pc 12px;
+}
+
+.table-card tbody tr td:last-child {
+    border-radius: 0px 12px 12px 0px;
+}
+
+.table-card tbody tr:hover {
+  background: #f9f9f9;
+}
+
+.rank-up {
+  color: green;
+  font-weight: 600;
+}
+
+.rank-down {
+  color: red;
+  font-weight: 600;
+}
+
+.table-card img {
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.leaderboard .student-info{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leaderboard .student-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.leaderboard .student-info .student-details{
+  display: flex;
+  flex-direction: column;
+}
+
+.leaderboard .student-info .student-details .student-name {
+  margin: 0;
+  font-size: 16px;
+  color: #000000;
+  font-weight: bold;
+}
+
+/* Parent container for score bar + text */
+.score-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* gap between bar and percent */
+}
+
+/* Score bar container */
+.score-bar {
+  width: 80px;   /* Adjust width as needed */
+  height: 8px;   /* Slim bar */
+  background-color: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+/* Filled part */
+.score-fill {
+  height: 100%;
+  background-color: #4CAF50;  /* Green or your theme color */
+  border-radius: 5px;
+}
+
+/* Percentage text */
+.score-text {
+  font-weight: 600;
+  font-size: 14px;
+}

@@ -19,6 +19,9 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoleManagementController;
 use App\Http\Controllers\PackageGenerateController;
 use App\Http\Controllers\Api\StudentController as StudentApiController;
+use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\LessonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +83,9 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::resource('roles', RoleManagementController::class);
     Route::resource('supervisors', SupervisorController::class);
     Route::resource('students', StudentController::class);
+    Route::resource('chapters', ChapterController::class);
+    Route::resource('lessons', LessonController::class);
+    Route::resource('courses', CourseController::class);
 
     Route::resource('exams', ExamController::class);
     Route::get('exams/{id}/edit', [ExamController::class, 'edit'])->name('exam.edit');
