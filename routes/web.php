@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\StudentController as StudentApiController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\TopicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,6 +123,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::post('/api/exam-questions', [FullTestController::class, 'getExamQuestions'])->name('exam.questions');
     Route::post('/api/filter-exam-questions', [FullTestController::class, 'filterExamQuestions'])->name('filter.exam.questions');
     Route::get('/ranking', [ExamController::class, 'ranking'])->name('ranking');
+    Route::get('/topic/create', [TopicController::class, 'create'])->name('topic.crate');
 });
 
 

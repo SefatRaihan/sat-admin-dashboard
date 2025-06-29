@@ -1,8 +1,9 @@
 <?php 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use App\Models\Topic;
 use App\Traits\Historiable;
+use Illuminate\Support\Str;
 use App\Traits\UserTrackable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,6 +18,7 @@ class ExamQuestion extends Model
 
     protected $fillable = [
         'uuid',  // ✅ Added missing uuid
+        'topic_id',
         'question_title',
         'question_description',
         'question_text',
@@ -45,6 +47,11 @@ class ExamQuestion extends Model
         'difficulty' => 'string',
         'status' => 'string',
     ];
+
+    public function topic()
+    {
+        return $this->hasMany(Topic::class);
+    }
 
     public function exams()
     {

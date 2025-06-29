@@ -123,7 +123,7 @@
                         <h5 class=""><b id="exampleModalLongTitle">Create an Exam</b></h5>
                         <p class="pb-2">Set a name and provide the exam parameters</p>
                     </div>
-                    <div class="modal-body" style="height: 600px; overflow-y: scroll;">
+                    <div class="modal-body " style="height: 500px; overflow-y: scroll;">
                         <div>
                             <div class="form-group">
                                 <div style="display: flex; justify-content: space-between;">
@@ -587,18 +587,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <div class="form-group mt-2">
+                        <div class="row mt-2">
+                            <div class="form-group col-md-6">
                                 <label class="label-header" for=""> Total no of Questions</label>
                                 <input type="text" class="form-control" id="total_questions" name="total_questions" readonly>
                             </div>
-                        </div>
-                        <div>
-                            <div class="form-group">
+                            <div class="form-group col-md-6">
                                 <label class="label-header" for=""> Total duration</label>
                                 <input type="text" class="form-control" id="total_duration" name="total_duration" readonly>
                             </div>
                         </div>
+
                     </div>
                     <div class="modal-footer border-top pt-3">
                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
@@ -957,7 +956,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td style="width: 25%">No of quesion</td>
+                                            <td style="width: 25%">No of question</td>
                                             <td class="font-weight-bold no-of-question" style="width: 25%">: </td>
 
                                             <td style="width: 25%">Average time</td>
@@ -980,7 +979,7 @@
                                             <td class="font-weight-bold best-time" style="width: 25%">: </td>
                                         </tr>
                                         <tr>
-                                            <td style="width: 25%">Total apperance</td>
+                                            <td style="width: 25%">Total appearance</td>
                                             <td class="font-weight-bold total-apperance" style="width: 25%">: </td>
 
                                             <td style="width: 25%">Total completion</td>
@@ -1022,7 +1021,7 @@
                                             <td class="font-weight-bold question-type" style="width: 25%">: </td>
                                         </tr>
                                         <tr>
-                                            <td style="width: 25%">No of quesion</td>
+                                            <td style="width: 25%">No of question</td>
                                             <td class="font-weight-bold no-of-question" style="width: 25%">: </td>
 
                                             <td style="width: 25%">Exam duration</td>
@@ -1045,7 +1044,7 @@
                                             <td class="font-weight-bold average-time" style="width: 25%">: </td>
                                         </tr>
                                         <tr>
-                                            <td style="width: 25%">Total apperance</td>
+                                            <td style="width: 25%">Total appearance</td>
                                             <td class="font-weight-bold total-apperance" style="width: 25%">: </td>
 
                                             <td style="width: 25%">Total completion</td>
@@ -1053,7 +1052,7 @@
                                         </tr>
                                     </table>
 
-                                    <h4 class="mt-3">All Qestions</h4>
+                                    <h4 class="mt-3">All Questions</h4>
                                     <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"  style="border: 1px solid #EAECF0">
                                         <thead>
                                             <tr class="bg-light" role="row">
@@ -2223,9 +2222,9 @@
             }
 
             const store = (e) => {
-                 e.preventDefault();
-
-                 $.ajax({
+                e.preventDefault();
+                const submitButton = $('.save-exam');
+                $.ajax({
                      url: '/api/exams',
                      type: 'POST',
                      data: getFormData(),
@@ -2240,6 +2239,8 @@
                          } else {
                              Swal.fire("Error", "Failed to created successfully!", "error");
                              checkbox.prop('checked', !checkbox.is(':checked'));
+                            submitButton.text('Proceed to Add Exams').prop('disabled', false);
+
                          }
                      },
                     error: function(error) {
@@ -2254,6 +2255,8 @@
                                     return `${field.replace('_', ' ')}: ${errors[field].join(', ')}`;
                                 })
                                 .join('\n');
+                        submitButton.text('Proceed to Add Exams').prop('disabled', false);
+
                         } else {
                             errorMessage = "An unexpected error occurred.";
                         }
@@ -2268,7 +2271,7 @@
                         checkbox.prop('checked', !checkbox.is(':checked'));
 
                         // Reset button text and enable it on error
-                        submitButton.text('Save Question').prop('disabled', false);
+                        submitButton.text('Proceed to Add Exams').prop('disabled', false);
                     }
 
                 });
@@ -2329,9 +2332,9 @@
                                     <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.title || ''}</td>
                                     <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.sections[0].audience || ''}</td>
                                     <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.section || ''}</td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.sections[0].num_of_question}<p>${exam.duration}<span>min</span></p></td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.avg_time || '00:00'} min</td>
-                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.avg_time || '00:00'} min</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.sections[0].num_of_question}<p>${formatDuration(exam.duration)}</p></td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.avg_time || '00:00'}</td>
+                                    <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${exam.avg_time || '00:00'}</td>
                                     <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">N/A</td>
                                     <td class="openDetailModal text-left" data-toggle="modal" data-target="#detailModalCenter" data-id="${exam.id}">${formatDate(exam.created_at)} ${exam?.created_by?.full_name || ''}</td>
                                     <td>
@@ -2404,6 +2407,20 @@
                 let date = new Date(dateString);
                 let options = { day: '2-digit', month: 'short', year: 'numeric' };
                 return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
+            }
+
+            function formatDuration(minutes) {
+                const totalSeconds = Math.round(minutes * 60);
+                const hours = Math.floor(totalSeconds / 3600);
+                const remainingSeconds = totalSeconds % 3600;
+                const mins = Math.floor(remainingSeconds / 60);
+                const secs = remainingSeconds % 60;
+
+                let result = '';
+                if (hours > 0) result += hours + "hr ";
+                if (mins > 0) result += mins + "min ";
+                if (secs > 0) result += secs + "sec";
+                return result.trim();
             }
 
             function getDifficultyColor(difficulty) {
