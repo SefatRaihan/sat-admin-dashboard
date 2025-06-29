@@ -614,7 +614,7 @@
 
                     },
                     error: function() {
-                        alert("Error fetching questions.");
+                        alert("Error fetching Topic.");
                     }
                 });
             }
