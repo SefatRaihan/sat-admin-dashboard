@@ -635,6 +635,9 @@
                                 </div>
                             </div>
                             <div>
+                                <label class="form-label" for="topic">
+                                    3. Select the Topic
+                                </label>
                                 <select name="topic" id="topic"></select>
                             </div>
                         </div>
