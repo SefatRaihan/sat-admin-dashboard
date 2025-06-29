@@ -613,9 +613,9 @@
                         }
 
                     },
-                    error: function() {
-                        alert("Error fetching Topic.");
-                    }
+                    // error: function() {
+                    //     alert("Error fetching Topic.");
+                    // }
                 });
             }
 
