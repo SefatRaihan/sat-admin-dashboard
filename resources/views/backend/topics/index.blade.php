@@ -9,14 +9,14 @@
         ';
     @endphp
 
-    <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'All Questions'" :prependContent="$prependHtml">
+    <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'All Topic'" :prependContent="$prependHtml">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
     <div class="d-none" id="questionNullList">
         <x-backend.layouts.partials.blocks.empty-state
-            title="You have not created any Question yet"
-            message="Let’s create a new question"
-            buttonText="Add Question"
+            title="You have not created any Topic yet"
+            message="Let’s create a new Topic"
+            buttonText="Add Topic"
             buttonRoute="#questionModal"
         />
     </div>
