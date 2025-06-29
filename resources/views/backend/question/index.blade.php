@@ -634,6 +634,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                <select name="topic" id="topic"></select>
+                            </div>
                         </div>
 
                         {{-- Placeholder for future steps --}}
@@ -735,9 +738,6 @@
                     <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
                         <div class="d-flex w-100 justify-content-end align-items-center">
                             <!-- Left side: Placeholder wrapper to maintain spacing -->
-                            {{-- <div class="left-placeholder">
-                                <button type="button" class="btn new-question d-none">Save & Create Another</button>
-                            </div> --}}
 
                             <!-- Right side: Navigation buttons -->
                             <div class="d-flex">
@@ -1695,6 +1695,8 @@
 
             $(document).ready(function() {
 
+                $(document).on('click', '.create-btn', selectTopic);
+
                 initializeQuill(".editor")
 
                 $(".sat_2").change(function() {
@@ -1823,6 +1825,21 @@
                 $(document).on("click", ".openDetailModal", detailModal);
             });
 
+            function selectTopic(selectedVal = null) {
+                let topicSelect = $('#topic');
+                let selectedTopics = topicSelect.val();
+
+                $.get('/api/get-topic', function(data){
+                    $('#topic').select2({
+                        data: data.data,
+                        placeholder: "Select Topic",
+                        allowClear: true,
+                        width: '100%',
+                    }).val(selectedVal).trigger('change');
+                });
+
+                
+            }
 
             function updateButtons() {
                 if (currentStep === 1) {
@@ -2039,6 +2056,7 @@
                     explanation: $('#explanation .ql-editor').html(),
                     status: $('input[name="question_status"]:checked').val(),
                     questionId: $('#questionId').val(),
+                    topic: $('#topic').val(),
                 };
 
                 $.ajax({
@@ -2171,7 +2189,7 @@
                         let questionNullList = $('#questionNullList');
                         let tableBody = $("#question-table-body");
 
-                        console.log(response.data.length);
+                        // console.log(response.data.length);
 
 
                         if (response.data.length == 0) {
@@ -2482,6 +2500,7 @@
                     $('#context .ql-editor').html(response.question_description),
                     $('#mcq_question .ql-editor').html(response.question_text),
                     $('#explanation .ql-editor').html(response.explanation);
+                    selectTopic(response.topic_id);
 
                     initializeQuill('#context', response.question_description);
                     initializeQuill('#mcq_question', response.question_title);

@@ -3,16 +3,17 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ExamController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\MainQuestionController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\Api\SupervisorController;
 use App\Http\Controllers\Api\ExamSectionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
-use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,8 @@ Route::group([ 'as' => 'api.','middleware' => ['auth', 'web', 'check.permission'
 
     Route::post('/notifications-delete', [NotificationController::class, 'delete']);
 
+    Route::resource('topic', TopicController::class);
+    Route::get('get-topic', [TopicController::class, 'getTopic']);
 
     /*
     |--------------------------------------------------------------------------

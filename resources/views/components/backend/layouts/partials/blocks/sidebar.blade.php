@@ -71,6 +71,7 @@
                         <span>Manage Questions</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
+                        <li class="nav-item"><a href="/topic/create" title="All Question" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Topic</span></a></li>
                         <li class="nav-item"><a href="/question" title="All Question" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Questions</span></a></li>
                         <li class="nav-item"><a href="/exams" title="All Question Exam" class="nav-link legitRipple m-0 ml-2 mr-2"><span>All Question Exams</span></a></li>
                     </ul>

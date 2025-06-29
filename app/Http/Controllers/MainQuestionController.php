@@ -140,6 +140,7 @@ class MainQuestionController extends Controller
                         'exam_questions.deleted_at',
                         'exam_questions.created_at',
                         'exam_questions.updated_at',
+                        'exam_questions.topic_id',
                         'exam_questions.question_code'
                     );
 
@@ -159,6 +160,7 @@ class MainQuestionController extends Controller
         $validator = Validator::make($request->all(), [
             'question_title' => 'required',
             'question_description' => 'nullable',
+            'topic' => 'required',
             'question_text' => 'required',
             'question_type' => ['required', Rule::in(['MCQ', 'Fill-in-the-Blank', 'Paragraph'])],
             'audience' => ['required', Rule::in(['High School', 'College', 'Graduation', 'SAT 2'])],
@@ -174,19 +176,20 @@ class MainQuestionController extends Controller
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         DB::beginTransaction(); // Start Transaction
 
         try {
 
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
-
             if ($request->questionId != null) {
+                // dd($request->topic);
                 $question = ExamQuestion::find($request->questionId);
                 $question->update([
                     'audience'             => $request->audience,
+                    'topic_id'             => $request->topic,
                     'question_title'       => $request->question_title,
                     'question_description' => $request->question_description,
                     'question_text'        => $request->question_text,
