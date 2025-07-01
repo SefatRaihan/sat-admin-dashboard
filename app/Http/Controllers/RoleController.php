@@ -12,6 +12,20 @@ use Illuminate\Database\QueryException;
 
 class RoleController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'create' => 'Create Form',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'edit' => 'Edit Form',
+        'excel' => 'Export Excel',
+        'pdf' => 'Export PDF',
+        'saveRole' => 'Save Role with Permissions',
+    ];
+
     public function index()
     {
         try{

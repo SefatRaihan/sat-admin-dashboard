@@ -7,7 +7,14 @@ use Illuminate\Http\Request;
 
 class TopicController extends Controller
 {
-    
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'fetch' => 'Fetch',
+        'create' => 'Create Form',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+    ];
+
     public function index()
     {
         return view('topics.index');

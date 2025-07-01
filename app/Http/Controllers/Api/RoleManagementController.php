@@ -30,6 +30,13 @@ class RoleManagementController extends Controller
     | 500 internal server or db error
     */
 
+    public static $visiblePermissions = [
+        'delete' => 'Delete Multiple Roles',
+        'activate' => 'Activate Roles',
+        'deactivate' => 'Deactivate Roles',
+        'updateStatus' => 'Update Role Status',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -56,17 +63,16 @@ class RoleManagementController extends Controller
     public function updateStatus(Request $request)
     {
         $role = Role::where('uuid', $request->uuid)->first();
-        
+
         if (!$role) {
             return response()->json(['success' => false, 'message' => 'Role not found']);
         }
-    
+
         $role->status = $request->status;
         $role->save();
-    
+
         return response()->json(['success' => true, 'message' => 'Status updated successfully']);
     }
-    
 
     //another methods
 }

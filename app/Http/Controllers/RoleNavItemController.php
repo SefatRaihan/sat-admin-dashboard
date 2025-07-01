@@ -11,6 +11,17 @@ use App\Models\Role;
 
 class RoleNavItemController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'create' => 'Create Form',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'edit' => 'Edit Form'
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -56,10 +67,10 @@ class RoleNavItemController extends Controller
                         if (!$role->navitems->contains($navitemId)) {
                             $role->navitems()->attach($navitemId);
                         }
-                    } 
+                    }
                 return redirect()->back()->withMessage(__('Recored Stored Successfully'));
 
-            } 
+            }
             return redirect()->back()->withMessage(__('Recored Stored Successfully'));
         }catch(QueryException $e){
             return redirect()->back()->withInput()->withErrors($e->getMessage());

@@ -10,6 +10,15 @@ use App\Models\Notification;
 
 class NotificationController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'create' => 'Create Form',
+        'sendNotification' => 'Send Notification',
+        'sendSms' => 'Send SMS',
+        'destroy' => 'Delete',
+    ];
+
     // protected $smsService;
 
     // public function __construct(SmsService $smsService)

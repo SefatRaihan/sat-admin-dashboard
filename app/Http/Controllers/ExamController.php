@@ -7,6 +7,18 @@ use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'create' => 'Create Form',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'edit' => 'Edit Form',
+        'allResult' => 'All Result',
+        'ranking' => 'Ranking',
+    ];
+
     public function index()
     {
         $exams = Exam::with('createdBy')

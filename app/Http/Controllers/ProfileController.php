@@ -13,6 +13,19 @@ use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'edit' => 'Edit Form',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'updateImage' => 'Update Image',
+        'updateName' => 'Update Name',
+        'updateDob' => 'Update Date of Birth',
+        'updateEmail' => 'Update Email',
+        'updatePhone' => 'Update Phone Number',
+        'updatePassword' => 'Update Password'
+    ];
+
     /**
      * Display the user's profile form.
      */
@@ -104,8 +117,6 @@ class ProfileController extends Controller
             return back()->with('error', 'An unexpected error occurred: ' . $e->getMessage())->withInput();
         }
     }
-
-
 
     /**
      * Delete the user's account.

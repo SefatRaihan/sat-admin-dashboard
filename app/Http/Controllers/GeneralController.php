@@ -12,6 +12,17 @@ use App\Http\Requests\UpdateGeneralRequest;
 
 class GeneralController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'create' => 'Create Form',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'edit' => 'Edit Form'
+    ];
+
     /**
      * Display a listing of the resource.
      */

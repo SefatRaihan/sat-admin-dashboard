@@ -11,6 +11,13 @@ use App\Models\ExamAttemptQuestion;
 
 class StudentExamController extends Controller
 {
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'openExam' => 'Open Exam',
+        'startExam' => 'Start Exam',
+        'update' => 'Update Exam Attempt',
+        'histories' => 'Exam Histories',
+    ];
 
     public function openExam($examId)
     {

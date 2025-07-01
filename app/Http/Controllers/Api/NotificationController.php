@@ -30,6 +30,10 @@ class NotificationController extends Controller
     | 500 internal server or db error
     */
 
+    public static $visiblePermissions = [
+        'delete' => 'Delete Multiple Notifications'
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -40,7 +44,7 @@ class NotificationController extends Controller
         Notification::whereIn('id', $request->notifications)->delete();
         return response()->json(['message' => 'Notification deleted successfully']);
     }
-    
+
 
     //another methods
 }

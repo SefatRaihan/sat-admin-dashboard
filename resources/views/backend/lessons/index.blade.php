@@ -2,30 +2,30 @@
     @php
         $prependHtml = '
             <div class="d-flex align-items-center justify-content-center" style="margin-right: 10px">
-                <a data-toggle="modal" data-target="#chapterModal" class="create-button btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px">
-                    <i class="fas fa-plus" style="font-size: 12px; margin-right: 5px; margin-top: 5px;"></i> Manage Chapter
+                <a data-toggle="modal" data-target="#lessonModal" class="create-button btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px">
+                    <i class="fas fa-plus" style="font-size: 12px; margin-right: 5px; margin-top: 5px;"></i> Manage Lesson
                 </a>
             </div>
         ';
     @endphp
 
-    <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'Manage Chapter'" :prependContent="$prependHtml">
+    <x-backend.layouts.partials.blocks.contentwrapper :headerTitle="'Manage Lesson'" :prependContent="$prependHtml">
     </x-backend.layouts.partials.blocks.contentwrapper>
 
-    <div class="d-none" id="chapterNullList">
+    <div class="d-none" id="lessonNullList">
         <x-backend.layouts.partials.blocks.empty-state
-            title="add chapter"
+            title="add lesson"
             message=""
-            buttonText="Add Chapter"
-            buttonRoute="#chapterModal"
+            buttonText="Add Lesson"
+            buttonRoute="#lessonModal"
         />
     </div>
 
-    <div id="chapterList">
+    <div id="lessonList">
         <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
             <div class="card-header border-bottom d-flex justify-content-between">
                 <div>
-                    <input type="text" id="search" class="form-control search_input" placeholder="Search Chapter" style="padding-left: 40px">
+                    <input type="text" id="search" class="form-control search_input" placeholder="Search Lesson" style="padding-left: 40px">
                 </div>
                 <div class="d-flex">
                     <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;">
@@ -35,22 +35,25 @@
             </div>
             <div class="card-body p-0 m-0 table-responsive">
                 <div class="d-flex justify-content-between align-items-center mt-3 p-2">
-                    <h4><strong id="total-chapters"></strong></h4>
+                    <h4><strong id="total-lessons"></strong></h4>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead>
                             <tr class="bg-light">
                                 <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
-                                <th>Chapter Name</th>
+                                <th>Question</th>
                                 <th>Audience</th>
-                                <th>Subject</th>
+                                <th>Q. Type</th>
+                                <th>Exam</th>
+                                <th>Difficulty</th>
+                                <th>Avg. Time</th>
                                 <th>Created</th>
                                 <th>State</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="chapter-table-body">
+                        <tbody id="lesson-table-body">
                             <tr>
                                 <td colspan="7" class="text-center">Loading...</td>
                             </tr>
@@ -80,15 +83,17 @@
 
     <!-- Create/Edit Modal -->
     <section>
-        <div class="modal fade" id="chapterModal" tabindex="-1" role="dialog" aria-labelledby="chapterModalTitle" aria-hidden="true">
+        <div class="modal fade" id="lessonModal" tabindex="-1" role="dialog" aria-labelledby="lessonModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document" style="width:60%">
                 <div class="modal-content" style="border-radius: 24px; height:100%">
                     <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                        <h5 class=""><b id="chapterpleModalLongTitle">Create Chapter</b></h5>
-                        <p class="pb-2">Step 1 : Choose Audience, Subject, title and description to Get Started</p>
+                        <h5 class=""><b id="lessonpleModalLongTitle">Create Lesson</b></h5>
+
+                        <p class="pb-2 step-1">Step 1 : Choose Audience and Subject to Get Started</p>
+                        <p class="pb-2 d-none step-2">Step 2 :  Upload Videos and PDF Files</p>
                     </div>
-                    <div class="modal-body" style="height: 620px;">
-                        <div>
+                    <div class="modal-body" style="height: 100%;">
+                        <div class="step-1">
                             <label class="label-header" for="">1. Select the Audience</label>
                             <div class="row" style="margin-left: 3px">
                                 <div class="col-md-6 row">
@@ -148,30 +153,45 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div>
-                                <div class="form-group">
-                                    <div style="display: flex; justify-content: space-between;">
-                                        <label class="label-header" for="">Title</label>
-                                    </div>
-                                    <input type="text" class="form-control" max="" id="title" name="title" placeholder="">
+                        </div>
+                        <div class="step-2 d-none">
+                            <div class="">
+                                <div class="lessons-section">
+                                    <h2>Lessons</h2>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>File Type</th>
+                                                <th>File size</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="lessonsTableBody">
+                                            </tbody>
+                                    </table>
                                 </div>
-                            </div>
 
-                            <div>
-                                <div class="form-group">
-                                    <div style="display: flex; justify-content: space-between;">
-                                        <label class="label-header" for="">Description</label>
+                                <div class="upload-files-section">
+                                    <h2>Upload Files</h2>
+                                    <div class="drop-zone" id="dropZone">
+                                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                        <p><strong>Click to upload</strong> or drag and drop</p>
+                                        <p>JPEG, PNG, PDF, GIF, MP3 and MP4 formats</p>
+                                        <input type="file" id="fileInput" multiple accept=".jpeg,.jpg,.png,.pdf,.gif,.mp3,.mp4" style="display: none;">
+                                        <button id="chooseFilesBtn">Choose files</button>
+                                        <p>[Max: 350MB]</p>
                                     </div>
-                                    <textarea name="description" class="form-control" id="" cols="30" rows="5" max="500"></textarea>
-                                    <p class="text-right" style="color: #475467">429 /500 character Maximum </p>
+
+                                    <div class="uploading-list" id="uploadingList">
+                                        </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer border-top pt-3" style="width: 100%; bottom: 0px !important; position: absolute;">
+                    <div class="modal-footer border-top pt-3">
                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <a href="#" class="btn save-chapter" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Add Chapters</a>
+                        <a href="#" class="btn next-step-2" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Next</a>
+                        <a href="#" class="btn save-lesson d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Add Lesson</a>
                     </div>
                 </div>
             </div>
@@ -342,6 +362,7 @@
     </div>
 
     @push('css')
+    <link rel="stylesheet" href="{{ asset('css/lesson.css') }}">
     <style>
         #chartdiv, #areaChartdiv {
             width: 100%;
@@ -779,6 +800,13 @@
                 $("#sat_type_2").addClass("d-none");
             });
 
+            $('.next-step-2').on('click', function() {
+                $('.step-1').addClass('d-none');
+                $('.step-2').removeClass('d-none');
+                $('.save-lesson').removeClass('d-none');
+                $('.next-step-2').addClass('d-none');
+            });
+
             // Sidebar toggle
             $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
                 $('#taskSidebar').removeClass('open');
@@ -849,7 +877,7 @@
                 toggleDeleteButton();
             });
 
-            // Chapter modal handling
+            // Lesson modal handling
             $('.sat_2').on('change', function() {
                 $('.sat_type_2').removeClass('d-none');
                 $('.sat_type_1').addClass('d-none');
@@ -860,26 +888,26 @@
                 $('.sat_type_2').addClass('d-none');
             });
 
-            $(document).on('input change', '.no_of_chapters, .duration', calculateTotalSectionValues);
+            $(document).on('input change', '.no_of_lessons, .duration', calculateTotalSectionValues);
             $(document).on('change', 'input[name="section"]', section);
-            $(document).on('click', '.save-chapter', store);
-            $(document).on('click', '.chapter-delete', destroy);
+            $(document).on('click', '.save-lesson', store);
+            $(document).on('click', '.lesson-delete', destroy);
             $(document).on('change', '.toggle-status', updateState);
             $(document).on('click', '.edit-btn', show);
             $(document).on('click', '.create-button', function() {
-                $('.save-chapter').removeClass('d-none');
-                $('.edit-chapter').addClass('d-none');
+                // $('.save-lesson').removeClass('d-none');
+                $('.edit-lesson').addClass('d-none');
                 resetData();
             });
 
-            $('.edit-chapter').on('click', function(e) {
+            $('.edit-lesson').on('click', function(e) {
                 e.preventDefault();
                 $('#confirmationModal').modal('show');
             });
 
             $(document).on('click', '#proceedBtn', function(e) {
-                let chapterId = $('.edit-chapter').data('id');
-                update(chapterId, e);
+                let lessonId = $('.edit-lesson').data('id');
+                update(lessonId, e);
             });
 
             $(document).on('click', '.openDetailModal', openDetailModal);
@@ -889,32 +917,32 @@
             // Datatable initialization
             let currentPage = 1;
             let perPage = $('#rowsPerPage').val();
-            fetchChapters(currentPage, perPage);
+            fetchLessons(currentPage, perPage);
 
             $(document).on('click', '.pagination a', function(e) {
                 e.preventDefault();
                 let page = $(this).data('page');
                 if (page) {
                     currentPage = page;
-                    fetchChapters(currentPage, perPage);
+                    fetchLessons(currentPage, perPage);
                 }
             });
 
             $('#rowsPerPage').on('change', function() {
                 perPage = $(this).val();
-                fetchChapters(1, perPage);
+                fetchLessons(1, perPage);
             });
 
             let searchTimeout;
             $('.search_input').on('input', function() {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
-                    fetchChapters(1, $('#rowsPerPage').val());
+                    fetchLessons(1, $('#rowsPerPage').val());
                 }, 300);
             });
 
             $('.apply-filter-btn').on('click', function() {
-                fetchChapters(1, $('#rowsPerPage').val());
+                fetchLessons(1, $('#rowsPerPage').val());
             });
 
             $('.reset-filter').on('click', function() {
@@ -927,7 +955,7 @@
                 minRange.val(1);
                 maxRange.val(120);
                 updateSlider();
-                fetchChapters(1, $('#rowsPerPage').val());
+                fetchLessons(1, $('#rowsPerPage').val());
             });
         });
 
@@ -941,34 +969,34 @@
         }
 
         function calculateTotalSectionValues() {
-            let totalChapters = 0;
+            let totalLessons = 0;
             let totalDuration = 0;
 
             $('.section_part:not(.d-none)').each(function() {
-                const no_of_chapters = parseInt($(this).find('input[name="no_of_questions"]').val()) || 0;
+                const no_of_lessons = parseInt($(this).find('input[name="no_of_questions"]').val()) || 0;
                 const duration = parseInt($(this).find('input[name="duration"]').val()) || 0;
-                totalChapters += no_of_chapters;
+                totalLessons += no_of_lessons;
                 totalDuration += duration;
             });
 
-            $('#total_questions').val(totalChapters);
+            $('#total_questions').val(totalLessons);
             $('#total_duration').val(totalDuration);
         }
 
         function store(e) {
             e.preventDefault();
             $.ajax({
-                url: '/api/chapters',
+                url: '/api/lessons',
                 type: 'POST',
                 data: getFormData(),
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 success: function(response) {
                     if (response.success) {
-                        Swal.fire('Success', 'Chapter created successfully!', 'success').then(() => {
+                        Swal.fire('Success', 'Lesson created successfully!', 'success').then(() => {
                             window.location.href = response.redirect;
                         });
                     } else {
-                        Swal.fire('Error', 'Failed to create chapter!', 'error');
+                        Swal.fire('Error', 'Failed to create lesson!', 'error');
                     }
                 },
                 error: function(error) {
@@ -979,7 +1007,7 @@
             });
         }
 
-        function fetchChapters(page = 1, perPage = 10) {
+        function fetchLessons(page = 1, perPage = 10) {
             let filters = {
                 search: $('.search_input').val(),
                 difficulty: $('.difficulty:checked').map((_, el) => el.value).get(),
@@ -1000,44 +1028,51 @@
                 type: 'GET',
                 data: filters,
                 success: function(response) {
-                    let chapterNullList = $('#chapterNullList');
-                    let chapterList = $('#chapterList');
-                    let tableBody = $('#chapter-table-body');
-                    let maxChapterCount = response.total;
+                    let lessonNullList = $('#lessonNullList');
+                    let lessonList = $('#lessonList');
+                    let tableBody = $('#lesson-table-body');
+                    let maxLessonCount = response.total;
 
-                    $('#max-chapter-count').text(maxChapterCount);
+                    $('#max-lesson-count').text(maxLessonCount);
 
                     if (response.data.length === 0) {
                         if (page === 1 && Object.values(filters).every(val => !val || (Array.isArray(val) && !val.length))) {
-                            chapterNullList.removeClass('d-none');
-                            chapterList.addClass('d-none');
+                            lessonNullList.removeClass('d-none');
+                            lessonList.addClass('d-none');
                         } else {
-                            chapterNullList.addClass('d-none');
-                            chapterList.removeClass('d-none');
-                            tableBody.html('<tr><td colspan="11" class="text-center">No chapters found.</td></tr>');
+                            lessonNullList.addClass('d-none');
+                            lessonList.removeClass('d-none');
+                            tableBody.html('<tr><td colspan="11" class="text-center">No lessons found.</td></tr>');
                         }
                     } else {
-                        chapterNullList.addClass('d-none');
-                        chapterList.removeClass('d-none');
+                        lessonNullList.addClass('d-none');
+                        lessonList.removeClass('d-none');
 
                         let rows = '';
-                        $.each(response.data, function(index, chapter) {
-                            let statusChecked = chapter.status === 'active' ? 'checked' : '';
+                        $.each(response.data, function(index, lesson) {
+                            let statusChecked = lesson.status === 'active' ? 'checked' : '';
 
                             rows += `<tr>
-                                <td><input type="checkbox" class="row-checkbox chapter-row" value="${chapter.uuid}"></td>
-                                <td>Fundamentals of Algebra: Variables & Expressions</td>
+                                <td><input type="checkbox" class="row-checkbox lesson-row" value="${lesson.uuid}"></td>
+                                <td>
+                                    <video width="70" height="50" controls>
+                                    <source src="movie.mp4" type="video/mp4">
+                                    </video>
+                                </td>
+                                <td>Variables & Expressions</td>
                                 <td>High School</td>
                                 <td>Verbal</td>
+                                <td>Fundamentals of Algebra</td>
+                                <td>50 min 52 s</td>
                                 <td>22 Jan, 25 Admin</td>
                                 <td>
                                     <label class="switch">
-                                        <input type="checkbox" class="toggle-status" data-id="${chapter.id}" ${statusChecked}>
+                                        <input type="checkbox" class="toggle-status" data-id="${lesson.id}" ${statusChecked}>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
                                 <td class="text-center">
-                                    <button data-uuid="f120efeb-1bb6-436c-90cc-7c467469f314" class="btn btn-sm edit-chapter-btn" data-toggle="modal" data-target="#chapterEditModelCenter">
+                                    <button data-uuid="f120efeb-1bb6-436c-90cc-7c467469f314" class="btn btn-sm edit-lesson-btn" data-toggle="modal" data-target="#lessonEditModelCenter">
                                         <i class="far fa-edit"></i> Edit
                                     </button>
                                 </td>
@@ -1048,7 +1083,7 @@
                     }
                 },
                 error: function() {
-                    Swal.fire('Error', 'Error fetching chapters.', 'error');
+                    Swal.fire('Error', 'Error fetching lessons.', 'error');
                 }
             });
         }
@@ -1061,7 +1096,7 @@
             let end = response.to || 0;
 
             $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
-            $('#total-chapters').text(`${totalResults} Chapters`);
+            $('#total-lessons').text(`${totalResults} Lessons`);
 
             let paginationHtml = `
                 <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
@@ -1106,11 +1141,11 @@
         }
 
         function updateState() {
-            let chapterId = $(this).data('id');
+            let lessonId = $(this).data('id');
             let newStatus = $(this).is(':checked') ? 'active' : 'inactive';
 
             $.ajax({
-                url: `/api/chapters/${chapterId}/update-status`,
+                url: `/api/lessons/${lessonId}/update-status`,
                 type: 'PATCH',
                 data: { status: newStatus },
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
@@ -1130,9 +1165,9 @@
         }
 
         function destroy() {
-            let selectedChapters = $('.row-checkbox:checked').map(function() { return $(this).val(); }).get();
-            if (!selectedChapters.length) {
-                Swal.fire('Warning', 'Please select at least one chapter.', 'warning');
+            let selectedLessons = $('.row-checkbox:checked').map(function() { return $(this).val(); }).get();
+            if (!selectedLessons.length) {
+                Swal.fire('Warning', 'Please select at least one lesson.', 'warning');
                 return;
             }
 
@@ -1147,15 +1182,15 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/api/chapter-delete',
+                        url: '/api/lesson-delete',
                         type: 'POST',
-                        data: { chapters: selectedChapters, _token: '{{ csrf_token() }}' },
+                        data: { lessons: selectedLessons, _token: '{{ csrf_token() }}' },
                         success: function(response) {
-                            Swal.fire('Deleted!', 'Chapters deleted successfully.', 'success');
-                            fetchChapters(1);
+                            Swal.fire('Deleted!', 'Lessons deleted successfully.', 'success');
+                            fetchLessons(1);
                         },
                         error: function() {
-                            Swal.fire('Error', 'Failed to delete chapters.', 'error');
+                            Swal.fire('Error', 'Failed to delete lessons.', 'error');
                         }
                     });
                 }
@@ -1163,15 +1198,15 @@
         }
 
         function show() {
-            let chapterId = $(this).data('id');
-            $('.edit-chapter').data('id', chapterId);
-            $('#proceedBtn').data('chapter-id', chapterId);
-            $('.save-chapter').addClass('d-none');
-            $('.edit-chapter').removeClass('d-none');
+            let lessonId = $(this).data('id');
+            $('.edit-lesson').data('id', lessonId);
+            $('#proceedBtn').data('lesson-id', lessonId);
+            $('.save-lesson').addClass('d-none');
+            $('.edit-lesson').removeClass('d-none');
             resetData();
 
-            $.get(`/api/chapters/${chapterId}`, function(response) {
-                $('#chapterpleModalLongTitle').text('Edit Chapter');
+            $.get(`/api/lessons/${lessonId}`, function(response) {
+                $('#lessonpleModalLongTitle').text('Edit Lesson');
                 $('input[name="audience"][value="' + response.sections[0].audience + '"]').prop('checked', true).trigger('change');
                 $('input[name="section"][value="' + response.section + '"]').prop('checked', true).trigger('change');
                 $('#title').val(response.title);
@@ -1180,31 +1215,31 @@
                     let sectionDiv = $(`.section_div_${index + 1}`);
                     if (sectionDiv.length) {
                         sectionDiv.attr('section-id', section.id);
-                        sectionDiv.find('[name="chapter_name"]').val(section.title);
+                        sectionDiv.find('[name="lesson_name"]').val(section.title);
                         sectionDiv.find('[name="no_of_questions"]').val(section.num_of_questions);
                         sectionDiv.find('[name="duration"]').val(section.duration);
                         sectionDiv.find(`[name="sat_type_section_${index+1}"][value="${section.section_type}"]`).prop('checked', true);
                     }
                 });
                 calculateTotalSectionValues();
-                $('#chapterModal').modal('show');
+                $('#lessonModal').modal('show');
             });
         }
 
-        function update(chapterId, e) {
+        function update(lessonId, e) {
             e.preventDefault();
             $.ajax({
-                url: `/api/chapters/${chapterId}`,
+                url: `/api/lessons/${lessonId}`,
                 method: 'PATCH',
                 data: getFormData(),
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 success: function(response) {
                     if (response.success) {
-                        Swal.fire('Success', 'Chapter updated successfully!', 'success').then(() => {
+                        Swal.fire('Success', 'Lesson updated successfully!', 'success').then(() => {
                             window.location.href = response.redirect;
                         });
                     } else {
-                        Swal.fire('Error', 'Failed to update the chapter!', 'error');
+                        Swal.fire('Error', 'Failed to update the lesson!', 'error');
                     }
                 },
                 error: function(error) {
@@ -1234,7 +1269,7 @@
 
                 formData.section_details.push({
                     section_type: $inputs.filter(`[name="sat_type_section_${index + 1}"]:checked`).val(),
-                    chapter_name: $inputs.filter('[name="chapter_name"]').val(),
+                    lesson_name: $inputs.filter('[name="lesson_name"]').val(),
                     section_id: $(this).attr('section-id'),
                     section_order: index + 1,
                     no_of_questions,
@@ -1252,37 +1287,37 @@
         }
 
         function resetData() {
-            $('#chapterpleModalLongTitle').text('Create Chapter');
-            $('#chapterModal input[type="text"]').val('');
+            $('#lessonpleModalLongTitle').text('Create Lesson');
+            $('#lessonModal input[type="text"]').val('');
             $('input[name="audience"]').prop('checked', false);
             $('input[name="section"]').prop('checked', false);
             $('.section_part input[type="radio"]').prop('checked', false);
             $('.section_part').attr('section-id', '').addClass('d-none');
             $('.section_part input[type="text"]').val('');
-            $('#chapterModal').modal('show');
+            $('#lessonModal').modal('show');
         }
 
         function openDetailModal() {
-            let chapterId = $(this).data('id');
-            $('.update-ranking').data('id', chapterId);
+            let lessonId = $(this).data('id');
+            $('.update-ranking').data('id', lessonId);
             $('#ranking-input').val('');
             $('#detailModalCenter').modal('show');
         }
 
         function moveRanking() {
-            let chapterId = $(this).data('id');
+            let lessonId = $(this).data('id');
             let direction = $(this).data('direction');
             let page = $('.pagination .active a').data('page') || 1;
             let perPage = $('#rowsPerPage').val();
 
             $.ajax({
-                url: `/api/chapters/${chapterId}/move-ranking`,
+                url: `/api/lessons/${lessonId}/move-ranking`,
                 type: 'POST',
                 data: { direction: direction, _token: '{{ csrf_token() }}' },
                 success: function(response) {
                     if (response.success) {
                         Swal.fire('Success', response.message, 'success');
-                        fetchChapters(page, perPage);
+                        fetchLessons(page, perPage);
                     } else {
                         Swal.fire('Error', response.message, 'error');
                     }
@@ -1294,7 +1329,7 @@
         }
 
         function updateRankingModal() {
-            let chapterId = $(this).data('id');
+            let lessonId = $(this).data('id');
             let newRanking = $('#ranking-input').val();
             let page = $('.pagination .active a').data('page') || 1;
             let perPage = $('#rowsPerPage').val();
@@ -1305,14 +1340,14 @@
             }
 
             $.ajax({
-                url: `/api/chapters/${chapterId}/ranking`,
+                url: `/api/lessons/${lessonId}/ranking`,
                 type: 'PATCH',
                 data: { ranking: newRanking, _token: '{{ csrf_token() }}' },
                 success: function(response) {
                     if (response.success) {
                         Swal.fire('Success', response.message, 'success');
                         $('#detailModalCenter').modal('hide');
-                        fetchChapters(page, perPage);
+                        fetchLessons(page, perPage);
                     } else {
                         Swal.fire('Error', response.message, 'error');
                     }
@@ -1322,6 +1357,163 @@
                 }
             });
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Initial lesson data (simulated)
+            const initialLessons = [
+                { name: "Math101.MP4", type: "Video", size: "250 MB", iconClass: "video", fileExtension: "mp4" },
+                { name: "Math102.MP4", type: "Video", size: "175 MB", iconClass: "video", fileExtension: "mp4" },
+                { name: "Math103.MP4", type: "Video", size: "210 MB", iconClass: "video", fileExtension: "mp4" },
+                { name: "Advanced Data Structures and Algorithms.pdf", type: "PDF", size: "2.5 MB", iconClass: "pdf", fileExtension: "pdf" }
+            ];
+
+            // Function to render lesson table
+            function renderLessons() {
+                const $lessonsTableBody = $('#lessonsTableBody');
+                $lessonsTableBody.empty(); // Clear existing
+                initialLessons.forEach(lesson => {
+                    const row = `
+                        <tr>
+                            <td>
+                                <div class="lesson-item">
+                                    <div class="icon ${lesson.iconClass}">
+                                        <i class="fas ${lesson.fileExtension === 'mp4' ? 'fa-play' : 'fa-file-pdf'}"></i>
+                                    </div>
+                                    <span>${lesson.name}</span>
+                                </div>
+                            </td>
+                            <td>${lesson.type}</td>
+                            <td>${lesson.size}</td>
+                        </tr>
+                    `;
+                    $lessonsTableBody.append(row);
+                });
+            }
+
+            // Call renderLessons on document ready to populate the initial table
+            renderLessons();
+
+            const $dropZone = $('#dropZone');
+            const $fileInput = $('#fileInput');
+            const $chooseFilesBtn = $('#chooseFilesBtn');
+            const $uploadingList = $('#uploadingList');
+
+            // Prevent default drag behaviors
+            $dropZone.on('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).addClass('dragover');
+            });
+
+            $dropZone.on('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('dragover');
+            });
+
+            $dropZone.on('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('dragover');
+                const files = e.originalEvent.dataTransfer.files;
+                handleFiles(files);
+            });
+
+            // Handle file input click
+            $chooseFilesBtn.on('click', function() {
+                $fileInput.click();
+            });
+
+            $fileInput.on('change', function() {
+                const files = this.files;
+                handleFiles(files);
+            });
+
+            function handleFiles(files) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    uploadFile(file);
+                }
+            }
+
+            function uploadFile(file) {
+                const fileName = file.name;
+                const fileSize = (file.size / (1024 * 1024)).toFixed(2); // Convert to MB
+                const fileExtension = fileName.split('.').pop().toLowerCase();
+                let iconClass = '';
+                let fileTypeDisplay = '';
+
+                if (['mp4', 'mp3'].includes(fileExtension)) {
+                    iconClass = 'mp4'; // Use mp4 icon for both video and audio for this design
+                    fileTypeDisplay = 'Video'; // Or 'Audio' for mp3
+                } else if (fileExtension === 'pdf') {
+                    iconClass = 'pdf-upload';
+                    fileTypeDisplay = 'PDF';
+                } else if (['jpeg', 'jpg', 'png', 'gif'].includes(fileExtension)) {
+                    iconClass = 'image'; // Add an image icon class if needed
+                    fileTypeDisplay = 'Image';
+                } else {
+                    iconClass = 'file'; // Default icon
+                    fileTypeDisplay = 'File';
+                }
+
+                const uploadItem = `
+                    <div class="uploading-item" data-filename="${fileName}">
+                        <div class="icon ${iconClass}">
+                            <i class="fas ${iconClass === 'mp4' ? 'fa-play' : (iconClass === 'pdf-upload' ? 'fa-file-pdf' : 'fa-file')}"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">${fileName}</div>
+                            <div class="file-size">${fileSize} MB</div>
+                            <div class="progress-row">
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 0%;"></div>
+                                </div>
+                                <div class="progress-percentage">0%</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-trash-alt delete-icon"></i>
+                    </div>
+                `;
+                $uploadingList.append(uploadItem);
+
+                // Simulate upload progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    if (progress < 100) {
+                        progress += Math.floor(Math.random() * 10) + 5; // Simulate random progress increase
+                        if (progress > 100) progress = 100;
+
+                        const $item = $(`[data-filename="${fileName}"]`);
+                        $item.find('.progress-bar').css('width', `${progress}%`);
+                        $item.find('.progress-percentage').text(`${progress}%`);
+                    } else {
+                        clearInterval(interval);
+                        // Once upload is "complete", add to lessons table
+                        initialLessons.push({
+                            name: fileName,
+                            type: fileTypeDisplay,
+                            size: `${fileSize} MB`,
+                            iconClass: iconClass === 'mp4' ? 'video' : (iconClass === 'pdf-upload' ? 'pdf' : 'file'), // Map back to lesson icons
+                            fileExtension: fileExtension
+                        });
+                        renderLessons();
+
+                        // Optionally, remove from uploading list after a short delay
+                        setTimeout(() => {
+                            $(`[data-filename="${fileName}"]`).remove();
+                        }, 1000);
+                    }
+                }, 300); // Update every 300ms
+
+                // Handle delete icon click for uploading items
+                $uploadingList.on('click', '.delete-icon', function() {
+                    $(this).closest('.uploading-item').remove();
+                    // In a real application, you would also cancel the upload here
+                });
+            }
+        });
     </script>
     @endpush
 </x-backend.layouts.master>

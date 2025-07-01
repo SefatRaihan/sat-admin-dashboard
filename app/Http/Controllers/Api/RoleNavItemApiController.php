@@ -8,6 +8,10 @@ use App\Models\Role;
 
 class RoleNavItemApiController extends Controller
 {
+    public static $visiblePermissions = [
+        'getNavitemWithSelected' => 'Get Navitems with Selected',
+    ];
+
     public function getNavitemWithSelected($roleId)
     {
         $role = Role::find($roleId);

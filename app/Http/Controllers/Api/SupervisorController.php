@@ -30,6 +30,15 @@ class SupervisorController extends Controller
     | 500 internal server or db error
     */
 
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'delete' => 'Delete Multiple Supervisors',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -38,7 +47,7 @@ class SupervisorController extends Controller
     public function index(Request $request)
     {
         $query = Supervisor::query();
-    
+
         // Search filter
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -49,29 +58,29 @@ class SupervisorController extends Controller
             $roles = explode(',', $request->role);
             $query->whereIn('role_name', $roles);
         }
-    
+
         // Status filter
         if ($request->filled('status')) {
             $status = explode(',', $request->status);
             $query->whereIn('status', $status);
         }
-    
+
         // Sorting
         if ($request->filled('sort')) {
             $sort = $request->sort == 'Oldest' ? 'asc' : 'desc';
             $query->orderBy('created_at', $sort);
         }
-    
+
         $supervisors = $query->latest()->paginate($request->input('per_page', 10));
-    
+
         $totalSupervisor = Supervisor::count();
-    
+
         return response()->json([
             'supervisors' => $supervisors,
             'totalSupervisor' => $totalSupervisor
         ]);
     }
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -89,21 +98,21 @@ class SupervisorController extends Controller
             'status' => 'required',
             'role' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
-    
+
         DB::beginTransaction(); // Start Transaction
-    
+
         try {
-    
+
             $ipAddress = getHostByName(getHostName());
             $role = Role::where('slug', 'supervisor')->first();
-    
+
             // Create User
             $user = User::create([
                 'uuid'              => Str::uuid(),
@@ -118,8 +127,8 @@ class SupervisorController extends Controller
                 'ip_address'        => $ipAddress,
                 'last_login'        => now()
             ]);
-            
-    
+
+
             $supervisorRole = Role::where('slug', $request->role)->first();
             // Create Supervisor
             $supervisor = Supervisor::create([
@@ -132,18 +141,18 @@ class SupervisorController extends Controller
                 'role_name'     => $request->role,
                 'status'        => $request->status,
             ]);
-    
+
             DB::commit(); // Commit Transaction
-    
+
             return response()->json([
                 'status' => true,
                 'message' => __('Successfully Created'),
                 'data' => $supervisor
             ], 201);
-    
+
         } catch (\Exception | QueryException $e) {
             DB::rollBack(); // Rollback on Error
-    
+
             return response()->json([
                 'status' => false,
                 'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
@@ -181,14 +190,14 @@ class SupervisorController extends Controller
             'role' => 'required',
             'status' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
-    
+
         DB::beginTransaction(); // Start Transaction
 
         try {
@@ -214,7 +223,7 @@ class SupervisorController extends Controller
             ], 200);
         } catch (\Exception | QueryException $e) {
             DB::rollBack(); // Rollback on Error
-    
+
             return response()->json([
                 'status' => false,
                 'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
@@ -250,7 +259,5 @@ class SupervisorController extends Controller
         Supervisor::whereIn('uuid', $request->supervisors)->delete();
         return response()->json(['message' => 'Supervisors deleted successfully']);
     }
-    
-
     //another methods
 }

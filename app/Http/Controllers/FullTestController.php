@@ -12,6 +12,24 @@ use Illuminate\Support\Facades\Validator;
 
 class FullTestController extends Controller
 {
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'create' => 'Create Form',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'edit' => 'Edit Form',
+        'results' => 'Results',
+        'otherExamScore' => 'Other Exam Score',
+        'view_details' => 'View Details',
+        'examDetails' => 'Exam Details',
+        'getExamQuestions' => 'Get Exam Questions',
+        'filterExamQuestions' => 'Filter Exam Questions',
+        'otherStudentScore' => 'Other Student Score',
+        'drillExam' => 'Drill Exam',
+    ];
+
     public function index()
     {
         return view('backend.fulltest.index');
@@ -93,7 +111,6 @@ class FullTestController extends Controller
             'betterThanPercent',
         ));
     }
-
 
     public function otherExamScore(Request $request)
     {

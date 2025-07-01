@@ -16,6 +16,13 @@ use Symfony\Component\Console\Question\Question;
 class ExamSectionController extends Controller
 {
 
+    public static $visiblePermissions = [
+        'getQuestionsWithExamSection' => 'Get Questions with Exam Section',
+        'assignQuestionToSection' => 'Assign Question to Section',
+        'removeQuestionFromSection' => 'Remove Question from Section',
+        'examSectionQuestion' => 'Exam Section Question'
+    ];
+
     public function getQuestionsWithExamSection(Request $request)
     {
         $query = ExamQuestion::latest()->with('createdBy');
@@ -92,7 +99,6 @@ class ExamSectionController extends Controller
         $questions = $query->where('status', 'active')->get();
         return response()->json(['code' => 200, 'data' => $questions]);
     }
-
 
     /**
      * Assign a question to a section (Drag & Drop).

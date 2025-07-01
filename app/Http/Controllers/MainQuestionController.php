@@ -15,141 +15,156 @@ use Illuminate\Support\Facades\DB;
 
 class MainQuestionController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'create' => 'Create Form',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'edit' => 'Edit Form',
+        'toggleStatus' => 'Toggle Status',
+        'restore' => 'Restore',
+        'delete' => 'Delete Multiple',
+        'getRelations' => 'Get Relations'
+    ];
+
     /**
      * Display a listing of the questions with optional filters and pagination.
      */
-        public function index(Request $request)
-        {
-            $query = ExamQuestion::with('createdBy');
+    public function index(Request $request)
+    {
+        $query = ExamQuestion::with('createdBy');
 
 
-            // Search filter
-            if ($request->filled('search')) {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    $q->where('question_title', 'like', "%{$search}%")
-                    ->orWhere('question_description', 'like', "%{$search}%")
-                    ->orWhere('question_text', 'like', "%{$search}%");
-                });
-            }
-
-            if ($request->filled('created_start_at') && $request->filled('created_end_at')) {
-                $query->whereBetween('exam_questions.created_at', [
-                    $request->created_start_at,
-                    $request->created_end_at
-                ]);
-            }
-
-            // Status filter
-            if ($request->filled('status') && $request->status !== 'All') {
-                switch ($request->status) {
-                    case 'Active only':
-                        $query->where('status', 'active');
-                        break;
-                    case 'Inactive only':
-                        $query->where('status', '!=', 'active');
-                        break;
-                }
-            }
-
-            // Audience filter
-            if ($request->filled('audience')) {
-                $audiences = $request->audience;
-                $audienceValues = array_unique(
-                    array_map(
-                        fn($value) => explode('-', $value)[0],
-                        array_filter($audiences, fn($value) => strpos($value, '-') !== false)
-                    )
-                );
-                $satQuestionTypes = array_unique(
-                    array_map(
-                        fn($value) => explode('-', $value)[1],
-                        array_filter($audiences, fn($value) => strpos($value, '-') !== false)
-                    )
-                );
-
-                if (!empty($audienceValues)) {
-                    $query->whereIn('audience', $audienceValues);
-                }
-
-                if (!empty($satQuestionTypes)) {
-                    $query->whereIn('sat_question_type', $satQuestionTypes);
-                }
-            }
-
-            // Audience and Type filters
-            if ($request->filled('audienceSat') && $request->audienceSat[0] === 'All SAT 2') {
-                $query->orWhere('audience', 'SAT 2');
-            }
-
-            // Exam appearance filter
-            if ($request->filled('questionSearch')) {
-                $query->where('question_title', 'LIKE', '%' . $request->questionSearch . '%');
-            }
-
-            // Difficulty filter
-            if ($request->filled('difficulty')) {
-                $difficulties = is_array($request->difficulty) ? $request->difficulty : [$request->difficulty];
-                $query->whereIn('difficulty', $difficulties);
-            }
-
-            // Created by filter
-            if ($request->filled('created_by')) {
-                $query->whereIn('created_by', $request->created_by);
-            }
-
-            // Question type filter
-            if ($request->filled('question_type')) {
-                $query->where('question_type', $request->question_type);
-            }
-
-            // Sorting
-            if ($request->filled('sort')) {
-                $sort = $request->sort == 'Oldest' ? 'asc' : 'desc';
-                $query->orderBy('id', $sort);
-            }
-
-            $query->leftJoin('exam_attempt_questions', 'exam_questions.id', '=', 'exam_attempt_questions.question_id')
-                    ->select(
-                        'exam_questions.*',
-                        DB::raw('COALESCE(ROUND(AVG(exam_attempt_questions.time_spent), 2), 00.0) as avg_time_spent')
-                    )
-                    ->groupBy(
-                        'exam_questions.id',
-                        'exam_questions.uuid',
-                        'exam_questions.question_title',
-                        'exam_questions.question_description',
-                        'exam_questions.question_text',
-                        'exam_questions.question_type',
-                        'exam_questions.audience',
-                        'exam_questions.sat_type',
-                        'exam_questions.sat_question_type',
-                        'exam_questions.options',
-                        'exam_questions.correct_answer',
-                        'exam_questions.difficulty',
-                        'exam_questions.tags',
-                        'exam_questions.explanation',
-                        'exam_questions.images',
-                        'exam_questions.videos',
-                        'exam_questions.status',
-                        'exam_questions.created_by',
-                        'exam_questions.updated_by',
-                        'exam_questions.version_number',
-                        'exam_questions.language_code',
-                        'exam_questions.deleted_by',
-                        'exam_questions.deleted_at',
-                        'exam_questions.created_at',
-                        'exam_questions.updated_at',
-                        'exam_questions.topic_id',
-                        'exam_questions.question_code'
-                    );
-
-            // Pagination
-            $perPage = $request->get('per_page', 10);
-            $questions = $query->paginate($perPage);
-
-            return response()->json($questions);
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('question_title', 'like', "%{$search}%")
+                ->orWhere('question_description', 'like', "%{$search}%")
+                ->orWhere('question_text', 'like', "%{$search}%");
+            });
         }
+
+        if ($request->filled('created_start_at') && $request->filled('created_end_at')) {
+            $query->whereBetween('exam_questions.created_at', [
+                $request->created_start_at,
+                $request->created_end_at
+            ]);
+        }
+
+        // Status filter
+        if ($request->filled('status') && $request->status !== 'All') {
+            switch ($request->status) {
+                case 'Active only':
+                    $query->where('status', 'active');
+                    break;
+                case 'Inactive only':
+                    $query->where('status', '!=', 'active');
+                    break;
+            }
+        }
+
+        // Audience filter
+        if ($request->filled('audience')) {
+            $audiences = $request->audience;
+            $audienceValues = array_unique(
+                array_map(
+                    fn($value) => explode('-', $value)[0],
+                    array_filter($audiences, fn($value) => strpos($value, '-') !== false)
+                )
+            );
+            $satQuestionTypes = array_unique(
+                array_map(
+                    fn($value) => explode('-', $value)[1],
+                    array_filter($audiences, fn($value) => strpos($value, '-') !== false)
+                )
+            );
+
+            if (!empty($audienceValues)) {
+                $query->whereIn('audience', $audienceValues);
+            }
+
+            if (!empty($satQuestionTypes)) {
+                $query->whereIn('sat_question_type', $satQuestionTypes);
+            }
+        }
+
+        // Audience and Type filters
+        if ($request->filled('audienceSat') && $request->audienceSat[0] === 'All SAT 2') {
+            $query->orWhere('audience', 'SAT 2');
+        }
+
+        // Exam appearance filter
+        if ($request->filled('questionSearch')) {
+            $query->where('question_title', 'LIKE', '%' . $request->questionSearch . '%');
+        }
+
+        // Difficulty filter
+        if ($request->filled('difficulty')) {
+            $difficulties = is_array($request->difficulty) ? $request->difficulty : [$request->difficulty];
+            $query->whereIn('difficulty', $difficulties);
+        }
+
+        // Created by filter
+        if ($request->filled('created_by')) {
+            $query->whereIn('created_by', $request->created_by);
+        }
+
+        // Question type filter
+        if ($request->filled('question_type')) {
+            $query->where('question_type', $request->question_type);
+        }
+
+        // Sorting
+        if ($request->filled('sort')) {
+            $sort = $request->sort == 'Oldest' ? 'asc' : 'desc';
+            $query->orderBy('id', $sort);
+        }
+
+        $query->leftJoin('exam_attempt_questions', 'exam_questions.id', '=', 'exam_attempt_questions.question_id')
+                ->select(
+                    'exam_questions.*',
+                    DB::raw('COALESCE(ROUND(AVG(exam_attempt_questions.time_spent), 2), 00.0) as avg_time_spent')
+                )
+                ->groupBy(
+                    'exam_questions.id',
+                    'exam_questions.uuid',
+                    'exam_questions.question_title',
+                    'exam_questions.question_description',
+                    'exam_questions.question_text',
+                    'exam_questions.question_type',
+                    'exam_questions.audience',
+                    'exam_questions.sat_type',
+                    'exam_questions.sat_question_type',
+                    'exam_questions.options',
+                    'exam_questions.correct_answer',
+                    'exam_questions.difficulty',
+                    'exam_questions.tags',
+                    'exam_questions.explanation',
+                    'exam_questions.images',
+                    'exam_questions.videos',
+                    'exam_questions.status',
+                    'exam_questions.created_by',
+                    'exam_questions.updated_by',
+                    'exam_questions.version_number',
+                    'exam_questions.language_code',
+                    'exam_questions.deleted_by',
+                    'exam_questions.deleted_at',
+                    'exam_questions.created_at',
+                    'exam_questions.updated_at',
+                    'exam_questions.topic_id',
+                    'exam_questions.question_code'
+                );
+
+        // Pagination
+        $perPage = $request->get('per_page', 10);
+        $questions = $query->paginate($perPage);
+
+        return response()->json($questions);
+    }
 
 
     /**
@@ -346,8 +361,8 @@ class MainQuestionController extends Controller
     }
 
     /**
- * Toggle the status of a question (Active ↔ Inactive)
- */
+     * Toggle the status of a question (Active ↔ Inactive)
+     */
     public function toggleStatus(Request $request, $id)
     {
         try {

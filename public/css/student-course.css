@@ -1,0 +1,200 @@
+.content-wrapper {
+    background-color: #fcfaff; /* Light background for the content area */
+}
+
+.nav-pills
+{
+    margin-bottom: 1.25rem;
+    background: #fff;
+    border-radius: 25px;
+    padding: 2px;
+}
+
+/* Custom Main Tabs (Courses, Video lessons) */
+.custom-main-tabs .nav-item .nav-link {
+    padding: 8px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #667085;
+    font-weight: 500;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    border: none; /* Remove default bootstrap border */
+}
+
+.custom-main-tabs .nav-item .nav-link.active {
+    background-color: #691D5E; /* Purple color for active tab */
+    color: #fff;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 8px 15px;
+    flex-grow: 1;
+    height: 40px;
+    border: 1px solid #EAECF0;
+    max-width: 300px; /* Limit width */
+}
+
+.search-bar i {
+    color: #888;
+    margin-right: 10px;
+}
+
+.search-bar input {
+    border: none;
+    background: none;
+    outline: none;
+    flex-grow: 1;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Custom Filter Tabs (All courses, Completed, Incomplete) */
+.custom-filter-tabs .nav-item .nav-link {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: transparent;
+    color: #667085;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.custom-filter-tabs .nav-item .nav-link.active {
+    background-color: #691D5E; /* Purple color */
+    color: #fff;
+}
+
+.section-title {
+    font-size: 24px;
+    color: #333;
+    /* margin-top: 20px; */ /* Removed as Bootstrap's mb-3 handles margin */
+    /* margin-bottom: 25px; */
+    font-weight: 600;
+}
+
+/* Course Card Design */
+.course-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none; /* Remove default Bootstrap card border */
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.course-image {
+    width: 100%;
+    height: 180px; /* Fixed height for consistency */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    border-bottom: 1px solid #eee;
+}
+
+.course-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0 5px; /* Adjust padding for card-body */
+    font-size: 13px;
+    color: #777;
+}
+
+.course-meta span i {
+    margin-right: 5px;
+}
+
+.course-title {
+    font-size: 18px;
+    color: #333;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.course-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    flex-grow: 1; /* Allows description to take up available space */
+}
+
+.view-course-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    background-color: #691D5E; /* Purple color */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.view-course-btn:hover {
+    background-color: #691D5E; /* Slightly darker purple on hover */
+}
+
+/* Adjustments for Bootstrap's .card-body padding */
+.course-card .card-body {
+    padding: 15px; /* Apply padding to the card body */
+}
+
+.lesson-card {
+    background-color: transparent !important;
+    border: none I !important;
+    box-shadow: none !important;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: none;
+    }
+
+    .custom-main-tabs,
+    .custom-filter-tabs {
+        width: 100%;
+        justify-content: space-around;
+        margin-bottom: 10px; /* Add some space below tabs */
+    }
+
+    .custom-main-tabs .nav-item,
+    .custom-filter-tabs .nav-item {
+        flex-grow: 1;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-filter-tabs {
+        flex-direction: column;
+        align-items: stretch; /* Make buttons stack vertically */
+    }
+    .custom-filter-tabs .nav-item {
+        margin-bottom: 5px; /* Space between stacked buttons */
+    }
+}
