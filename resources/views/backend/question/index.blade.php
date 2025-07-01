@@ -635,6 +635,9 @@
                                 </div>
                             </div>
                             <div>
+                                <label class="form-label" for="topic">
+                                   <h5 class="mt-3"><strong>3. Select the Topic </strong></h5>
+                                </label>
                                 <select name="topic" id="topic"></select>
                             </div>
                         </div>
