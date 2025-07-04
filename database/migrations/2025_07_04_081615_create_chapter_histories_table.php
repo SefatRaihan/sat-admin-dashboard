@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chapters', function (Blueprint $table) {
+        Schema::create('chapter_histories', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique()->index();
+            $table->uuid('uuid')->index();
+            $table->uuid('chapter_id')->index();
             $table->string('title');
             $table->text('description');
-            $table->string('type')->index();
-            $table->string('audience')->index();
+            $table->string('type');
+            $table->string('audience');
             $table->boolean('state')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->softDeletes();
+			$table->string('action', 100);
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chapters');
+        Schema::dropIfExists('chapter_histories');
     }
 };
