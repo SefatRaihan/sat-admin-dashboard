@@ -120,12 +120,12 @@
                                         <div class="col-md-12 row">
                                             <div class="col-md-6 mb-2">
                                                 <label class="radio-container mb-3 col-md-12">
-                                                    <input class="" type="radio" name="type" value="Verbal"> Verbal
+                                                    <input class="" type="radio" name="question_type" value="Verbal"> Verbal
                                                 </label>
                                             </div>
                                             <div class="col-md-6 mb-2">
                                                 <label class="radio-container mb-3 col-md-12">
-                                                    <input class="" type="radio" name="type" value="Quant"> Quant
+                                                    <input class="" type="radio" name="question_type" value="Quant"> Quant
                                                 </label>
                                             </div>
                                         </div>
@@ -136,18 +136,18 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Physics"> Physics
+                                                <input class="" type="radio" name="subjects" value="Physics"> Physics
                                             </label>
                                             <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Chemistry"> Chemistry
+                                                <input class="" type="radio" name="subjects" value="Chemistry"> Chemistry
                                             </label>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Biology"> Biology
+                                                <input class="" type="radio" name="subjects" value="Biology"> Biology
                                             </label>
                                             <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Math"> Math
+                                                <input class="" type="radio" name="subjects" value="Math"> Math
                                             </label>
                                         </div>
                                     </div>
@@ -310,6 +310,42 @@
                                             <input type="checkbox" value="Mixed" name="sat_type[]">Mixed
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="d-flex justify-content-between">
+                                <h6><b>Difficulty Level:</b> All Result</h6>
+                            </div>
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="difficulty" value="Easy">
+                                <label class="form-check-label pl-1"><span class="badge badge-pill badge-easy"><b>Easy</b></span></label>
+                            </div>
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="difficulty" value="Medium">
+                                <label class="form-check-label" for="medium"><span class="badge badge-pill badge-medium"><b>Medium</b></span></label>
+                            </div>
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="difficulty" value="Hard">
+                                <label class="form-check-label" for="hard"><span class="badge badge-pill badge-hard"><b>Hard</b></span></label>
+                            </div>
+                            <div class="form-check custom-checkbox d-flex justify-center">
+                                <input type="checkbox" class="difficulty" value="Very Hard">
+                                <label class="form-check-label" for="very-hard"><span class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="slider-container" style="max-width: 100%!important;">
+                                <div class="slider-header">
+                                    <span>Average Time: All Result</span>
+                                </div>
+                                <div class="range-slider">
+                                    <input type="range" min="1" max="120" value="1" id="min-range">
+                                    <input type="range" min="1" max="120" value="120" id="max-range">
+                                </div>
+                                <div class="slider-labels">
+                                    <span id="min-label">0m 1s</span>
+                                    <span id="max-label">2m 0s</span>
                                 </div>
                             </div>
                         </div>
@@ -1161,6 +1197,35 @@
             });
         }
 
+        function show() {
+            let lessonId = $(this).data('id');
+            $('.edit-lesson').data('id', lessonId);
+            $('#proceedBtn').data('lesson-id', lessonId);
+            $('.save-lesson').addClass('d-none');
+            $('.edit-lesson').removeClass('d-none');
+            resetData();
+
+            $.get(`/api/lessons/${lessonId}`, function(response) {
+                $('#lessonpleModalLongTitle').text('Edit Lesson');
+                $('input[name="audience"][value="' + response.sections[0].audience + '"]').prop('checked', true).trigger('change');
+                $('input[name="section"][value="' + response.section + '"]').prop('checked', true).trigger('change');
+                $('#title').val(response.title);
+
+                $.each(response.sections, function(index, section) {
+                    let sectionDiv = $(`.section_div_${index + 1}`);
+                    if (sectionDiv.length) {
+                        sectionDiv.attr('section-id', section.id);
+                        sectionDiv.find('[name="lesson_name"]').val(section.title);
+                        sectionDiv.find('[name="no_of_questions"]').val(section.num_of_questions);
+                        sectionDiv.find('[name="duration"]').val(section.duration);
+                        sectionDiv.find(`[name="sat_type_section_${index+1}"][value="${section.section_type}"]`).prop('checked', true);
+                    }
+                });
+                calculateTotalSectionValues();
+                $('#lessonModal').modal('show');
+            });
+        }
+
         function update(lessonId, e) {
             e.preventDefault();
             $.ajax({
@@ -1237,6 +1302,60 @@
             $('.update-ranking').data('id', lessonId);
             $('#ranking-input').val('');
             $('#detailModalCenter').modal('show');
+        }
+
+        function moveRanking() {
+            let lessonId = $(this).data('id');
+            let direction = $(this).data('direction');
+            let page = $('.pagination .active a').data('page') || 1;
+            let perPage = $('#rowsPerPage').val();
+
+            $.ajax({
+                url: `/api/lessons/${lessonId}/move-ranking`,
+                type: 'POST',
+                data: { direction: direction, _token: '{{ csrf_token() }}' },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('Success', response.message, 'success');
+                        fetchLessons(page, perPage);
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                },
+                error: function(error) {
+                    Swal.fire('Error', 'Failed to update ranking.', 'error');
+                }
+            });
+        }
+
+        function updateRankingModal() {
+            let lessonId = $(this).data('id');
+            let newRanking = $('#ranking-input').val();
+            let page = $('.pagination .active a').data('page') || 1;
+            let perPage = $('#rowsPerPage').val();
+
+            if (!newRanking || newRanking < 1) {
+                Swal.fire('Error', 'Please enter a valid ranking.', 'error');
+                return;
+            }
+
+            $.ajax({
+                url: `/api/lessons/${lessonId}/ranking`,
+                type: 'PATCH',
+                data: { ranking: newRanking, _token: '{{ csrf_token() }}' },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('Success', response.message, 'success');
+                        $('#detailModalCenter').modal('hide');
+                        fetchLessons(page, perPage);
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                },
+                error: function(error) {
+                    Swal.fire('Error', 'Failed to update ranking.', 'error');
+                }
+            });
         }
     </script>
     <script>

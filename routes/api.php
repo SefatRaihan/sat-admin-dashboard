@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ChapterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ExamController;
@@ -112,5 +113,14 @@ Route::group([ 'as' => 'api.','middleware' => ['auth', 'web', 'check.permission'
     Route::post('/exams/{id}/move-ranking', [ExamController::class, 'moveRanking']);
     // Route::middleware('auth')->get('/student-history', [StudentController::class, 'history']);
     Route::post('/feedback', [FeedbackController::class, 'store']);
+
+    Route::prefix('chapters')->group(function () {
+        Route::get('/', [ChapterController::class, 'index']);
+        Route::post('/', [ChapterController::class, 'store']);
+        Route::get('/{id}', [ChapterController::class, 'show']);
+        Route::patch('/{id}', [ChapterController::class, 'update']);
+        Route::patch('/{id}/state', [ChapterController::class, 'updateState']);
+        Route::post('/delete', [ChapterController::class, 'destroy']);
+    });
 
 });

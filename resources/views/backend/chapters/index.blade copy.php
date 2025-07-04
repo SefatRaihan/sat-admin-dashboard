@@ -4,7 +4,7 @@
         $prependHtml = '
             <div class="d-flex align-items-center justify-content-center" style="margin-right: 10px">
                 <a data-toggle="modal" data-target="#chapterModal" class="create-button btn d-flex btn-link btn-float font-size-sm mr-3 font-weight-semibold text-default legitRipple ml-2 text-white btn-sm" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px">
-                    <i class="fas fa-plus" style="font-size: 12px; margin-right: 5px; margin-top: 5px;"></i> Add Chapter
+                    <i class="fas fa-plus" style="font-size: 12px; margin-right: 5px; margin-top: 5px;"></i> Manage Chapter
                 </a>
             </div>
         ';
@@ -29,7 +29,7 @@
                     <input type="text" id="search" class="form-control search_input" placeholder="Search Chapter" style="padding-left: 40px">
                 </div>
                 <div class="d-flex">
-                    <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px; padding: 11px .875rem !important;" onclick="filter()">
+                    <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="filter()">
                         <img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters
                     </button>
                 </div>
@@ -84,9 +84,9 @@
         <div class="modal fade" id="chapterModal" tabindex="-1" role="dialog" aria-labelledby="chapterModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document" style="width:60%">
                 <div class="modal-content" style="border-radius: 24px;">
-                    <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                        <h5 class=""><b id="chapterModalLongTitle">Create Chapter</b></h5>
-                        <p class="pb-2">Step 1 : Choose Audience, Subject, title and description to Get Started</p>
+                    <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px;">
+                        <h5 class="modal-title" id="chapterModalLongTitle">Create Chapter</h5>
+                        <p class="pb-2">Step 1: Choose Audience, Subject, Title, and Description to Get Started</p>
                     </div>
                     <div class="modal-body">
                         <div>
@@ -95,55 +95,65 @@
                                 <div class="col-md-6 row">
                                     <label class="radio-container mb-3 col-md-12 custom-radio">
                                         <input class="sat_1" type="radio" name="audience" value="High School"> High School
+                                        <span class="form-check-label"></span>
                                     </label>
                                     <label class="radio-container mb-3 col-md-12 custom-radio">
                                         <input class="sat_1" type="radio" name="audience" value="Graduation"> Graduation
+                                        <span class="form-check-label"></span>
                                     </label>
                                 </div>
                                 <div class="col-md-6 row">
                                     <label class="radio-container mb-3 col-md-12 custom-radio">
                                         <input class="sat_1" type="radio" name="audience" value="College"> College
+                                        <span class="form-check-label"></span>
                                     </label>
                                     <label class="radio-container mb-3 col-md-12 custom-radio">
                                         <input class="sat_2" type="radio" name="audience" value="SAT 2"> SAT 2
+                                        <span class="form-check-label"></span>
                                     </label>
                                 </div>
                             </div>
-                            <div class="">
+                            <div>
                                 <div id="sat_type_1" class="d-none">
                                     <h5 class="mt-3 label-header">2. Select the Question Type</h5>
                                     <div class="row">
                                         <div class="col-md-12 row">
                                             <div class="col-md-6 mb-2">
-                                                <label class="radio-container mb-3 col-md-12">
-                                                    <input class="" type="radio" name="type" value="Verbal"> Verbal
+                                                <label class="radio-container mb-3 col-md-12 custom-radio">
+                                                    <input type="radio" name="subject" value="Verbal"> Verbal
+                                                    <span class="form-check-label"></span>
                                                 </label>
                                             </div>
                                             <div class="col-md-6 mb-2">
-                                                <label class="radio-container mb-3 col-md-12">
-                                                    <input class="" type="radio" name="type" value="Quant"> Quant
+                                                <label class="radio-container mb-3 col-md-12 custom-radio">
+                                                    <input type="radio" name="subject" value="Quant"> Quant
+                                                    <span class="form-check-label"></span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="sat_type_2" class="d-none">
-                                    <h5 class="mt-3"><strong>2. Select the Question Subject</strong></h5>
+                                    <h5 class="mt-3 label-header">2. Select the Question Subject</h5>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Physics"> Physics
+                                            <label class="radio-container mb-3 col-md-12 custom-radio">
+                                                <input type="radio" name="subject" value="Physics"> Physics
+                                                <span class="form-check-label"></span>
                                             </label>
-                                            <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Chemistry"> Chemistry
+                                            <label class="radio-container mb-3 col-md-12 custom-radio">
+                                                <input type="radio" name="subject" value="Chemistry"> Chemistry
+                                                <span class="form-check-label"></span>
                                             </label>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Biology"> Biology
+                                            <label class="radio-container mb-3 col-md-12 custom-radio">
+                                                <input type="radio" name="subject" value="Biology"> Biology
+                                                <span class="form-check-label"></span>
                                             </label>
-                                            <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Math"> Math
+                                            <label class="radio-container mb-3 col-md-12 custom-radio">
+                                                <input type="radio" name="subject" value="Math"> Math
+                                                <span class="form-check-label"></span>
                                             </label>
                                         </div>
                                     </div>
@@ -263,11 +273,6 @@
 
     @push('css')
     <style>
-        #chartdiv, #areaChartdiv {
-            width: 100%;
-            height: 300px;
-        }
-
         input[type="radio"] {
             accent-color: #691D5e;
         }
@@ -280,42 +285,12 @@
         .search_input {
             width: 400px;
             padding: 12px 24px;
-            background-color: transparent;
-            font-size: 14px;
-            color: #575756;
             background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 0 3 3 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-size: 18px 18px;
             background-position: 10px center;
             border-radius: 50px;
             padding-left: 36px;
-        }
-
-        .search_input::placeholder {
-            padding-left: 30px;
-        }
-
-        .nav-tabs {
-            border: 1px solid #ddd;
-            background-color: #F9FAFB;
-            border-radius: 8px;
-        }
-
-        .nav-tabs .nav-link.active {
-            color: #000;
-            background-color: #fff;
-            border-color: transparent;
-            padding: 8px;
-            margin-top: 3px;
-            margin-left: 3px;
-            border-radius: 7px;
-            font-weight: bold;
-        }
-
-        .nav-tabs .nav-link:hover {
-            background-color: transparent;
-            color: #333;
-            border-radius: 8px;
         }
 
         input[type='checkbox'] {
@@ -325,7 +300,7 @@
             appearance: none;
             background-color: white;
             cursor: pointer;
-            border-radius: 4px !important;
+            border-radius: 4px;
         }
 
         input[type='checkbox']:checked {
@@ -344,17 +319,8 @@
             height: 100%;
         }
 
-        .dataTable tbody > tr.selected, .dataTable tbody > tr > .selected {
+        .dataTable tbody > tr.selected {
             background-color: #F1E9F0;
-        }
-
-        .change-btn {
-            color: #ffffff;
-            background-color: #521749;
-            border: 1px solid #A16A99;
-            width: 80px;
-            border-radius: 5px;
-            font-weight: bold;
         }
 
         .modal .form-check {
@@ -365,7 +331,6 @@
             align-items: center;
             padding-left: 46px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .custom-radio .form-check-input:checked ~ .form-check {
@@ -376,16 +341,6 @@
         .form-check-input:checked {
             background-color: #732066;
             border-color: #732066;
-            margin: 2px;
-        }
-
-        .form-check-input:checked + .form-check-label {
-            color: #344054;
-            font-weight: 500;
-        }
-
-        .form-check:hover {
-            border-color: #732066;
         }
 
         .form-check-input {
@@ -393,12 +348,7 @@
             opacity: 0;
         }
 
-        .form-check-label {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .custom-radio .form-check-label::before {
+        .form-check-label::before {
             content: "";
             position: absolute;
             left: -30px;
@@ -409,46 +359,12 @@
             border: 2px solid #D0D5DD;
             border-radius: 50%;
             background-color: #fff;
-            transition: all 0.3s ease;
         }
 
-        .custom-radio .form-check-input:checked + .form-check-label::before {
+        .form-check-input:checked + .form-check-label::before {
             border-color: #732066;
             background-color: #732066;
             box-shadow: 0 0 0 2px white, 0 0 0 4px #732066;
-        }
-
-        .status-radio .form-check-label::before {
-            content: "";
-            position: absolute;
-            left: -30px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            border: 2px solid #D0D5DD;
-            border-radius: 50%;
-            background-color: #fff;
-            transition: all 0.3s ease;
-        }
-
-        .status-radio .form-check-input:checked + .form-check-label::before {
-            border-color: #732066;
-            background-color: #732066;
-            width: 10px;
-            height: 10px;
-            margin-left: 4px;
-            box-shadow: 0 0 0 2px white, 0 0 0 4px #732066;
-        }
-
-        .form-check-input:checked ~ .form-check-label {
-            color: #344054;
-            font-weight: 500;
-        }
-
-        .custom-radio:has(.form-check-input:checked) {
-            background-color: #F1E9F0;
-            border-color: #A16A99;
         }
 
         .floating-sidebar {
@@ -461,16 +377,10 @@
             box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
             transition: right 0.3s ease-in-out;
             z-index: 1050;
-            display: flex;
-            flex-direction: column;
         }
 
-        .filter-sidebar-content {
-            flex-grow: 1;
-            height: calc(95vh - 120px);
-            overflow-y: auto;
-            padding-left: 15px;
-            padding-bottom: 60px;
+        .floating-sidebar.open {
+            right: 0;
         }
 
         .sidebar-overlay {
@@ -484,6 +394,16 @@
             z-index: 1040;
         }
 
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        .filter-sidebar-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
         .sidebar-header {
             padding: 18px;
             display: flex;
@@ -492,114 +412,11 @@
             border-bottom: 1px solid #D0D5DD;
         }
 
-        .floating-sidebar.open {
-            right: 0;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        .filter-group {
-            margin-bottom: 10px;
-        }
-
         .form-check {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
             gap: 8px;
             cursor: pointer;
-        }
-
-        .nested-options {
-            margin-left: 24px;
-            display: none;
-        }
-
-        .toggle-icon {
-            cursor: pointer;
-            font-size: 14px;
-            transition: transform 0.3s ease-in-out;
-            margin-left: auto;
-        }
-
-        .toggle-icon.open {
-            transform: rotate(180deg);
-        }
-
-        .form-check-input {
-            width: 18px;
-            height: 18px;
-            accent-color: #4B1D3F;
-        }
-
-        .form-check-label {
-            font-size: 14px;
-            color: #333;
-        }
-
-        .slider-container {
-            width: 100%;
-            max-width: 300px;
-            font-family: Arial, sans-serif;
-        }
-
-        .slider-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .reset-slider {
-            background: none;
-            border: none;
-            color: black;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            text-decoration: underline;
-        }
-
-        .range-slider {
-            position: relative;
-            display: flex;
-            align-items: center;
-            width: 100%;
-        }
-
-        .range-slider input {
-            -webkit-appearance: none;
-            width: 100%;
-            position: absolute;
-            background: transparent;
-            pointer-events: none;
-        }
-
-        .range-slider input::-webkit-slider-runnable-track {
-            background: #E0E0E0;
-            height: 4px;
-            border-radius: 2px;
-        }
-
-        .range-slider input::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            background: white;
-            border: 3px solid #69275C;
-            border-radius: 50%;
-            cursor: pointer;
-            pointer-events: auto;
-            margin-top: -6px;
-        }
-
-        .slider-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            margin-top: 8px;
         }
 
         .close-btn {
@@ -607,12 +424,6 @@
             border: none;
             font-size: 24px;
             cursor: pointer;
-        }
-
-        .task-form .form-control {
-            border: 1px solid #ddd;
-            padding-left: 4px;
-            padding-right: 4px;
         }
 
         .switch {
@@ -659,28 +470,6 @@
         input:checked+.slider:before {
             transform: translateX(18px);
         }
-
-        .new-question, .next-step, .back-btn {
-            border-radius: 8px;
-        }
-
-        .modal-content {
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        .badge-pill {
-            border-radius: 50px;
-            padding: 5px 15px;
-            font-size: 14px;
-        }
-
-        .badge-easy { background-color: #d4edda; color: #28a745; border: 1px solid #28a745; }
-        .badge-medium { background-color: #d1ecf1; color: #17a2b8; border: 1px solid #17a2b8; }
-        .badge-hard { background-color: #fff3cd; color: #fab905; border: 1px solid #fab905; }
-        .badge-very-hard { background-color: #f8d7da; color: #dc3545; border: 1px solid #dc3545; }
-
     </style>
     @endpush
 
@@ -885,7 +674,7 @@
                         $('#title').val(chapter.title);
                         $('#description').val(chapter.description).trigger('input');
                         $(`input[name="audience"][value="${chapter.audience}"]`).prop('checked', true).trigger('change');
-                        $(`input[name="type"][value="${chapter.type}"]`).prop('checked', true);
+                        $(`input[name="subject"][value="${chapter.type}"]`).prop('checked', true);
                         $('#chapterModal').modal('show');
                     },
                     error: function() {
@@ -970,7 +759,7 @@
                     title: $('#title').val(),
                     description: $('#description').val(),
                     audience: $('input[name="audience"]:checked').val(),
-                    type: $('input[name="type"]:checked').val(),
+                    type: $('input[name="subject"]:checked').val(),
                 };
             }
 
@@ -1002,8 +791,8 @@
             $('.apply-filter-btn').on('click', function() {
                 currentPage = 1;
                 fetchChapters(currentPage, perPage);
-                // $('#taskSidebar').removeClass('open');
-                // $('#taskSidebarOverlay').removeClass('active');
+                $('#taskSidebar').removeClass('open');
+                $('#taskSidebarOverlay').removeClass('active');
             });
 
             $('.reset-filter').on('click', function() {

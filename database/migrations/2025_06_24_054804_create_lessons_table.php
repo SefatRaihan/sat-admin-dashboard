@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
+            $table->enum('audience', ['High School', 'Graduation', 'College', 'SAT 2']);
+            $table->enum('question_type', ['Verbal', 'Quant', 'Physics', 'Chemistry', 'Biology', 'Math'])->nullable();
+            $table->boolean('state')->default(true);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
