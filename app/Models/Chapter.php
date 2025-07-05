@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Chapter extends Model
 {
-        use HasFactory, SoftDeletes, Historiable, UserTrackable;
+    use HasFactory, SoftDeletes, Historiable, UserTrackable;
 
     protected $guarded = ['id'];
 
