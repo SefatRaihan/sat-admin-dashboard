@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ChapterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ExamController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\MainQuestionController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\Api\SupervisorController;
 use App\Http\Controllers\Api\ExamSectionController;
+use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
@@ -112,5 +114,21 @@ Route::group([ 'as' => 'api.','middleware' => ['auth', 'web', 'check.permission'
     Route::post('/exams/{id}/move-ranking', [ExamController::class, 'moveRanking']);
     // Route::middleware('auth')->get('/student-history', [StudentController::class, 'history']);
     Route::post('/feedback', [FeedbackController::class, 'store']);
+
+    Route::prefix('chapters')->group(function () {
+        Route::get('/', [ChapterController::class, 'index']);
+        Route::post('/', [ChapterController::class, 'store']);
+        Route::get('/{id}', [ChapterController::class, 'show']);
+        Route::patch('/{id}', [ChapterController::class, 'update']);
+        Route::patch('/{id}/state', [ChapterController::class, 'updateState']);
+        Route::post('/delete', [ChapterController::class, 'destroy']);
+    });
+
+    Route::get('/lessons', [LessonController::class, 'index']);
+    Route::post('/lessons', [LessonController::class, 'store']);
+    Route::get('/lessons/{id}', [LessonController::class, 'show']);
+    Route::post('/lessons/{id}', [LessonController::class, 'update']);
+    Route::post('/lessons/delete', [LessonController::class, 'destroy']);
+    Route::patch('/lessons/{id}/update-status', [LessonController::class, 'updateStatus']);
 
 });

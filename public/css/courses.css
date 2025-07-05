@@ -1,0 +1,342 @@
+    .course-page-container {
+        display: flex;
+        gap: 30px;
+        max-width: 100%;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden; /* Ensures rounded corners */
+        border: 1px solid #D0D5DD;
+    }
+
+    /* Main Content Area */
+    .main-content {
+        flex: 2.3;
+        padding: 30px;
+        padding-right: 0px;
+    }
+
+    .video-player-section {
+        background-color: #000; /* Background for video player */
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .video-player-section video {
+        display: block; /* Remove extra space below video */
+        width: 100%;
+        height: auto;
+    }
+
+    .course-meta .tags {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap; /* Allow tags to wrap */
+    }
+
+    .course-meta .tags span {
+        background-color: #F1E9F0; /* Light purple-blue */
+        color: #732067; /* Darker purple-blue */
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .course-meta h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #222;
+        margin-bottom: 15px;
+        line-height: 1.3;
+    }
+
+    .course-meta .description {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    /* Sidebar Area */
+    .sidebar2 {
+        flex: 1.2; /* Takes less space */
+        padding: 30px 20px;
+    }
+
+    .student-profile-card {
+        display: flex;
+        align-items: center;
+        background-color: #691D5E;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        margin-bottom: 30px;
+        gap: 8px; /* Spacing between items */
+        color: #fff;
+    }
+
+    .student-profile-card .profile-avatar img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4a67ed;
+    }
+
+    .student-profile-card .profile-info {
+        flex-grow: 1; /* Allows it to take available space */
+    }
+
+    .student-profile-card .name {
+        font-weight: 600;
+        font-size: 18px;
+        color: #FFFFFF;
+    }
+
+    .student-profile-card .role {
+        font-size: 14px;
+        color: #FFFFFF;
+    }
+
+    .student-profile-card .progress-info {
+        width: 40%; /* Take full width on a new line */
+        margin-top: 15px;
+    }
+
+    .student-profile-card .progress-label {
+        font-size: 14px;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+
+    .student-profile-card .progress-percentage {
+        font-weight: 600;
+        color: #fff;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .student-profile-card .progress-bar-container {
+        width: 100%;
+        height: 8px;
+        background-color: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .student-profile-card .progress-bar {
+        height: 100%;
+        background-color: #D4BAD0;
+        border-radius: 4px;
+        width: 0%; /* Will be set by JS */
+        transition: width 0.5s ease-out;
+    }
+
+    /* Course Lessons List (Collapsible Sections) */
+    .course-lessons-list {
+        margin-top: 20px;
+    }
+
+    .chapter-section {
+        margin-bottom: 15px;
+        background-color: #fff;
+        border-radius: 25px;
+        overflow: hidden; /* For border-radius on children */
+        border: 1px solid #eee;
+    }
+
+    .chapter-header {
+        display: flex;
+        margin: 0px !important;
+        align-items: center;
+        border-radius: 0px !important;
+        justify-content: space-between;
+        padding: 15px 20px;
+        background-color: #F9FAFB; /* Lighter background for header */
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+        transition: background-color 0.2s ease;
+    }
+
+    .chapter-header:hover {
+        background-color: #eaf1fa;
+    }
+
+    .chapter-header.active {
+        background-color: #F9FAFB; /* Highlight active header */
+    }
+
+    .chapter-title {
+        font-weight: 600;
+        font-size: 17px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 70%;
+    }
+
+    .chapter-title i {
+        color: #4a67ed;
+    }
+
+    .chapter-meta {
+        font-size: 10px;
+        color: #777;
+        display: flex;
+        gap: 15px;
+    }
+
+    .chapter-toggle-icon {
+        font-size: 14px;
+        color: #666;
+        transition: transform 0.3s ease;
+    }
+
+    .chapter-section.expanded .chapter-toggle-icon {
+        transform: rotate(90deg); /* Rotate for expanded state */
+    }
+
+    .chapter-content {
+        display: none; /* Hidden by default */
+        padding: 10px 0;
+    }
+
+    .chapter-section.expanded .chapter-content {
+        display: block; /* Show when expanded */
+    }
+
+    /* Lesson Items */
+    .lesson-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border-bottom: 1px dashed #eee;
+    }
+
+    .lesson-item:last-child {
+        border-bottom: none; /* No border for the last lesson in a chapter */
+    }
+
+    .lesson-item:hover {
+        background-color: #f7f7f7;
+    }
+
+    .lesson-item.active {
+        background-color: #e0e7ff; /* Highlight currently playing lesson */
+        color: #4a67ed;
+        font-weight: 500;
+    }
+
+    .lesson-item-icon {
+        width: 35px;
+        height: 35px;
+        min-width: 35px; /* Prevent shrinking */
+        background-color: #eff2f7;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 15px;
+        font-size: 16px;
+        color: #666;
+    }
+
+    .lesson-item.active .lesson-item-icon {
+        background-color: #4a67ed;
+        color: #fff;
+    }
+
+    .lesson-item .lesson-details {
+        flex-grow: 1;
+    }
+
+    .lesson-item .lesson-name {
+        font-size: 15px;
+        color: inherit; /* Inherit color from active state */
+    }
+
+    .lesson-item .lesson-duration {
+        font-size: 13px;
+        color: #888;
+        margin-top: 3px;
+    }
+
+    .lesson-item.active .lesson-duration {
+        color: rgba(255, 255, 255, 0.8); /* Adjust for active background */
+    }
+
+    .lesson-item .lesson-status {
+        margin-left: 15px;
+        font-size: 18px;
+        color: #4CAF50; /* Green checkmark */
+        display: flex; /* For progress bar/icon alignment */
+        align-items: center;
+        gap: 5px;
+    }
+
+    .lesson-item .lesson-status .progress-bar-tiny {
+        width: 40px;
+        height: 4px;
+        background-color: #e9ecef;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-right: 5px;
+    }
+
+    .lesson-item .lesson-status .progress-bar-tiny div {
+        height: 100%;
+        background-color: #6c5ce7; /* Purple for progress */
+        border-radius: 2px;
+    }
+
+    .lesson-item .lesson-status .progress-percentage-small {
+        font-size: 12px;
+        color: #6c5ce7;
+        font-weight: 600;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1024px) {
+        .course-page-container {
+            flex-direction: column;
+            width: 95%;
+        }
+        .sidebar2 {
+            border-left: none;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .main-content {
+            padding-bottom: 0; /* Adjust padding */
+        }
+    }
+
+    @media (max-width: 768px) {
+        .main-content, .sidebar2 {
+            padding: 20px;
+        }
+        .course-meta h1 {
+            font-size: 24px;
+        }
+        .chapter-header {
+            padding: 12px 15px;
+        }
+        .chapter-title {
+            font-size: 16px;
+        }
+        .chapter-meta {
+            font-size: 13px;
+            flex-direction: column; /* Stack meta info */
+            gap: 5px;
+            text-align: right;
+        }
+        .lesson-item {
+            padding: 10px 15px;
+        }
+    }

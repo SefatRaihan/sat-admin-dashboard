@@ -1,0 +1,399 @@
+.content-wrapper {
+    background-color: #fcfaff;
+}
+
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: #fff;
+    color: #555;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.filter-btn.active {
+    background-color: #7b4397; /* Purple color */
+    color: #fff;
+    border-color: #7b4397;
+}
+
+/* Main Content Wrapper */
+.content-wrapper {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+.main-content {
+    flex: 3; /* Takes up more space */
+    min-width: 600px; /* Minimum width for main content before wrapping */
+}
+
+.videosidebar {
+    flex: 1; /* Takes up less space */
+    min-width: 300px; /* Minimum width for videosidebar */
+}
+
+/* Video Player Section */
+.video-player-section {
+    margin-bottom: 30px;
+}
+
+.video-player-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio (9 / 16 * 100) */
+    background-color: #000;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.main-video-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-overlay-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 20px;
+    box-sizing: border-box;
+    pointer-events: none; /* Allows clicks to pass through to video controls if they were real */
+}
+
+.progress-info {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 36px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.progress-percentage {
+    align-self: center; /* Vertically align with the bar */
+}
+
+.progress-bar-vertical-container {
+    width: 10px;
+    height: 150px; /* Height of the vertical bar container */
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end; /* Fill from bottom */
+}
+
+.progress-bar-vertical {
+    width: 100%;
+    background-color: #4CAF50; /* Green fill color */
+    border-radius: 5px;
+}
+
+.completion-bars {
+    display: flex;
+    gap: 10px; /* Space between bar groups */
+    align-items: flex-end; /* Align bars to the bottom */
+}
+
+.bar-group {
+    display: flex;
+    flex-direction: column;
+    height: 150px; /* Max height for bars */
+    justify-content: flex-end; /* Bars fill from bottom */
+    gap: 5px; /* Space between individual bars in a group */
+    width: 20px; /* Width of each bar group */
+}
+
+.bar {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 3px;
+}
+
+/* Video Controls Bottom (simple representation) */
+.video-controls-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+    padding: 15px 20px 10px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font-size: 14px;
+}
+
+.video-time {
+    font-weight: 500;
+}
+
+.control-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.control-icons i {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.timeline-bar {
+    flex-grow: 1;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 2.5px;
+    margin: 0 10px; /* Space around timeline */
+    position: relative;
+}
+
+.timeline-progress {
+    height: 100%;
+    background-color: #7b4397; /* Purple progress */
+    border-radius: 2.5px;
+    position: relative;
+}
+.timeline-progress::after {
+    content: '';
+    position: absolute;
+    right: -7px; /* Half of circle width */
+    top: -4px; /* Half of circle height */
+    width: 14px;
+    height: 14px;
+    background-color: #7b4397;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-sizing: border-box;
+}
+
+/* Course Details */
+.course-details {
+    padding-bottom: 20px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #141B34;
+    font-weight: 500;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.back-link i {
+    font-size: 16px;
+    border: 1px solid #D0D5DD;
+    border-radius: 50%;
+    height: 36px;
+    width: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background-color: #F1E9F0;
+    color: #732067;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.lesson-title {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.lesson-description {
+    font-size: 15px;
+    color: #475467;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Related Videos Sidebar */
+.related-videos {
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.related-video-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.related-video-card:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+.related-video-card:hover {
+    background-color: #f0f0f0;
+}
+
+.related-video-thumbnail {
+    width: 120px; /* Fixed width for thumbnail */
+    height: 70px; /* Fixed height for thumbnail */
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.related-video-info {
+    flex-grow: 1;
+}
+
+.related-video-title {
+    font-size: 15px;
+    color: #333;
+    margin: 0 0 5px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.related-video-description {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 5px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Limit to 1 line */
+    -webkit-box-orient: vertical;
+}
+
+.related-video-meta {
+    display: flex;
+    gap: 10px;
+    font-size: 11px;
+    color: #888;
+}
+
+.related-video-meta i {
+    margin-right: 3px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+    .main-content, .videosidebar {
+        min-width: unset; /* Remove min-width to allow full width on small screens */
+        width: 100%;
+        flex: none; /* Reset flex */
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: none;
+    }
+
+    .filter-buttons {
+        width: 100%;
+        justify-content: space-around;
+        margin-top: 10px;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: space-around;
+        margin-bottom: 10px;
+    }
+
+    .filter-btn, .nav-item {
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .video-overlay-elements {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-end;
+        padding-bottom: 60px; /* Make space for controls */
+    }
+    .progress-info {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+    .completion-bars {
+        margin-bottom: 15px;
+    }
+    .video-controls-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .control-icons {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .timeline-bar {
+        margin: 0;
+        flex-grow: 1; /* Allow timeline to grow */
+    }
+    .video-time {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-buttons {
+        flex-direction: column;
+    }
+    .filter-btn {
+        width: 100%;
+    }
+    .lesson-title {
+        font-size: 24px;
+    }
+}

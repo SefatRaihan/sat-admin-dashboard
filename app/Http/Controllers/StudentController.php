@@ -15,6 +15,23 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'create' => 'Create Form',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'edit' => 'Edit Form',
+        'studentProfile' => 'Student Profile',
+        'checkout' => 'Checkout',
+        'explanation' => 'Explanation',
+        'studentCourse' => 'Student Course',
+        'studentCourseDetails' => 'Student Course Details',
+        'studentVideoLessonDetails' => 'Student Video Lesson Details',
+    ];
+
     public function index()
     {
         return view('backend.students.index');
@@ -78,5 +95,20 @@ class StudentController extends Controller
         ];
 
         return view('backend.students.explanation', compact('exam', 'questions', 'examAttempt', 'flatQuestions', 'questionId'));
+    }
+
+    public function studentCourse()
+    {
+        return view('backend.students.student_course');
+    }
+
+    public function studentCourseDetails()
+    {
+        return view('backend.students.student_course_details');
+    }
+
+    public function studentVideoLessonDetails()
+    {
+        return view('backend.students.student_video_lesson_details');
     }
 }

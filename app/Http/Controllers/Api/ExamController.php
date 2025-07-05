@@ -17,6 +17,24 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ExamController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'restore' => 'Restore',
+        'toggleStatus' => 'Toggle Status',
+        'delete' => 'Delete Multiple Exams',
+        'results' => 'Exam Results',
+        'resultDetails' => 'Exam Result Details',
+        'ranking' => 'Exam Ranking',
+        'updateRanking' => 'Update Exam Ranking',
+        'moveRanking' => 'Move Exam Ranking',
+
+    ];
+
     /**
      * 📌 Get a list of all exams (with optional filters)
      */
@@ -500,7 +518,6 @@ class ExamController extends Controller
             ],
         ]);
     }
-
 
     public function ranking(Request $request)
     {

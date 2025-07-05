@@ -34,6 +34,20 @@ class StudentController extends Controller
     | 500 internal server or db error
     */
 
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'store' => 'Save',
+        'show' => 'Details',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'delete' => 'Delete Multiple Students',
+        'deactivate' => 'Deactivate Students',
+        'sendNotification' => 'Send Notification',
+        'exportExcel' => 'Export Excel',
+        'updateStatus' => 'Update Student Status',
+        'history' => 'Student History',
+    ];
+
     /**
      * Display a listing of the resource.
      *

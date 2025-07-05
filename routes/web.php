@@ -125,6 +125,10 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::post('/api/filter-exam-questions', [FullTestController::class, 'filterExamQuestions'])->name('filter.exam.questions');
     Route::get('/ranking', [ExamController::class, 'ranking'])->name('ranking');
     Route::get('/topic/create', [TopicController::class, 'create'])->name('topic.crate');
+    Route::get('/student/course', [StudentController::class, 'studentCourse'])->name('student.course');
+    Route::get('/student/course/deatils', [StudentController::class, 'studentCourseDetails'])->name('student.course.details');
+    Route::get('/student/video/lesson', [StudentController::class, 'studentVideoLessonDetails'])->name('student.video.lesson.details');
+
 });
 
 

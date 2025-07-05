@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lessons', function (Blueprint $table) {
+        Schema::create('lesson_histories', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
+            $table->uuid('lesson_id')->index();
             $table->enum('audience', ['High School', 'Graduation', 'College', 'SAT 2']);
             $table->enum('question_type', ['Verbal', 'Quant', 'Physics', 'Chemistry', 'Biology', 'Math'])->nullable();
             $table->string('file_name');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->softDeletes();
+            $table->string('action', 100); // Action type: created, updated, deleted
             $table->timestamps();
         });
     }
@@ -35,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lessons');
+        Schema::dropIfExists('lesson_histories');
     }
 };

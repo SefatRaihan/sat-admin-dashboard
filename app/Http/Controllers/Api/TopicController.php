@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Validator;
 
 class TopicController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'store' => 'Save',
+        'show' => 'Details',
+        'getTopic' => 'Get Topic',
+    ];
+
     public function index(Request $request)
     {
         try {
@@ -104,7 +112,7 @@ class TopicController extends Controller
             ], 404);
         }
     }
-     
+
     // public function update(Request $request, $id)
     // {
     //     $validator = Validator::make($request->all(), [
@@ -139,7 +147,7 @@ class TopicController extends Controller
     {
         try {
             $topics = Topic::select('id', 'name as text')->get();
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $topics

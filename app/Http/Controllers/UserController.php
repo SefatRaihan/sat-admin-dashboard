@@ -12,6 +12,19 @@ use Illuminate\Database\QueryException;
 
 class UserController extends Controller
 {
+
+    public static $visiblePermissions = [
+        'index' => 'List',
+        'show' => 'Details',
+        'edit' => 'Edit Form',
+        'update' => 'Update',
+        'destroy' => 'Delete',
+        'trash' => 'Trash',
+        'restore' => 'Restore',
+        'excel' => 'Export Excel',
+        'pdf' => 'Export PDF',
+    ];
+
     public function __construct()
     {
         $this->middleware('check.permission:UserController,index')->only('index');
