@@ -12,6 +12,7 @@ use App\Http\Controllers\MainQuestionController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\Api\SupervisorController;
 use App\Http\Controllers\Api\ExamSectionController;
+use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
@@ -122,5 +123,12 @@ Route::group([ 'as' => 'api.','middleware' => ['auth', 'web', 'check.permission'
         Route::patch('/{id}/state', [ChapterController::class, 'updateState']);
         Route::post('/delete', [ChapterController::class, 'destroy']);
     });
+
+    Route::get('/lessons', [LessonController::class, 'index']);
+    Route::post('/lessons', [LessonController::class, 'store']);
+    Route::get('/lessons/{id}', [LessonController::class, 'show']);
+    Route::post('/lessons/{id}', [LessonController::class, 'update']);
+    Route::post('/lessons/delete', [LessonController::class, 'destroy']);
+    Route::patch('/lessons/{id}/update-status', [LessonController::class, 'updateStatus']);
 
 });

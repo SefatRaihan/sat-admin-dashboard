@@ -28,7 +28,7 @@
                     <input type="text" id="search" class="form-control search_input" placeholder="Search Lesson" style="padding-left: 40px">
                 </div>
                 <div class="d-flex">
-                    <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;">
+                    <button type="button" class="btn pt-0 pb-0 mr-2" style="border: 1px solid #D0D5DD; border-radius: 8px;" onclick="window.filter(this)">
                         <img src="{{ asset('image/icon/layer.png') }}" alt=""> Filters
                     </button>
                 </div>
@@ -42,12 +42,12 @@
                         <thead>
                             <tr class="bg-light">
                                 <th style="width: 20px"><input type="checkbox" id="selectAll"></th>
-                                <th>Question</th>
+                                <th>Lesson</th>
+                                <th>Title</th>
                                 <th>Audience</th>
-                                <th>Q. Type</th>
-                                <th>Exam</th>
-                                <th>Difficulty</th>
-                                <th>Avg. Time</th>
+                                <th>Subject</th>
+                                <th>Course(s)</th>
+                                <th>Total Time</th>
                                 <th>Created</th>
                                 <th>State</th>
                                 <th class="text-center">Action</th>
@@ -55,7 +55,7 @@
                         </thead>
                         <tbody id="lesson-table-body">
                             <tr>
-                                <td colspan="7" class="text-center">Loading...</td>
+                                <td colspan="10" class="text-center">Loading...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -88,9 +88,8 @@
                 <div class="modal-content" style="border-radius: 24px; height:100%">
                     <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
                         <h5 class=""><b id="lessonpleModalLongTitle">Create Lesson</b></h5>
-
                         <p class="pb-2 step-1">Step 1 : Choose Audience and Subject to Get Started</p>
-                        <p class="pb-2 d-none step-2">Step 2 :  Upload Videos and PDF Files</p>
+                        <p class="pb-2 d-none step-2">Step 2 : Upload Videos and PDF Files</p>
                     </div>
                     <div class="modal-body" style="height: 100%;">
                         <div class="step-1">
@@ -120,12 +119,12 @@
                                         <div class="col-md-12 row">
                                             <div class="col-md-6 mb-2">
                                                 <label class="radio-container mb-3 col-md-12">
-                                                    <input class="" type="radio" name="type" value="Verbal"> Verbal
+                                                    <input type="radio" name="question_type" value="Verbal"> Verbal
                                                 </label>
                                             </div>
                                             <div class="col-md-6 mb-2">
                                                 <label class="radio-container mb-3 col-md-12">
-                                                    <input class="" type="radio" name="type" value="Quant"> Quant
+                                                    <input type="radio" name="question_type" value="Quant"> Quant
                                                 </label>
                                             </div>
                                         </div>
@@ -136,18 +135,18 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Physics"> Physics
+                                                <input type="radio" name="question_type" value="Physics"> Physics
                                             </label>
                                             <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Chemistry"> Chemistry
+                                                <input type="radio" name="question_type" value="Chemistry"> Chemistry
                                             </label>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Biology"> Biology
+                                                <input type="radio" name="question_type" value="Biology"> Biology
                                             </label>
                                             <label class="radio-container mb-3 col-md-12">
-                                                <input class="" type="radio" name="type" value="Math"> Math
+                                                <input type="radio" name="question_type" value="Math"> Math
                                             </label>
                                         </div>
                                     </div>
@@ -163,14 +162,12 @@
                                             <tr>
                                                 <th>Name</th>
                                                 <th>File Type</th>
-                                                <th>File size</th>
+                                                <th>File Size</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="lessonsTableBody">
-                                            </tbody>
+                                        <tbody id="lessonsTableBody"></tbody>
                                     </table>
                                 </div>
-
                                 <div class="upload-files-section">
                                     <h2>Upload Files</h2>
                                     <div class="drop-zone" id="dropZone">
@@ -181,9 +178,7 @@
                                         <button id="chooseFilesBtn">Choose files</button>
                                         <p>[Max: 350MB]</p>
                                     </div>
-
-                                    <div class="uploading-list" id="uploadingList">
-                                        </div>
+                                    <div class="uploading-list" id="uploadingList"></div>
                                 </div>
                             </div>
                         </div>
@@ -289,25 +284,22 @@
                                     </div>
                                     <div class="nested-options collapse" id="sectionTypes">
                                         <div class="form-check">
-                                            <input type="checkbox" value="Physics" name="sat_type[]">Physics
+                                            <input type="checkbox" value="Physics" name="question_type[]">Physics
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" value="Chemistry" name="sat_type[]">Chemistry
+                                            <input type="checkbox" value="Chemistry" name="question_type[]">Chemistry
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" value="Biology" name="sat_type[]">Biology
+                                            <input type="checkbox" value="Biology" name="question_type[]">Biology
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" value="Math" name="sat_type[]">Math
+                                            <input type="checkbox" value="Math" name="question_type[]">Math
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" value="Verbal" name="sat_type[]">Verbal
+                                            <input type="checkbox" value="Verbal" name="question_type[]">Verbal
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" value="Quant" name="sat_type[]">Quant
-                                        </div>
-                                        <div class="form-check">
-                                            <input type="checkbox" value="Mixed" name="sat_type[]">Mixed
+                                            <input type="checkbox" value="Quant" name="question_type[]">Quant
                                         </div>
                                     </div>
                                 </div>
@@ -735,17 +727,42 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-        .badge-pill {
-            border-radius: 50px;
-            padding: 5px 15px;
-            font-size: 14px;
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #E0E0E0;
+            border-radius: 4px;
+            overflow: hidden;
         }
 
-        .badge-easy { background-color: #d4edda; color: #28a745; border: 1px solid #28a745; }
-        .badge-medium { background-color: #d1ecf1; color: #17a2b8; border: 1px solid #17a2b8; }
-        .badge-hard { background-color: #fff3cd; color: #fab905; border: 1px solid #fab905; }
-        .badge-very-hard { background-color: #f8d7da; color: #dc3545; border: 1px solid #dc3545; }
+        .progress-bar {
+            height: 100%;
+            background-color: #691D5E;
+            transition: width 0.3s ease-in-out;
+        }
 
+        .progress-percentage {
+            margin-left: 10px;
+            font-size: 12px;
+            color: #344054;
+        }
+
+        .uploading-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #D0D5DD;
+        }
+
+        .delete-icon {
+            cursor: pointer;
+            color: #d33;
+        }
+
+        .drop-zone.dragover {
+            background-color: #F1E9F0;
+            border: 2px dashed #691D5E;
+        }
     </style>
     @endpush
 
@@ -764,11 +781,13 @@
                 $("#sat_type_2").addClass("d-none");
             });
 
-            $('.next-step-2').on('click', function() {
+            $('.next-step-2').on('click', function(e) {
+                e.preventDefault();
                 $('.step-1').addClass('d-none');
                 $('.step-2').removeClass('d-none');
                 $('.save-lesson').removeClass('d-none');
                 $('.next-step-2').addClass('d-none');
+                $('#lessonpleModalLongTitle').text('Upload Lesson Files');
             });
 
             // Sidebar toggle
@@ -796,32 +815,6 @@
                 target.find('input[type="checkbox"]').prop('checked', this.checked);
             });
 
-            // Slider for average time
-            const minRange = $('#min-range');
-            const maxRange = $('#max-range');
-            const minLabel = $('#min-label');
-            const maxLabel = $('#max-label');
-
-            function updateSlider() {
-                let minValue = parseInt(minRange.val());
-                let maxValue = parseInt(maxRange.val());
-
-                if (maxValue - minValue < 10) {
-                    if (minValue > maxValue - 10) minRange.val(maxValue - 10);
-                    else maxRange.val(minValue + 10);
-                }
-
-                minValue = parseInt(minRange.val());
-                maxValue = parseInt(maxRange.val());
-
-                minLabel.text(`${Math.floor(minValue / 60)}m ${minValue % 60}s`);
-                maxLabel.text(`${Math.floor(maxValue / 60)}m ${maxValue % 60}s`);
-            }
-
-            minRange.on('input', updateSlider);
-            maxRange.on('input', updateSlider);
-            updateSlider();
-
             // Checkbox selection
             function toggleDeleteButton() {
                 $('.delete-btn').toggleClass('d-none', $('.row-checkbox:checked').length === 0);
@@ -842,24 +835,11 @@
             });
 
             // Lesson modal handling
-            $('.sat_2').on('change', function() {
-                $('.sat_type_2').removeClass('d-none');
-                $('.sat_type_1').addClass('d-none');
-            });
-
-            $('.sat_1').on('change', function() {
-                $('.sat_type_1').removeClass('d-none');
-                $('.sat_type_2').addClass('d-none');
-            });
-
-            $(document).on('input change', '.no_of_lessons, .duration', calculateTotalSectionValues);
-            $(document).on('change', 'input[name="section"]', section);
             $(document).on('click', '.save-lesson', store);
             $(document).on('click', '.lesson-delete', destroy);
             $(document).on('change', '.toggle-status', updateState);
             $(document).on('click', '.edit-btn', show);
             $(document).on('click', '.create-button', function() {
-                // $('.save-lesson').removeClass('d-none');
                 $('.edit-lesson').addClass('d-none');
                 resetData();
             });
@@ -873,10 +853,6 @@
                 let lessonId = $('.edit-lesson').data('id');
                 update(lessonId, e);
             });
-
-            $(document).on('click', '.openDetailModal', openDetailModal);
-            $(document).on('click', '.move-ranking', moveRanking);
-            $(document).on('click', '.update-ranking', updateRankingModal);
 
             // Datatable initialization
             let currentPage = 1;
@@ -915,372 +891,17 @@
                 $('input[name="crated_end_at"]').val('');
                 $('input[name="status"][value="All"]').prop('checked', true);
                 $('.filter-group input:checkbox').prop('checked', false);
-                $('.custom-checkbox input:checkbox').prop('checked', false);
-                minRange.val(1);
-                maxRange.val(120);
-                updateSlider();
                 fetchLessons(1, $('#rowsPerPage').val());
             });
-        });
 
-        function section() {
-            var sectionValue = $('input[name="section"]:checked').val();
-            $('.section_part').addClass('d-none');
-            for (let i = 1; i <= sectionValue; i++) {
-                $('.section_div_' + i).removeClass('d-none');
-            }
-            calculateTotalSectionValues();
-        }
-
-        function calculateTotalSectionValues() {
-            let totalLessons = 0;
-            let totalDuration = 0;
-
-            $('.section_part:not(.d-none)').each(function() {
-                const no_of_lessons = parseInt($(this).find('input[name="no_of_questions"]').val()) || 0;
-                const duration = parseInt($(this).find('input[name="duration"]').val()) || 0;
-                totalLessons += no_of_lessons;
-                totalDuration += duration;
-            });
-
-            $('#total_questions').val(totalLessons);
-            $('#total_duration').val(totalDuration);
-        }
-
-        function store(e) {
-            e.preventDefault();
-            $.ajax({
-                url: '/api/lessons',
-                type: 'POST',
-                data: getFormData(),
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire('Success', 'Lesson created successfully!', 'success').then(() => {
-                            window.location.href = response.redirect;
-                        });
-                    } else {
-                        Swal.fire('Error', 'Failed to create lesson!', 'error');
-                    }
-                },
-                error: function(error) {
-                    let errors = error.responseJSON.errors;
-                    let errorMessage = errors ? Object.keys(errors).map(field => `${field.replace('_', ' ')}: ${errors[field].join(', ')}`).join('\n') : 'An unexpected error occurred.';
-                    Swal.fire('Validation Error', errorMessage, 'error');
-                }
-            });
-        }
-
-        function fetchLessons(page = 1, perPage = 10) {
-            let filters = {
-                search: $('.search_input').val(),
-                difficulty: $('.difficulty:checked').map((_, el) => el.value).get(),
-                crated_start_at: $('input[name="crated_start_at"]').val(),
-                crated_end_at: $('input[name="crated_end_at"]').val(),
-                status: $('input[name="status"]:checked').val(),
-                audience: $('input[name="audience[]"]:checked').map((_, el) => el.value).get(),
-                sat_type: $('input[name="sat_type[]"]:checked').map((_, el) => el.value).get(),
-                created_by: $('.created_by:checked').map((_, el) => el.value).get(),
-                average_time: {
-                    min: $('#min-range').val(),
-                    max: $('#max-range').val()
-                }
-            };
-
-            $.ajax({
-                url: `/api/ranking?page=${page}&per_page=${perPage}`,
-                type: 'GET',
-                data: filters,
-                success: function(response) {
-                    let lessonNullList = $('#lessonNullList');
-                    let lessonList = $('#lessonList');
-                    let tableBody = $('#lesson-table-body');
-                    let maxLessonCount = response.total;
-
-                    $('#max-lesson-count').text(maxLessonCount);
-
-                    if (response.data.length === 0) {
-                        if (page === 1 && Object.values(filters).every(val => !val || (Array.isArray(val) && !val.length))) {
-                            lessonNullList.removeClass('d-none');
-                            lessonList.addClass('d-none');
-                        } else {
-                            lessonNullList.addClass('d-none');
-                            lessonList.removeClass('d-none');
-                            tableBody.html('<tr><td colspan="11" class="text-center">No lessons found.</td></tr>');
-                        }
-                    } else {
-                        lessonNullList.addClass('d-none');
-                        lessonList.removeClass('d-none');
-
-                        let rows = '';
-                        $.each(response.data, function(index, lesson) {
-                            let statusChecked = lesson.status === 'active' ? 'checked' : '';
-
-                            rows += `<tr>
-                                <td><input type="checkbox" class="row-checkbox lesson-row" value="${lesson.uuid}"></td>
-                                <td>
-                                    <video width="70" height="50" controls>
-                                    <source src="movie.mp4" type="video/mp4">
-                                    </video>
-                                </td>
-                                <td>Variables & Expressions</td>
-                                <td>High School</td>
-                                <td>Verbal</td>
-                                <td>Fundamentals of Algebra</td>
-                                <td>50 min 52 s</td>
-                                <td>22 Jan, 25 Admin</td>
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" class="toggle-status" data-id="${lesson.id}" ${statusChecked}>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-                                    <button data-uuid="f120efeb-1bb6-436c-90cc-7c467469f314" class="btn btn-sm edit-lesson-btn" data-toggle="modal" data-target="#lessonEditModelCenter">
-                                        <i class="far fa-edit"></i> Edit
-                                    </button>
-                                </td>
-                            </tr>`;
-                        });
-                        tableBody.html(rows);
-                        updatePagination(response, page);
-                    }
-                },
-                error: function() {
-                    Swal.fire('Error', 'Error fetching lessons.', 'error');
-                }
-            });
-        }
-
-        function updatePagination(response, currentPage) {
-            let totalResults = response.total;
-            let perPage = response.per_page;
-            let totalPages = response.last_page;
-            let start = response.from || 0;
-            let end = response.to || 0;
-
-            $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
-            $('#total-lessons').text(`${totalResults} Lessons`);
-
-            let paginationHtml = `
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" data-page="1">«</a>
-                </li>
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" data-page="${currentPage - 1}">‹</a>
-                </li>
-            `;
-
-            if (currentPage > 2) {
-                paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`;
-                paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
-            }
-
-            for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages, currentPage + 1); i++) {
-                paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <a class="page-link" href="#" data-page="${i}">${i}</a>
-                </li>`;
-            }
-
-            if (currentPage < totalPages - 1) {
-                paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
-                paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
-            }
-
-            paginationHtml += `
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                    <a class="page-link" href="#" data-page="${currentPage + 1}">›</a>
-                </li>
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                    <a class="page-link" href="#" data-page="${totalPages}">»</a>
-                </li>
-            `;
-
-            $('#pagination-links').html(paginationHtml);
-        }
-
-        function formatDate(dateString) {
-            let date = new Date(dateString);
-            return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-        }
-
-        function updateState() {
-            let lessonId = $(this).data('id');
-            let newStatus = $(this).is(':checked') ? 'active' : 'inactive';
-
-            $.ajax({
-                url: `/api/lessons/${lessonId}/update-status`,
-                type: 'PATCH',
-                data: { status: newStatus },
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire('Success', 'Status updated successfully!', 'success');
-                    } else {
-                        Swal.fire('Error', 'Failed to update status.', 'error');
-                        $(this).prop('checked', !$(this).is(':checked'));
-                    }
-                },
-                error: function() {
-                    Swal.fire('Error', 'Something went wrong!', 'error');
-                    $(this).prop('checked', !$(this).is(':checked'));
-                }
-            });
-        }
-
-        function destroy() {
-            let selectedLessons = $('.row-checkbox:checked').map(function() { return $(this).val(); }).get();
-            if (!selectedLessons.length) {
-                Swal.fire('Warning', 'Please select at least one lesson.', 'warning');
-                return;
-            }
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/api/lesson-delete',
-                        type: 'POST',
-                        data: { lessons: selectedLessons, _token: '{{ csrf_token() }}' },
-                        success: function(response) {
-                            Swal.fire('Deleted!', 'Lessons deleted successfully.', 'success');
-                            fetchLessons(1);
-                        },
-                        error: function() {
-                            Swal.fire('Error', 'Failed to delete lessons.', 'error');
-                        }
-                    });
-                }
-            });
-        }
-
-        function update(lessonId, e) {
-            e.preventDefault();
-            $.ajax({
-                url: `/api/lessons/${lessonId}`,
-                method: 'PATCH',
-                data: getFormData(),
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire('Success', 'Lesson updated successfully!', 'success').then(() => {
-                            window.location.href = response.redirect;
-                        });
-                    } else {
-                        Swal.fire('Error', 'Failed to update the lesson!', 'error');
-                    }
-                },
-                error: function(error) {
-                    let errors = error.responseJSON.errors;
-                    let errorMessage = errors ? Object.keys(errors).map(field => `${field.replace('_', ' ')}: ${errors[field].join(', ')}`).join('\n') : 'An unexpected error occurred.';
-                    Swal.fire('Validation Error', errorMessage, 'error');
-                }
-            });
-        }
-
-        function getFormData() {
-            let formData = {
-                title: $('#title').val(),
-                audience: $('input[name="audience"]:checked').val(),
-                section: parseInt($('input[name="section"]:checked').val()) || null,
-                section_details: [],
-                total_questions: 0,
-                total_duration: 0
-            };
-
-            let totalQuestions = 0, totalDuration = 0;
-
-            $('.section_part:not(.d-none)').each(function(index) {
-                let $inputs = $(this).find('input');
-                let no_of_questions = parseInt($inputs.filter('[name="no_of_questions"]').val()) || 0;
-                let duration = parseInt($inputs.filter('[name="duration"]').val()) || 0;
-
-                formData.section_details.push({
-                    section_type: $inputs.filter(`[name="sat_type_section_${index + 1}"]:checked`).val(),
-                    lesson_name: $inputs.filter('[name="lesson_name"]').val(),
-                    section_id: $(this).attr('section-id'),
-                    section_order: index + 1,
-                    no_of_questions,
-                    duration
-                });
-
-                totalQuestions += no_of_questions;
-                totalDuration += duration;
-            });
-
-            formData.total_questions = totalQuestions;
-            formData.total_duration = totalDuration;
-
-            return formData;
-        }
-
-        function resetData() {
-            $('#lessonpleModalLongTitle').text('Create Lesson');
-            $('#lessonModal input[type="text"]').val('');
-            $('input[name="audience"]').prop('checked', false);
-            $('input[name="section"]').prop('checked', false);
-            $('.section_part input[type="radio"]').prop('checked', false);
-            $('.section_part').attr('section-id', '').addClass('d-none');
-            $('.section_part input[type="text"]').val('');
-            $('#lessonModal').modal('show');
-        }
-
-        function openDetailModal() {
-            let lessonId = $(this).data('id');
-            $('.update-ranking').data('id', lessonId);
-            $('#ranking-input').val('');
-            $('#detailModalCenter').modal('show');
-        }
-    </script>
-    <script>
-        $(document).ready(function() {
-            // Initial lesson data (simulated)
-            const initialLessons = [
-                { name: "Math101.MP4", type: "Video", size: "250 MB", iconClass: "video", fileExtension: "mp4" },
-                { name: "Math102.MP4", type: "Video", size: "175 MB", iconClass: "video", fileExtension: "mp4" },
-                { name: "Math103.MP4", type: "Video", size: "210 MB", iconClass: "video", fileExtension: "mp4" },
-                { name: "Advanced Data Structures and Algorithms.pdf", type: "PDF", size: "2.5 MB", iconClass: "pdf", fileExtension: "pdf" }
-            ];
-
-            // Function to render lesson table
-            function renderLessons() {
-                const $lessonsTableBody = $('#lessonsTableBody');
-                $lessonsTableBody.empty(); // Clear existing
-                initialLessons.forEach(lesson => {
-                    const row = `
-                        <tr>
-                            <td>
-                                <div class="lesson-item">
-                                    <div class="icon ${lesson.iconClass}">
-                                        <i class="fas ${lesson.fileExtension === 'mp4' ? 'fa-play' : 'fa-file-pdf'}"></i>
-                                    </div>
-                                    <span>${lesson.name}</span>
-                                </div>
-                            </td>
-                            <td>${lesson.type}</td>
-                            <td>${lesson.size}</td>
-                        </tr>
-                    `;
-                    $lessonsTableBody.append(row);
-                });
-            }
-
-            // Call renderLessons on document ready to populate the initial table
-            renderLessons();
-
+            // File upload handling
             const $dropZone = $('#dropZone');
             const $fileInput = $('#fileInput');
             const $chooseFilesBtn = $('#chooseFilesBtn');
             const $uploadingList = $('#uploadingList');
+            const maxSizeMB = 350;
+            const allowedTypes = ['jpeg', 'jpg', 'png', 'pdf', 'gif', 'mp3', 'mp4'];
 
-            // Prevent default drag behaviors
             $dropZone.on('dragover', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1301,7 +922,6 @@
                 handleFiles(files);
             });
 
-            // Handle file input click
             $chooseFilesBtn.on('click', function() {
                 $fileInput.click();
             });
@@ -1314,35 +934,32 @@
             function handleFiles(files) {
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
+                    const fileExtension = file.name.split('.').pop().toLowerCase();
+                    const fileSizeMB = file.size / (1024 * 1024);
+
+                    if (!allowedTypes.includes(fileExtension)) {
+                        Swal.fire('Error', `File type ${fileExtension} is not allowed.`, 'error');
+                        continue;
+                    }
+                    if (fileSizeMB > maxSizeMB) {
+                        Swal.fire('Error', `File size exceeds ${maxSizeMB}MB limit.`, 'error');
+                        continue;
+                    }
                     uploadFile(file);
                 }
             }
 
             function uploadFile(file) {
                 const fileName = file.name;
-                const fileSize = (file.size / (1024 * 1024)).toFixed(2); // Convert to MB
+                const fileSize = (file.size / (1024 * 1024)).toFixed(2);
                 const fileExtension = fileName.split('.').pop().toLowerCase();
-                let iconClass = '';
-                let fileTypeDisplay = '';
-
-                if (['mp4', 'mp3'].includes(fileExtension)) {
-                    iconClass = 'mp4'; // Use mp4 icon for both video and audio for this design
-                    fileTypeDisplay = 'Video'; // Or 'Audio' for mp3
-                } else if (fileExtension === 'pdf') {
-                    iconClass = 'pdf-upload';
-                    fileTypeDisplay = 'PDF';
-                } else if (['jpeg', 'jpg', 'png', 'gif'].includes(fileExtension)) {
-                    iconClass = 'image'; // Add an image icon class if needed
-                    fileTypeDisplay = 'Image';
-                } else {
-                    iconClass = 'file'; // Default icon
-                    fileTypeDisplay = 'File';
-                }
+                let fileTypeDisplay = fileExtension === 'mp4' ? 'Video' : fileExtension === 'pdf' ? 'PDF' : fileExtension === 'mp3' ? 'Audio' : 'Image';
+                let iconClass = fileExtension === 'mp4' ? 'video' : fileExtension === 'pdf' ? 'pdf' : 'file';
 
                 const uploadItem = `
                     <div class="uploading-item" data-filename="${fileName}">
                         <div class="icon ${iconClass}">
-                            <i class="fas ${iconClass === 'mp4' ? 'fa-play' : (iconClass === 'pdf-upload' ? 'fa-file-pdf' : 'fa-file')}"></i>
+                            <i class="fas ${iconClass === 'video' ? 'fa-play' : iconClass === 'pdf' ? 'fa-file-pdf' : 'fa-file'}"></i>
                         </div>
                         <div class="file-details">
                             <div class="file-name">${fileName}</div>
@@ -1359,40 +976,326 @@
                 `;
                 $uploadingList.append(uploadItem);
 
-                // Simulate upload progress
-                let progress = 0;
-                const interval = setInterval(() => {
-                    if (progress < 100) {
-                        progress += Math.floor(Math.random() * 10) + 5; // Simulate random progress increase
-                        if (progress > 100) progress = 100;
+                // Create FormData for the file and metadata
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('audience', $('input[name="audience"]:checked').val() || '');
+                formData.append('question_type', $('input[name="question_type"]:checked').val() || '');
+                formData.append('file_name', fileName);
+                formData.append('file_type', fileTypeDisplay);
+                formData.append('file_size', fileSize);
+                formData.append('total_length', fileExtension === 'mp4' ? '00:00' : null);
 
+                // Use XMLHttpRequest for progress tracking
+                const xhr = new XMLHttpRequest();
+
+                // Track upload progress
+                xhr.upload.addEventListener('progress', function(e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = (e.loaded / e.total) * 100;
                         const $item = $(`[data-filename="${fileName}"]`);
-                        $item.find('.progress-bar').css('width', `${progress}%`);
-                        $item.find('.progress-percentage').text(`${progress}%`);
-                    } else {
-                        clearInterval(interval);
-                        // Once upload is "complete", add to lessons table
-                        initialLessons.push({
-                            name: fileName,
-                            type: fileTypeDisplay,
-                            size: `${fileSize} MB`,
-                            iconClass: iconClass === 'mp4' ? 'video' : (iconClass === 'pdf-upload' ? 'pdf' : 'file'), // Map back to lesson icons
-                            fileExtension: fileExtension
-                        });
-                        renderLessons();
-
-                        // Optionally, remove from uploading list after a short delay
-                        setTimeout(() => {
-                            $(`[data-filename="${fileName}"]`).remove();
-                        }, 1000);
+                        $item.find('.progress-bar').css('width', `${percentComplete}%`);
+                        $item.find('.progress-percentage').text(`${Math.round(percentComplete)}%`);
                     }
-                }, 300); // Update every 300ms
-
-                // Handle delete icon click for uploading items
-                $uploadingList.on('click', '.delete-icon', function() {
-                    $(this).closest('.uploading-item').remove();
-                    // In a real application, you would also cancel the upload here
                 });
+
+                // Handle upload completion
+                xhr.upload.addEventListener('load', function() {
+                    const $item = $(`[data-filename="${fileName}"]`);
+                    $item.find('.progress-bar').css('width', '100%');
+                    $item.find('.progress-percentage').text('100%');
+                });
+
+                // Handle response
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            $(`[data-filename="${fileName}"]`).remove();
+                            fetchLessons(1, $('#rowsPerPage').val());
+                            Swal.fire('Success', 'File uploaded successfully!', 'success');
+                        } else {
+                            Swal.fire('Error', 'Failed to upload file.', 'error');
+                        }
+                    }
+                };
+
+                // Handle errors
+                xhr.upload.addEventListener('error', function() {
+                    Swal.fire('Error', 'Upload failed. Please try again.', 'error');
+                    $(`[data-filename="${fileName}"]`).remove();
+                });
+
+                // Send the request
+                xhr.open('POST', '/api/lessons', true);
+                xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
+                xhr.send(formData);
+
+                // Handle delete icon click
+                $uploadingList.on('click', '.delete-icon', function() {
+                    xhr.abort(); // Cancel the upload
+                    $(this).closest('.uploading-item').remove();
+                });
+            }
+
+            function store(e) {
+                e.preventDefault();
+                // Handled in uploadFile function
+            }
+
+            function fetchLessons(page = 1, perPage = 10) {
+                let filters = {
+                    search: $('.search_input').val(),
+                    crated_start_at: $('input[name="crated_start_at"]').val(),
+                    crated_end_at: $('input[name="crated_end_at"]').val(),
+                    status: $('input[name="status"]:checked').val(),
+                    audience: $('input[name="audience[]"]:checked').map((_, el) => el.value).get(),
+                    question_type: $('input[name="question_type[]"]:checked').map((_, el) => el.value).get()
+                };
+
+                $.ajax({
+                    url: `/api/lessons?page=${page}&per_page=${perPage}`,
+                    type: 'GET',
+                    data: filters,
+                    success: function(response) {
+                        let lessonNullList = $('#lessonNullList');
+                        let lessonList = $('#lessonList');
+                        let tableBody = $('#lesson-table-body');
+                        let totalResults = response.total;
+
+                        $('#total-lessons').text(`${totalResults} Lessons`);
+
+                        if (response.data.length === 0) {
+                            if (page === 1 && Object.values(filters).every(val => !val || (Array.isArray(val) && !val.length))) {
+                                lessonNullList.removeClass('d-none');
+                                lessonList.addClass('d-none');
+                            } else {
+                                lessonNullList.addClass('d-none');
+                                lessonList.removeClass('d-none');
+                                tableBody.html('<tr><td colspan="10" class="text-center">No lessons found.</td></tr>');
+                            }
+                        } else {
+                            lessonNullList.addClass('d-none');
+                            lessonList.removeClass('d-none');
+
+                            let rows = '';
+                            $.each(response.data, function(index, lesson) {
+                                let icon = lesson.file_type === 'Video' ? '<video width="70" height="50" controls><source src="' + lesson.file_path + '" type="video/mp4"></video>' :
+                                    lesson.file_type === 'PDF' ? '<i class="fas fa-file-pdf" style="font-size: 50px;"></i>' :
+                                    '<i class="fas fa-file" style="font-size: 50px;"></i>';
+                                let totalTime = lesson.total_length ? lesson.total_length : 'N/A';
+                                let statusChecked = lesson.state ? 'checked' : '';
+
+                                rows += `<tr>
+                                    <td><input type="checkbox" class="row-checkbox lesson-row" value="${lesson.uuid}"></td>
+                                    <td>${icon}</td>
+                                    <td>${lesson.file_name}</td>
+                                    <td>${lesson.audience}</td>
+                                    <td>${lesson.question_type || 'N/A'}</td>
+                                    <td>N/A</td>
+                                    <td>${totalTime}</td>
+                                    <td>${formatDate(lesson.created_at)}</td>
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" class="toggle-status" data-id="${lesson.id}" ${statusChecked}>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                        <button data-id="${lesson.id}" class="btn btn-sm edit-btn" data-toggle="modal" data-target="#lessonModal">
+                                            <i class="far fa-edit"></i> Edit
+                                        </button>
+                                    </td>
+                                </tr>`;
+                            });
+                            tableBody.html(rows);
+                            updatePagination(response, page);
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('Error', 'Error fetching lessons.', 'error');
+                    }
+                });
+            }
+
+            function updatePagination(response, currentPage) {
+                let totalResults = response.total;
+                let perPage = response.per_page;
+                let totalPages = response.last_page;
+                let start = response.from || 0;
+                let end = response.to || 0;
+
+                $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
+
+                let paginationHtml = `
+                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="1">«</a>
+                    </li>
+                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="${currentPage - 1}">‹</a>
+                    </li>
+                `;
+
+                if (currentPage > 2) {
+                    paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`;
+                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                }
+
+                for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages, currentPage + 1); i++) {
+                    paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>`;
+                }
+
+                if (currentPage < totalPages - 1) {
+                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                    paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
+                }
+
+                paginationHtml += `
+                    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="${currentPage + 1}">›</a>
+                    </li>
+                    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="${totalPages}">»</a>
+                    </li>
+                `;
+
+                $('#pagination-links').html(paginationHtml);
+            }
+
+            function formatDate(dateString) {
+                let date = new Date(dateString);
+                return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            }
+
+            function updateState() {
+                let lessonId = $(this).data('id');
+                let newStatus = $(this).is(':checked') ? 'active' : 'inactive';
+
+                $.ajax({
+                    url: `/api/lessons/${lessonId}/update-status`,
+                    type: 'PATCH',
+                    data: { state: newStatus },
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire('Success', 'Status updated successfully!', 'success');
+                        } else {
+                            Swal.fire('Error', 'Failed to update status.', 'error');
+                            $(this).prop('checked', !$(this).is(':checked'));
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('Error', 'Something went wrong!', 'error');
+                        $(this).prop('checked', !$(this).is(':checked'));
+                    }
+                });
+            }
+
+            function destroy() {
+                let selectedLessons = $('.row-checkbox:checked').map(function() { return $(this).val(); }).get();
+                if (!selectedLessons.length) {
+                    Swal.fire('Warning', 'Please select at least one lesson.', 'warning');
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You won\'t be able to revert this!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/api/lessons/delete',
+                            type: 'POST',
+                            data: { lessons: selectedLessons, _token: '{{ csrf_token() }}' },
+                            success: function(response) {
+                                Swal.fire('Deleted!', 'Lessons deleted successfully.', 'success');
+                                fetchLessons(1);
+                            },
+                            error: function() {
+                                Swal.fire('Error', 'Failed to delete lessons.', 'error');
+                            }
+                        });
+                    }
+                });
+            }
+
+            function show() {
+                let lessonId = $(this).data('id');
+                $.ajax({
+                    url: `/api/lessons/${lessonId}`,
+                    type: 'GET',
+                    success: function(response) {
+                        $('#lessonpleModalLongTitle').text('Edit Lesson');
+                        $('input[name="audience"][value="' + response.audience + '"]').prop('checked', true);
+                        if (response.audience === 'SAT 2') {
+                            $('#sat_type_2').removeClass('d-none');
+                            $('#sat_type_1').addClass('d-none');
+                        } else {
+                            $('#sat_type_1').removeClass('d-none');
+                            $('#sat_type_2').addClass('d-none');
+                        }
+                        $('input[name="question_type"][value="' + response.question_type + '"]').prop('checked', true);
+                        $('.save-lesson').addClass('d-none');
+                        $('.edit-lesson').removeClass('d-none').data('id', lessonId);
+                        $('.step-1').removeClass('d-none');
+                        $('.step-2').addClass('d-none');
+                        $('#lessonModal').modal('show');
+                    },
+                    error: function() {
+                        Swal.fire('Error', 'Failed to load lesson data.', 'error');
+                    }
+                });
+            }
+
+            function update(lessonId, e) {
+                e.preventDefault();
+                const formData = new FormData();
+                formData.append('audience', $('input[name="audience"]:checked').val());
+                formData.append('question_type', $('input[name="question_type"]:checked').val());
+                formData.append('_method', 'PATCH');
+
+                $.ajax({
+                    url: `/api/lessons/${lessonId}`,
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire('Success', 'Lesson updated successfully!', 'success').then(() => {
+                                $('#lessonModal').modal('hide');
+                                fetchLessons(1, $('#rowsPerPage').val());
+                            });
+                        } else {
+                            Swal.fire('Error', 'Failed to update the lesson!', 'error');
+                        }
+                    },
+                    error: function(error) {
+                        let errors = error.responseJSON?.errors;
+                        let errorMessage = errors ? Object.values(errors).flat().join('\n') : 'An unexpected error occurred.';
+                        Swal.fire('Validation Error', errorMessage, 'error');
+                    }
+                });
+            }
+
+            function resetData() {
+                $('#lessonpleModalLongTitle').text('Create Lesson');
+                $('#lessonModal input[type="text"]').val('');
+                $('input[name="audience"]').prop('checked', false);
+                $('input[name="question_type"]').prop('checked', false);
+                $('.step-1').removeClass('d-none');
+                $('.step-2').addClass('d-none');
+                $('.next-step-2').removeClass('d-none');
+                $('.save-lesson').addClass('d-none');
+                $('.edit-lesson').addClass('d-none');
+                $('#lessonModal').modal('show');
             }
         });
     </script>
