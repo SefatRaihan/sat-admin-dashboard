@@ -21,7 +21,6 @@ class StudentExamController extends Controller
 
     public function startExam(Request $request, $examId)
     {
-        // dd($examId);
         $exam = Exam::with(['questions', 'sections'])->find($examId);
 
         $userId = auth()->id();
@@ -69,10 +68,7 @@ class StudentExamController extends Controller
 
 
         $questions = $exam->questions->groupBy('sat_question_type');
-        // ->map(function ($group) {
-        //     return $group->groupBy('sat_question_type');
-        // });
-        // dd($nestedGrouped);
+
         return view('backend.student-exam.create', compact('exam', 'questions', 'examAttempt'));
     }
 

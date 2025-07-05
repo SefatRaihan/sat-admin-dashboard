@@ -21,6 +21,7 @@ use App\Http\Controllers\PackageGenerateController;
 use App\Http\Controllers\Api\StudentController as StudentApiController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DrillExamController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\TopicController;
 
@@ -100,7 +101,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     })->name('markAsRead');
 
     Route::resource('full-tests', FullTestController::class);
-    Route::get('drill-exam', [FullTestController::class, 'drillExam'])->name('drill-exam');
+    Route::get('drill-exam', [DrillExamController::class, 'create'])->name('drill-exam');
     Route::resource('student-exams', StudentExamController::class)->names('student-exams');
     Route::post('student-exams/{id}', [StudentExamController::class, 'update']);
     Route::post('student-exam/start/{examId}', [StudentExamController::class, 'startExam'])->name('student-exam.start');

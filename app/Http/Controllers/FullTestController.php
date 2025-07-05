@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Exam;
 use App\Models\ExamAttempt;
 use App\Models\ExamAttemptQuestion;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -396,8 +397,5 @@ class FullTestController extends Controller
         return sprintf('%d:%02d', $minutes, $secs);
     }
 
-    public function drillExam()
-    {
-        return view('backend.fulltest.drill-exam');
-    }
+    
 }

@@ -11,30 +11,16 @@
                     <div class="col-md-12 mt-2">
                         <label for="">1. Select question type</label>
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-check custom-radio">
-                                    <input class="form-check-input" type="radio" name="question_type" id="verbal" value="verbal" checked>
-                                    <label class="form-check-label" for="verbal">
-                                        Verbal
-                                    </label>
+                            @forEach($data as $key => $value)
+                                <div class="col-md-4">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="question_type" id="{{ $key }}" value="{{ $key }}"  {{ $loop->first ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="{{ $key }}">
+                                            {{ $value }}
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-check custom-radio">
-                                    <input class="form-check-input" type="radio" name="question_type" id="quant" value="quant">
-                                    <label class="form-check-label" for="quant">
-                                        Quant
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-check custom-radio">
-                                    <input class="form-check-input" type="radio" name="question_type" id="mixed" value="mixed">
-                                    <label class="form-check-label" for="mixed">
-                                        Mixed
-                                    </label>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
 
@@ -71,12 +57,6 @@
                     <div class="col-md-12">
                         <label for="">3. Question difficulty level</label>
                         <div class="d-flex">
-                            <div class="form-check custom-radio" style="border: none; background: transparent;">
-                                <input class="form-check-input" type="radio" name="question_defficulty_level" id="easy" value="very-easy">
-                                <label class="form-check-label" for="easy">
-                                    <span class="badge badge-pill badge-easy">Very Easy</span>
-                                </label>
-                            </div>
                             <div class="form-check custom-radio" style="border: none; background: transparent;">
                                 <input class="form-check-input" type="radio" name="question_defficulty_level" id="easy" value="easy" checked>
                                 <label class="form-check-label" for="easy">
