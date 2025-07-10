@@ -58,25 +58,25 @@
                         <label for="">3. Question difficulty level</label>
                         <div class="d-flex">
                             <div class="form-check custom-radio" style="border: none; background: transparent;">
-                                <input class="form-check-input" type="radio" name="question_defficulty_level" id="easy" value="easy" checked>
+                                <input class="form-check-input" type="radio" name="question_difficulty_level" id="easy" value="easy" checked>
                                 <label class="form-check-label" for="easy">
                                     <span class="badge badge-pill badge-easy">Easy</span>
                                 </label>
                             </div>
                             <div class="form-check custom-radio" style="border: none; background: transparent;">
-                                <input class="form-check-input" type="radio" name="question_defficulty_level" id="medium" value="medium">
+                                <input class="form-check-input" type="radio" name="question_difficulty_level" id="medium" value="medium">
                                 <label class="form-check-label" for="medium">
                                     <span class="badge badge-pill badge-medium">Medium</span>
                                 </label>
                             </div>
                             <div class="form-check custom-radio" style="border: none; background: transparent;">
-                                <input class="form-check-input" type="radio" name="question_defficulty_level" id="hard" value="hard">
+                                <input class="form-check-input" type="radio" name="question_difficulty_level" id="hard" value="hard">
                                 <label class="form-check-label" for="hard">
                                     <span class="badge badge-pill badge-hard">Hard</span>
                                 </label>
                             </div>
                             <div class="form-check custom-radio" style="border: none; background: transparent;">
-                                <input class="form-check-input" type="radio" name="question_defficulty_level" id="very-hard" value="very_hard">
+                                <input class="form-check-input" type="radio" name="question_difficulty_level" id="very-hard" value="very_hard">
                                 <label class="form-check-label" for="very-hard">
                                     <span class="badge badge-pill badge-very-hard">Very Hard</span>
                                 </label>
@@ -99,12 +99,13 @@
     </div>
 
     <div class="footer">
-        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 25px;" data-dismiss="modal">Cancel</button>
+        <a href="{{ url('full-tests') }}" type="button" class="btn" style="border: 1px solid #D0D5DD; border-radius: 25px;">Cancel</a>
         <button type="button" class="btn start-exam ml-2" style="background-color:#691D5E ;border-radius: 25px; color:#fff">Start Exam</button>
     </div>
 
     @push('css')
     <style>
+
         .content {
             background-color: #FCFAFF;
             padding: 0px !important;
@@ -226,5 +227,69 @@
             border: 1px solid #dc3545;
         }
     </style>
+    @endpush
+    @push('js')
+        <script>
+            $(document).ready(function () {
+                $(document).on('click', '.start-exam', startExam)
+            });
+
+            const startExam = () => {
+                let questionType = $('input[name="question_type"]:checked').val();
+                let questionPool = $('input[name="question_pool"]:checked').val();
+                let difficulty = $('input[name="question_difficulty_level"]:checked').val();
+                let totalQuestions = $('input[name="total_no_of_question"]').val();
+                let totalDuration = $('input[name="total_duration"]').val();
+
+
+            const validations = [
+                { value: questionType, message: "Please select a question type" },
+                { value: questionPool, message: "Please select a question pool" },
+                { value: difficulty, message: "Please select a difficulty level" },
+                { value: totalQuestions, message: "Please enter total number of questions" },
+                { value: totalDuration, message: "Please enter total duration" },
+            ];
+
+            for (let i = 0; i < validations.length; i++) {
+                if (!validations[i].value) {
+                    Swal.fire({
+                        width: 400,
+                        icon: "warning",
+                        text: validations[i].message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    return;
+                }
+            }
+
+            $.ajax({
+                url: "{{ route('drill-exam.prepare') }}", // route to prepare and redirect
+                method: "POST",
+                data: {
+                    question_type: questionType,
+                    question_pool: questionPool,
+                    difficulty_level: difficulty,
+                    total_questions: totalQuestions,
+                    total_duration: totalDuration
+                },
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                success: function (response) {
+                    if (response.status === 'ok') {
+                        window.location.href = response.redirect_url;
+                    } else {
+                        alert('Something went wrong. Please try again.');
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    alert('Server error occurred.');
+                }
+            });
+            }
+        </script>
+
     @endpush
 </x-backend.layouts.student-master>

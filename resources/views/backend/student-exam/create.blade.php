@@ -19,24 +19,31 @@
                 <div class="pagination-1">
                     @php
                         $groupColor = 'groupActive'; // Default color
+                        $groupBgColor = 'groupBgActive'; // Default color
                         if ($key == 'Verbal') {
                             $groupColor = 'verbalGroupActive';
+                            $groupBgColor = 'verbalBgGroupActive';
                         } elseif ($key == 'Quant') {
                             $groupColor = 'quantGroupActive';
+                            $groupBgColor = 'quantBgGroupActive';
                         } elseif ($key == 'Chemistry') {
                             $groupColor = 'chemistryGroupActive';
+                            $groupBgColor = 'chemistryBgGroupActive';
                         } elseif ($key == 'Biology') {
                             $groupColor = 'biologyGroupActive';
+                            $groupBgColor = 'biologyBgGroupActive';
                         } elseif ($key == 'Math') {
                             $groupColor = 'mathGroupActive';
+                            $groupBgColor = 'mathBgGroupActive';
                         } elseif ($key == 'Physics') {
                             $groupColor = 'physicsGroupActive';
+                            $groupBgColor = 'physicsBgGroupActive';
                         }
                     @endphp
                     <p class="p-0 m-0 text-center text-capitalize {{ $groupColor }}">{{ $key }}</p>
                     <div class="box-pagination">
                         @foreach ($group as $index => $question)
-                            <span class="box question-{{ $question['id'] }}" data-question='@json($question)'></span>
+                            <span class="box question-{{ $question['id'] }}" data-bgColor="{{ $groupBgColor }}" data-question='@json($question)'></span>
                         @endforeach
                     </div>
                 </div>
@@ -209,7 +216,8 @@
                 let question = questions[index];
 
                 $('.box').removeClass('active');
-                $(`.question-${question.id}`).addClass('active');
+                let boxBgColor = $(`.question-${question.id}`).attr('data-bgColor');
+                $(`.question-${question.id}`).addClass('active '+ boxBgColor);
 
                 $('#question-context').html(`
                     <p>${question.question_description || 'No context provided.'}</p>
@@ -250,7 +258,8 @@
             function selectOption(inputId, option, questionId) {
                 $(`#${inputId}`).prop('checked', true);
                 answers[questionId] = option;
-                $(`.question-${questionId}`).removeClass('incomplete').addClass('completed');
+                let incompleteBgColor = $(`.question-${questionId}`).attr('data-bgColor');
+                $(`.question-${questionId}`).removeClass('incomplete ' + incompleteBgColor).addClass('completed '+ incompleteBgColor+'Complete');
                 updateAnsweredCount();
             }
 

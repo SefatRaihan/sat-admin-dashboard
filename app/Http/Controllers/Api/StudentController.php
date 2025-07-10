@@ -80,7 +80,7 @@ class StudentController extends Controller
             }
 
             if (in_array('All-SAT-1', $audiences)) {
-                $query->orWhereIn('audience', ['high-school', 'graduate', 'college']);
+                $query->orWhereIn('audience', ['High School', 'graduate', 'college']);
             }
         }
 

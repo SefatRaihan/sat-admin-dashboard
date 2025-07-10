@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Models;
 
 use App\Models\Topic;
@@ -63,6 +63,16 @@ class ExamQuestion extends Model
         return $this->belongsToMany(ExamSection::class, 'section_question_pivot', 'question_id', 'section_id');
     }
 
+    public function unansweredQuestion()
+    {
+        return $this->hasMany(ExamAttemptQuestion::class, 'question_id')
+            ->whereDoesntHave('attempt', function ($query) {
+                $query->where('user_id', auth()->id())
+                      ->where('status', 'completed');
+            });
+    }
+
+    
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

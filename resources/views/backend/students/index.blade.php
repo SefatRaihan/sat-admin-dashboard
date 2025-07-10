@@ -107,7 +107,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="high-school" value="high-school">
+                                        <input class="form-check-input" type="radio" name="audience" id="high-school" value="High School">
                                         <label class="form-check-label" for="high-school">
                                             High School
                                         </label>
@@ -242,7 +242,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="high-school" value="high-school">
+                                        <input class="form-check-input" type="radio" name="audience" id="high-school" value="High School">
                                         <label class="form-check-label" for="high-school">
                                             High School
                                         </label>

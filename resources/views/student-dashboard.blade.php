@@ -109,33 +109,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <div class="student-info">
-                                            <img src="./raj.png" alt="Student Avatar" />
-                                            <div class="student-details">
-                                                <span class="student-name">Rajesh Kumar</span>
-                                                <span class="student-per">83%</span>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td><span class="rank-up">2 ↑</span></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>
-                                        <div class="student-info">
-                                            <img src="./sita.png" alt="Student Avatar" />
-                                            <div class="student-details">
-                                                <span class="student-name">Sita Devi</span>
-                                                <span class="student-per">78%</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="rank-down">3 ↓</span></td>
-                                </tr>
+                                @foreach($leadBoard as $index => $data)
+                                    <tr>
+                                        <td><img src="{{ $data['profile_image'] }}" alt="student" width="40" height="40"></td>
+                                        <td>{{ $data['user_name'] }}</td>
+                                        {{-- <td class="{{ $attempt->rank_change > 0 ? 'positive' : 'negative' }}">
+                                            {{ $attempt->rank_change }}
+                                            <span class="rank-change-icon">
+                                                @if($attempt->rank_change > 0)
+                                                    <i class="fas fa-arrow-up"></i>
+                                                @else
+                                                    <i class="fas fa-arrow-down"></i>
+                                                @endif
+                                            </span>
+                                        </td> --}}
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -153,27 +142,25 @@
                                 <tr>
                                     <th>Exam</th>
                                     <th>Score</th>
-                                    <th>Previous</th>
+                                    {{-- <th>Previous</th> --}}
                                     <th>Questions</th>
                                     <th>Duration</th>
                                     <th>Date Taken</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @forEach($attemptedExams as $exam)
+                                    <tr>
+                                        <td>{{ $exam->exam->title }}</td>
+                                        <td>{{ $exam->score }}%</td>
+                                        {{-- <td>{{ $exam->previous_score }}%</td> --}}
+                                        <td>{{ $exam->exam->questions->count() ?? 0 }}</td>
+                                        <td>{{ floor($exam->total_duration / 60) }} Mins</td>
+                                        <td>{{ $exam->start_time }}</td>
+                                    </tr>
+                                @endforeach
                                 <tr>
-                                    <td>SAT I - Endurance Test</td>
-                                    <td>
-                                        <div class="score-cell">
-                                            <div class="score-bar">
-                                                <div class="score-fill" style="width: 89%;"></div>
-                                            </div>
-                                            <span class="score-text">89%</span>
-                                        </div>
-                                    </td>
-                                    <td>N/A</td>
-                                    <td>100</td>
-                                    <td>2:14</td>
-                                    <td>23/01/2025</td>
+                                  
                                 </tr>
                                 <!-- আরও rows copy করবে -->
                             </tbody>

@@ -31,18 +31,17 @@
 
 /* Active box */
 .box.active {
-    background-color: #069212;
     margin-left: 0px !important;
     border-radius: 0px !important;
 }
 
-.box.completed {
+/* .box.completed {
     background-color: #069212;
 }
 
 .box.incomplete {
     background-color: #E59A0F;
-}
+} */
 
 .box:first-child.box.active {
     margin-left: 0px !important;
@@ -209,6 +208,58 @@
 
 .physicsGroupActive {
     color: #079455;
+}
+
+.groupBgActive {
+    background-color: #079455;
+}
+
+.verbalBgGroupActiveComplete {
+    background-color: #BA24D5;
+}
+
+.quantBgGroupActiveComplete {
+    background-color: #444CE7;
+}
+
+.chemistryBgGroupActiveComplete {
+    background-color: #ff04b4;
+}
+
+.biologyBgGroupActiveComplete {
+    background-color: #DC6803;
+}
+
+.mathBgGroupActiveComplete {
+    background-color: #0086C9;
+}
+
+.physicsBgGroupActiveComplete {
+    background-color: #079455;
+}
+
+.verbalBgGroupActive {
+    background-color: #F6D0FE;
+}
+
+.quantBgGroupActive {
+    background-color: #C7D7FE;
+}
+
+.chemistryBgGroupActive {
+    background-color: #FCCEEE;
+}
+
+.biologyBgGroupActive {
+    background-color: #FEDF89;
+}
+
+.mathBgGroupActive {
+    background-color: #B9E6FE;
+}
+
+.physicsBgGroupActive {
+    background-color: #ABEFC6;
 }
 
 .content {
