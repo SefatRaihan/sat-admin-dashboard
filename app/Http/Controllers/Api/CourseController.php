@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Models\Exam;
 use App\Models\Course;
+use App\Models\Lesson;
+use App\Models\Chapter;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
-use App\Models\Exam;
 
 class CourseController extends Controller
 {
@@ -16,7 +19,9 @@ class CourseController extends Controller
         'show' => 'Details',
         'update' => 'Update',
         'destroy' => 'Delete',
-        'edit' => 'Edit Form'
+        'getExam' => 'Exam',
+        'getLesson' => 'Lesson',
+        'getChapter' => 'Chapter'
     ];
 
     /**
@@ -40,7 +45,7 @@ class CourseController extends Controller
      */
     public function store(StoreCourseRequest $request)
     {
-        
+
     }
 
     /**
@@ -73,5 +78,23 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         //
+    }
+
+    public function getExam()
+    {
+        $exams = Exam::select('id', 'title as text')->get();
+        return response()->json($exams);
+    }
+
+    public function getChapter()
+    {
+        $exams = Chapter::select('id', 'title as text')->get();
+        return response()->json($exams);
+    }
+
+    public function getLesson()
+    {
+        $exams = Lesson::select('id', 'title as text')->get();
+        return response()->json($exams);
     }
 }

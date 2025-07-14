@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ChapterController;
+use App\Http\Controllers\Api\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ExamController;
@@ -57,6 +58,9 @@ Route::group([ 'as' => 'api.','middleware' => ['auth', 'web', 'check.permission'
 
     Route::resource('topic', TopicController::class);
     Route::get('get-topic', [TopicController::class, 'getTopic']);
+    Route::get('get-exam', [CourseController::class, 'getExam']);
+    Route::get('get-lesson', [CourseController::class, 'getLesson']);
+    Route::get('get-chapter', [CourseController::class, 'getChapter']);
 
     /*
     |--------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Course;
 use App\Traits\Historiable;
 use App\Traits\UserTrackable;
 use Illuminate\Database\Eloquent\Model;
@@ -65,6 +66,11 @@ class Exam extends Model
     public function examAttempts()
     {
         return $this->hasMany(ExamAttempt::class);
+    }
+
+    public function course()
+    {
+        return $this->hasMany(Course::class);
     }
 
     /**
