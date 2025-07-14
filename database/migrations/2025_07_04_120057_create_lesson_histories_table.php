@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('lesson_histories', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
+            $table->uuid('uuid');
             $table->uuid('lesson_id')->index();
             $table->enum('audience', ['High School', 'Graduation', 'College', 'SAT 2']);
             $table->enum('question_type', ['Verbal', 'Quant', 'Physics', 'Chemistry', 'Biology', 'Math'])->nullable();

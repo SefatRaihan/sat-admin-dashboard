@@ -83,10 +83,7 @@ class LessonController extends Controller
             'created_by' => auth()->id()
         ]);
 
-        return response()->json([
-            'success' => true,
-            'redirect' => route('lessons.index')
-        ]);
+        return response()->json(['success' => true, 'lesson' => $lesson], 200);
     }
 
     public function show($id)
@@ -109,10 +106,7 @@ class LessonController extends Controller
             'updated_by' => auth()->id()
         ]);
 
-        return response()->json([
-            'success' => true,
-            'redirect' => route('lessons.index')
-        ]);
+        return response()->json(['success' => true, 'lesson' => $lesson], 200);
     }
 
     public function destroy(Request $request)

@@ -33,8 +33,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // 'middleware' => ['api', 'auth', 'web'],
-Route::group([ 'as' => 'api.','middleware' => ['auth', 'web', 'check.permission']], function () {
-    Route::get('get-role-navitems-with-selected/{id}', [RoleNavItemApiController::class,'getnavitemWithSelected']);
+Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission']], function () {
+    Route::get('get-role-navitems-with-selected/{id}', [RoleNavItemApiController::class, 'getnavitemWithSelected']);
     Route::post('/profile/update', [ProfileController::class, 'update']);
     Route::post('/students/{uuid}/update', [StudentController::class, 'update']);
     Route::resource('students', StudentController::class);
@@ -130,5 +130,4 @@ Route::group([ 'as' => 'api.','middleware' => ['auth', 'web', 'check.permission'
     Route::post('/lessons/{id}', [LessonController::class, 'update']);
     Route::post('/lessons/delete', [LessonController::class, 'destroy']);
     Route::patch('/lessons/{id}/update-status', [LessonController::class, 'updateStatus']);
-
 });
