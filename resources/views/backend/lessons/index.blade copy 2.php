@@ -173,7 +173,7 @@
                                     <div class="drop-zone" id="dropZone">
                                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                                         <p><strong>Click to upload</strong> or drag and drop</p>
-                                        <p>JPEG, PNG, PDF, GIF, MP3 and MPOSSIBLE formats</p>
+                                        <p>JPEG, PNG, PDF, GIF, MP3 and MP4 formats</p>
                                         <input type="file" id="fileInput" multiple accept=".jpeg,.jpg,.png,.pdf,.gif,.mp3,.mp4" style="display: none;">
                                         <button id="chooseFilesBtn">Choose files</button>
                                         <p>[Max: 350MB]</p>
@@ -186,28 +186,7 @@
                     <div class="modal-footer border-top pt-3">
                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
                         <a href="#" class="btn next-step-2" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Next</a>
-                        <a href="#" class="btn save-lesson d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD" data-dismiss="modal">Add Lesson</a>
-                        <a href="#" class="btn update-lesson d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD" data-dismiss="modal">Update Lesson</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Edit Confirmation Modal -->
-    <section>
-        <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="border-radius: 24px;">
-                    <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px;">
-                        <h5 class="modal-title" id="confirmationModalTitle">Confirm Edit</h5>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to edit this lesson?</p>
-                    </div>
-                    <div class="modal-footer border-top pt-3">
-                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn" id="proceedBtn" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Proceed</button>
+                        <a href="#" class="btn save-lesson d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Add Lesson</a>
                     </div>
                 </div>
             </div>
@@ -305,7 +284,7 @@
                                     </div>
                                     <div class="nested-options collapse" id="sectionTypes">
                                         <div class="form-check">
-                                            < input type="checkbox" value="Physics" name="question_type[]">Physics
+                                            <input type="checkbox" value="Physics" name="question_type[]">Physics
                                         </div>
                                         <div class="form-check">
                                             <input type="checkbox" value="Chemistry" name="question_type[]">Chemistry
@@ -861,20 +840,18 @@
             $(document).on('change', '.toggle-status', updateState);
             $(document).on('click', '.edit-btn', show);
             $(document).on('click', '.create-button', function() {
-                $('.update-lesson').addClass('d-none');
-                $('.next-step-2').removeClass('d-none');
+                $('.edit-lesson').addClass('d-none');
                 resetData();
             });
 
-            $('.update-lesson').on('click', function(e) {
+            $('.edit-lesson').on('click', function(e) {
                 e.preventDefault();
-                let lessonId = $(this).data('id');
-                update(lessonId, e);
+                $('#confirmationModal').modal('show');
             });
 
             $(document).on('click', '#proceedBtn', function(e) {
-                $('#confirmationModal').modal('hide');
-                $('#lessonModal').modal('show');
+                let lessonId = $('.edit-lesson').data('id');
+                update(lessonId, e);
             });
 
             // Datatable initialization
@@ -999,6 +976,7 @@
                 `;
                 $uploadingList.append(uploadItem);
 
+                // Create FormData for the file and metadata
                 const formData = new FormData();
                 formData.append('file', file);
                 formData.append('audience', $('input[name="audience"]:checked').val() || '');
@@ -1008,8 +986,10 @@
                 formData.append('file_size', fileSize);
                 formData.append('total_length', fileExtension === 'mp4' ? '00:00' : null);
 
+                // Use XMLHttpRequest for progress tracking
                 const xhr = new XMLHttpRequest();
 
+                // Track upload progress
                 xhr.upload.addEventListener('progress', function(e) {
                     if (e.lengthComputable) {
                         const percentComplete = (e.loaded / e.total) * 100;
@@ -1019,25 +999,19 @@
                     }
                 });
 
+                // Handle upload completion
                 xhr.upload.addEventListener('load', function() {
                     const $item = $(`[data-filename="${fileName}"]`);
                     $item.find('.progress-bar').css('width', '100%');
                     $item.find('.progress-percentage').text('100%');
                 });
 
+                // Handle response
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             $(`[data-filename="${fileName}"]`).remove();
                             fetchLessons(1, $('#rowsPerPage').val());
-                            const response = typeof xhr.response === "string" ? JSON.parse(xhr.response) : xhr.response;
-                            $('#lessonsTableBody').append(`
-                                <tr>
-                                    <td>${response.lesson.file_name}</td>
-                                    <td>${response.lesson.file_type}</td>
-                                    <td>${response.lesson.file_size} MB</td>
-                                </tr>
-                            `);
                             Swal.fire('Success', 'File uploaded successfully!', 'success');
                         } else {
                             Swal.fire('Error', 'Failed to upload file.', 'error');
@@ -1045,24 +1019,27 @@
                     }
                 };
 
+                // Handle errors
                 xhr.upload.addEventListener('error', function() {
                     Swal.fire('Error', 'Upload failed. Please try again.', 'error');
                     $(`[data-filename="${fileName}"]`).remove();
                 });
 
+                // Send the request
                 xhr.open('POST', '/api/lessons', true);
                 xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
                 xhr.send(formData);
 
+                // Handle delete icon click
                 $uploadingList.on('click', '.delete-icon', function() {
-                    xhr.abort();
+                    xhr.abort(); // Cancel the upload
                     $(this).closest('.uploading-item').remove();
                 });
             }
 
             function store(e) {
                 e.preventDefault();
-                $('#lessonsTableBody').empty();
+                // Handled in uploadFile function
             }
 
             function fetchLessons(page = 1, perPage = 10) {
@@ -1124,7 +1101,7 @@
                                         </label>
                                     </td>
                                     <td class="text-center">
-                                        <button data-id="${lesson.id}" class="btn btn-sm edit-btn" data-toggle="modal" data-target="#confirmationModal">
+                                        <button data-id="${lesson.id}" class="btn btn-sm edit-btn" data-toggle="modal" data-target="#lessonModal">
                                             <i class="far fa-edit"></i> Edit
                                         </button>
                                     </td>
@@ -1265,10 +1242,10 @@
                         }
                         $('input[name="question_type"][value="' + response.question_type + '"]').prop('checked', true);
                         $('.save-lesson').addClass('d-none');
-                        $('.next-step-2').addClass('d-none');
-                        $('.update-lesson').removeClass('d-none').data('id', lessonId);
+                        $('.edit-lesson').removeClass('d-none').data('id', lessonId);
                         $('.step-1').removeClass('d-none');
                         $('.step-2').addClass('d-none');
+                        $('#lessonModal').modal('show');
                     },
                     error: function() {
                         Swal.fire('Error', 'Failed to load lesson data.', 'error');
@@ -1281,7 +1258,7 @@
                 const formData = new FormData();
                 formData.append('audience', $('input[name="audience"]:checked').val());
                 formData.append('question_type', $('input[name="question_type"]:checked').val());
-                formData.append('_method', 'POST');
+                formData.append('_method', 'PATCH');
 
                 $.ajax({
                     url: `/api/lessons/${lessonId}`,
@@ -1317,7 +1294,7 @@
                 $('.step-2').addClass('d-none');
                 $('.next-step-2').removeClass('d-none');
                 $('.save-lesson').addClass('d-none');
-                $('.update-lesson').addClass('d-none');
+                $('.edit-lesson').addClass('d-none');
                 $('#lessonModal').modal('show');
             }
         });
