@@ -60,7 +60,9 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::get('get-topic', [TopicController::class, 'getTopic']);
     Route::get('get-exam', [CourseController::class, 'getExam']);
     Route::get('get-lesson', [CourseController::class, 'getLesson']);
+    Route::get('lessons-by-id', [CourseController::class, 'getLessonByIds']);
     Route::get('get-chapter', [CourseController::class, 'getChapter']);
+    Route::apiResource('course', CourseController::class);
 
     /*
     |--------------------------------------------------------------------------

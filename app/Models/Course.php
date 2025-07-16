@@ -13,12 +13,7 @@ class Course extends Model
 
     public function chapters()
     {
-        return $this->belongsToMany(Chapter::class);
-    }
-
-        public function lessons()
-    {
-        return $this->belongsToMany(Lesson::class);
+        return $this->belongsToMany(Chapter::class, 'course_chapter');
     }
 
     public function exam()

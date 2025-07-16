@@ -1204,6 +1204,12 @@ input[type="text"].noui-height-helper:not(.noUi-target)[data-fouc] {
   margin: 0;
   padding: 0;
   width: 100%;
+  border:1px solid #ddd !important;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
 }
 .select2-selection--multiple .select2-selection__placeholder {
   color: #999;

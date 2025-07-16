@@ -70,7 +70,6 @@
                                     <th>Lessons No</th>
                                     <th>Duaration</th>
                                     <th>Created</th>
-                                    <th>State</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -643,9 +642,7 @@
                             <div>
                                 <h5><strong>Chapter Options</strong></h5>
                                 <div>
-                                    <select name="chapter" class="form-control" id="chapter">
-                                        <option value="">Please Select</option>
-                                    </select>
+                                    <select name="chapter" class="form-control " id="chapter" multiple></select>
                                 </div>
                             </div>
                         </div>
@@ -653,24 +650,23 @@
                         <div class="step step-3 d-none">
                             <div>
                                 <h5><strong>Lesson</strong></h5>
-                                <div>
-                                    <select name="lesson" class="form-control" id="lesson">
-                                        <option value="">Please Select</option>
-                                    </select>
+                                <div class="form-group lessonSelectBox">
+                                    {{-- <label for="" id="chapterTitle"></label>
+                                    <select name="lesson" class="form-control lesson" id="lesson" multiple></select> --}}
                                 </div>
                             </div>
-                            <div class="mt-2">
+
+                            <div class="form-group mt-2">
                                 <h5><strong>Is Exam Create</strong></h5>
                                 <div>
-                                    <input type="checkbox" class="" id="isExamCreate">
+                                    <input type="checkbox" class="form-control" name="isExamCreate" id="isExamCreate">
                                 </div>
                             </div>
+
                             <div class="mt-2 exam-section" style="display: none;">
                                 <h5><strong>Select from existing exam</strong></h5>
                                 <div>
-                                    <select name="exam" class="form-control" id="exam">
-                                        <option value="">Please Select</option>
-                                    </select>
+                                    <select name="exam" class="form-control exam" id="exam"></select>
                                 </div>
                             </div>
                         </div>
@@ -679,26 +675,21 @@
                             <div class="course-page-container">
                                 <div class="main-content">
                                     <div class="video-player-section">
-                                        <video controls width="100%" height="auto" poster="https://via.placeholder.com/800x450/4A67ED/FFFFFF?text=Course+Video+Placeholder">
-                                            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                                        <video id="lesson-player" controls width="100%" height="auto" poster="https://via.placeholder.com/800x450/4A67ED/FFFFFF?text=Course+Video+Placeholder">
+                                            <source id="videoSource" src="" type="video/mp4">
                                             Your browser does not support the video tag.
                                         </video>
                                     </div>
 
                                     <div class="course-meta">
                                         <div class="tags">
-                                            <span>High School</span>
-                                            <span>20 Lessons</span>
-                                            <span>6 Chapters</span>
-                                            <span>Duration: 2h 30m</span>
+                                            <span id="lastAudience"></span>
+                                            <span id="total-lessons"></span>
+                                            <span id="total-chapters"></span>
+                                            <span id="total-duration"></span>
                                         </div>
-                                        <h1>SAT (MATH) - Solving Linear Equations & Inequalities</h1>
-                                        <p class="description">
-                                            This advanced algebra course delves deeper into the complexities of algebraic concepts, focusing on enhancing number sense and operations. Students will solidify their understanding by engaging with integers, fractions, and decimals, while mastering essential properties such as commutativity and associativity. They will apply these skills to tackle linear equations and inequalities with confidence.
-                                        </p>
-                                        <p class="description">
-                                            Through a variety of practical examples and challenging problem-solving exercises, this course empowers learners to navigate numerical relationships effectively and lays the groundwork for exploring more sophisticated algebraic theories.
-                                        </p>
+                                        <h1 id="show_title"></h1>
+                                        <p id="show_description"></p>
                                     </div>
                                 </div>
 
@@ -722,8 +713,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="course-lessons-list" id="courseLessonsList">
-                                        </div>
+                                    <div class="course-lessons-list" id="courseLessonsList"></div>
                                 </div>
                             </div>
                         </div>
@@ -752,7 +742,6 @@
 
     @push('css')
         <!-- DataTables -->
-        <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/courses.css') }}">
 
         <style>
@@ -1423,7 +1412,6 @@
     @endpush
 
     @push('js')
-        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
         <!-- Theme JS files -->
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/uploaders/dropzone.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/uploader_dropzone.js"></script>
@@ -1514,6 +1502,7 @@
             });
         </script>
         <script>
+            const appUrl = @json(config('app.url'));
             $(document).ready(function() {
                 $('#closeSidebar, #taskSidebarOverlay').on('click', function() {
                     $('#taskSidebar').removeClass('open');
@@ -1536,9 +1525,9 @@
             }
 
             // Remove dragover style on leave
-            document.querySelector('.photosection').addEventListener('dragleave', function() {
-                this.classList.remove('dragover');
-            });
+            // document.querySelector('.photosection').addEventListener('dragleave', function() {
+            //     this.classList.remove('dragover');
+            // });
 
             // Handle dropped image
             function dropImage(event) {
@@ -1640,7 +1629,9 @@
 
             $(document).ready(function() {
 
-                $(document).on('click', '.create-btn', selectTopic);
+                $(document).on('click', '.create-btn',selectChapter);
+                $(document).on('click', '.create-btn',selectLesson);
+                $(document).on('click', '.create-btn',selectExam);
 
                 initializeQuill(".editor")
 
@@ -1768,22 +1759,116 @@
                 });
 
                 $(document).on("click", ".openDetailModal", detailModal);
+
+
+                // course view
+                
+                $('#isExamCreate').change(function() {
+                    if ($(this).is(':checked')) {
+                        $('.exam-section').show(); // Show the section if checked
+                    } else {
+                        $('.exam-section').hide(); // Hide the section if unchecked
+                    }
+                });
+
+                // --- Function to Collect Course Data from Selections ---
+                const $courseLessonsList = $('#courseLessonsList');
+                // Call render function on page load
+
+                // --- Event Listeners ---
+
+                // Toggle chapter expansion
+                $courseLessonsList.on('click', '.chapter-header', chapterHeaderToggle);
+
+                // Handle lesson item click (simulated active lesson)
+                $courseLessonsList.on('click', '.lesson-item', function() {
+                    // Remove active class from all lessons first
+                    $('.lesson-item').removeClass('active');
+                    // Add active class to the clicked lesson
+                    $(this).addClass('active');
+
+                    // Optional: In a real app, update main video player source here
+                    // const lessonType = $(this).find('.lesson-item-icon i').hasClass('fa-play') ? 'video' : 'pdf';
+                    // const lessonName = $(this).find('.lesson-name').text();
+                    // console.log(`Simulating playing: ${lessonName} (Type: ${lessonType})`);
+
+                    // You could also update the main video src based on lesson id/data
+                    // For example: $('#mainVideoPlayer source').attr('src', 'new-video-url.mp4');
+                    // $('#mainVideoPlayer')[0].load(); // Reload video player
+                });
+
+                // Simulate overall course progress
+                // This could be calculated based on completed lessons in a real app
+                const overallProgress = 67; // Hardcoded for this example
+                $('.student-profile-card .progress-bar').css('width', `${overallProgress}%`);
             });
 
-            function selectTopic(selectedVal = null) {
-                let topicSelect = $('#topic');
-                let selectedTopics = topicSelect.val();
+            function selectChapter(selectedVal = null) {
+                let chapterSelect = $('#chapter');
+                const lessonContainer = $('.lessonSelectBox');
 
-                $.get('/api/get-topic', function(data){
-                    $('#topic').select2({
-                        data: data.data,
-                        placeholder: "Select Topic",
+                $.get('/api/get-chapter', function(data){
+                    chapterSelect.empty();
+                    chapterSelect.select2({
+                        data: data,
+                        placeholder: "Select Chapter",
+                        allowClear: true,
+                        width: '100%',
+                    }).val(selectedVal).trigger('change');
+
+                    chapterSelect.on('change').on('change', function () {
+                        const selectedChapters = $(this).val(); // array of selected chapter IDs
+                        lessonContainer.empty(); // Clear previous selections
+
+                        if (selectedChapters && selectedChapters.length) {
+                            selectedChapters.forEach((chapterId) => {
+                                const chapter = data.find(c => c.id == chapterId);
+                                const chapterTitle = chapter ? chapter.text : 'Unnamed Chapter';
+
+                                const lessonSelectHTML = `
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>${chapterTitle}</strong></label>
+                                        <select name="lessons[${chapterId}][]" id="lesson_${chapterId}" class="form-control lesson" multiple></select>
+                                    </div>
+                                `;
+
+                                const wrapper = $(lessonSelectHTML);
+                                selectLesson('#lesson_' + chapterId);
+                                
+
+                                lessonContainer.append(wrapper);
+                            });
+                        }
+                    });
+                });
+            }
+
+            function selectLesson(lessonId, selectedVal = null) {
+
+                $.get('/api/get-lesson', function(data){
+                   $(`${lessonId}`).empty();
+                    $(`${lessonId}`).select2({
+                        data: data,
+                        placeholder: "Select Lesson",
                         allowClear: true,
                         width: '100%',
                     }).val(selectedVal).trigger('change');
                 });
 
 
+            }
+            function selectExam(selectedVal = null) {
+                let examSelect = $('#exam');
+
+                $.get('/api/get-exam', function(data){
+                    examSelect.empty();
+                    examSelect.select2({
+                        data: data,
+                        placeholder: "Select Exam",
+                        allowClear: true,
+                        width: '100%',
+                    }).val(selectedVal).trigger('change');
+                });
             }
 
             function updateButtons() {
@@ -1840,6 +1925,8 @@
                     $('.step-title').text('Step 3 : Add from existing lessons');
                     updateStep3Content();
                 } else if (step === 4) {
+                    renderCourseContent();
+
                     $('.step-title').text('Step 4 :  Publish and Preview');
                 }
             }
@@ -1988,24 +2075,41 @@
                 submitButton.text('Processing').prop('disabled', true);
 
                 let formData = {
-                    audience: $('input[name="audience"]:checked').val(),
-                    sat_type: $('input[name="audience"]:checked').val() === 'SAT 2' ? 'SAT 2' : 'SAT 1',
+                    audience:  $('input[name="audience"]:checked').val(),
+                    title: $('input[name="title"]').val(),
+                    description: $('textarea[name="description"]').val(),
+                    exam: $('#exam').val(),
+                    exam: $('input[name="is"]:checked').val(),
                     sat_course_type: $('input[name="course_type"]:checked').val() || $('input[name="subjects"]:checked').val(),
-                    course_title: $('#mcq_course .ql-editor').html(),
-                    course_description: $('#context .ql-editor').html(),
-                    course_text: $('#mcq_course .ql-editor').html(),
-                    course_type: 'MCQ',
-                    options: JSON.stringify(getOptions()),
-                    correct_answer: $('input[name="mcq_options"]:checked').val(),
-                    difficulty: $('input[name="difficulty"]:checked').val(),
-                    explanation: $('#explanation .ql-editor').html(),
-                    status: $('input[name="course_status"]:checked').val(),
-                    courseId: $('#courseId').val(),
-                    topic: $('#topic').val(),
-                };
+                    chapters: [], // store chapter IDs
+                    lessons: {},
 
+
+                };
+                // sat_type: $('input[name="audience"]:checked').val() === 'SAT 2' ? 'SAT 2' : 'SAT 1',
+                // course_title: $('#mcq_course .ql-editor').html(),
+                // course_description: $('#context .ql-editor').html(),
+                // course_text: $('#mcq_course .ql-editor').html(),
+                // course_type: 'MCQ',
+                // options: JSON.stringify(getOptions()),
+                // correct_answer: $('input[name="mcq_options"]:checked').val(),
+                // difficulty: $('input[name="difficulty"]:checked').val(),
+                // explanation: $('#explanation .ql-editor').html(),
+                // status: $('input[name="course_status"]:checked').val(),
+                // courseId: $('#courseId').val(),
+                // topic: $('#topic').val(),
+
+                formData.chapters = $('#chapter').val() || []; // e.g., ['1', '2']
+
+                // For each selected chapter, get its lessons
+                formData.chapters.forEach(chapterId => {
+                    const lessonSelect = $(`select[name="lessons[${chapterId}][]"]`);
+                    const selectedLessons = lessonSelect.val() || [];
+                    formData.lessons[chapterId] = selectedLessons;
+                });
+                
                 $.ajax({
-                    url: '/api/questions',
+                    url: '/api/course',
                     type: 'POST',
                     data: formData,
                     headers: {
@@ -2125,7 +2229,7 @@
                 };
 
                 $.ajax({
-                    url: "/api/questions?page=" + page + "&per_page=" + perPage,
+                    url: "/api/course?page=" + page + "&per_page=" + perPage,
                     type: "GET",
                     data: filters,
                     success: function(response) {
@@ -2147,24 +2251,19 @@
 
                             let rows = '';
                             $.each(response.data, function(index, course) {
-                                let difficultyColor = getDifficultyColor(course.difficulty);
+                                console.log(course);
                                 let statusChecked = course.status ? "checked" : "";
 
                                 // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
                                 rows += `<tr>
                                     <td><input type="checkbox" class="row-checkbox course-row" value="${course.uuid}"></td>
-                                    <td>Fundamentals of Algebra: Variables & Expressions</td>
-                                    <td>Hi School</td>
+                                    <td>${course.title}</td>
+                                    <td>${course.audience}</td>
                                     <td>6</td>
                                     <td>9</td>
                                     <td>20 min</td>
-                                    <td>22 Jan, 25 Admin</td>
-                                    <td class="text-center">
-                                        <label class="switch">
-                                            <input type="checkbox" class="toggle-status" data-id="${course.id}" ${course.status === 'active' ? 'checked' : '' }>
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </td>
+                                    <td>${course.created_at}</td>
+                            
                                     <td class="text-center">
                                          <button data-toggle="modal" data-id="${course.id}" data-target="#courseModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
                                     </td>
@@ -2246,20 +2345,6 @@
                 return result.trim();
             }
 
-            function getDifficultyColor(difficulty) {
-                switch (difficulty.toLowerCase()) {
-                    case "easy":
-                        return "badge-easy";
-                    case "medium":
-                        return "badge-medium";
-                    case "hard":
-                        return "badge-hard";
-                    case "very hard":
-                        return "badge-very-hard";
-                    default:
-                        return "bg-secondary text-white";
-                }
-            }
 
             // Toggle status (on/off)
             function updateState() {
@@ -2589,198 +2674,265 @@
                     },
                 });
             }
-        </script>
+            
 
-        <script>
-            $(document).ready(function() {
-                $('#isExamCreate').change(function() {
-                    if ($(this).is(':checked')) {
-                        $('.exam-section').show(); // Show the section if checked
-                    } else {
-                        $('.exam-section').hide(); // Hide the section if unchecked
-                    }
-                });
 
-                // --- Data Definition (Simulated Course Structure) ---
-                const courseData = [
-                    {
-                        id: 'chapter1',
-                        title: "Fundamentals of Algebra: Variables & Expressions",
-                        lessonsCount: 6,
-                        duration: "30min",
-                        expanded: true, // Initially expanded
-                        lessons: [
-                            { id: 'lesson1-1', type: 'video', name: 'Introduction', duration: '08 min, 27 Sec', completed: true, progress: 100 },
-                            { id: 'lesson1-2', type: 'video', name: 'Structure', duration: '08 min, 27 Sec', completed: true, progress: 100 },
-                            { id: 'lesson1-3', type: 'video', name: 'Strategy', duration: '08 min, 27 Sec', completed: true, progress: 100 },
-                            { id: 'lesson1-4', type: 'video', name: 'Understanding', duration: '08 min, 27 Sec', completed: false, progress: 72 }, // Partially completed
-                            { id: 'lesson1-5', type: 'pdf', name: 'Probability & Statistics Basics.pdf', duration: '04 min', completed: false, progress: 0 } // PDF
-                        ]
-                    },
-                    {
-                        id: 'chapter2',
-                        title: "Solving Linear Equations & Inequalities",
-                        lessonsCount: 4,
-                        duration: "20min",
-                        expanded: false,
-                        lessons: [
-                            { id: 'lesson2-1', type: 'video', name: 'Linear Equations Basics', duration: '05 min, 10 Sec', completed: false, progress: 0 },
-                            { id: 'lesson2-2', type: 'video', name: 'Graphing Linear Equations', duration: '07 min, 00 Sec', completed: false, progress: 0 },
-                            { id: 'lesson2-3', type: 'pdf', name: 'Inequalities Practice.pdf', duration: '08 min', completed: false, progress: 0 }
-                        ]
-                    },
-                    {
-                        id: 'chapter3',
-                        title: "Systems of Equations: Solving by Substitution & Elimination",
-                        lessonsCount: 2,
-                        duration: "10min",
-                        expanded: false,
-                        lessons: [
-                            { id: 'lesson3-1', type: 'video', name: 'Substitution Method', duration: '04 min, 30 Sec', completed: false, progress: 0 },
-                            { id: 'lesson3-2', type: 'video', name: 'Elimination Method', duration: '05 min, 30 Sec', completed: false, progress: 0 }
-                        ]
-                    },
-                    {
-                        id: 'chapter4',
-                        title: "Probability: Basic Concepts & Applications",
-                        lessonsCount: 3,
-                        duration: "15min",
-                        expanded: false,
-                        lessons: [
-                            { id: 'lesson4-1', type: 'video', name: 'Introduction to Probability', duration: '06 min, 00 Sec', completed: false, progress: 0 },
-                            { id: 'lesson4-2', type: 'video', name: 'Combinations & Permutations', duration: '05 min, 00 Sec', completed: false, progress: 0 },
-                            { id: 'lesson4-3', type: 'pdf', name: 'Probability Exercises.pdf', duration: '04 min', completed: false, progress: 0 }
-                        ]
-                    },
-                    {
-                        id: 'chapter5',
-                        title: "Introduction to Trigonometry: Ratios & Functions",
-                        lessonsCount: 2,
-                        duration: "10min",
-                        expanded: false,
-                        lessons: [
-                            { id: 'lesson5-1', type: 'video', name: 'Trigonometric Ratios', duration: '05 min, 00 Sec', completed: false, progress: 0 },
-                            { id: 'lesson5-2', type: 'video', name: 'Unit Circle Basics', duration: '05 min, 00 Sec', completed: false, progress: 0 }
-                        ]
-                    },
-                    {
-                        id: 'chapter6',
-                        title: "Rational Expressions: Simplifying, Multiplying, & Dividing",
-                        lessonsCount: 3,
-                        duration: "20min",
-                        expanded: false,
-                        lessons: [
-                            { id: 'lesson6-1', type: 'video', name: 'Simplifying Rational Expressions', duration: '07 min, 00 Sec', completed: false, progress: 0 },
-                            { id: 'lesson6-2', type: 'video', name: 'Multiplying & Dividing Rational Expressions', duration: '08 min, 00 Sec', completed: false, progress: 0 },
-                            { id: 'lesson6-3', type: 'pdf', name: 'Rational Expressions Quiz.pdf', duration: '05 min', completed: false, progress: 0 }
-                        ]
-                    }
-                ];
+            // --- Function to Render Course Sections and Lessons ---
+            async function renderCourseContent() {
+                $('#courseLessonsList').empty(); // Clear existing content
 
-                const $courseLessonsList = $('#courseLessonsList');
+                const courseData = await collectCourseDataFromSelections();
+                courseData.forEach(chapter => {
+                    let lessonsHtml = '';
+                    chapter.lessons.forEach(lesson => {
+                        
+                        const iconClass = lesson.type === 'Video' ? 'fa-play' : 'fa-file-pdf';
+                        const statusHtml = lesson.completed ? '<i class="fas fa-check-circle"></i>' :
+                                        (lesson.progress > 0 && lesson.progress < 100 ?
+                                            `<div class="progress-bar-tiny"><div style="width: ${lesson.progress}%;"></div></div><span class="progress-percentage-small">${lesson.progress}%</span>` :
+                                            ''); // Empty if 0% progress
 
-                // --- Function to Render Course Sections and Lessons ---
-                function renderCourseContent() {
-                    $courseLessonsList.empty(); // Clear existing content
-
-                    courseData.forEach(chapter => {
-                        let lessonsHtml = '';
-                        chapter.lessons.forEach(lesson => {
-                            const iconClass = lesson.type === 'video' ? 'fa-play' : 'fa-file-pdf';
-                            const statusHtml = lesson.completed ? '<i class="fas fa-check-circle"></i>' :
-                                            (lesson.progress > 0 && lesson.progress < 100 ?
-                                                `<div class="progress-bar-tiny"><div style="width: ${lesson.progress}%;"></div></div><span class="progress-percentage-small">${lesson.progress}%</span>` :
-                                                ''); // Empty if 0% progress
-
-                            lessonsHtml += `
-                                <div class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}" data-lesson-id="${lesson.id}">
-                                    <div class="lesson-item-icon">
-                                        <i class="fas ${iconClass}"></i>
-                                    </div>
-                                    <div class="lesson-details">
-                                        <div class="lesson-name">${lesson.name}</div>
-                                        <div class="lesson-duration">${lesson.duration}</div>
-                                    </div>
-                                    <div class="lesson-status">
-                                        ${statusHtml}
-                                    </div>
+                        lessonsHtml += `
+                            <div class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}" data-lesson-id="${lesson.id}">
+                                <div class="lesson-item-icon">
+                                    <i class="fas ${iconClass}"></i>
                                 </div>
-                            `;
-                        });
-
-                        const chapterClass = chapter.expanded ? 'expanded' : '';
-                        const toggleIconClass = chapter.expanded ? 'fa-chevron-right' : 'fa-chevron-right'; // Initial state arrow
-                        const chapterHeaderActiveClass = chapter.expanded ? 'active' : '';
-
-                        const chapterHtml = `
-                            <div class="chapter-section ${chapterClass}" data-chapter-id="${chapter.id}">
-                                <div class="chapter-header ${chapterHeaderActiveClass}">
-                                    <div class="chapter-title">
-                                        <i class="fas fa-chevron-right chapter-toggle-icon"></i>
-                                        <span>${chapter.title}</span>
-                                    </div>
-                                    <div class="chapter-meta">
-                                        <span>${chapter.lessonsCount} Lessons</span>
-                                        <span>${chapter.duration}</span>
-                                    </div>
+                                <div class="lesson-details">
+                                    <div class="lesson-name">${lesson.name}</div>
+                                    <div class="lesson-duration">${lesson.duration}</div>
                                 </div>
-                                <div class="chapter-content" ${chapter.expanded ? 'style="display: block;"' : ''}>
-                                    ${lessonsHtml}
+                                <div class="lesson-status">
+                                    ${statusHtml}
                                 </div>
                             </div>
                         `;
-                        $courseLessonsList.append(chapterHtml);
                     });
 
-                    // Set initial toggle icon rotation for expanded chapters
-                    $('.chapter-section.expanded .chapter-toggle-icon').css('transform', 'rotate(90deg)');
+                    const chapterClass = chapter.expanded ? 'expanded' : '';
+                    const toggleIconClass = chapter.expanded ? 'fa-chevron-right' : 'fa-chevron-right'; // Initial state arrow
+                    const chapterHeaderActiveClass = chapter.expanded ? 'active' : '';
+
+                    const chapterHtml = `
+                        <div class="chapter-section ${chapterClass}" data-chapter-id="${chapter.id}">
+                            <div class="chapter-header ${chapterHeaderActiveClass}">
+                                <div class="chapter-title">
+                                    <i class="fas fa-chevron-right chapter-toggle-icon"></i>
+                                    <span>${chapter.title}</span>
+                                </div>
+                                <div class="chapter-meta">
+                                    <span>${chapter.lessonsCount} Lessons</span>
+                                    <span>${chapter.duration}</span>
+                                </div>
+                            </div>
+                            <div class="chapter-content" ${chapter.expanded ? 'style="display: block;"' : ''}>
+                                ${lessonsHtml}
+                            </div>
+                        </div>
+                    `;
+                    $('#courseLessonsList').append(chapterHtml);
+                });
+
+                // Set initial toggle icon rotation for expanded chapters
+                $('.chapter-section.expanded .chapter-toggle-icon').css('transform', 'rotate(90deg)');
+            }
+
+            async function collectCourseDataFromSelections() {
+                const chapterSelect = $('#chapter');
+                let chapterOptions = [];
+
+                if (chapterSelect.hasClass('select2-hidden-accessible')) {
+                    chapterOptions = chapterSelect.select2('data');
+                } else {
+                    chapterOptions = chapterSelect.find('option:selected').map(function () {
+                        return {
+                            id: $(this).val(),
+                            text: $(this).text()
+                        };
+                    }).get();
                 }
 
-                // Call render function on page load
-                renderCourseContent();
+                const courseData = [];
 
-                // --- Event Listeners ---
+                for (const chapter of chapterOptions) {
+                    const chapterId = chapter.id;
+                    const chapterTitle = chapter.text;
+                    const lessonSelect = $(`select[name="lessons[${chapterId}][]"]`);
+                    const selectedLessonIds = lessonSelect.val() || [];
 
-                // Toggle chapter expansion
-                $courseLessonsList.on('click', '.chapter-header', function() {
-                    const $chapterSection = $(this).closest('.chapter-section');
-                    const $chapterContent = $chapterSection.find('.chapter-content');
-                    const $toggleIcon = $(this).find('.chapter-toggle-icon');
+                    if (selectedLessonIds.length === 0) continue;
+                    // Fetch lesson data for the selected lesson IDs
+                    const lessonData = await $.get('/api/lessons-by-id', { ids: selectedLessonIds });
 
-                    $chapterContent.slideToggle(300, function() {
-                        $chapterSection.toggleClass('expanded');
-                        if ($chapterSection.hasClass('expanded')) {
-                            $toggleIcon.css('transform', 'rotate(90deg)');
-                            $(this).addClass('active'); // Add active class to header
-                        } else {
-                            $toggleIcon.css('transform', 'rotate(0deg)');
-                            $(this).removeClass('active'); // Remove active class from header
-                        }
+                    const lessonObjects = lessonData.map(lesson => ({
+                        id: lesson.id,
+                        name: lesson.file_name,
+                        file_path: lesson.file_path || 'video',
+                        type: lesson.file_type || 'video',
+                        duration: lesson.total_length || '10m',
+                        completed: lesson.completed || false,
+                        progress: lesson.progress || 0
+                    }));
+
+                    const totalSeconds = lessonObjects.reduce((sum, lesson) => {
+                        return sum + timeStringToSeconds(lesson.duration);
+                    }, 0);
+
+                    const totalDuration = secondsToTimeString(totalSeconds);
+
+                    courseData.push({
+                        id: chapterId,
+                        title: chapterTitle,
+                        lessonsCount: lessonObjects.length,
+                        duration: totalDuration,
+                        expanded: true,
+                        lessons: lessonObjects
                     });
-                    $(this).toggleClass('active'); // Toggle active class on header itself
+                }
+
+                console.log(courseData[0].lessons[0].file_path, 'hello');
+
+                const filePath = 'storage/' + courseData[0].lessons[0].file_path;
+                const fullUrl = `${appUrl}/${filePath}`;
+
+                $('#videoSource').attr('src', fullUrl);
+                $('#lesson-player')[0].load();
+
+                const totalChapters = courseData.length;
+    
+                // ✅ Total lessons count
+                const totalLessons = courseData.reduce((sum, chapter) => sum + chapter.lessons.length, 0);
+    
+                // ✅ Total duration in seconds
+                const totalCourseSeconds = courseData.reduce((sum, chapter) => {
+                    return sum + timeStringToSeconds(chapter.duration);
+                }, 0);
+    
+                const totalCourseDuration = secondsToTimeString(totalCourseSeconds);
+                $('#total-chapters').text(totalChapters + ' Chapters');
+                $('#total-lessons').text(totalLessons + ' Lessons');
+                $('#total-duration').text(totalCourseDuration + ' Duration');
+                $('#lastAudience').text($('input[name="audience"]:checked').val());
+                $('#show_title').text($('input[name="title"]').val());
+                $('#show_description').text($('textarea[name="description"]').val());
+                return courseData;
+            }
+
+            
+
+            function timeStringToSeconds(timeStr) {
+                const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+                return hours * 3600 + minutes * 60 + seconds;
+            }
+
+            // Converts seconds to "HH:MM:SS"
+            function secondsToTimeString(totalSeconds) {
+                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+                const seconds = String(totalSeconds % 60).padStart(2, '0');
+                return `${hours}:${minutes}:${seconds}`;
+            }
+
+            function chapterHeaderToggle() {  
+                const $chapterSection = $(this).closest('.chapter-section');
+                const $chapterContent = $chapterSection.find('.chapter-content');
+                const $toggleIcon = $(this).find('.chapter-toggle-icon');
+
+                $chapterContent.slideToggle(300, function() {
+                    $chapterSection.toggleClass('expanded');
+                    if ($chapterSection.hasClass('expanded')) {
+                        $toggleIcon.css('transform', 'rotate(90deg)');
+                        $(this).addClass('active'); // Add active class to header
+                    } else {
+                        $toggleIcon.css('transform', 'rotate(0deg)');
+                        $(this).removeClass('active'); // Remove active class from header
+                    }
                 });
+                $(this).toggleClass('active'); // Toggle active class on header itself
+            }
 
-                // Handle lesson item click (simulated active lesson)
-                $courseLessonsList.on('click', '.lesson-item', function() {
-                    // Remove active class from all lessons first
-                    $('.lesson-item').removeClass('active');
-                    // Add active class to the clicked lesson
-                    $(this).addClass('active');
+            $(document).ready(function() {
+                
 
-                    // Optional: In a real app, update main video player source here
-                    // const lessonType = $(this).find('.lesson-item-icon i').hasClass('fa-play') ? 'video' : 'pdf';
-                    // const lessonName = $(this).find('.lesson-name').text();
-                    // console.log(`Simulating playing: ${lessonName} (Type: ${lessonType})`);
+                // --- Data Definition (Simulated Course Structure) ---
+                // const courseData = [
+                //     {
+                //         id: 'chapter1',
+                //         title: "Fundamentals of Algebra: Variables & Expressions",
+                //         lessonsCount: 6,
+                //         duration: "30min",
+                //         expanded: true, // Initially expanded
+                //         lessons: [
+                //             { id: 'lesson1-1', type: 'video', name: 'Introduction', duration: '08 min, 27 Sec', completed: true, progress: 100 },
+                //             { id: 'lesson1-2', type: 'video', name: 'Structure', duration: '08 min, 27 Sec', completed: true, progress: 100 },
+                //             { id: 'lesson1-3', type: 'video', name: 'Strategy', duration: '08 min, 27 Sec', completed: true, progress: 100 },
+                //             { id: 'lesson1-4', type: 'video', name: 'Understanding', duration: '08 min, 27 Sec', completed: false, progress: 72 }, // Partially completed
+                //             { id: 'lesson1-5', type: 'pdf', name: 'Probability & Statistics Basics.pdf', duration: '04 min', completed: false, progress: 0 } // PDF
+                //         ]
+                //     },
+                //     {
+                //         id: 'chapter2',
+                //         title: "Solving Linear Equations & Inequalities",
+                //         lessonsCount: 4,
+                //         duration: "20min",
+                //         expanded: false,
+                //         lessons: [
+                //             { id: 'lesson2-1', type: 'video', name: 'Linear Equations Basics', duration: '05 min, 10 Sec', completed: false, progress: 0 },
+                //             { id: 'lesson2-2', type: 'video', name: 'Graphing Linear Equations', duration: '07 min, 00 Sec', completed: false, progress: 0 },
+                //             { id: 'lesson2-3', type: 'pdf', name: 'Inequalities Practice.pdf', duration: '08 min', completed: false, progress: 0 }
+                //         ]
+                //     },
+                //     {
+                //         id: 'chapter3',
+                //         title: "Systems of Equations: Solving by Substitution & Elimination",
+                //         lessonsCount: 2,
+                //         duration: "10min",
+                //         expanded: false,
+                //         lessons: [
+                //             { id: 'lesson3-1', type: 'video', name: 'Substitution Method', duration: '04 min, 30 Sec', completed: false, progress: 0 },
+                //             { id: 'lesson3-2', type: 'video', name: 'Elimination Method', duration: '05 min, 30 Sec', completed: false, progress: 0 }
+                //         ]
+                //     },
+                //     {
+                //         id: 'chapter4',
+                //         title: "Probability: Basic Concepts & Applications",
+                //         lessonsCount: 3,
+                //         duration: "15min",
+                //         expanded: false,
+                //         lessons: [
+                //             { id: 'lesson4-1', type: 'video', name: 'Introduction to Probability', duration: '06 min, 00 Sec', completed: false, progress: 0 },
+                //             { id: 'lesson4-2', type: 'video', name: 'Combinations & Permutations', duration: '05 min, 00 Sec', completed: false, progress: 0 },
+                //             { id: 'lesson4-3', type: 'pdf', name: 'Probability Exercises.pdf', duration: '04 min', completed: false, progress: 0 }
+                //         ]
+                //     },
+                //     {
+                //         id: 'chapter5',
+                //         title: "Introduction to Trigonometry: Ratios & Functions",
+                //         lessonsCount: 2,
+                //         duration: "10min",
+                //         expanded: false,
+                //         lessons: [
+                //             { id: 'lesson5-1', type: 'video', name: 'Trigonometric Ratios', duration: '05 min, 00 Sec', completed: false, progress: 0 },
+                //             { id: 'lesson5-2', type: 'video', name: 'Unit Circle Basics', duration: '05 min, 00 Sec', completed: false, progress: 0 }
+                //         ]
+                //     },
+                //     {
+                //         id: 'chapter6',
+                //         title: "Rational Expressions: Simplifying, Multiplying, & Dividing",
+                //         lessonsCount: 3,
+                //         duration: "20min",
+                //         expanded: false,
+                //         lessons: [
+                //             { id: 'lesson6-1', type: 'video', name: 'Simplifying Rational Expressions', duration: '07 min, 00 Sec', completed: false, progress: 0 },
+                //             { id: 'lesson6-2', type: 'video', name: 'Multiplying & Dividing Rational Expressions', duration: '08 min, 00 Sec', completed: false, progress: 0 },
+                //             { id: 'lesson6-3', type: 'pdf', name: 'Rational Expressions Quiz.pdf', duration: '05 min', completed: false, progress: 0 }
+                //         ]
+                //     }
+                // ];
 
-                    // You could also update the main video src based on lesson id/data
-                    // For example: $('#mainVideoPlayer source').attr('src', 'new-video-url.mp4');
-                    // $('#mainVideoPlayer')[0].load(); // Reload video player
-                });
 
-                // Simulate overall course progress
-                // This could be calculated based on completed lessons in a real app
-                const overallProgress = 67; // Hardcoded for this example
-                $('.student-profile-card .progress-bar').css('width', `${overallProgress}%`);
+
+                
+               
             });
         </script>
 

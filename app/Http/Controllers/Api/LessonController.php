@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Lesson;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
 use FFMpeg\FFMpeg;
+use FFMpeg\FFProbe;
+use App\Models\Lesson;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class LessonController extends Controller
 {
@@ -57,6 +59,7 @@ class LessonController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'audience' => 'required|in:High School,Graduation,College,SAT 2',
             'question_type' => 'nullable|in:Verbal,Quant,Physics,Chemistry,Biology,Math',
@@ -69,7 +72,7 @@ class LessonController extends Controller
 
         $file = $request->file('file');
         $path = $file->store('lessons', 'public'); // Change to 's3' for S3 storage
-
+ 
         $lesson = Lesson::create([
             'uuid' => Str::uuid(),
             'audience' => $request->audience,
@@ -141,15 +144,20 @@ class LessonController extends Controller
 
     private function getVideoLength($file)
     {
+
         try {
-            $ffmpeg = FFMpeg::create();
-            $video = $ffmpeg->open($file->getPathname());
-            $duration = $video->getDurationInSeconds();
-            $minutes = floor($duration / 60);
-            $seconds = $duration % 60;
-            return sprintf('%02d:%02d', $minutes, $seconds);
+
+            $ffprobe = FFProbe::create();
+            $durationInSeconds = $ffprobe
+                ->format($file->getRealPath()) // path to your video file
+                ->get('duration');
+
+            // Format to mm:ss or hh:mm:ss depending on your need
+            $formatted = gmdate("H:i:s", (int)$durationInSeconds);
+
+            return $formatted;
         } catch (\Exception $e) {
-            \Log::error('Failed to get video length: ' . $e->getMessage());
+            Log::error('Failed to get video length: ' . $e->getMessage());
             return '00:00'; // Fallback
         }
     }

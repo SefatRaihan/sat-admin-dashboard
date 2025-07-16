@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Lesson;
 use App\Traits\Historiable;
 use App\Traits\UserTrackable;
 use Illuminate\Database\Eloquent\Model;
@@ -35,4 +36,10 @@ class Chapter extends Model
     {
         return $this->belongsToMany(Course::class, 'course_chapter');
     }
+
+    public function lessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'chapter_lesson');
+    }
+
 }
