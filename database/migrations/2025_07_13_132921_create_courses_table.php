@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('total_chapter')->nullable();
             $table->integer('total_lesson')->nullable();
             $table->integer('total_duration')->nullable();
-            $table->tyninteger('status')->default(1);
             $table->foreignId('exam_id')->nullable()->constrained('exams')->onDelete('Set null')->comment('References the exam associated with the course');
             $table->tinyInteger('is_exam_create')->default(0)->comment('Indicates if the course has an associated exam');
             $table->timestamps();
