@@ -87,7 +87,17 @@
                         <li class="nav-item"><a href="/ranking" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Test Ranking</span></a></li>
                     </ul>
                 </li>
-
+                <li class="nav-item nav-item-submenu parent-nav-item-submenu">
+                    <a href="#" title="Manage Tests" class="nav-link legitRipple m-0 ml-2 mr-2">
+                        <img src="{{ asset('image/icon/manage-test.png') }}" alt="" class="mr-3" style="width: 16px; height: 16px;">
+                        <span>Manage Courses</span>
+                    </a>
+                    <ul class="nav nav-group-sub" data-submenu-title="Authorization">
+                        <li class="nav-item"><a href="/chapters" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Chapter</span></a></li>
+                        <li class="nav-item"><a href="/lessons" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Lesson</span></a></li>
+                        <li class="nav-item"><a href="/courses" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Course</span></a></li>
+                    </ul>
+                </li>
                 <li class="nav-item nav-item-submenu parent-nav-item-submenu">
                     <a href="#" title="Manage Packages" class="nav-link legitRipple m-0 ml-2 mr-2">
                         <img src="{{ asset('image/icon/manage-package.png') }}" alt="" class="mr-3" style="width: 16px; height: 16px;">
