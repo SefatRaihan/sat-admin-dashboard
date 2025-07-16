@@ -10,7 +10,7 @@
                         <div class="col-md-6 col-sm-12 d-flex align-content-center flex-wrap justify-content-center" style="border-right: 1px solid #dee2e6">
                             <div class="d-flex align-content-center flex-wrap justify-content-center">
                                 @if ($general != null)
-                                <img src="{{ asset('storage/' . $general->logo) }}" class="" alt="logo" style="width: 100%">
+                                <img src="{{ asset('/image/logo.png') }}" class="" alt="logo" style="width: 100%">
                                 @endif
                             </div>
                         </div>
