@@ -68,7 +68,7 @@
                                     <th>Audience</th>
                                     <th>Chapter No</th>
                                     <th>Lessons No</th>
-                                    <th>Duaration</th>
+                                    <th>Duration</th>
                                     <th>Created</th>
                                     <th class="text-center">Action</th>
                                 </tr>
