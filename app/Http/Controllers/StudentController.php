@@ -106,13 +106,23 @@ class StudentController extends Controller
         return view('backend.students.student_course', compact('courses', 'lessons'));
     }
 
-    public function studentCourseDetails()
+    public function studentCourseDetails($uuid)
     {
-        return view('backend.students.student_course_details');
+        $course = Course::where('uuid', $uuid)->first();
+        return view('backend.students.student_course_details', compact('course'));
     }
 
-    public function studentVideoLessonDetails()
+    public function studentVideoLessonDetails($uuid)
     {
-        return view('backend.students.student_video_lesson_details');
+        $lesson = Lesson::where('uuid', $uuid)->first();
+
+        $relatedLessons = Lesson::where('audience', $lesson->audience)
+            ->where('file_type', 'Video')
+            ->where('question_type', $lesson->question_type)
+            ->where('id', '!=', $lesson->id)
+            ->inRandomOrder()
+            ->get();
+
+        return view('backend.students.student_video_lesson_details', compact('lesson', 'relatedLessons'));
     }
 }
