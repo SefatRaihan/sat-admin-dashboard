@@ -260,7 +260,7 @@ class MainQuestionController extends Controller
 
             return response()->json([
                 'status' => false,
-                'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
