@@ -1633,7 +1633,6 @@
                 $(document).on('click', '.create-btn',selectLesson);
                 $(document).on('click', '.create-btn',selectExam);
 
-                initializeQuill(".editor")
 
                 $(".sat_2").change(function() {
                     $('#sat_type_1').find('input').prop('checked', false);
@@ -1666,10 +1665,8 @@
                     $("#courseModal").modal("hide"); // Hide modal on cancel (replace ID)
                 });
 
-                $(document).on("click", ".add-options", addOption);
 
                 // Event Listener for Removing an Option
-                $(document).on("click", ".remove-option", removeOption);
 
                 showStep(currentStep);
 
@@ -1762,7 +1759,7 @@
 
 
                 // course view
-                
+
                 $('#isExamCreate').change(function() {
                     if ($(this).is(':checked')) {
                         $('.exam-section').show(); // Show the section if checked
@@ -1773,12 +1770,11 @@
 
                 // --- Function to Collect Course Data from Selections ---
                 const $courseLessonsList = $('#courseLessonsList');
-                // Call render function on page load
 
-                // --- Event Listeners ---
 
                 // Toggle chapter expansion
                 $courseLessonsList.on('click', '.chapter-header', chapterHeaderToggle);
+                $(document).on('click change', '.lesson-name', selectedVideo);
 
                 // Handle lesson item click (simulated active lesson)
                 $courseLessonsList.on('click', '.lesson-item', function() {
@@ -1787,17 +1783,8 @@
                     // Add active class to the clicked lesson
                     $(this).addClass('active');
 
-                    // Optional: In a real app, update main video player source here
-                    // const lessonType = $(this).find('.lesson-item-icon i').hasClass('fa-play') ? 'video' : 'pdf';
-                    // const lessonName = $(this).find('.lesson-name').text();
-                    // console.log(`Simulating playing: ${lessonName} (Type: ${lessonType})`);
-
-                    // You could also update the main video src based on lesson id/data
-                    // For example: $('#mainVideoPlayer source').attr('src', 'new-video-url.mp4');
-                    // $('#mainVideoPlayer')[0].load(); // Reload video player
                 });
 
-                // Simulate overall course progress
                 // This could be calculated based on completed lessons in a real app
                 const overallProgress = 67; // Hardcoded for this example
                 $('.student-profile-card .progress-bar').css('width', `${overallProgress}%`);
@@ -1834,7 +1821,7 @@
 
                                 const wrapper = $(lessonSelectHTML);
                                 selectLesson('#lesson_' + chapterId);
-                                
+
 
                                 lessonContainer.append(wrapper);
                             });
@@ -1912,7 +1899,6 @@
 
                 $(".step-circle[data-step=" + step + "]").addClass("active");
 
-                initializeQuill(); // Reinitialize Quill editor if needed
 
                 updateButtons(); // Ensure button visibility updates
 
@@ -1945,16 +1931,10 @@
                 `;
 
                 $('#option-container').append(newOptionHtml);
-                initializeQuill(`#option-editor-${optionCount}`);
 
                 updateOptionContainerBorder();
             }
 
-            function removeOption() {
-                let optionId = $(this).data("option");
-                $(`#${optionId}`).remove();
-                updateOptionContainerBorder();
-            }
 
             // Function to Add/Remove Border Dynamically
             function updateOptionContainerBorder() {
@@ -2002,69 +1982,6 @@
                 $('#show-options').html(optionsHtml);
             }
 
-            function initializeQuill(selector, content = null) {
-                // console.log('Received content inside initializeQuill:', content);
-
-                $(selector).each(function() {
-                    if (!$(this).hasClass("ql-container")) {
-                        new Quill(this, {
-                            modules: {
-                                toolbar: [
-                                    ['bold', 'italic', 'underline', 'strike'],
-                                    ['blockquote', 'code-block'],
-                                    ['link', 'image', 'video', 'formula'],
-                                    [{
-                                        'header': 1
-                                    }, {
-                                        'header': 2
-                                    }],
-                                    [{
-                                        'list': 'ordered'
-                                    }, {
-                                        'list': 'bullet'
-                                    }],
-                                    [{
-                                        'script': 'sub'
-                                    }, {
-                                        'script': 'super'
-                                    }],
-                                    [{
-                                        'direction': 'rtl'
-                                    }],
-                                    [{
-                                        'size': ['small', false, 'large', 'huge']
-                                    }],
-                                    [{
-                                        'header': [1, 2, 3, 4, 5, 6, false]
-                                    }],
-                                    [{
-                                        'color': []
-                                    }, {
-                                        'background': []
-                                    }],
-                                    [{
-                                        'font': []
-                                    }],
-                                    [{
-                                        'align': []
-                                    }]
-                                ]
-                            },
-                            placeholder: 'Type your content here...',
-                            theme: 'snow'
-                        });
-                        // console.log('Before condition check: content.trim() is', content);
-
-                        if (content !== null && content.trim() !== '') {
-                            // console.log('Content being set: ', content);
-                            quill.root.innerHTML = content; // Set the content as HTML
-                        } else {
-                            // console.log('No content to set or content is empty.');
-                        }
-                    }
-                });
-            }
-
             function store(e){
                 e.preventDefault();
 
@@ -2107,7 +2024,7 @@
                     const selectedLessons = lessonSelect.val() || [];
                     formData.lessons[chapterId] = selectedLessons;
                 });
-                
+
                 $.ajax({
                     url: '/api/course',
                     type: 'POST',
@@ -2263,7 +2180,7 @@
                                     <td>9</td>
                                     <td>20 min</td>
                                     <td>${course.created_at}</td>
-                            
+
                                     <td class="text-center">
                                          <button data-toggle="modal" data-id="${course.id}" data-target="#courseModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
                                     </td>
@@ -2531,9 +2448,6 @@
                     $('#explanation .ql-editor').html(response.explanation);
                     selectTopic(response.topic_id);
 
-                    initializeQuill('#context', response.course_description);
-                    initializeQuill('#mcq_course', response.course_title);
-
                     // Parse and set options
                     let options = JSON.parse(response.options);
                     // $('#option-container').html('');
@@ -2549,7 +2463,6 @@
                         `;
 
                         $('#option-container').append(newOptionHtml);
-                        initializeQuill(`#option-editor-${index}`);
                     });
 
 
@@ -2674,7 +2587,7 @@
                     },
                 });
             }
-            
+
 
 
             // --- Function to Render Course Sections and Lessons ---
@@ -2682,10 +2595,10 @@
                 $('#courseLessonsList').empty(); // Clear existing content
 
                 const courseData = await collectCourseDataFromSelections();
-                courseData.forEach(chapter => {
+                courseData.forEach((chapter, index) => {
                     let lessonsHtml = '';
                     chapter.lessons.forEach(lesson => {
-                        
+
                         const iconClass = lesson.type === 'Video' ? 'fa-play' : 'fa-file-pdf';
                         const statusHtml = lesson.completed ? '<i class="fas fa-check-circle"></i>' :
                                         (lesson.progress > 0 && lesson.progress < 100 ?
@@ -2698,7 +2611,7 @@
                                     <i class="fas ${iconClass}"></i>
                                 </div>
                                 <div class="lesson-details">
-                                    <div class="lesson-name">${lesson.name}</div>
+                                    <div class="lesson-name" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.file_path}">${lesson.name}</div>
                                     <div class="lesson-duration">${lesson.duration}</div>
                                 </div>
                                 <div class="lesson-status">
@@ -2708,9 +2621,8 @@
                         `;
                     });
 
-                    const chapterClass = chapter.expanded ? 'expanded' : '';
-                    const toggleIconClass = chapter.expanded ? 'fa-chevron-right' : 'fa-chevron-right'; // Initial state arrow
-                    const chapterHeaderActiveClass = chapter.expanded ? 'active' : '';
+                    const chapterClass = index === 0 ? 'expanded' : '';
+                    const chapterHeaderActiveClass = index === 0 ? 'active' : '';
 
                     const chapterHtml = `
                         <div class="chapter-section ${chapterClass}" data-chapter-id="${chapter.id}">
@@ -2724,7 +2636,7 @@
                                     <span>${chapter.duration}</span>
                                 </div>
                             </div>
-                            <div class="chapter-content" ${chapter.expanded ? 'style="display: block;"' : ''}>
+                            <div class="chapter-content" ${index === 0 ? 'style="display: block;"' : ''}>
                                 ${lessonsHtml}
                             </div>
                         </div>
@@ -2792,21 +2704,21 @@
                 console.log(courseData[0].lessons[0].file_path, 'hello');
 
                 const filePath = 'storage/' + courseData[0].lessons[0].file_path;
-                const fullUrl = `${appUrl}/${filePath}`;
+                const fullUrl = `${appUrl}${filePath}`;
 
                 $('#videoSource').attr('src', fullUrl);
                 $('#lesson-player')[0].load();
 
                 const totalChapters = courseData.length;
-    
+
                 // ✅ Total lessons count
                 const totalLessons = courseData.reduce((sum, chapter) => sum + chapter.lessons.length, 0);
-    
+
                 // ✅ Total duration in seconds
                 const totalCourseSeconds = courseData.reduce((sum, chapter) => {
                     return sum + timeStringToSeconds(chapter.duration);
                 }, 0);
-    
+
                 const totalCourseDuration = secondsToTimeString(totalCourseSeconds);
                 $('#total-chapters').text(totalChapters + ' Chapters');
                 $('#total-lessons').text(totalLessons + ' Lessons');
@@ -2817,7 +2729,7 @@
                 return courseData;
             }
 
-            
+
 
             function timeStringToSeconds(timeStr) {
                 const [hours, minutes, seconds] = timeStr.split(':').map(Number);
@@ -2832,108 +2744,43 @@
                 return `${hours}:${minutes}:${seconds}`;
             }
 
-            function chapterHeaderToggle() {  
-                const $chapterSection = $(this).closest('.chapter-section');
+            function chapterHeaderToggle() {
+                const $header = $(this);
+                const $chapterSection = $header.closest('.chapter-section');
                 const $chapterContent = $chapterSection.find('.chapter-content');
-                const $toggleIcon = $(this).find('.chapter-toggle-icon');
+                const $toggleIcon = $header.find('.chapter-toggle-icon');
 
-                $chapterContent.slideToggle(300, function() {
+                $chapterContent.slideToggle(300, function () {
                     $chapterSection.toggleClass('expanded');
+
                     if ($chapterSection.hasClass('expanded')) {
                         $toggleIcon.css('transform', 'rotate(90deg)');
-                        $(this).addClass('active'); // Add active class to header
+                        $header.addClass('active');
                     } else {
                         $toggleIcon.css('transform', 'rotate(0deg)');
-                        $(this).removeClass('active'); // Remove active class from header
+                        $header.removeClass('active');
                     }
                 });
-                $(this).toggleClass('active'); // Toggle active class on header itself
             }
 
-            $(document).ready(function() {
-                
+            function selectedVideo() {
+                const $lessonItem = $(this);
+                const lessonId = $lessonItem.data('lesson-id');
+                const filePath = 'storage/'+$lessonItem.data('lesson-path');
 
-                // --- Data Definition (Simulated Course Structure) ---
-                // const courseData = [
-                //     {
-                //         id: 'chapter1',
-                //         title: "Fundamentals of Algebra: Variables & Expressions",
-                //         lessonsCount: 6,
-                //         duration: "30min",
-                //         expanded: true, // Initially expanded
-                //         lessons: [
-                //             { id: 'lesson1-1', type: 'video', name: 'Introduction', duration: '08 min, 27 Sec', completed: true, progress: 100 },
-                //             { id: 'lesson1-2', type: 'video', name: 'Structure', duration: '08 min, 27 Sec', completed: true, progress: 100 },
-                //             { id: 'lesson1-3', type: 'video', name: 'Strategy', duration: '08 min, 27 Sec', completed: true, progress: 100 },
-                //             { id: 'lesson1-4', type: 'video', name: 'Understanding', duration: '08 min, 27 Sec', completed: false, progress: 72 }, // Partially completed
-                //             { id: 'lesson1-5', type: 'pdf', name: 'Probability & Statistics Basics.pdf', duration: '04 min', completed: false, progress: 0 } // PDF
-                //         ]
-                //     },
-                //     {
-                //         id: 'chapter2',
-                //         title: "Solving Linear Equations & Inequalities",
-                //         lessonsCount: 4,
-                //         duration: "20min",
-                //         expanded: false,
-                //         lessons: [
-                //             { id: 'lesson2-1', type: 'video', name: 'Linear Equations Basics', duration: '05 min, 10 Sec', completed: false, progress: 0 },
-                //             { id: 'lesson2-2', type: 'video', name: 'Graphing Linear Equations', duration: '07 min, 00 Sec', completed: false, progress: 0 },
-                //             { id: 'lesson2-3', type: 'pdf', name: 'Inequalities Practice.pdf', duration: '08 min', completed: false, progress: 0 }
-                //         ]
-                //     },
-                //     {
-                //         id: 'chapter3',
-                //         title: "Systems of Equations: Solving by Substitution & Elimination",
-                //         lessonsCount: 2,
-                //         duration: "10min",
-                //         expanded: false,
-                //         lessons: [
-                //             { id: 'lesson3-1', type: 'video', name: 'Substitution Method', duration: '04 min, 30 Sec', completed: false, progress: 0 },
-                //             { id: 'lesson3-2', type: 'video', name: 'Elimination Method', duration: '05 min, 30 Sec', completed: false, progress: 0 }
-                //         ]
-                //     },
-                //     {
-                //         id: 'chapter4',
-                //         title: "Probability: Basic Concepts & Applications",
-                //         lessonsCount: 3,
-                //         duration: "15min",
-                //         expanded: false,
-                //         lessons: [
-                //             { id: 'lesson4-1', type: 'video', name: 'Introduction to Probability', duration: '06 min, 00 Sec', completed: false, progress: 0 },
-                //             { id: 'lesson4-2', type: 'video', name: 'Combinations & Permutations', duration: '05 min, 00 Sec', completed: false, progress: 0 },
-                //             { id: 'lesson4-3', type: 'pdf', name: 'Probability Exercises.pdf', duration: '04 min', completed: false, progress: 0 }
-                //         ]
-                //     },
-                //     {
-                //         id: 'chapter5',
-                //         title: "Introduction to Trigonometry: Ratios & Functions",
-                //         lessonsCount: 2,
-                //         duration: "10min",
-                //         expanded: false,
-                //         lessons: [
-                //             { id: 'lesson5-1', type: 'video', name: 'Trigonometric Ratios', duration: '05 min, 00 Sec', completed: false, progress: 0 },
-                //             { id: 'lesson5-2', type: 'video', name: 'Unit Circle Basics', duration: '05 min, 00 Sec', completed: false, progress: 0 }
-                //         ]
-                //     },
-                //     {
-                //         id: 'chapter6',
-                //         title: "Rational Expressions: Simplifying, Multiplying, & Dividing",
-                //         lessonsCount: 3,
-                //         duration: "20min",
-                //         expanded: false,
-                //         lessons: [
-                //             { id: 'lesson6-1', type: 'video', name: 'Simplifying Rational Expressions', duration: '07 min, 00 Sec', completed: false, progress: 0 },
-                //             { id: 'lesson6-2', type: 'video', name: 'Multiplying & Dividing Rational Expressions', duration: '08 min, 00 Sec', completed: false, progress: 0 },
-                //             { id: 'lesson6-3', type: 'pdf', name: 'Rational Expressions Quiz.pdf', duration: '05 min', completed: false, progress: 0 }
-                //         ]
-                //     }
-                // ];
+                if (filePath) {
+                    const fullUrl = `${appUrl}${filePath}`;
+                    $('#videoSource').attr('src', fullUrl);
+                    $('#lesson-player')[0].load();
+                    const video = $('#lesson-player')[0];
+                    video.load();
+                    video.play()
+                } else {
+                    console.error('File path is not available for this lesson.');
+                }
+            }
 
 
-
-                
-               
-            });
         </script>
 
     @endpush

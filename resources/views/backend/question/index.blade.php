@@ -2495,11 +2495,8 @@
                     $('#question_id').val(response.id);
                     $('#modalTitle').text('Edit Question'); // Change modal title
                     $('#question_title').val(response.question_title);
-                    // $('#question_description').val(response.question_description);
-                    // $('#question_text').val(response.question_text);
                     $('#difficulty').val(response.difficulty);
                     $('#question_type').val(response.question_type);
-                    // $('#audience').val(response.audience);
                     $('#context .ql-editor').html(response.question_description),
                     $('#mcq_question .ql-editor').html(response.question_text),
                     $('#explanation .ql-editor').html(response.explanation);
@@ -2510,7 +2507,7 @@
 
                     // Parse and set options
                     let options = JSON.parse(response.options);
-                    // $('#option-container').html('');
+
                     options.forEach(function(optionText, index) {
 
                         let newOptionHtml = `
@@ -2530,12 +2527,6 @@
                     $('#questionCorrectAnswer').val(response.correct_answer);
                     $('#questionId').val(response.id);
                     $('#questionModal').modal('show');
-
-                    // $('#audience').val(response.audience);
-                    // $('#question_type').val(response.question_type);
-                    // $('#question_title').val(response.question_title);
-
-                    // $('#question_description').val(response.question_description);
                 });
             }
 

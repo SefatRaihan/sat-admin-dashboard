@@ -27,9 +27,9 @@ return new class extends Migration
             $table->enum('sat_question_type', ['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])->nullable()->comment('Specifies the subject type for SAT questions')->index();
 
             // Question Details
-            $table->text('question_title')->comment('Short title for the question');
-            $table->text('question_description')->nullable()->comment('Detailed description of the question');
-            $table->text('question_text');
+            $table->longText('question_title')->comment('Short title for the question');
+            $table->longText('question_description')->nullable()->comment('Detailed description of the question');
+            $table->longText('question_text');
             $table->enum('question_type', ['MCQ', 'Fill-in-the-Blank', 'Paragraph'])->default('MCQ')->index();
             $table->json('options')->nullable()->comment('Stores possible answers for MCQs');
             $table->string('correct_answer', 255);
