@@ -8,6 +8,8 @@ use App\Models\ExamAttempt;
 use App\Models\ExamAttemptQuestion;
 use App\Models\Exam;
 use App\Exports\StudentsExport;
+use App\Models\Course;
+use App\Models\Lesson;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\StudentNotification;
 use Illuminate\Support\Facades\Validator;
@@ -99,7 +101,9 @@ class StudentController extends Controller
 
     public function studentCourse()
     {
-        return view('backend.students.student_course');
+        $courses = Course::latest()->get();
+        $lessons = Lesson::where('file_type', 'Video')->latest()->get();
+        return view('backend.students.student_course', compact('courses', 'lessons'));
     }
 
     public function studentCourseDetails()
