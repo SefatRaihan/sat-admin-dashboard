@@ -64,7 +64,7 @@ class LessonController extends Controller
 
         $file = $request->file('file');
         $path = $file->store('lessons', 'public'); // Change to 's3' for S3 storage
-        $totalLength = $file->getClientOriginalExtension() === 'mp4' ? $this->getVideoLength($file) : null;
+        $totalLength = $file->getClientOriginalExtension() == 'mp4' ? $this->getVideoLength($file) : null;
 
         return response()->json([
             'success' => true,
@@ -183,14 +183,26 @@ class LessonController extends Controller
     private function getVideoLength($file)
     {
         try {
-            $ffprobe = FFProbe::create();
-            $durationInSeconds = $ffprobe
-                ->format($file->getRealPath())
-                ->get('duration');
-            return gmdate("H:i:s", (int)$durationInSeconds);
+            $getID3 = new \getID3;
+            $path = $file->getRealPath();
+
+            if (!file_exists($path)) {
+                \Log::error("File does not exist at path: $path");
+                return '00:00';
+            }
+
+            $info = $getID3->analyze($path);
+            if (!isset($info['playtime_seconds'])) {
+                \Log::error("Unable to get playtime from getID3.");
+                return '00:00';
+            }
+
+            $duration = (int) $info['playtime_seconds'];
+            return gmdate("H:i:s", $duration);
         } catch (\Exception $e) {
-            \Log::error('Failed to get video length: ' . $e->getMessage());
+            \Log::error('Failed to get video length (getID3): ' . $e->getMessage());
             return '00:00';
         }
     }
+
 }
