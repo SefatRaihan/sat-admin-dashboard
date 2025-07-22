@@ -2156,8 +2156,8 @@
                                     <td><input type="checkbox" class="row-checkbox course-row" value="${course.uuid}"></td>
                                     <td>${course.title}</td>
                                     <td>${course.audience}</td>
-                                    <td>${course.total_chpater}</td>
                                     <td>${course.total_chapter}</td>
+                                    <td>${course.total_lesson}</td>
                                     <td>${formatDuration(course.total_duration)}</td>
                                     <td>${formatDate(course.created_at)}</td>
 
