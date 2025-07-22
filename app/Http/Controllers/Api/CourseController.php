@@ -29,6 +29,7 @@ class CourseController extends Controller
         'getLesson' => 'Lesson',
         'getChapter' => 'Chapter',
         'markComplete' => 'Mark Complete',
+        'courseDelete' => 'Delete Course',
     ];
 
     /**
@@ -43,8 +44,7 @@ class CourseController extends Controller
             $search = $request->search;
             $course->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('duration', 'like', "%{$search}%");
+                  ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -78,7 +78,6 @@ class CourseController extends Controller
             'title'             => 'required|string|max:255',
             'description'       => 'nullable|string|max:1000',
             'exam'              => 'nullable',
-            'sat_course_type'   => 'nullable|string',
             'chapters'          => 'required|array',    
             'chapters.*'        => 'exists:chapters,id',
             'lessons'           => 'required|array',
@@ -165,7 +164,11 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        // Load related chapters and lessons
+        $course->load(['chapters', 'chapters.lessons']);
+
+        // Return the course with its chapters and lessons
+        return response()->json($course);
     }
 
     /**
@@ -179,9 +182,118 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCourseRequest $request, Course $course)
+    public function update(Request $request, $courseId)
     {
-        //
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
+            'audience'          => 'required|string',
+            'sat_course_type'   => 'nullable|string',
+            'title'             => 'required|string|max:255',
+            'description'       => 'nullable|string|max:1000',
+            'exam'              => 'nullable|numeric|exists:exams,id',
+            'chapters'          => 'required|array',
+            'chapters.*'        => 'exists:chapters,id',
+            'lessons'           => 'required|array',
+            'lessons.*'         => 'array',
+            'lessons.*.*'       => 'exists:lessons,id',
+            'total_duration'    => 'nullable|numeric',
+            'total_chapter'     => 'nullable|numeric',
+            'total_lesson'      => 'nullable|numeric',
+            'thumbnail'         => 'nullable|file|mimes:jpeg,png|max:10240', // 10MB max
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $validated = $validator->validated();
+
+        // Find the course by ID
+        $course = Course::findOrFail($courseId);
+
+        DB::beginTransaction();
+
+        try {
+            // Handle thumbnail upload
+            $filePath = $course->thumbnail; // Retain existing thumbnail if no new one is uploaded
+
+            if ($request->hasFile('thumbnail')) {
+                $uploadedFile = $request->file('thumbnail');
+                $fileName = time() . self::generateCourseCode() . '.' . $uploadedFile->getClientOriginalExtension();
+                $filePath = $uploadedFile->storeAs('course', $fileName, 'public');
+
+                // Optionally, delete the old thumbnail if it exists
+                if ($course->thumbnail && Storage::disk('public')->exists($course->thumbnail)) {
+                    Storage::disk('public')->delete($course->thumbnail);
+                }
+            }
+
+            // Update the course details
+            $course->update([
+                'audience'       => $validated['audience'],
+                'subject'        => $validated['sat_course_type'] ?? null,
+                'title'          => $validated['title'],
+                'description'    => $validated['description'] ?? null,
+                'exam_id'        => isset($validated['exam']) && is_numeric($validated['exam']) ? (int) $validated['exam'] : null,
+                'total_duration' => isset($validated['total_duration']) && is_numeric($validated['total_duration']) ? (int) $validated['total_duration'] : null,
+                'total_lesson'   => isset($validated['total_lesson']) && is_numeric($validated['total_lesson']) ? (int) $validated['total_lesson'] : null,
+                'total_chapter'  => isset($validated['total_chapter']) && is_numeric($validated['total_chapter']) ? (int) $validated['total_chapter'] : null,
+                'thumbnail'      => $filePath,
+            ]);
+
+            // Sync chapters (replace existing chapters with new ones)
+            $course->chapters()->sync($validated['chapters']);
+
+            // Sync lessons for each chapter
+            foreach ($validated['chapters'] as $chapterId) {
+                $lessonIds = $validated['lessons'][$chapterId] ?? [];
+
+                if (!empty($lessonIds)) {
+                    // Prepare data for upsert
+                    $lessonData = collect($lessonIds)->map(function ($lessonId) use ($chapterId, $course) {
+                        return [
+                            'course_id'  => $course->id,
+                            'chapter_id' => $chapterId,
+                            'lesson_id'  => $lessonId,
+                            'updated_at' => now(),
+                            'created_at' => now(),
+                        ];
+                    })->toArray();
+
+                    // Upsert lessons for the chapter
+                    DB::table('chapter_lesson')->upsert(
+                        $lessonData,
+                        ['course_id', 'chapter_id', 'lesson_id'], // Composite unique key
+                        ['updated_at'] // Update timestamp on duplicate
+                    );
+                }
+
+                // Remove any lessons not included in the request for this chapter
+                DB::table('chapter_lesson')
+                    ->where('course_id', $course->id)
+                    ->where('chapter_id', $chapterId)
+                    ->whereNotIn('lesson_id', $lessonIds)
+                    ->delete();
+            }
+
+            // Remove any chapters not included in the request
+            $course->chapters()->whereNotIn('chapter_id', $validated['chapters'])->detach();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Course updated successfully'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Course update failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -206,7 +318,7 @@ class CourseController extends Controller
 
     public function getLesson()
     {
-        $exams = Lesson::select('id', 'file_name as text')->get();
+        $exams = Lesson::select('id', 'title as text')->get();
         return response()->json($exams);
     }
 
@@ -264,5 +376,23 @@ class CourseController extends Controller
         }
     }
 
+    public function courseDelete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'courses' => 'required|array',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            $ids = $request->input('courses');
+            Course::whereIn('uuid', $ids)->delete();
+
+            return response()->json(['status' => 'success', 'message' => 'Courses deleted successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
 }

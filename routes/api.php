@@ -63,6 +63,8 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::get('lessons-by-id', [CourseController::class, 'getLessonByIds']);
     Route::get('get-chapter', [CourseController::class, 'getChapter']);
     Route::apiResource('course', CourseController::class);
+    Route::post('course/{id}/update', [CourseController::class, 'update']);
+    Route::post('courses-delete', [CourseController::class, 'courseDelete']);
 
     /*
     |--------------------------------------------------------------------------
