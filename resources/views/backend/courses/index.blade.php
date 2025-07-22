@@ -136,32 +136,6 @@
                                     <input type="date" class="form-control" name="crated_end_at">
                                 </div>
                             </div>
-                            <div id="filter-status">
-                                <div class="d-flex justify-content-between">
-                                    <h6><b>Status:</b> Active Only</h6>
-                                </div>
-                                <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="all"
-                                        value="All" checked>
-                                    <label class="form-check-label" for="all">
-                                        All
-                                    </label>
-                                </div>
-                                <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="activeonly"
-                                        value="Active only">
-                                    <label class="form-check-label" for="activeonly">
-                                        Active only
-                                    </label>
-                                </div>
-                                <div class="form-check status-radio">
-                                    <input class="form-check-input" type="radio" name="status" id="inactiveonly"
-                                        value="Inactive only">
-                                    <label class="form-check-label" for="inactiveonly">
-                                        Inactive only
-                                    </label>
-                                </div>
-                            </div>
                             <div class="mt-2">
                                 <div class="d-flex justify-content-between">
                                     <h6><b>Audience & Type:</b> All Result</h6>
@@ -223,31 +197,6 @@
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <div class="d-flex justify-content-between">
-                                    <h6><b>Defficulty:</b> All result</h6>
-                                </div>
-                                <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" class="difficulty" value="Easy">
-                                    <label class="form-check-label pl-1"><span
-                                            class="badge badge-pill badge-easy"><b>Easy</b></span></label>
-                                </div>
-                                <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" class="difficulty" value="Medium">
-                                    <label class="form-check-label pl-1"><span
-                                            class="badge badge-pill badge-medium"><b>Medium</b></span></label>
-                                </div>
-                                <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" class="defficulty" value="Hard">
-                                    <label class="form-check-label pl-1" for="gladiator"><span
-                                            class="badge badge-pill badge-hard"><b>Hard</b></span></label>
-                                </div>
-                                <div class="form-check custom-checkbox d-flex justify-center">
-                                    <input type="checkbox" class="difficulty" value="Very Hard">
-                                    <label class="form-check-label pl-1" for="gladiator"><span
-                                            class="badge badge-pill badge-very-hard"><b>Very Hard</b></span></label>
-                                </div>
-                            </div>
-                            <div class="mt-2">
                                 <div class="slider-container" style="max-width: 100% !important">
                                     <div class="slider-header">
                                         <span>Average Time:</span>
@@ -284,7 +233,7 @@
     </section>
 
     {{-- show details modal --}}
-    <section>
+    {{-- <section>
         <div class="modal fade" id="detailModalCenter" tabindex="-1" role="dialog"
             aria-labelledby="detailModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 60%">
@@ -479,7 +428,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     {{-- create modal --}}
     <section>
@@ -635,6 +584,28 @@
                                     <p class="text-right" style="color: #475467">429 /500 character Maximum </p>
                                 </div>
                             </div>
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">5. Course Thumbnail</label>
+
+                                <div id="thumbnail-upload-box" class="upload-box text-center p-4 border border-dashed rounded">
+                                    <input type="file" id="thumbnail" name="thumbnail" class="d-none" accept="image/jpeg, image/png" />
+
+                                    <div id="upload-preview" class="mb-2">
+                                        <img src="#" id="preview-image" alt="Preview" class="img-fluid d-none" style="max-height: 200px;" />
+                                    </div>
+
+                                    <label for="thumbnail" class="upload-label mt-3">
+                                        <div class="upload-icon mb-2">
+                                                <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
+                                        </div>
+                                        <span class="d-block fw-semibold text-primary">Click to upload</span>
+                                        <span class="text-muted small">or drag and drop</span><br>
+                                        <span class="text-muted small">JPEG, PNG formats</span><br>
+                                        <span class="text-muted small">[Max: 10MB]</span>
+                                    </label>
+                                </div>
+                            </div>
+
                         </div>
 
                         {{-- Placeholder for future steps --}}
@@ -651,8 +622,7 @@
                             <div>
                                 <h5><strong>Lesson</strong></h5>
                                 <div class="form-group lessonSelectBox">
-                                    {{-- <label for="" id="chapterTitle"></label>
-                                    <select name="lesson" class="form-control lesson" id="lesson" multiple></select> --}}
+
                                 </div>
                             </div>
 
@@ -943,6 +913,22 @@
                 margin-right: 0px;
                 margin-bottom: 14px;
             }
+
+            /* thumbnail upload */
+            .upload-box {
+                border: 2px dashed #d1c4e9;
+                background-color: #fdfdff;
+                cursor: pointer;
+                transition: border-color 0.3s ease;
+            }
+            .upload-box:hover {
+                border-color: #7e57c2;
+            }
+            .upload-label {
+                display: block;
+                cursor: pointer;
+            }
+
         </style>
         <style>
             .floating-sidebar {
@@ -1131,7 +1117,7 @@
 
             .upload-icon {
                 position: absolute;
-                bottom: 50px;
+                bottom: 150px;
                 left: 50%;
                 transform: translateX(-50%);
                 width: 40px;
@@ -1702,7 +1688,6 @@
 
                 //end datatable code
 
-                $(document).on('change', '.toggle-status', updateState);
 
                 $(document).on("change", ".row-checkbox", function() {
                     $(this).closest("tr").toggleClass("selected", this.checked);
@@ -1985,50 +1970,50 @@
             function store(e){
                 e.preventDefault();
 
-                // Get the submit button
-                const submitButton = $('button[type="submit"]'); // Adjust selector based on your HTML
-
-                // Change button text to "Processing" and disable it
+                const submitButton = $('button[type="submit"]');
                 submitButton.text('Processing').prop('disabled', true);
 
-                let formData = {
-                    audience:  $('input[name="audience"]:checked').val(),
-                    title: $('input[name="title"]').val(),
-                    description: $('textarea[name="description"]').val(),
-                    exam: $('#exam').val(),
-                    exam: $('input[name="is"]:checked').val(),
-                    sat_course_type: $('input[name="course_type"]:checked').val() || $('input[name="subjects"]:checked').val(),
-                    chapters: [], // store chapter IDs
-                    lessons: {},
+                // Create a real FormData object to handle file uploads
+                let formData = new FormData();
 
+                // Append normal fields
+                formData.append('audience', $('input[name="audience"]:checked').val());
+                formData.append('title', $('input[name="title"]').val());
+                formData.append('description', $('textarea[name="description"]').val());
+                formData.append('exam', $('#exam').val());
+                formData.append('total_duration', $('#total-duration').data('duration'));
+                formData.append('total_chapter', $('#total-chapters').data('chapter'));
+                formData.append('total_lesson', $('#total-lessons').data('lesson'));
+                formData.append('exam_checked', $('input[name="isExamCreate"]:checked').val());
 
-                };
-                // sat_type: $('input[name="audience"]:checked').val() === 'SAT 2' ? 'SAT 2' : 'SAT 1',
-                // course_title: $('#mcq_course .ql-editor').html(),
-                // course_description: $('#context .ql-editor').html(),
-                // course_text: $('#mcq_course .ql-editor').html(),
-                // course_type: 'MCQ',
-                // options: JSON.stringify(getOptions()),
-                // correct_answer: $('input[name="mcq_options"]:checked').val(),
-                // difficulty: $('input[name="difficulty"]:checked').val(),
-                // explanation: $('#explanation .ql-editor').html(),
-                // status: $('input[name="course_status"]:checked').val(),
-                // courseId: $('#courseId').val(),
-                // topic: $('#topic').val(),
+                let courseType = $('input[name="course_type"]:checked').val() || $('input[name="subjects"]:checked').val();
+                formData.append('sat_course_type', courseType);
 
-                formData.chapters = $('#chapter').val() || []; // e.g., ['1', '2']
+                // Append thumbnail file (if selected)
+                let thumbnail = $('#thumbnail')[0].files[0];
+                if (thumbnail) {
+                    formData.append('thumbnail', thumbnail);
+                }
 
-                // For each selected chapter, get its lessons
-                formData.chapters.forEach(chapterId => {
-                    const lessonSelect = $(`select[name="lessons[${chapterId}][]"]`);
-                    const selectedLessons = lessonSelect.val() || [];
-                    formData.lessons[chapterId] = selectedLessons;
+                // Append chapters
+                let chapters = $('#chapter').val() || [];
+                chapters.forEach((chapterId, index) => {
+                    formData.append(`chapters[${index}]`, chapterId);
+
+                    // Append lessons for each chapter
+                    const selectedLessons = $(`select[name="lessons[${chapterId}][]"]`).val() || [];
+                    selectedLessons.forEach((lessonId, lessonIndex) => {
+                        formData.append(`lessons[${chapterId}][${lessonIndex}]`, lessonId);
+                    });
                 });
+
 
                 $.ajax({
                     url: '/api/course',
                     type: 'POST',
                     data: formData,
+                    processData: false,
+                    contentType: false,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -2036,10 +2021,6 @@
                         if (response.success) {
                             Swal.fire("Success", response.message, "success");
                             $('#courseModal').find('input[type="radio"]').prop('checked', false);
-                            $('#context .ql-editor').html('');
-                            $('#mcq_course .ql-editor').html('');
-                            $('#explanation .ql-editor').html('');
-                            $('#explanation').html('');
                             $('#option-container').empty();
                             $('.step').addClass('d-none').filter('.step-1').removeClass('d-none');
                             $('.step-circle').removeClass('active').first().addClass('active');
@@ -2176,10 +2157,10 @@
                                     <td><input type="checkbox" class="row-checkbox course-row" value="${course.uuid}"></td>
                                     <td>${course.title}</td>
                                     <td>${course.audience}</td>
-                                    <td>6</td>
-                                    <td>9</td>
-                                    <td>20 min</td>
-                                    <td>${course.created_at}</td>
+                                    <td>${course.total_chpater}</td>
+                                    <td>${course.total_chapter}</td>
+                                    <td>${formatDuration(course.total_duration)}</td>
+                                    <td>${formatDate(course.created_at)}</td>
 
                                     <td class="text-center">
                                          <button data-toggle="modal" data-id="${course.id}" data-target="#courseModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
@@ -2248,10 +2229,10 @@
                 return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
             }
 
-            function formatDuration(minutes) {
-                const totalSeconds = Math.round(minutes * 60);
-                const hours = Math.floor(totalSeconds / 3600);
-                const remainingSeconds = totalSeconds % 3600;
+            function formatDuration(second) {
+                // const totalSeconds = Math.round(minutes * 60);
+                const hours = Math.floor(second / 3600);
+                const remainingSeconds = second % 3600;
                 const mins = Math.floor(remainingSeconds / 60);
                 const secs = remainingSeconds % 60;
 
@@ -2262,36 +2243,6 @@
                 return result.trim();
             }
 
-
-            // Toggle status (on/off)
-            function updateState() {
-                let courseId = $(this).data('id');
-
-                let newStatus = $(this).is(':checked') ? 'active' : 'inactive';
-
-                $.ajax({
-                    url: `/api/courses/${courseId}/update-status`,
-                    type: "PATCH",
-                    data: {
-                        status: newStatus
-                    },
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire("Success", "Status updated successfully!", "success");
-                        } else {
-                            Swal.fire("Error", "Failed to update status.", "error");
-                            checkbox.prop('checked', !checkbox.is(':checked'));
-                        }
-                    },
-                    error: function() {
-                        Swal.fire("Error", "Something went wrong!", "error");
-                        checkbox.prop('checked', !checkbox.is(':checked'));
-                    }
-                });
-            }
 
             function getSelectedCourses() {
                 return $(".row-checkbox:checked").map(function () {
@@ -2701,8 +2652,6 @@
                     });
                 }
 
-                console.log(courseData[0].lessons[0].file_path, 'hello');
-
                 const filePath = 'storage/' + courseData[0].lessons[0].file_path;
                 const fullUrl = `${appUrl}${filePath}`;
 
@@ -2720,9 +2669,15 @@
                 }, 0);
 
                 const totalCourseDuration = secondsToTimeString(totalCourseSeconds);
-                $('#total-chapters').text(totalChapters + ' Chapters');
-                $('#total-lessons').text(totalLessons + ' Lessons');
-                $('#total-duration').text(totalCourseDuration + ' Duration');
+                const $totalChapters = $('#total-chapters');
+                const chapterLabel = totalChapters === 1 ? 'Chapter' : 'Chapters';
+                $totalChapters.text(`${totalChapters} ${chapterLabel}`).attr('data-chapter', totalChapters);
+
+                const $totalLessons = $('#total-lessons');
+                const lessonLabel = totalLessons === 1 ? 'Lesson' : 'Lessons';
+                $totalLessons.text(`${totalLessons} ${lessonLabel}`).attr('data-lesson', totalLessons);
+
+                $('#total-duration').text(totalCourseDuration + ' Duration').attr('data-duration', totalCourseSeconds);
                 $('#lastAudience').text($('input[name="audience"]:checked').val());
                 $('#show_title').text($('input[name="title"]').val());
                 $('#show_description').text($('textarea[name="description"]').val());
@@ -2782,6 +2737,43 @@
 
 
         </script>
+
+        {{-- thumbnail upload --}}
+        <script>
+            $(document).ready(function () {
+                $('#thumbnail').on('change', function () {
+                    const file = this.files[0];
+                    if (file) {
+                        const fileSizeMB = file.size / 1024 / 1024;
+                        if (fileSizeMB > 10) {
+                            alert("File size exceeds 10MB.");
+                            this.value = ""; // Clear file input
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#preview-image').attr('src', e.target.result).removeClass('d-none');
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                // Optional drag & drop
+                $('#thumbnail-upload-box').on('dragover', function (e) {
+                    e.preventDefault();
+                    $(this).addClass('border-primary');
+                }).on('dragleave drop', function (e) {
+                    e.preventDefault();
+                    $(this).removeClass('border-primary');
+                }).on('drop', function (e) {
+                    const droppedFile = e.originalEvent.dataTransfer.files[0];
+                    $('#thumbnail')[0].files = e.originalEvent.dataTransfer.files;
+                    $('#thumbnail').trigger('change');
+                });
+            });
+        </script>
+
 
     @endpush
 

@@ -90,16 +90,29 @@ class CourseController extends Controller
         $validated = $validator->validated();
         DB::beginTransaction();
 
+            $filePath = null;
+
+            if (isset($request->thumbnail)) {
+                $uploadedFile = $request->thumbnail;
+
+                $fileName = time() . self::generateCourseCode() . '.' . $uploadedFile->getClientOriginalExtension();
+                $filePath = $uploadedFile->storeAs('crouse', $fileName, 'public');
+            }
+
         try {
-            // ✅ Create the course
+              // ✅ Create the course
             $course = Course::create([
-                'uuid'            => Str::uuid(),
-                'code'            => $this->generateCourseCode(),
-                'audience'        => $validated['audience'],
-                'subject'         => $validated['subject'] ?? null,
-                'title'           => $validated['title'],
-                'description'     => $validated['description'] ?? null,
-                'exam_id'         => $validated['exam'] ?? null,
+                'uuid'           => Str::uuid(),
+                'code'           => $this->generateCourseCode(),
+                'audience'       => $validated['audience'],
+                'subject'        => $validated['sat_course_type'] ?? null,
+                'title'          => $validated['title'],
+                'description'    => $validated['description'] ?? null,
+                'exam_id'        => $validated['exam'] ?? null,
+                'total_duration' => $request->total_duration ?? null,
+                'total_lesson'   => $request->total_lesson ?? null,
+                'total_chapter'  => $request->total_chapter ?? null,
+                'thumbnail'      => $filePath ?? null,
             ]);
 
             // ✅ Attach chapters to course
@@ -110,18 +123,22 @@ class CourseController extends Controller
                 $lessonIds = $validated['lessons'][$chapterId] ?? [];
 
                 if (!empty($lessonIds)) {
-                    // Avoid duplicates using syncWithoutDetaching
                     DB::table('chapter_lesson')->upsert(
-                        collect($lessonIds)->map(function ($lessonId) use ($chapterId) {
+                        collect($lessonIds)->map(function ($lessonId) use ($chapterId, $course) {
                             return [
+                                'course_id' => $course->id,
                                 'chapter_id' => $chapterId,
                                 'lesson_id' => $lessonId,
+                                'updated_at' => now(),
+                                'created_at' => now(),
                             ];
                         })->toArray(),
-                        ['chapter_id', 'lesson_id']
+                        ['course_id', 'chapter_id', 'lesson_id'], // composite unique key for upsert
+                        ['updated_at'] // columns to update on duplicate
                     );
                 }
             }
+
 
             DB::commit();
 
@@ -211,5 +228,4 @@ class CourseController extends Controller
         return "CRS{$date}{$random}";
     }
 
-    
 }

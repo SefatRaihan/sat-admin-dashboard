@@ -15,7 +15,9 @@
 
         <div class="student-navbar">
             <ul class="nav justify-content-center">
-                <li class="nav-item"><a class="nav-link active" href="/full-tests">ALL EXAMS</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/full-tests">All Exams</a></li>
+                <li class="nav-item"><a class="nav-link" href="/student/course">Courses</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Analytics</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Custom Exam</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Leaderboard</a></li>

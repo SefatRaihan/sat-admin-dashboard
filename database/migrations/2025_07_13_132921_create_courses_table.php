@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('audience')->nullable();
             $table->string('subject')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->integer('total_chapter')->nullable();
             $table->integer('total_lesson')->nullable();
             $table->integer('total_duration')->nullable();

@@ -41,7 +41,7 @@
                             @foreach ($courses as $course) 
                             <div class="col-md-3 mb-4">
                                     <div class="card course-card h-100">
-                                        <img src="https://via.placeholder.com/300x180" class="card-img-top course-image" alt="Course Image">
+                                        <img src="{{ asset('storage/'.$course->thumbnail) }}" class="card-img-top course-image" alt="Course Image">
                                         <div class="card-body d-flex flex-column">
                                             <div class="course-meta">
                                                 <ul class="d-flex" style="padding-left: 17px; margin-bottom: 0px;">
@@ -51,7 +51,7 @@
                                             </div>
                                             <h5 class="card-title course-title">{{ $course->title }}</h5>
                                             <p class="card-text course-description">{{ $course->description }}</p>
-                                            <a href="{{ route('student.course.details', $course->uuid) }}" class="btn view-course-btn mt-auto">View Course</a>
+                                            <a href="{{ route('student.course.detail', $course->id) }}" class="btn view-course-btn mt-auto">View Course</a>
                                         </div>
                                     </div>
                             </div>
