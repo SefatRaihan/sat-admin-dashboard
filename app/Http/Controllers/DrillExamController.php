@@ -43,6 +43,7 @@ class DrillExamController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+        
         $userAudience = auth()->user()->audience;
         $questions = collect();
 
@@ -111,12 +112,15 @@ class DrillExamController extends Controller
                 break;
         }
 
+        $groupedQuestions = $questions->groupBy(function ($question) {
+            return $question->sat_question_type ?? 'unknown';
+        });
+        
         if ($questions->isEmpty()) {
             return response()->json(['message' => 'No questions found for the given criteria.'], 404);
         }
 
-        return view('backend.student-exam.create', compact('exam', 'questions', 'examAttempt'));
-        // return redirect()->route('drill-exam.index')->with('success', 'Exam prepared successfully!');
+        return view('drill-exam.create', compact('groupedQuestions'));        // return redirect()->route('drill-exam.index')->with('success', 'Exam prepared successfully!');
     }
 
     /**

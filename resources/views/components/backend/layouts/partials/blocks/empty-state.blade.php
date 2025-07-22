@@ -3,6 +3,7 @@
     'message' => 'Default message',
     'buttonText' => 'Create',
     'buttonRoute' => null, // Now can be either a URL or a modal ID
+    'class' => "create-btn"
 ])
 
 <div class="flex flex-col items-center align-content-center justify-center min-h-screen" style="height: 80vh">
@@ -19,7 +20,7 @@
                 @else 
                     href="{{ $buttonRoute }}" 
                 @endif
-                class="btn text-white px-4 py-2 flex items-center justify-center mx-auto"
+                class="btn text-white px-4 py-2 flex items-center justify-center mx-auto {{ $class }}"
                 style="background-color:#732066; font-size: 12px; border-radius: 8px; width: max-content;">
                 <i class="fas fa-plus text-xs mr-1"></i> {{ $buttonText }}
             </a>

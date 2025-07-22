@@ -18,6 +18,7 @@
             message="Let’s create a new course"
             buttonText="Create Course"
             buttonRoute="#courseModal"
+            class="create-btn"
         />
     </div>
 
@@ -690,8 +691,6 @@
                     </div>
                     <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
                         <div class="d-flex w-100 justify-content-end align-items-center">
-                            <!-- Left side: Placeholder wrapper to maintain spacing -->
-
                             <!-- Right side: Navigation buttons -->
                             <div class="d-flex">
                                 <button type="button"
@@ -2562,7 +2561,7 @@
                                     <i class="fas ${iconClass}"></i>
                                 </div>
                                 <div class="lesson-details">
-                                    <div class="lesson-name" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.file_path}">${lesson.name}</div>
+                                    <div class="lesson-name" data-lesson-type="${lesson.type}" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.file_path}">${lesson.name}</div>
                                     <div class="lesson-duration">${lesson.duration}</div>
                                 </div>
                                 <div class="lesson-status">
@@ -2636,10 +2635,12 @@
                         progress: lesson.progress || 0
                     }));
 
+     
                     const totalSeconds = lessonObjects.reduce((sum, lesson) => {
-                        return sum + timeStringToSeconds(lesson.duration);
+                        return lesson.type.toLowerCase() === 'video' ? sum + timeStringToSeconds(lesson.duration) : sum;
                     }, 0);
 
+                    
                     const totalDuration = secondsToTimeString(totalSeconds);
 
                     courseData.push({
@@ -2652,11 +2653,34 @@
                     });
                 }
 
-                const filePath = 'storage/' + courseData[0].lessons[0].file_path;
-                const fullUrl = `${appUrl}${filePath}`;
 
-                $('#videoSource').attr('src', fullUrl);
-                $('#lesson-player')[0].load();
+                // 🔄 Find the first video lesson in all chapters
+                let firstVideoLesson = null;
+
+                for (const chapter of courseData) {
+                    const videoLesson = chapter.lessons.find(lesson => lesson.type.toLowerCase() === 'video');
+                    if (videoLesson) {
+                        firstVideoLesson = videoLesson;
+                        break;
+                    }
+                }
+
+                if (firstVideoLesson) {
+                    const filePath = 'storage/' + firstVideoLesson.file_path;
+                    const fullUrl = `${appUrl}${filePath}`;
+                    $('#videoSource').attr('src', fullUrl);
+                    $('#lesson-player')[0].load();
+                } 
+                // else {
+                //     // 🧾 No video found, fallback to first lesson (likely PDF) and download it
+                //     const firstLesson = courseData[0]?.lessons[0];
+                    
+                //      if (firstLesson) {
+                //         const filePath = 'storage/' + firstLesson.file_path;
+                //         const fullUrl = `${appUrl}${filePath}`;
+                //         window.open(fullUrl, '_blank'); // ⬇️ open in new tab for download
+                //     }
+                // }
 
                 const totalChapters = courseData.length;
 
@@ -2722,17 +2746,29 @@
                 const $lessonItem = $(this);
                 const lessonId = $lessonItem.data('lesson-id');
                 const filePath = 'storage/'+$lessonItem.data('lesson-path');
+                const fileType = $lessonItem.data('lesson-type');
+                const fullUrl = `${appUrl}${filePath}`;
 
-                if (filePath) {
-                    const fullUrl = `${appUrl}${filePath}`;
-                    $('#videoSource').attr('src', fullUrl);
-                    $('#lesson-player')[0].load();
-                    const video = $('#lesson-player')[0];
-                    video.load();
-                    video.play()
-                } else {
-                    console.error('File path is not available for this lesson.');
-                }
+                const isVideo = fileType 
+                    ? fileType.toLowerCase() === 'video'
+                    : filePath.toLowerCase().endsWith('.mp4') || filePath.toLowerCase().endsWith('.webm');
+
+                const isPdf = fileType 
+                    ? fileType.toLowerCase() === 'pdf'
+                    : filePath.toLowerCase().endsWith('.pdf');
+
+                    if (isVideo) {
+                        $('#videoSource').attr('src', fullUrl);
+                        const video = $('#lesson-player')[0];
+                        video.load();
+                        video.play();
+                    } else if (isPdf) {
+
+                         window.open(fullUrl, '_blank')
+
+                    } else {
+                        console.warn('Unknown lesson type. Cannot preview.');
+                    }
             }
 
 
