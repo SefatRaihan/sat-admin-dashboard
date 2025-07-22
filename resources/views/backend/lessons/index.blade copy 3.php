@@ -81,15 +81,15 @@
         </div>
     </div>
 
-    <!-- Create Lesson Modal -->
+    <!-- Create/Edit Modal -->
     <section>
         <div class="modal fade" id="lessonModal" tabindex="-1" role="dialog" aria-labelledby="lessonModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document" style="width:60%">
                 <div class="modal-content" style="border-radius: 24px; height:100%">
                     <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                        <h5 class=""><b id="lessonModalLongTitle">Create Lesson</b></h5>
-                        <p class="pb-2 step-1">Step 1: Choose Audience and Subject to Get Started</p>
-                        <p class="pb-2 d-none step-2">Step 2: Upload Videos and PDF Files</p>
+                        <h5 class=""><b id="lessonpleModalLongTitle">Create Lesson</b></h5>
+                        <p class="pb-2 step-1">Step 1 : Choose Audience and Subject to Get Started</p>
+                        <p class="pb-2 d-none step-2">Step 2 : Upload Videos and PDF Files</p>
                     </div>
                     <div class="modal-body" style="height: 100%;">
                         <div class="step-1">
@@ -173,10 +173,10 @@
                                     <div class="drop-zone" id="dropZone">
                                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                                         <p><strong>Click to upload</strong> or drag and drop</p>
-                                        <p>JPEG, PNG, PDF, GIF, MP3 and MP4 formats</p>
+                                        <p>JPEG, PNG, PDF, GIF, MP3 and MPOSSIBLE formats</p>
                                         <input type="file" id="fileInput" multiple accept=".jpeg,.jpg,.png,.pdf,.gif,.mp3,.mp4" style="display: none;">
                                         <button id="chooseFilesBtn">Choose files</button>
-                                        <p>Max: 350MB</p>
+                                        <p>[Max: 350MB]</p>
                                     </div>
                                     <div class="uploading-list" id="uploadingList"></div>
                                 </div>
@@ -186,113 +186,8 @@
                     <div class="modal-footer border-top pt-3">
                         <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
                         <a href="#" class="btn next-step-2" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Next</a>
-                        <a href="#" class="btn save-lesson d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Add Lesson</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Edit Lesson Modal -->
-    <section>
-        <div class="modal fade" id="editLessonModal" tabindex="-1" role="dialog" aria-labelledby="editLessonModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document" style="width:60%">
-                <div class="modal-content" style="border-radius: 24px; height:100%">
-                    <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
-                        <h5 class=""><b id="editLessonModalLongTitle">Edit Lesson</b></h5>
-                        <p class="pb-2">Update Lesson Details</p>
-                    </div>
-                    <div class="modal-body">
-                        <div class="edit-lesson-content" style="height: 60vh; overflow: scroll;">
-                            <label class="label-header" for="">1. Select the Audience</label>
-                            <div class="row" style="margin-left: 3px">
-                                <div class="col-md-6 row">
-                                    <label class="radio-container mb-3 col-md-12">
-                                        <input class="sat_1_edit" type="radio" name="edit_audience" value="High School"> High School
-                                    </label>
-                                    <label class="radio-container mb-3 col-md-12">
-                                        <input class="sat_1_edit" type="radio" name="edit_audience" value="Graduation"> Graduation
-                                    </label>
-                                </div>
-                                <div class="col-md-6 row">
-                                    <label class="radio-container mb-3 col-md-12">
-                                        <input class="sat_1_edit" type="radio" name="edit_audience" value="College"> College
-                                    </label>
-                                    <label class="radio-container mb-3 col-md-12">
-                                        <input class="sat_2_edit" type="radio" name="edit_audience" value="SAT 2"> SAT 2
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div id="edit_sat_type_1" class="d-none">
-                                    <h5 class="mt-3 label-header">2. Select the Question Type</h5>
-                                    <div class="row">
-                                        <div class="col-md-12 row">
-                                            <div class="col-md-6 mb-2">
-                                                <label class="radio-container mb-3 col-md-12">
-                                                    <input type="radio" name="edit_question_type" value="Verbal"> Verbal
-                                                </label>
-                                            </div>
-                                            <div class="col-md-6 mb-2">
-                                                <label class="radio-container mb-3 col-md-12">
-                                                    <input type="radio" name="edit_question_type" value="Quant"> Quant
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="edit_sat_type_2" class="d-none">
-                                    <h5 class="mt-3"><strong>2. Select the Question Subject</strong></h5>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="radio-container mb-3 col-md-12">
-                                                <input type="radio" name="edit_question_type" value="Physics"> Physics
-                                            </label>
-                                            <label class="radio-container mb-3 col-md-12">
-                                                <input type="radio" name="edit_question_type" value="Chemistry"> Chemistry
-                                            </label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="radio-container mb-3 col-md-12">
-                                                <input type="radio" name="edit_question_type" value="Biology"> Biology
-                                            </label>
-                                            <label class="radio-container mb-3 col-md-12">
-                                                <input type="radio" name="edit_question_type" value="Math"> Math
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="lessons-section mt-3">
-                                <h2>Lesson Details</h2>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>File Type</th>
-                                            <th>File Size</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="editLessonsTableBody"></tbody>
-                                </table>
-                            </div>
-                            <div class="upload-files-section mt-3">
-                                <h2>Upload New File (Optional)</h2>
-                                <div class="drop-zone" id="editDropZone">
-                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                    <p><strong>Click to upload</strong> or drag and drop</p>
-                                    <p>JPEG, PNG, PDF, GIF, MP3 and MP4 formats</p>
-                                    <input type="file" id="editFileInput" multiple accept=".jpeg,.jpg,.png,.pdf,.gif,.mp3,.mp4" style="display: none;">
-                                    <button id="editChooseFilesBtn">Choose files</button>
-                                    <p>Max: 350MB</p>
-                                </div>
-                                <div class="uploading-list" id="editUploadingList"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-top pt-3">
-                        <button type="button" class="btn btn-outline-dark" style="border: 1px solid #D0D5DD; border-radius: 8px;" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn update-lesson" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD">Update Lesson</button>
+                        <a href="#" class="btn save-lesson d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD" data-dismiss="modal">Add Lesson</a>
+                        <a href="#" class="btn update-lesson d-none" style="background-color:#691D5E; border-radius: 8px; color:#D0D5DD" data-dismiss="modal">Update Lesson</a>
                     </div>
                 </div>
             </div>
@@ -304,7 +199,7 @@
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" style="border-radius: 24px;">
-                    <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; padding: 21px;">
+                    <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px;">
                         <h5 class="modal-title" id="confirmationModalTitle">Confirm Edit</h5>
                     </div>
                     <div class="modal-body">
@@ -410,7 +305,7 @@
                                     </div>
                                     <div class="nested-options collapse" id="sectionTypes">
                                         <div class="form-check">
-                                            <input type="checkbox" value="Physics" name="question_type[]">Physics
+                                            < input type="checkbox" value="Physics" name="question_type[]">Physics
                                         </div>
                                         <div class="form-check">
                                             <input type="checkbox" value="Chemistry" name="question_type[]">Chemistry
@@ -895,10 +790,6 @@
     @push('js')
     <script>
         $(document).ready(function() {
-            // Array to store uploaded file data temporarily
-            let uploadedFiles = [];
-
-            // Create modal audience/question type toggle
             $(".sat_2").change(function() {
                 $('#sat_type_1').find('input').prop('checked', false);
                 $("#sat_type_2").removeClass("d-none");
@@ -911,26 +802,13 @@
                 $("#sat_type_2").addClass("d-none");
             });
 
-            // Edit modal audience/question type toggle
-            $(".sat_2_edit").change(function() {
-                $('#edit_sat_type_1').find('input').prop('checked', false);
-                $("#edit_sat_type_2").removeClass("d-none");
-                $("#edit_sat_type_1").addClass("d-none");
-            });
-
-            $(".sat_1_edit").change(function() {
-                $('#edit_sat_type_2').find('input').prop('checked', false);
-                $("#edit_sat_type_1").removeClass("d-none");
-                $("#edit_sat_type_2").addClass("d-none");
-            });
-
             $('.next-step-2').on('click', function(e) {
                 e.preventDefault();
                 $('.step-1').addClass('d-none');
                 $('.step-2').removeClass('d-none');
                 $('.save-lesson').removeClass('d-none');
                 $('.next-step-2').addClass('d-none');
-                $('#lessonModalLongTitle').text('Upload Lesson Files');
+                $('#lessonpleModalLongTitle').text('Upload Lesson Files');
             });
 
             // Sidebar toggle
@@ -983,10 +861,12 @@
             $(document).on('change', '.toggle-status', updateState);
             $(document).on('click', '.edit-btn', show);
             $(document).on('click', '.create-button', function() {
+                $('.update-lesson').addClass('d-none');
+                $('.next-step-2').removeClass('d-none');
                 resetData();
             });
 
-            $(document).on('click', '.update-lesson', function(e) {
+            $('.update-lesson').on('click', function(e) {
                 e.preventDefault();
                 let lessonId = $(this).data('id');
                 update(lessonId, e);
@@ -994,7 +874,7 @@
 
             $(document).on('click', '#proceedBtn', function(e) {
                 $('#confirmationModal').modal('hide');
-                $('#editLessonModal').modal('show');
+                $('#lessonModal').modal('show');
             });
 
             // Datatable initialization
@@ -1037,7 +917,7 @@
                 fetchLessons(1, $('#rowsPerPage').val());
             });
 
-            // File upload handling for create modal
+            // File upload handling
             const $dropZone = $('#dropZone');
             const $fileInput = $('#fileInput');
             const $chooseFilesBtn = $('#chooseFilesBtn');
@@ -1062,7 +942,7 @@
                 e.stopPropagation();
                 $(this).removeClass('dragover');
                 const files = e.originalEvent.dataTransfer.files;
-                handleFiles(files, '#lessonsTableBody', '#uploadingList');
+                handleFiles(files);
             });
 
             $chooseFilesBtn.on('click', function() {
@@ -1071,45 +951,10 @@
 
             $fileInput.on('change', function() {
                 const files = this.files;
-                handleFiles(files, '#lessonsTableBody', '#uploadingList');
+                handleFiles(files);
             });
 
-            // File upload handling for edit modal
-            const $editDropZone = $('#editDropZone');
-            const $editFileInput = $('#editFileInput');
-            const $editChooseFilesBtn = $('#editChooseFilesBtn');
-            const $editUploadingList = $('#editUploadingList');
-
-            $editDropZone.on('dragover', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).addClass('dragover');
-            });
-
-            $editDropZone.on('dragleave', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).removeClass('dragover');
-            });
-
-            $editDropZone.on('drop', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).removeClass('dragover');
-                const files = e.originalEvent.dataTransfer.files;
-                handleFiles(files, '#editLessonsTableBody', '#editUploadingList');
-            });
-
-            $editChooseFilesBtn.on('click', function() {
-                $editFileInput.click();
-            });
-
-            $editFileInput.on('change', function() {
-                const files = this.files;
-                handleFiles(files, '#editLessonsTableBody', '#editUploadingList');
-            });
-
-            function handleFiles(files, tableBodyId, uploadingListId) {
+            function handleFiles(files) {
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
                     const fileExtension = file.name.split('.').pop().toLowerCase();
@@ -1123,11 +968,11 @@
                         Swal.fire('Error', `File size exceeds ${maxSizeMB}MB limit.`, 'error');
                         continue;
                     }
-                    uploadFile(file, tableBodyId, uploadingListId);
+                    uploadFile(file);
                 }
             }
 
-            function uploadFile(file, tableBodyId, uploadingListId) {
+            function uploadFile(file) {
                 const fileName = file.name;
                 const fileSize = (file.size / (1024 * 1024)).toFixed(2);
                 const fileExtension = fileName.split('.').pop().toLowerCase();
@@ -1152,10 +997,16 @@
                         <i class="fas fa-trash-alt delete-icon"></i>
                     </div>
                 `;
-                $(uploadingListId).append(uploadItem);
+                $uploadingList.append(uploadItem);
 
                 const formData = new FormData();
                 formData.append('file', file);
+                formData.append('audience', $('input[name="audience"]:checked').val() || '');
+                formData.append('question_type', $('input[name="question_type"]:checked').val() || '');
+                formData.append('file_name', fileName);
+                formData.append('file_type', fileTypeDisplay);
+                formData.append('file_size', fileSize);
+                formData.append('total_length', fileExtension === 'mp4' ? '00:00' : null);
 
                 const xhr = new XMLHttpRequest();
 
@@ -1177,50 +1028,14 @@
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            const response = typeof xhr.response === "string" ? JSON.parse(xhr.response) : xhr.response;
                             $(`[data-filename="${fileName}"]`).remove();
-                            const fileData = {
-                                file_name: fileName,
-                                file_type: fileTypeDisplay,
-                                file_size: fileSize,
-                                file_path: response.file_path,
-                                total_length: response.total_length || (fileExtension === 'mp4' ? '00:00' : null),
-                                title: '',
-                                description: ''
-                            };
-                            uploadedFiles.push(fileData);
-                            $(tableBodyId).append(`
-                                <tr data-filename="${fileName}">
-                                    <td><input type="text" class="form-control" value="${fileName}" readonly></td>
-                                    <input type="hidden" name="file_name[]" value="${fileName}">
-                                    <input type="hidden" name="file_type[]" value="${fileTypeDisplay}">
-                                    <input type="hidden" name="file_size[]" value="${fileSize}">
-                                    <input type="hidden" name="file_path[]" value="${response.file_path}">
-                                    <input type="hidden" name="total_length[]" value="${response.total_length || ''}">
-                                    <td>${fileTypeDisplay}</td>
-                                    <td>${fileSize} MB</td>
-                                </tr>
-                                <tr data-filename="${fileName}">
-                                    <td colspan="3">
-                                        <table class="table table-borderless">
-                                            <tr>
-                                                <td colspan="3">
-                                                    <div class="">
-                                                        <label for="title">Lesson Title</label>
-                                                        <input type="text" name="title[]" class="form-control" placeholder="Enter lesson title">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <div class="">
-                                                        <label for="description">Lesson Description</label>
-                                                        <input type="text" name="description[]" class="form-control" placeholder="Enter lesson description">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
+                            fetchLessons(1, $('#rowsPerPage').val());
+                            const response = typeof xhr.response === "string" ? JSON.parse(xhr.response) : xhr.response;
+                            $('#lessonsTableBody').append(`
+                                <tr>
+                                    <td>${response.lesson.file_name}</td>
+                                    <td>${response.lesson.file_type}</td>
+                                    <td>${response.lesson.file_size} MB</td>
                                 </tr>
                             `);
                             Swal.fire('Success', 'File uploaded successfully!', 'success');
@@ -1235,59 +1050,19 @@
                     $(`[data-filename="${fileName}"]`).remove();
                 });
 
-                xhr.open('POST', '/api/upload-file', true);
+                xhr.open('POST', '/api/lessons', true);
                 xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
                 xhr.send(formData);
 
-                $(uploadingListId).on('click', '.delete-icon', function() {
+                $uploadingList.on('click', '.delete-icon', function() {
                     xhr.abort();
-                    const filename = $(this).closest('.uploading-item').data('filename');
                     $(this).closest('.uploading-item').remove();
-                    uploadedFiles = uploadedFiles.filter(file => file.file_name !== filename);
-                    $(`tr[data-filename="${filename}"]`).remove();
                 });
             }
 
             function store(e) {
                 e.preventDefault();
-                const formData = new FormData();
-                formData.append('audience', $('input[name="audience"]:checked').val() || '');
-                formData.append('question_type', $('input[name="question_type"]:checked').val() || '');
-                uploadedFiles.forEach((file, index) => {
-                    formData.append(`files[${index}][file_name]`, file.file_name);
-                    formData.append(`files[${index}][file_type]`, file.file_type);
-                    formData.append(`files[${index}][file_size]`, file.file_size);
-                    formData.append(`files[${index}][file_path]`, file.file_path);
-                    formData.append(`files[${index}][total_length]`, file.total_length || '');
-                    formData.append(`files[${index}][title]`, $(`#lessonsTableBody input[name="title[]"]`).eq(index).val() || '');
-                    formData.append(`files[${index}][description]`, $(`#lessonsTableBody input[name="description[]"]`).eq(index).val() || '');
-                });
-
-                $.ajax({
-                    url: '/api/lessons',
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire('Success', 'Lesson created successfully!', 'success').then(() => {
-                                $('#lessonModal').modal('hide');
-                                uploadedFiles = [];
-                                $('#lessonsTableBody').empty();
-                                fetchLessons(1, $('#rowsPerPage').val());
-                            });
-                        } else {
-                            Swal.fire('Error', 'Failed to create lesson.', 'error');
-                        }
-                    },
-                    error: function(error) {
-                        let errors = error.responseJSON?.errors;
-                        let errorMessage = errors ? Object.values(errors).flat().join('\n') : 'An unexpected error occurred.';
-                        Swal.fire('Validation Error', errorMessage, 'error');
-                    }
-                });
+                $('#lessonsTableBody').empty();
             }
 
             function fetchLessons(page = 1, perPage = 10) {
@@ -1336,7 +1111,7 @@
                                 rows += `<tr>
                                     <td><input type="checkbox" class="row-checkbox lesson-row" value="${lesson.uuid}"></td>
                                     <td>${icon}</td>
-                                    <td>${lesson.title || lesson.file_name}</td>
+                                    <td>${lesson.file_name}</td>
                                     <td>${lesson.audience}</td>
                                     <td>${lesson.question_type || 'N/A'}</td>
                                     <td>N/A</td>
@@ -1479,60 +1254,21 @@
                     url: `/api/lessons/${lessonId}`,
                     type: 'GET',
                     success: function(response) {
-                        $('#editLessonModalLongTitle').text('Edit Lesson');
-                        $('input[name="edit_audience"][value="' + response.audience + '"]').prop('checked', true);
+                        $('#lessonpleModalLongTitle').text('Edit Lesson');
+                        $('input[name="audience"][value="' + response.audience + '"]').prop('checked', true);
                         if (response.audience === 'SAT 2') {
-                            $('#edit_sat_type_2').removeClass('d-none');
-                            $('#edit_sat_type_1').addClass('d-none');
+                            $('#sat_type_2').removeClass('d-none');
+                            $('#sat_type_1').addClass('d-none');
                         } else {
-                            $('#edit_sat_type_1').removeClass('d-none');
-                            $('#edit_sat_type_2').addClass('d-none');
+                            $('#sat_type_1').removeClass('d-none');
+                            $('#sat_type_2').addClass('d-none');
                         }
-                        $('input[name="edit_question_type"][value="' + response.question_type + '"]').prop('checked', true);
-                        $('.update-lesson').data('id', lessonId);
-                        uploadedFiles = [{
-                            file_name: response.file_name,
-                            file_type: response.file_type,
-                            file_size: response.file_size,
-                            file_path: response.file_path,
-                            total_length: response.total_length,
-                            title: response.title,
-                            description: response.description
-                        }];
-                        $('#editLessonsTableBody').html(`
-                            <tr data-filename="${response.file_name}">
-                                <td><input type="text" class="form-control" value="${response.file_name}" readonly></td>
-                                <input type="hidden" name="file_name[]" value="${response.file_name}">
-                                <input type="hidden" name="file_type[]" value="${response.file_type}">
-                                <input type="hidden" name="file_size[]" value="${response.file_size}">
-                                <input type="hidden" name="file_path[]" value="${response.file_path}">
-                                <input type="hidden" name="total_length[]" value="${response.total_length || ''}">
-                                <td>${response.file_type}</td>
-                                <td>${response.file_size} MB</td>
-                            </tr>
-                            <tr data-filename="${response.file_name}">
-                                <td colspan="3">
-                                    <table class="table table-borderless">
-                                        <tr>
-                                            <td colspan="3">
-                                                <div class="">
-                                                    <label for="title">Lesson Title</label>
-                                                    <input type="text" name="title[]" class="form-control" value="${response.title || ''}" placeholder="Enter lesson title">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3">
-                                                <div class="">
-                                                    <label for="description">Lesson Description</label>
-                                                    <input type="text" name="description[]" class="form-control" value="${response.description || ''}" placeholder="Enter lesson description">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        `);
+                        $('input[name="question_type"][value="' + response.question_type + '"]').prop('checked', true);
+                        $('.save-lesson').addClass('d-none');
+                        $('.next-step-2').addClass('d-none');
+                        $('.update-lesson').removeClass('d-none').data('id', lessonId);
+                        $('.step-1').removeClass('d-none');
+                        $('.step-2').addClass('d-none');
                     },
                     error: function() {
                         Swal.fire('Error', 'Failed to load lesson data.', 'error');
@@ -1543,17 +1279,8 @@
             function update(lessonId, e) {
                 e.preventDefault();
                 const formData = new FormData();
-                formData.append('audience', $('input[name="edit_audience"]:checked').val() || '');
-                formData.append('question_type', $('input[name="edit_question_type"]:checked').val() || '');
-                uploadedFiles.forEach((file, index) => {
-                    formData.append(`files[${index}][file_name]`, file.file_name);
-                    formData.append(`files[${index}][file_type]`, file.file_type);
-                    formData.append(`files[${index}][file_size]`, file.file_size);
-                    formData.append(`files[${index}][file_path]`, file.file_path);
-                    formData.append(`files[${index}][total_length]`, file.total_length || '');
-                    formData.append(`files[${index}][title]`, $(`#editLessonsTableBody input[name="title[]"]`).eq(index).val() || '');
-                    formData.append(`files[${index}][description]`, $(`#editLessonsTableBody input[name="description[]"]`).eq(index).val() || '');
-                });
+                formData.append('audience', $('input[name="audience"]:checked').val());
+                formData.append('question_type', $('input[name="question_type"]:checked').val());
                 formData.append('_method', 'POST');
 
                 $.ajax({
@@ -1566,9 +1293,7 @@
                     success: function(response) {
                         if (response.success) {
                             Swal.fire('Success', 'Lesson updated successfully!', 'success').then(() => {
-                                $('#editLessonModal').modal('hide');
-                                uploadedFiles = [];
-                                $('#editLessonsTableBody').empty();
+                                $('#lessonModal').modal('hide');
                                 fetchLessons(1, $('#rowsPerPage').val());
                             });
                         } else {
@@ -1584,16 +1309,15 @@
             }
 
             function resetData() {
-                $('#lessonModalLongTitle').text('Create Lesson');
+                $('#lessonpleModalLongTitle').text('Create Lesson');
                 $('#lessonModal input[type="text"]').val('');
                 $('input[name="audience"]').prop('checked', false);
                 $('input[name="question_type"]').prop('checked', false);
                 $('.step-1').removeClass('d-none');
                 $('.step-2').addClass('d-none');
-                $('.save-lesson').addClass('d-none');
                 $('.next-step-2').removeClass('d-none');
-                uploadedFiles = [];
-                $('#lessonsTableBody').empty();
+                $('.save-lesson').addClass('d-none');
+                $('.update-lesson').addClass('d-none');
                 $('#lessonModal').modal('show');
             }
         });

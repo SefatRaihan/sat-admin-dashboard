@@ -23,12 +23,9 @@
                             <span class="tag">Duration: {{ $lesson->total_length }}</span>
                         </div>
                     </div>
-                    <h1 class="lesson-title">SAT (MATH) - Solving Linear Equations & Inequalities</h1>
+                    <h1 class="lesson-title">{{ $lesson->title }}</h1>
                     <p class="lesson-description">
-                        This advanced algebra course delves deeper into the complexities of algebraic concepts, focusing on enhancing
-                        number sense and operations. Students will solidify their understanding by engaging with integers, fractions, and
-                        decimals, while mastering essential properties such as commutativity and associativity. They will apply these skills
-                        to tackle linear equations and inequalities with confidence.
+                        {{ $lesson->description }}
                     </p>
                 </div>
             </div>
@@ -37,14 +34,18 @@
                 <div class="related-videos">
                     @foreach ($relatedLessons as $item)
                     <div class="related-video-card">
-                        <a href="{{ route('student.video.lesson.details', $lesson->uuid) }}">
-                            <img src="https://via.placeholder.com/150x90" alt="Related Video Thumbnail" class="related-video-thumbnail">
+                        <a href="{{ route('student.video.lesson.details', $item->uuid) }}">
+                            <video class="card-img-top course-image video-thumbnail" style="width: 50%;" controlsList="nodownload" disablePictureInPicture preload="metadata" onloadeddata="this.currentTime=0;" muted>
+                                <source src="{{ asset('storage/' . $item->file_path) }}" type="video/mp4">
+                                {{-- Add more source types if you support other formats, e.g., <source src="..." type="video/webm"> --}}
+                                Your browser does not support the video tag.
+                            </video>
                             <div class="related-video-info">
-                                <h4 class="related-video-title">Introduction to Physics</h4>
-                                <p class="related-video-description">Learn the fundamental concepts of physics design...</p>
+                                <h4 class="related-video-title">{{ $item->title }}</h4>
+                                <p class="related-video-description">{{ \Illuminate\Support\Str::words(strip_tags($item->description), 100, '...') }}</p>
                                 <div class="related-video-meta">
-                                    <span class="related-level"><i class="fas fa-graduation-cap"></i> {{ $lesson->audience }}</span>
-                                    <span class="related-duration"><i class="fas fa-clock"></i> Duration: {{ $lesson->total_length }}</span>
+                                    <span class="related-level"><i class="fas fa-graduation-cap"></i> {{ $item->audience }}</span>
+                                    <span class="related-duration"><i class="fas fa-clock"></i> Duration: {{ $item->total_length }}</span>
                                 </div>
                             </div>
                         </a>

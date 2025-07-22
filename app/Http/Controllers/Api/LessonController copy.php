@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use App\Models\Lesson;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,8 +19,7 @@ class LessonController extends Controller
         $query = Lesson::query();
 
         if ($request->has('search') && $request->search) {
-            $query->where('file_name', 'like', '%' . $request->search . '%')
-                  ->orWhere('title', 'like', '%' . $request->search . '%');
+            $query->where('file_name', 'like', '%' . $request->search . '%');
         }
 
         if ($request->has('status') && $request->status !== 'All') {
@@ -56,59 +57,36 @@ class LessonController extends Controller
         ]);
     }
 
-    public function uploadFile(Request $request)
+    public function store(Request $request)
     {
+
         $request->validate([
-            'file' => 'required|file|mimes:jpeg,png,pdf,gif,mp3,mp4|max:358400'
+            'audience' => 'required|in:High School,Graduation,College,SAT 2',
+            'question_type' => 'nullable|in:Verbal,Quant,Physics,Chemistry,Biology,Math',
+            'file' => 'required|file|mimes:jpeg,png,pdf,gif,mp3,mp4|max:358400',
+            'file_name' => 'required|string',
+            'file_type' => 'required|in:Video,PDF,Image,Audio',
+            'file_size' => 'required|numeric',
+            'total_length' => 'nullable|string'
         ]);
 
         $file = $request->file('file');
         $path = $file->store('lessons', 'public'); // Change to 's3' for S3 storage
-        $totalLength = $file->getClientOriginalExtension() === 'mp4' ? $this->getVideoLength($file) : null;
-
-        return response()->json([
-            'success' => true,
-            'file_path' => $path,
-            'total_length' => $totalLength
-        ], 200);
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'audience' => 'required|in:High School,Graduation,College,SAT 2',
-            'question_type' => 'nullable|in:Verbal,Quant,Physics,Chemistry,Biology,Math',
-            'files' => 'required|array',
-            'files.*.file_name' => 'required|string',
-            'files.*.file_type' => 'required|in:Video,PDF,Image,Audio',
-            'files.*.file_size' => 'required|numeric',
-            'files.*.file_path' => 'required|string',
-            'files.*.total_length' => 'nullable|string',
-            'files.*.title' => 'nullable|string',
-            'files.*.description' => 'nullable|string'
+ 
+        $lesson = Lesson::create([
+            'uuid' => Str::uuid(),
+            'audience' => $request->audience,
+            'question_type' => $request->question_type,
+            'file_name' => $request->file_name,
+            'file_type' => $request->file_type,
+            'file_size' => $request->file_size,
+            'file_path' => $path, // Use Storage::disk('s3')->url($path) for S3
+            'total_length' => $request->file_type === 'Video' ? $this->getVideoLength($file) : null,
+            'state' => true,
+            'created_by' => auth()->id()
         ]);
 
-        $lessons = [];
-        foreach ($request['files'] as $fileData) {
-            $lesson = Lesson::create([
-                'uuid' => Str::uuid(),
-                'audience' => $request->audience,
-                'question_type' => $request->question_type,
-                'file_name' => $fileData['file_name'],
-                'file_type' => $fileData['file_type'],
-                'file_size' => $fileData['file_size'],
-                'file_path' => $fileData['file_path'],
-                'total_length' => $fileData['total_length'] ?? null,
-                'title' => $fileData['title'] ?? null,
-                'description' => $fileData['description'] ?? null,
-                'state' => true,
-                'created_by' => auth()->id()
-            ]);
-            $lessons[] = $lesson;
-        }
-
-
-        return response()->json(['success' => true, 'lessons' => $lessons], 200);
+        return response()->json(['success' => true, 'lesson' => $lesson], 200);
     }
 
     public function show($id)
@@ -121,29 +99,13 @@ class LessonController extends Controller
     {
         $request->validate([
             'audience' => 'required|in:High School,Graduation,College,SAT 2',
-            'question_type' => 'nullable|in:Verbal,Quant,Physics,Chemistry,Biology,Math',
-            'files' => 'required|array',
-            'files.*.file_name' => 'required|string',
-            'files.*.file_type' => 'required|in:Video,PDF,Image,Audio',
-            'files.*.file_size' => 'required|numeric',
-            'files.*.file_path' => 'required|string',
-            'files.*.total_length' => 'nullable|string',
-            'files.*.title' => 'nullable|string',
-            'files.*.description' => 'nullable|string'
+            'question_type' => 'nullable|in:Verbal,Quant,Physics,Chemistry,Biology,Math'
         ]);
 
         $lesson = Lesson::findOrFail($id);
-        $fileData = $request['files'][0]; // Assuming single file for update
         $lesson->update([
             'audience' => $request->audience,
             'question_type' => $request->question_type,
-            'file_name' => $fileData['file_name'],
-            'file_type' => $fileData['file_type'],
-            'file_size' => $fileData['file_size'],
-            'file_path' => $fileData['file_path'],
-            'total_length' => $fileData['total_length'] ?? null,
-            'title' => $fileData['title'] ?? null,
-            'description' => $fileData['description'] ?? null,
             'updated_by' => auth()->id()
         ]);
 
@@ -182,15 +144,21 @@ class LessonController extends Controller
 
     private function getVideoLength($file)
     {
+
         try {
+
             $ffprobe = FFProbe::create();
             $durationInSeconds = $ffprobe
-                ->format($file->getRealPath())
+                ->format($file->getRealPath()) // path to your video file
                 ->get('duration');
-            return gmdate("H:i:s", (int)$durationInSeconds);
+
+            // Format to mm:ss or hh:mm:ss depending on your need
+            $formatted = gmdate("H:i:s", (int)$durationInSeconds);
+
+            return $formatted;
         } catch (\Exception $e) {
-            \Log::error('Failed to get video length: ' . $e->getMessage());
-            return '00:00';
+            Log::error('Failed to get video length: ' . $e->getMessage());
+            return '00:00'; // Fallback
         }
     }
 }

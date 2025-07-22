@@ -136,4 +136,5 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::post('/lessons/{id}', [LessonController::class, 'update']);
     Route::post('/lessons/delete', [LessonController::class, 'destroy']);
     Route::patch('/lessons/{id}/update-status', [LessonController::class, 'updateStatus']);
+    Route::post('/upload-file', [LessonController::class, 'uploadFile']);
 });

@@ -86,10 +86,16 @@
                     <div class="col-md-3 mb-4">
                         <a href="{{ route('student.video.lesson.details', $lesson->uuid) }}">
                         <div class="card lesson-card h-100">
-                            <img src="https://via.placeholder.com/300x180" class="card-img-top course-image" alt="Course Image">
+                            <div class="video-thumbnail-container">
+                                <video class="card-img-top course-image video-thumbnail" controlsList="nodownload" disablePictureInPicture preload="metadata" onloadeddata="this.currentTime=0;" muted>
+                                    <source src="{{ asset('storage/' . $lesson->file_path) }}" type="video/mp4">
+                                    {{-- Add more source types if you support other formats, e.g., <source src="..." type="video/webm"> --}}
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title course-title">Introduction to Physics</h5>
-                                <p class="card-text course-description pb-0 mb-0">Learn the fundamental concepts of physics designed for high school students</p>
+                                <h5 class="card-title course-title">{{ $lesson->title }}</h5>
+                                <p class="card-text course-description pb-0 mb-0">{{ $lesson->description }}</p>
                                 <div class="course-meta">
                                     <ul class="d-flex" style="padding-left: 17px; margin-bottom: 0px;">
                                         <li>{{ $lesson->audience }}</li>
