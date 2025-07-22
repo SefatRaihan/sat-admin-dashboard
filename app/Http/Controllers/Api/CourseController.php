@@ -108,7 +108,7 @@ class CourseController extends Controller
                 'subject'        => $validated['sat_course_type'] ?? null,
                 'title'          => $validated['title'],
                 'description'    => $validated['description'] ?? null,
-                'exam_id'        => $validated['exam'] ?? null,
+                'exam_id'        => isset($validated['exam']) && is_numeric($validated['exam']) ? (int) $validated['exam'] : null,
                 'total_duration' => $request->total_duration ?? null,
                 'total_lesson'   => $request->total_lesson ?? null,
                 'total_chapter'  => $request->total_chapter ?? null,
