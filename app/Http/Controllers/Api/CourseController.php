@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,8 @@ class CourseController extends Controller
         'destroy' => 'Delete',
         'getExam' => 'Exam',
         'getLesson' => 'Lesson',
-        'getChapter' => 'Chapter'
+        'getChapter' => 'Chapter',
+        'markComplete' => 'Mark Complete',
     ];
 
     /**
@@ -227,5 +229,40 @@ class CourseController extends Controller
         $random = strtoupper(Str::random(4)); // 4-character random code
         return "CRS{$date}{$random}";
     }
+
+    public function markComplete($courseId, $chapterId, $lessonId)
+    {
+        try {
+            $user = Auth::user();
+            $lesson = Lesson::findOrFail($lessonId);
+            $course = Course::findOrFail($courseId);
+
+            $user->lessons()->syncWithoutDetaching([
+                $lesson->id => [
+                    'completed_at' => now(),
+                    'chapter_id' => $chapterId,
+                    'course_id' => $courseId,
+                ]
+            ]);
+
+            $totalLessons = $course->total_lesson;
+            $completedLessons = $user->lessons()
+                ->wherePivot('course_id', $course->id)
+                ->count();
+
+            if ($totalLessons == $completedLessons) {
+                // Mark course as complete in course_user pivot table
+                $user->courses()->syncWithoutDetaching([
+                    $course->id => ['is_completed' => true, 'completed_at' => now()]
+                ]);
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Lesson marked as complete.']);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
 
 }

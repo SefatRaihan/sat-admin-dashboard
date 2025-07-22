@@ -137,4 +137,5 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::post('/lessons/delete', [LessonController::class, 'destroy']);
     Route::patch('/lessons/{id}/update-status', [LessonController::class, 'updateStatus']);
     Route::post('/upload-file', [LessonController::class, 'uploadFile']);
+    Route::get('/courses/mark-complete/{courseId}/{chapterId}/{lessonId}', [CourseController::class, 'markComplete']);
 });

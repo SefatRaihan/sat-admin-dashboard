@@ -2162,7 +2162,7 @@
                                     <td>${formatDate(course.created_at)}</td>
 
                                     <td class="text-center">
-                                         
+                                         <button data-toggle="modal" data-id="${course.id}" data-target="#courseModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
                                     </td>
                                 </tr>`;
                             });
