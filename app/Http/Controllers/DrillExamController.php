@@ -45,7 +45,7 @@ class DrillExamController extends Controller
         }
         $userAudience = auth()->user()->audience;
         $questions = collect();
-        
+
         switch ($request->question_pool) {
             case 'answeredUnanswered':
                 $questionIds = ExamAttemptQuestion::whereHas('attempt', function ($query) {
@@ -110,12 +110,13 @@ class DrillExamController extends Controller
                 # code...
                 break;
         }
-        dd($questions);
+
         if ($questions->isEmpty()) {
             return response()->json(['message' => 'No questions found for the given criteria.'], 404);
         }
 
-        return redirect()->route('drill-exam.index')->with('success', 'Exam prepared successfully!');
+        return view('backend.student-exam.create', compact('exam', 'questions', 'examAttempt'));
+        // return redirect()->route('drill-exam.index')->with('success', 'Exam prepared successfully!');
     }
 
     /**

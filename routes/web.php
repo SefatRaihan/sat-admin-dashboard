@@ -128,7 +128,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/ranking', [ExamController::class, 'ranking'])->name('ranking');
     Route::get('/topic/create', [TopicController::class, 'create'])->name('topic.crate');
     Route::get('/student/course', [StudentController::class, 'studentCourse'])->name('student.course');
-    Route::get('/student/course/deatils/{uuid}', [StudentController::class, 'studentCourseDetails'])->name('student.course.details');
+    Route::get('/student/course/detail/{id}', [StudentController::class, 'studentCourseDetails'])->name('student.course.detail');
     Route::get('/student/video/lesson/{uuid}', [StudentController::class, 'studentVideoLessonDetails'])->name('student.video.lesson.details');
 
 });

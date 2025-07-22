@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
-use Illuminate\Http\Request;
-use App\Models\ExamAttempt;
-use App\Models\ExamAttemptQuestion;
 use App\Models\Exam;
-use App\Exports\StudentsExport;
 use App\Models\Course;
 use App\Models\Lesson;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Student;
+use App\Models\ExamAttempt;
+use Illuminate\Http\Request;
+use App\Exports\StudentsExport;
+use Illuminate\Support\Facades\DB;
+use App\Models\ExamAttemptQuestion;
 use App\Models\StudentNotification;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -106,10 +107,58 @@ class StudentController extends Controller
         return view('backend.students.student_course', compact('courses', 'lessons'));
     }
 
-    public function studentCourseDetails($uuid)
+    public function studentCourseDetails($id)
     {
-        $course = Course::where('uuid', $uuid)->first();
-        return view('backend.students.student_course_details', compact('course'));
+        $course = Course::findOrFail($id);
+
+        $chapterLessons = DB::table('chapter_lesson')
+            ->where('course_id', $course->id)
+            ->join('chapters', 'chapter_lesson.chapter_id', '=', 'chapters.id')
+            ->join('lessons', 'chapter_lesson.lesson_id', '=', 'lessons.id')
+            ->select('chapters.id as chapter_id', 'chapters.title as chapter_title', 
+                    'lessons.id as lesson_id', 'lessons.file_path as file_path', 'lessons.file_name', 'lessons.file_type', 'lessons.total_length')
+            // ->distinct()
+            ->get();
+            // ->groupBy('chapter_id');
+
+            // $groupedByTitle = $chapterLessons
+            //         ->groupBy('chapter_title')
+            //         ->map(function ($lessons) {
+            //             return $lessons->map(function ($lesson) {
+            //                 return [
+            //                     'lesson_id'   => $lesson->lesson_id,
+            //                     'file_name'   => $lesson->file_name,
+            //                     'file_path'   => $lesson->file_path,
+            //                     'file_type'   => $lesson->file_type,
+            //                     'duration'    => $lesson->total_length,
+            //                 ];
+            //             });
+            //         });
+
+            $groupedChapters = $chapterLessons->groupBy('chapter_title')->map(function ($items, $chapterTitle) {
+                            $first = $items->first();
+                            return [
+                                'id' => $first->chapter_id,
+                                'title' => $chapterTitle,
+                                'index' => null, // Optionally assign an index like "Chapter 1"
+                                'duration' => '00:00', // You can calculate actual duration here
+                                'lessonsCount' => count($items),
+                                'expanded' => false,
+                                'lessons' => $items->map(function ($lesson) {
+                                    return [
+                                        'id' => $lesson->lesson_id,
+                                        'name' => $lesson->file_name,
+                                        'path' => $lesson->file_path,
+                                        'type' => strtolower($lesson->file_type),
+                                        'duration' => $lesson->total_length, // Add if available
+                                        'completed' => false,   // Add logic based on user if needed
+                                        'progress' => 0         // Same here
+                                    ];
+                                })->toArray()
+                            ];
+                        })->values();
+        // dd($groupedByTitle);
+        return view('backend.students.student_course_details', compact('course', 'chapterLessons', 'groupedChapters'));
     }
 
     public function studentVideoLessonDetails($uuid)
