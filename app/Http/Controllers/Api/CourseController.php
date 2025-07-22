@@ -75,7 +75,7 @@ class CourseController extends Controller
             'sat_course_type'   => 'nullable|string',
             'title'             => 'required|string|max:255',
             'description'       => 'nullable|string|max:1000',
-            'exam'              => 'nullable|exists:exams,id',
+            'exam'              => 'nullable',
             'sat_course_type'   => 'nullable|string',
             'chapters'          => 'required|array',
             'chapters.*'        => 'exists:chapters,id',
