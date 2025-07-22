@@ -14,7 +14,7 @@
                     <span>{{ $course->audience }}</span>
                     <span>{{ $course->total_lesson }} Lessons</span>
                     <span>{{ $course->total_chapter }} Chapters</span>
-                    <span>Duration: {{ $course->total_duration }}</span>
+                    <span id="total_duration"></span>
                 </div>
                 <h1>{{ $course->title }}</h1>
                 <p class="description">
@@ -55,9 +55,12 @@
     @push('js')
         <script>
             const chapters = @json($groupedChapters);
+            
             const appUrl = @json(config('app.url'));
+            const totalDuration = @json($course->total_duration);
 
             $(document).ready(function () {
+                $('#total_duration').text('Duration: ' +secondsToTimeString(totalDuration));
                 const $courseLessonsList = $('#courseLessonsList');
 
                 function renderCourseContent() {
@@ -68,25 +71,27 @@
                         let totalSeconds = 0;
 
                         chapter.lessons.forEach(lesson => {
+                            let  isVideo = lesson.type.toLowerCase() === 'video';
+                            if (isVideo) {
+                                const seconds = timeStringToSeconds(lesson.duration);
+                                totalSeconds += seconds;
+                            }
 
-                            const seconds = timeStringToSeconds(lesson.duration);
-                            totalSeconds += seconds;
-
-                            const iconClass = lesson.type === 'video' ? 'fa-play' : 'fa-file-pdf';
+                            const iconClass = isVideo ? 'fa-play' : 'fa-file-pdf';
                             const statusHtml = lesson.completed
                                 ? '<i class="fas fa-check-circle"></i>'
                                 : (lesson.progress > 0 && lesson.progress < 100
                                     ? `<div class="progress-bar-tiny"><div style="width: ${lesson.progress}%"></div></div><span class="progress-percentage-small">${lesson.progress}%</span>`
                                     : '');
-// class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}"
+                            // class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}"
                             lessonsHtml += `
                                 <div class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}" data-lesson-id="${lesson.id}">
                                     <div class="lesson-item-icon">
                                         <i class="fas ${iconClass}"></i>
                                     </div>
                                     <div class="lesson-details">
-                                        <div class="lesson-name" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.path}">${lesson.name}</div>
-                                        <div class="lesson-duration">${lesson.duration}</div>
+                                        <div class="lesson-name" data-lesson-type="${lesson.type}" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.path}">${lesson.name}</div>
+                                        <div class="lesson-duration">${isVideo ? lesson.duration : ''}</div>
                                     </div>
                                     <div class="lesson-status">
                                         ${statusHtml}
@@ -164,19 +169,29 @@
                 function selectedVideo() {
                     const $lessonItem = $(this).find('.lesson-name');
                     const lessonId = $lessonItem.data('lesson-id');
-                    console.log($lessonItem.data('lesson-path'));
-                    
                     const filePath = 'storage/'+$lessonItem.data('lesson-path');
+                    const fileType = $lessonItem.data('lesson-type');
+                    const fullUrl = `${appUrl}${filePath}`;
 
-                    if (filePath) {
-                        const fullUrl = `${appUrl}${filePath}`;
+                    const isVideo = fileType 
+                        ? fileType.toLowerCase() === 'video'
+                        : filePath.toLowerCase().endsWith('.mp4') || filePath.toLowerCase().endsWith('.webm');
+
+                    const isPdf = fileType 
+                        ? fileType.toLowerCase() === 'pdf'
+                        : filePath.toLowerCase().endsWith('.pdf');
+
+                    if (isVideo) {
                         $('#videoSource').attr('src', fullUrl);
-                        $('#lesson-player')[0].load();
                         const video = $('#lesson-player')[0];
                         video.load();
-                        video.play()
+                        video.play();
+                    } else if (isPdf) {
+
+                        window.open(fullUrl, '_blank')
+
                     } else {
-                        console.error('File path is not available for this lesson.');
+                        console.warn('Unknown lesson type. Cannot preview.');
                     }
                 }
             });
