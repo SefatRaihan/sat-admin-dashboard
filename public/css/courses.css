@@ -340,3 +340,57 @@
             padding: 10px 15px;
         }
     }
+
+
+     .exam-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #f4eaf4;
+      border-radius: 12px;
+      padding: 10px 20px;
+      max-width: 800px;
+      border: 1px solid #e6d9e6;
+    }
+
+    .exam-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .exam-icon {
+      background-color: #6d216d;
+      color: white;
+      padding: 8px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-size: 14px;
+    }
+
+    .exam-title {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .start-btn {
+      background-color: transparent;
+      color: #6d216d;
+      border: 1px solid #6d216d;
+      padding: 6px 14px;
+      border-radius: 1rem !important;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      -webkit-border-radius: 1rem !important;
+      -moz-border-radius: 1rem !important;
+      -ms-border-radius: 1rem !important;
+      -o-border-radius: 1rem !important;
+}
+
+    .start-btn:hover {
+      background-color: #6d216d;
+      color: white !important;
+    }

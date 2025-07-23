@@ -117,23 +117,7 @@ class StudentController extends Controller
             ->join('lessons', 'chapter_lesson.lesson_id', '=', 'lessons.id')
             ->select('chapters.id as chapter_id', 'chapters.title as chapter_title', 
                     'lessons.id as lesson_id', 'lessons.file_path as file_path', 'lessons.file_name', 'lessons.file_type', 'lessons.total_length')
-            // ->distinct()
             ->get();
-            // ->groupBy('chapter_id');
-
-            // $groupedByTitle = $chapterLessons
-            //         ->groupBy('chapter_title')
-            //         ->map(function ($lessons) {
-            //             return $lessons->map(function ($lesson) {
-            //                 return [
-            //                     'lesson_id'   => $lesson->lesson_id,
-            //                     'file_name'   => $lesson->file_name,
-            //                     'file_path'   => $lesson->file_path,
-            //                     'file_type'   => $lesson->file_type,
-            //                     'duration'    => $lesson->total_length,
-            //                 ];
-            //             });
-            //         });
 
             $groupedChapters = $chapterLessons->groupBy('chapter_title')->map(function ($items, $chapterTitle) {
                             $first = $items->first();
@@ -157,8 +141,13 @@ class StudentController extends Controller
                                 })->toArray()
                             ];
                         })->values();
-        // dd($groupedByTitle);
-        return view('backend.students.student_course_details', compact('course', 'chapterLessons', 'groupedChapters'));
+
+        if(!is_null($course->exam_id))
+        {
+            $exam = Exam::find($course->exam_id);
+        }
+        
+        return view('backend.students.student_course_details', compact('course', 'chapterLessons', 'groupedChapters', 'exam'));
     }
 
     public function studentVideoLessonDetails($uuid)
