@@ -63,6 +63,8 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::get('lessons-by-id', [CourseController::class, 'getLessonByIds']);
     Route::get('get-chapter', [CourseController::class, 'getChapter']);
     Route::apiResource('course', CourseController::class);
+    Route::post('course/{id}/update', [CourseController::class, 'update']);
+    Route::post('courses-delete', [CourseController::class, 'courseDelete']);
 
     /*
     |--------------------------------------------------------------------------
@@ -137,4 +139,5 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::post('/lessons/delete', [LessonController::class, 'destroy']);
     Route::patch('/lessons/{id}/update-status', [LessonController::class, 'updateStatus']);
     Route::post('/upload-file', [LessonController::class, 'uploadFile']);
+    Route::get('/courses/mark-complete/{courseId}/{chapterId}/{lessonId}', [CourseController::class, 'markComplete']);
 });

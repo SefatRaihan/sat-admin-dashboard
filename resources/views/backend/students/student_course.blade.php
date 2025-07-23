@@ -38,20 +38,20 @@
                     <div class="tab-pane fade show active" id="all-courses" role="tabpanel" aria-labelledby="all-courses-tab">
                         <h2 class="section-title mb-2">All Courses</h2>
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 course-grid">
-                            @foreach ($courses as $course) 
+                            @foreach ($allCourses as $allcourse) 
                             <div class="col-md-3 mb-4">
                                     <div class="card course-card h-100">
-                                        <img src="{{ asset('storage/'.$course->thumbnail) }}" class="card-img-top course-image" alt="Course Image">
+                                        <img src="{{ asset('storage/'.$allcourse->thumbnail) }}" class="card-img-top course-image" alt="Course Image">
                                         <div class="card-body d-flex flex-column">
                                             <div class="course-meta">
                                                 <ul class="d-flex" style="padding-left: 17px; margin-bottom: 0px;">
-                                                    <li>{{ $course->audience }}</li>
-                                                    <li style="margin-left:28px">{{ $course->total_lesson }} Lessons</li>
+                                                    <li>{{ $allcourse->audience }}</li>
+                                                    <li style="margin-left:28px">{{ $allcourse->total_lesson }} Lessons</li>
                                                 </ul>
                                             </div>
-                                            <h5 class="card-title course-title">{{ $course->title }}</h5>
-                                            <p class="card-text course-description">{{ $course->description }}</p>
-                                            <a href="{{ route('student.course.detail', $course->id) }}" class="btn view-course-btn mt-auto">View Course</a>
+                                            <h5 class="card-title course-title">{{ $allcourse->title }}</h5>
+                                            <p class="card-text course-description">{{ $allcourse->description }}</p>
+                                            <a href="{{ route('student.course.detail', $allcourse->id) }}" class="btn view-course-btn mt-auto">View Course</a>
                                         </div>
                                     </div>
                             </div>
@@ -62,14 +62,50 @@
                     <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
                         <h2 class="section-title mb-2">Completed</h2>
 
-                        <p class="text-muted text-center mt-5">No completed courses yet.</p>
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 course-grid">
+                            @foreach ($completeCourses as $completeCourse) 
+                            <div class="col-md-3 mb-4">
+                                    <div class="card course-card h-100">
+                                        <img src="{{ asset('storage/'.$completeCourse->thumbnail) }}" class="card-img-top course-image" alt="Course Image">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="course-meta">
+                                                <ul class="d-flex" style="padding-left: 17px; margin-bottom: 0px;">
+                                                    <li>{{ $completeCourse->audience }}</li>
+                                                    <li style="margin-left:28px">{{ $completeCourse->total_lesson }} Lessons</li>
+                                                </ul>
+                                            </div>
+                                            <h5 class="card-title course-title">{{ $completeCourse->title }}</h5>
+                                            <p class="card-text course-description">{{ $completeCourse->description }}</p>
+                                            <a href="{{ route('student.course.detail', $completeCourse->id) }}" class="btn view-course-btn mt-auto">View Course</a>
+                                        </div>
+                                    </div>
+                            </div>
+                            @endforeach
                         </div>
+                    </div>
 
                     <div class="tab-pane fade" id="incomplete" role="tabpanel" aria-labelledby="incomplete-tab">
                         <h2 class="section-title mb-2">Incomplete</h2>
 
-                        <p class="text-muted text-center mt-5">No incomplete courses yet.</p>
-                        </div>
+                        @foreach ($incompleteCourses as $incompleteCourse) 
+                            <div class="col-md-3 mb-4">
+                                    <div class="card course-card h-100">
+                                        <img src="{{ asset('storage/'.$incompleteCourse->thumbnail) }}" class="card-img-top course-image" alt="Course Image">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="course-meta">
+                                                <ul class="d-flex" style="padding-left: 17px; margin-bottom: 0px;">
+                                                    <li>{{ $incompleteCourse->audience }}</li>
+                                                    <li style="margin-left:28px">{{ $incompleteCourse->total_lesson }} Lessons</li>
+                                                </ul>
+                                            </div>
+                                            <h5 class="card-title course-title">{{ $incompleteCourse->title }}</h5>
+                                            <p class="card-text course-description">{{ $incompleteCourse->description }}</p>
+                                            <a href="{{ route('student.course.detail', $incompleteCourse->id) }}" class="btn view-course-btn mt-auto">View Course</a>
+                                        </div>
+                                    </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 

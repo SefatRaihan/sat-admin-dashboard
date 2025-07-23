@@ -8,6 +8,7 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
+
             <div class="course-meta">
                 <div class="tags">
                     <span>{{ $course->audience }}</span>
@@ -44,18 +45,6 @@
 
             <div class="course-lessons-list" id="courseLessonsList">
             </div>
-            @if(!is_null($course->exam_id))
-                <div class="exam-card">
-                    <div class="exam-info">
-                    <div class="exam-icon"><img src="{{ asset('storage/icon/lock-closed.png') }}" alt=""></div>
-                    <div class="exam-title">{{ $exam->title }}</div>
-                    </div>
-                    <form action="{{ route('student-exam.start', $exam->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-sm start-btn">Start Exam</button>
-                    </form>
-                </div>
-            @endif
         </div>
     </div>
 
@@ -101,7 +90,7 @@
                                         <i class="fas ${iconClass}"></i>
                                     </div>
                                     <div class="lesson-details">
-                                        <div class="lesson-name" data-lesson-type="${lesson.type}" data-chapter-id="${chapter.id}" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.path}">${lesson.name}</div>
+                                        <div class="lesson-name" data-lesson-type="${lesson.type}" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.path}">${lesson.name}</div>
                                         <div class="lesson-duration">${isVideo ? lesson.duration : ''}</div>
                                     </div>
                                     <div class="lesson-status">
@@ -180,9 +169,7 @@
                 function selectedVideo() {
                     const $lessonItem = $(this).find('.lesson-name');
                     const lessonId = $lessonItem.data('lesson-id');
-                    const chapterId = $lessonItem.data('chapter-id');
-                    const couseId = '{{ $course->id }}';
-                    const filePath = 'storage/' + $lessonItem.data('lesson-path');
+                    const filePath = 'storage/'+$lessonItem.data('lesson-path');
                     const fileType = $lessonItem.data('lesson-type');
                     const fullUrl = `${appUrl}${filePath}`;
 
@@ -194,34 +181,19 @@
                         ? fileType.toLowerCase() === 'pdf'
                         : filePath.toLowerCase().endsWith('.pdf');
 
-                    // 🔥 Call API to mark lesson as complete
-                    $.ajax({
-                        url: `/api/courses/mark-complete/${couseId}/${chapterId}/${lessonId}`,
-                        method: 'get',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response) {
-                            console.log(response.message);
-                            // Optionally update UI here like adding a check icon
-                        },
-                        error: function(xhr) {
-                            console.error("Error marking lesson complete", xhr.responseJSON);
-                        }
-                    });
-
                     if (isVideo) {
                         $('#videoSource').attr('src', fullUrl);
                         const video = $('#lesson-player')[0];
                         video.load();
                         video.play();
                     } else if (isPdf) {
-                        window.open(fullUrl, '_blank');
+
+                        window.open(fullUrl, '_blank')
+
                     } else {
                         console.warn('Unknown lesson type. Cannot preview.');
                     }
                 }
-
             });
 
             
