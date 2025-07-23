@@ -23,7 +23,7 @@
     <!-- Create Modal -->
     <div class="modal fade" id="createModalCenter" tabindex="-1" role="dialog" aria-labelledby="createModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content supervisor-create-section" style="border-radius: 24px; height:65vh">
+            <div class="modal-content supervisor-create-section" style="border-radius: 24px;">
                 <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
                     <h5 class="" id="exampleModalLongTitle"><b>Create Supervisor</b></h5>
                     <p>Create Supervisor Enter the necessary details to create a supervisor</p>
@@ -96,7 +96,7 @@
     <!-- Edit Modal -->
     <div class="modal fade" id="editModalCenter" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content supervisor-edit-section" style="border-radius: 24px; height:65vh">
+            <div class="modal-content supervisor-edit-section" style="border-radius: 24px;">
                 <div class="modal-header text-center" style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
                     <h5 class="" id="exampleModalLongTitle"><b>Edit Supervisor</b></h5>
                     <p>Edit Supervisor Enter the necessary details to edit a supervisor</p>
