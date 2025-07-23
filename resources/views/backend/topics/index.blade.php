@@ -540,10 +540,10 @@
                             Swal.fire("Error", "Failed to create topic successfully!", "error");
                         }
 
-                        submitButton.text('Save Question').prop('disabled', false);
+                        submitButton.text('Save').prop('disabled', false);
                     },
                     error: function(error) {
-                        submitButton.text('Save Question').prop('disabled', false);
+                        submitButton.text('Save').prop('disabled', false);
 
                         let errors = error.responseJSON.errors;
                         let errorMessage = "";
