@@ -35,10 +35,10 @@
                 <div class="progress-info">
                     <div style="display: flex; justify-content: space-between;">
                         <div class="progress-label">In Progress</div>
-                        <div class="progress-percentage" id="overall-progress">0%</div>
+                        <div class="progress-percentage">67%</div>
                     </div>
                     <div class="progress-bar-container">
-                        <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
+                        <div class="progress-bar" style="width: 67%;"></div>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,6 @@
             const totalDuration = @json($course->total_duration);
 
             $(document).ready(function () {
-                updateOverallProgress();
                 $('#total_duration').text('Duration: ' +secondsToTimeString(totalDuration));
                 const $courseLessonsList = $('#courseLessonsList');
 
@@ -85,7 +84,6 @@
                                     ? `<div class="progress-bar-tiny"><div style="width: ${lesson.progress}%"></div></div><span class="progress-percentage-small">${lesson.progress}%</span>`
                                     : '');
                             // class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}"
-
                             lessonsHtml += `
                                 <div class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}" data-lesson-id="${lesson.id}">
                                     <div class="lesson-item-icon">
@@ -169,17 +167,13 @@
                 $(document).on('click', '.lesson-item', selectedVideo);
 
                 function selectedVideo() {
-                    const lessonItem = $(this);
-                    const lessonName = lessonItem.find('.lesson-name');
-                    const lessonStatus = lessonItem.find('.lesson-status'); // Corrected selector
-                    const lessonId = lessonName.data('lesson-id');
-                    const chapterId = lessonName.data('chapter-id');
-                    const courseId = '{{ $course->id }}';
-                    const filePath = 'storage/' + lessonName.data('lesson-path');
-                    const fileType = lessonName.data('lesson-type');
+                    const $lessonItem = $(this).find('.lesson-name');
+                    const lessonId = $lessonItem.data('lesson-id');
+                    const chapterId = $lessonItem.data('chapter-id');
+                    const couseId = '{{ $course->id }}';
+                    const filePath = 'storage/' + $lessonItem.data('lesson-path');
+                    const fileType = $lessonItem.data('lesson-type');
                     const fullUrl = `${appUrl}${filePath}`;
-                    console.log(lessonStatus);
-                
 
                     const isVideo = fileType 
                         ? fileType.toLowerCase() === 'video'
@@ -191,15 +185,13 @@
 
                     // 🔥 Call API to mark lesson as complete
                     $.ajax({
-                        url: `/api/courses/mark-complete/${courseId}/${chapterId}/${lessonId}`,
+                        url: `/api/courses/mark-complete/${couseId}/${chapterId}/${lessonId}`,
                         method: 'get',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
                             console.log(response.message);
-                            lessonStatus.html('<i class="fas fa-check-circle"></i>');
-                            updateOverallProgress();
                             // Optionally update UI here like adding a check icon
                         },
                         error: function(xhr) {
@@ -220,22 +212,6 @@
                 }
 
             });
-
-            function updateOverallProgress() {
-                let courseId = '{{ $course->id }}';
-                $.ajax({
-                    url: `/api/courses/${courseId}/progress`,
-                    method: 'GET',
-                    success: function(response) {
-                        const progress = response.progress;
-                        $('#overall-progress').text(`${progress}%`);
-                        $('#progress-bar').css('width', `${progress}%`);
-                    },
-                    error: function(xhr) {
-                        console.error("Error fetching progress", xhr.responseJSON);
-                    }
-                });
-            }
 
             
 

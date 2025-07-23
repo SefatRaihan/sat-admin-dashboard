@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
+use App\Models\LessonUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -84,7 +85,7 @@ class CourseController extends Controller
             'lessons.*'         => 'array',
             'lessons.*.*'       => 'exists:lessons,id',
         ]);
-
+        
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
@@ -114,6 +115,7 @@ class CourseController extends Controller
                 'total_lesson'   => $request->total_lesson ?? null,
                 'total_chapter'  => $request->total_chapter ?? null,
                 'thumbnail'      => $filePath ?? null,
+                'is_exam_create' => $request->exam_checked ?? false,
             ]);
 
             // ✅ Attach chapters to course
@@ -239,6 +241,7 @@ class CourseController extends Controller
                 'total_lesson'   => isset($validated['total_lesson']) && is_numeric($validated['total_lesson']) ? (int) $validated['total_lesson'] : null,
                 'total_chapter'  => isset($validated['total_chapter']) && is_numeric($validated['total_chapter']) ? (int) $validated['total_chapter'] : null,
                 'thumbnail'      => $filePath,
+                'is_exam_create' => $request->exam_checked ?? false,
             ]);
 
             // Sync chapters (replace existing chapters with new ones)
@@ -349,18 +352,28 @@ class CourseController extends Controller
             $lesson = Lesson::findOrFail($lessonId);
             $course = Course::findOrFail($courseId);
 
-            $user->lessons()->syncWithoutDetaching([
-                $lesson->id => [
-                    'completed_at' => now(),
+            $lessonUser = LessonUser::where('user_id', $user->id)
+                ->where('lesson_id', $lesson->id)
+                ->where('course_id', $course->id)
+                ->where('chapter_id', $chapterId)
+                ->first();
+
+            if (!$lessonUser) {
+                LessonUser::create([
+                    'user_id' => $user->id,
+                    'lesson_id' => $lesson->id,
+                    'course_id' => $course->id,
                     'chapter_id' => $chapterId,
-                    'course_id' => $courseId,
-                ]
-            ]);
+                    'completed_at' => now(),
+                ]);
+            }
 
             $totalLessons = $course->total_lesson;
-            $completedLessons = $user->lessons()
-                ->wherePivot('course_id', $course->id)
+            $completedLessons = LessonUser::where('user_id', $user->id)
+                ->where('course_id', $course->id)
                 ->count();
+
+            $progress = round(($completedLessons / $totalLessons) * 100);
 
             if ($totalLessons == $completedLessons) {
                 // Mark course as complete in course_user pivot table
@@ -369,7 +382,7 @@ class CourseController extends Controller
                 ]);
             }
 
-            return response()->json(['status' => 'success', 'message' => 'Lesson marked as complete.']);
+            return response()->json(['status' => 'success', 'message' => 'Lesson marked as complete.', 'progress' => $progress], 200);
 
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);

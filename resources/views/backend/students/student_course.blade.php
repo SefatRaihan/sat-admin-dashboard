@@ -87,24 +87,26 @@
                     <div class="tab-pane fade" id="incomplete" role="tabpanel" aria-labelledby="incomplete-tab">
                         <h2 class="section-title mb-2">Incomplete</h2>
 
-                        @foreach ($incompleteCourses as $incompleteCourse) 
-                            <div class="col-md-3 mb-4">
-                                    <div class="card course-card h-100">
-                                        <img src="{{ asset('storage/'.$incompleteCourse->thumbnail) }}" class="card-img-top course-image" alt="Course Image">
-                                        <div class="card-body d-flex flex-column">
-                                            <div class="course-meta">
-                                                <ul class="d-flex" style="padding-left: 17px; margin-bottom: 0px;">
-                                                    <li>{{ $incompleteCourse->audience }}</li>
-                                                    <li style="margin-left:28px">{{ $incompleteCourse->total_lesson }} Lessons</li>
-                                                </ul>
+                        <div class="row">
+                            @foreach ($incompleteCourses as $incompleteCourse) 
+                                <div class="col-md-3 mb-4">
+                                        <div class="card course-card h-100">
+                                            <img src="{{ asset('storage/'.$incompleteCourse->thumbnail) }}" class="card-img-top course-image" alt="Course Image">
+                                            <div class="card-body d-flex flex-column">
+                                                <div class="course-meta">
+                                                    <ul class="d-flex" style="padding-left: 17px; margin-bottom: 0px;">
+                                                        <li>{{ $incompleteCourse->audience }}</li>
+                                                        <li style="margin-left:28px">{{ $incompleteCourse->total_lesson }} Lessons</li>
+                                                    </ul>
+                                                </div>
+                                                <h5 class="card-title course-title">{{ $incompleteCourse->title }}</h5>
+                                                <p class="card-text course-description">{{ $incompleteCourse->description }}</p>
+                                                <a href="{{ route('student.course.detail', $incompleteCourse->id) }}" class="btn view-course-btn mt-auto">View Course</a>
                                             </div>
-                                            <h5 class="card-title course-title">{{ $incompleteCourse->title }}</h5>
-                                            <p class="card-text course-description">{{ $incompleteCourse->description }}</p>
-                                            <a href="{{ route('student.course.detail', $incompleteCourse->id) }}" class="btn view-course-btn mt-auto">View Course</a>
                                         </div>
-                                    </div>
-                            </div>
-                        @endforeach
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>

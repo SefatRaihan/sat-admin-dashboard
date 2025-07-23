@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Exports\StudentsExport;
 use Illuminate\Support\Facades\DB;
 use App\Models\ExamAttemptQuestion;
+use App\Models\LessonUser;
 use App\Models\StudentNotification;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -133,54 +134,54 @@ class StudentController extends Controller
     public function studentCourseDetails($id)
     {
         $course = Course::findOrFail($id);
+        $user = Auth::user(); // Get the authenticated user
 
         $chapterLessons = DB::table('chapter_lesson')
             ->where('course_id', $course->id)
             ->join('chapters', 'chapter_lesson.chapter_id', '=', 'chapters.id')
             ->join('lessons', 'chapter_lesson.lesson_id', '=', 'lessons.id')
-            ->select('chapters.id as chapter_id', 'chapters.title as chapter_title', 
-                    'lessons.id as lesson_id', 'lessons.file_path as file_path', 'lessons.file_name', 'lessons.file_type', 'lessons.total_length')
-            // ->distinct()
+            ->select(
+                'chapters.id as chapter_id',
+                'chapters.title as chapter_title',
+                'lessons.id as lesson_id',
+                'lessons.file_path as file_path',
+                'lessons.file_name',
+                'lessons.file_type',
+                'lessons.total_length',
+                'lessons.title'
+            )
             ->get();
-            // ->groupBy('chapter_id');
 
-            // $groupedByTitle = $chapterLessons
-            //         ->groupBy('chapter_title')
-            //         ->map(function ($lessons) {
-            //             return $lessons->map(function ($lesson) {
-            //                 return [
-            //                     'lesson_id'   => $lesson->lesson_id,
-            //                     'file_name'   => $lesson->file_name,
-            //                     'file_path'   => $lesson->file_path,
-            //                     'file_type'   => $lesson->file_type,
-            //                     'duration'    => $lesson->total_length,
-            //                 ];
-            //             });
-            //         });
+        $groupedChapters = $chapterLessons->groupBy('chapter_title')->map(function ($items, $chapterTitle) use ($user, $course) {
+            $first = $items->first();
+            return [
+                'id' => $first->chapter_id,
+                'title' => $chapterTitle,
+                'index' => null, // Optionally assign an index like "Chapter 1"
+                'duration' => '00:00', // You can calculate actual duration here
+                'lessonsCount' => count($items),
+                'expanded' => false,
+                'lessons' => $items->map(function ($lesson) use ($user, $course, $first) {
+                    // Check if the lesson is completed by the user
+                    $lessonUser = LessonUser::where('user_id', $user->id)
+                        ->where('lesson_id', $lesson->lesson_id)
+                        ->where('course_id', $course->id)
+                        ->where('chapter_id', $first->chapter_id)
+                        ->first();
 
-            $groupedChapters = $chapterLessons->groupBy('chapter_title')->map(function ($items, $chapterTitle) {
-                            $first = $items->first();
-                            return [
-                                'id' => $first->chapter_id,
-                                'title' => $chapterTitle,
-                                'index' => null, // Optionally assign an index like "Chapter 1"
-                                'duration' => '00:00', // You can calculate actual duration here
-                                'lessonsCount' => count($items),
-                                'expanded' => false,
-                                'lessons' => $items->map(function ($lesson) {
-                                    return [
-                                        'id' => $lesson->lesson_id,
-                                        'name' => $lesson->file_name,
-                                        'path' => $lesson->file_path,
-                                        'type' => strtolower($lesson->file_type),
-                                        'duration' => $lesson->total_length, // Add if available
-                                        'completed' => false,   // Add logic based on user if needed
-                                        'progress' => 0         // Same here
-                                    ];
-                                })->toArray()
-                            ];
-                        })->values();
-        // dd($groupedByTitle);
+                    return [
+                        'id' => $lesson->lesson_id,
+                        'name' => $lesson->title,
+                        'path' => $lesson->file_path,
+                        'type' => strtolower($lesson->file_type),
+                        'duration' => $lesson->total_length,
+                        'completed' => $lessonUser ? (bool) $lessonUser->completed_at : false,
+                        'progress' => $lessonUser && $lessonUser->completed_at ? 100 : ($lessonUser->progress ?? 0)
+                    ];
+                })->toArray()
+            ];
+        })->values();
+
         return view('backend.students.student_course_details', compact('course', 'chapterLessons', 'groupedChapters'));
     }
 

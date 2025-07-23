@@ -140,4 +140,6 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::patch('/lessons/{id}/update-status', [LessonController::class, 'updateStatus']);
     Route::post('/upload-file', [LessonController::class, 'uploadFile']);
     Route::get('/courses/mark-complete/{courseId}/{chapterId}/{lessonId}', [CourseController::class, 'markComplete']);
+    Route::get('/courses/lessons/{courseId}/{chapterId}/{lessonId}', [StudentController::class, 'getCourseLessons']);
+    Route::get('/courses/{courseId}/progress', [StudentController::class, 'getCourseProgress']);
 });

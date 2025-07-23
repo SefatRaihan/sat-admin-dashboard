@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\StudentNotification;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\Lesson;
+use App\Models\LessonUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -46,6 +49,9 @@ class StudentController extends Controller
         'exportExcel' => 'Export Excel',
         'updateStatus' => 'Update Student Status',
         'history' => 'Student History',
+        'getCourseLessons' => 'Get Course Lessons',
+        'markComplete' => 'Mark Complete',
+        'getCourseProgress' => 'Get Course Progress',
     ];
 
     /**
@@ -530,4 +536,54 @@ class StudentController extends Controller
         ]);
     }
 
+    public function getCourseLessons($courseId, $chapterId, $lessonId)
+    {
+        try {
+            $user = Auth::user();
+            $lesson = Lesson::findOrFail($lessonId);
+            $course = Course::findOrFail($courseId);
+
+            $lessonUser = LessonUser::where('user_id', $user->id)
+                ->where('lesson_id', $lesson->id)
+                ->where('course_id', $course->id)
+                ->where('chapter_id', $chapterId)
+                ->first();
+
+            return response()->json([
+                'status' => 'success',
+                'lessonUser' => $lessonUser
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getCourseProgress($courseId)
+    {
+        try {
+            $user = Auth::user();
+            $course = Course::findOrFail($courseId);
+            
+            $totalLessons = $course->total_lesson;
+            $completedLessons = $user->lessons()
+                ->wherePivot('course_id', $course->id)
+                ->whereNotNull('completed_at')
+                ->count();
+
+            $progress = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
+
+            return response()->json([
+                'status' => 'success',
+                'progress' => $progress
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

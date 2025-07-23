@@ -381,7 +381,7 @@
                                             <div class="name">Mubhir Student</div>
                                             <div class="role">SAT Student</div>
                                         </div>
-                                        <div class="progress-info">
+                                        {{-- <div class="progress-info">
                                             <div style="display: flex; justify-content: space-between;">
                                                 <div class="progress-label">In Progress</div>
                                                 <div class="progress-percentage">67%</div>
@@ -389,7 +389,7 @@
                                             <div class="progress-bar-container">
                                                 <div class="progress-bar" style="width: 67%;"></div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="course-lessons-list" id="courseLessonsList"></div>
                                 </div>
@@ -1740,7 +1740,7 @@
                                 </div>
                                 <div class="lesson-details">
                                     <div class="lesson-name" data-lesson-type="${lesson.type}" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.file_path}">${lesson.name}</div>
-                                    <div class="lesson-duration">${lesson.duration}</div>
+                                    <div class="lesson-duration"><i class="far fa-clock"></i> ${lesson.duration}</div>
                                 </div>
                                 <div class="lesson-status">${statusHtml}</div>
                             </div>
@@ -1757,7 +1757,7 @@
                                     <span>${chapter.title}</span>
                                 </div>
                                 <div class="chapter-meta">
-                                    <span>${chapter.lessonsCount} Lessons</span>
+                                    <span style="width: 58px;">${chapter.lessonsCount} Lessons</span>
                                     <span>${chapter.duration}</span>
                                 </div>
                             </div>
@@ -1792,7 +1792,7 @@
                     const lessonData = await $.get('/api/lessons-by-id', { ids: selectedLessonIds });
                     const lessonObjects = lessonData.map(lesson => ({
                         id: lesson.id,
-                        name: lesson.file_name,
+                        name: lesson.title,
                         file_path: lesson.file_path || 'video',
                         type: lesson.file_type || 'video',
                         duration: lesson.total_length || '00:10:00',
@@ -1879,6 +1879,10 @@
             }
 
             function selectedVideo() {
+                $('.lesson-item').removeClass('active');
+                // Add 'active' to the clicked lesson item
+                $(this).closest('.lesson-item').addClass('active');
+
                 const $lessonItem = $(this);
                 const filePath = 'storage/' + $lessonItem.data('lesson-path');
                 const fileType = $lessonItem.data('lesson-type');
