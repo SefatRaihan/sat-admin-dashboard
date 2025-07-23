@@ -182,7 +182,14 @@ class StudentController extends Controller
             ];
         })->values();
 
-        return view('backend.students.student_course_details', compact('course', 'chapterLessons', 'groupedChapters'));
+        if(!is_null($course->exam_id))
+        {
+            $exam = Exam::find($course->exam_id);
+        } else {
+            $exam = null;
+        }
+
+        return view('backend.students.student_course_details', compact('course', 'chapterLessons', 'groupedChapters', 'exam'));
     }
 
     public function studentVideoLessonDetails($uuid)

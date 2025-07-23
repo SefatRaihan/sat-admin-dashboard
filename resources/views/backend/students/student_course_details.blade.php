@@ -8,7 +8,6 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
-
             <div class="course-meta">
                 <div class="tags">
                     <span>{{ $course->audience }}</span>
@@ -45,6 +44,24 @@
 
             <div class="course-lessons-list" id="courseLessonsList">
             </div>
+            @if(!is_null($course->exam_id))
+                <div class="exam-card mt-2">
+                    <div class="exam-info">
+                    <div class="exam-icon lock-exam"><i class="fas fa-lock"></i></div>
+                    <div class="exam-icon unlock-exam d-none"><i class="fas fa-lock-open"></i></div>
+                    <div class="exam-title">{{ $exam->title }}</div>
+                    </div>
+                    <div class="lock-exam">
+                        <button type="submit" class="btn btn-sm start-btn">Start Exam</button>
+                    </div>
+                    <div class="unlock-exam d-none">
+                        <form action="{{ route('student-exam.start', $exam->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm start-btn">Start Exam</button>
+                        </form>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -230,6 +247,14 @@
                         const progress = response.progress;
                         $('#overall-progress').text(`${progress}%`);
                         $('#progress-bar').css('width', `${progress}%`);
+
+                        if (progress == 100) {
+                            $('.lock-exam').addClass('d-none');
+                            $('.unlock-exam').removeClass('d-none');
+                        } else {
+                            $('.lock-exam').removeClass('d-none');
+                            $('.unlock-exam').addClass('d-none');
+                        }
                     },
                     error: function(xhr) {
                         console.error("Error fetching progress", xhr.responseJSON);
