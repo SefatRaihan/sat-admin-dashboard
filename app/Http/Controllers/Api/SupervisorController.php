@@ -186,7 +186,7 @@ class SupervisorController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'email' => 'required',
+            'email' => 'required|email|max:255',
             'role' => 'required',
             'status' => 'required',
         ]);
@@ -201,26 +201,37 @@ class SupervisorController extends Controller
         DB::beginTransaction(); // Start Transaction
 
         try {
-            $supervisor = Supervisor::where('uuid', $uuid)->first();
-            $supervisorRole = Role::where('slug', $request->role)->first();
+            $supervisor = Supervisor::where('uuid', $uuid)->firstOrFail();
+            $user = $supervisor->user; // assuming Supervisor has a belongsTo relationship with User
+            $supervisorRole = Role::where('slug', $request->role)->firstOrFail();
 
+            // Update Supervisor
             $supervisor->update([
-                'name'          => $request->name,
+                'name'      => $request->name,
+                'email'     => $request->email,
+                'phone'     => $request->phone,
+                'role_id'   => $supervisorRole->id,
+                'role_name' => $request->role,
+                'status'    => $request->status,
+            ]);
+
+            // Update related User
+            $user->update([
+                'first_name'    => $request->name,
+                'full_name'     => $request->name,
                 'email'         => $request->email,
                 'phone'         => $request->phone,
-                'role_id'       => $supervisorRole->id,
-                'role_name'     => $request->role,
-                'status'        => $request->status,
+                'active_role_id'=> $supervisorRole->id,
             ]);
 
             DB::commit(); // Commit Transaction
 
-            //handle relationship update
             return response()->json([
                 'status' => true,
                 'message' => __('Successfully Updated'),
                 'data' => $supervisor
             ], 200);
+
         } catch (\Exception | QueryException $e) {
             DB::rollBack(); // Rollback on Error
 
@@ -230,6 +241,7 @@ class SupervisorController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
