@@ -31,6 +31,7 @@ class CourseController extends Controller
         'getChapter' => 'Chapter',
         'markComplete' => 'Mark Complete',
         'courseDelete' => 'Delete Course',
+        'searchCourses' => 'Search Courses',
     ];
 
     /**
@@ -407,5 +408,56 @@ class CourseController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
+    }
+
+    public function searchCourses(Request $request)
+    {
+        $user = auth()->user();
+        $search = $request->query('search', '');
+
+        // 1. All courses with search filter
+        $allCourses = Course::when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+        })->latest()->get();
+
+        // 2. Completed courses (user-specific) with search filter
+        $completeCourses = Course::whereHas('users', function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->where('is_completed', true);
+        })->when($search, function ($query, $search) {
+            return $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+            });
+        })->latest()->get();
+
+
+        // 3. Incomplete courses (user-specific) with search filter
+        $incompleteCourses = Course::where(function ($query) use ($user, $search) {
+            $query->whereHas('users', function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                ->where(function ($q2) {
+                    $q2->where('is_completed', false)
+                        ->orWhereNull('is_completed');
+                });
+            })->orWhereDoesntHave('users', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+                });
+            }
+        })->latest()->get();
+
+
+        return response()->json([
+            'allCourses' => $allCourses,
+            'completeCourses' => $completeCourses,
+            'incompleteCourses' => $incompleteCourses,
+        ]);
     }
 }

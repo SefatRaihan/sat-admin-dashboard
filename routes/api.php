@@ -142,4 +142,5 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::get('/courses/mark-complete/{courseId}/{chapterId}/{lessonId}', [CourseController::class, 'markComplete']);
     Route::get('/courses/lessons/{courseId}/{chapterId}/{lessonId}', [StudentController::class, 'getCourseLessons']);
     Route::get('/courses/{courseId}/progress', [StudentController::class, 'getCourseProgress']);
+    Route::get('/courses/search', [CourseController::class, 'searchCourses']);
 });
