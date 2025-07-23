@@ -928,7 +928,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Unexpected Error',
-                                    text: 'An unexpected error occurred. Please try again.',
+                                    text: xhr.responseJSON.error || 'An unexpected error occurred. Please try again.',
                                 });
                             }
                         },
@@ -1044,6 +1044,8 @@
                             }
                         },
                         error: function (xhr) {
+                            console.log(xhr);
+                            
                             if (xhr.status === 422) {
                                 let errors = xhr.responseJSON.errors;
                                 let errorMsg = '';
@@ -1059,7 +1061,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Unexpected Error',
-                                    text: 'An unexpected error occurred. Please try again.',
+                                    text: xhr.responseJSON.error || 'An unexpected error occurred. Please try again.',
                                 });
                             }
                         },
