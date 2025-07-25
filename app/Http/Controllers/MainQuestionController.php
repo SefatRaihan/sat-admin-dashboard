@@ -234,6 +234,7 @@ class MainQuestionController extends Controller
                 $question = ExamQuestion::create([
                     'question_code'        => $questionCode,
                     'audience'             => $request->audience,
+                    'topic_id'             => $request->topic,
                     'question_title'       => $request->question_title,
                     'question_description' => $request->question_description,
                     'question_text'        => $request->question_text,

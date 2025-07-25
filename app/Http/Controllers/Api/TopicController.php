@@ -20,23 +20,27 @@ class TopicController extends Controller
     public function index(Request $request)
     {
         try {
-            // Start query using Eloquent
             $query = Topic::query();
 
-            // Apply search filter if present
             if ($request->filled('search')) {
                 $search = $request->search;
                 $query->where('name', 'like', "%{$search}%");
             }
 
-            // Get pagination value or default to 10
+            $sort = $request->get('sort', 'Latest');
+            if ($sort === 'Latest') {
+                $query->orderBy('created_at', 'desc');
+            } elseif ($sort === 'Oldest') {
+                $query->orderBy('created_at', 'asc');
+            }
+
             $perPage = $request->get('per_page', 10);
             $topics = $query->paginate($perPage);
 
             return response()->json([
                 'success' => true,
                 'data' => $topics
-            ], 200); // 200 OK status code
+            ], 200);
 
         } catch (\Exception $e) {
             return response()->json([

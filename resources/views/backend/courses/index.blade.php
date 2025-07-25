@@ -375,7 +375,7 @@
                                 <div class="sidebar2">
                                     <div class="student-profile-card">
                                         <div class="profile-avatar">
-                                            <img src="https://via.placeholder.com/50/4A67ED/FFFFFF?text=MS" alt="Img">
+                                            <img src="{{ asset('image/user-icon.png') }}" alt="Img">
                                         </div>
                                         <div class="profile-info">
                                             <div class="name">Mubhir Student</div>

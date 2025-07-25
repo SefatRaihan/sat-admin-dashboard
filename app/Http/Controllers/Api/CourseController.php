@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 
 class CourseController extends Controller
 {
@@ -99,7 +99,7 @@ class CourseController extends Controller
                 $uploadedFile = $request->thumbnail;
 
                 $fileName = time() . self::generateCourseCode() . '.' . $uploadedFile->getClientOriginalExtension();
-                $filePath = $uploadedFile->storeAs('crouse', $fileName, 'public');
+                $filePath = $uploadedFile->storeAs('course', $fileName, 'public');
             }
 
         try {
