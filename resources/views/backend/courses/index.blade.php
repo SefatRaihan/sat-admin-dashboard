@@ -1296,6 +1296,7 @@
                                     `;
                                     $('.lesson').select2();
                                     lessonContainer.append(lessonSelectHTML);
+                                    selectLesson('#lesson_' + chapterId);
                                 });
                             } else {
                                 console.log('No chapters selected, lesson container cleared'); // Debug

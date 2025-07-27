@@ -167,12 +167,16 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        // Load related chapters and lessons
-        $course->load(['chapters', 'chapters.lessons']);
+        $course->load(['chapters']);
 
-        // Return the course with its chapters and lessons
+        // Manually load lessons by course for each chapter
+        foreach ($course->chapters as $chapter) {
+            $chapter->setRelation('lessons', $chapter->lessonsByCourse($course->id)->get());
+        }
+
         return response()->json($course);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -187,7 +191,6 @@ class CourseController extends Controller
      */
     public function update(Request $request, $courseId)
     {
-        // Validate the incoming request data
         $validator = Validator::make($request->all(), [
             'audience'          => 'required|string',
             'sat_course_type'   => 'nullable|string',
@@ -210,22 +213,19 @@ class CourseController extends Controller
         }
 
         $validated = $validator->validated();
-
-        // Find the course by ID
         $course = Course::findOrFail($courseId);
 
         DB::beginTransaction();
 
         try {
             // Handle thumbnail upload
-            $filePath = $course->thumbnail; // Retain existing thumbnail if no new one is uploaded
-
+            $filePath = $course->thumbnail;
             if ($request->hasFile('thumbnail')) {
                 $uploadedFile = $request->file('thumbnail');
-                $fileName = time() . self::generateCourseCode() . '.' . $uploadedFile->getClientOriginalExtension();
+                $fileName = time() . $this->generateCourseCode() . '.' . $uploadedFile->getClientOriginalExtension();
                 $filePath = $uploadedFile->storeAs('course', $fileName, 'public');
 
-                // Optionally, delete the old thumbnail if it exists
+                // Delete old thumbnail if it exists
                 if ($course->thumbnail && Storage::disk('public')->exists($course->thumbnail)) {
                     Storage::disk('public')->delete($course->thumbnail);
                 }
@@ -245,43 +245,53 @@ class CourseController extends Controller
                 'is_exam_create' => $request->exam_checked ?? false,
             ]);
 
-            // Sync chapters (replace existing chapters with new ones)
-            $course->chapters()->sync($validated['chapters']);
+            // Delete existing chapters and lessons for the course
+            DB::table('course_chapter')->where('course_id', $course->id)->delete();
+            DB::table('chapter_lesson')->where('course_id', $course->id)->delete();
 
-            // Sync lessons for each chapter
+            // Attach new chapters
+            foreach ($validated['chapters'] as $chapterId) {
+                DB::table('course_chapter')->insert([
+                    'course_id'  => $course->id,
+                    'chapter_id' => $chapterId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            // Attach lessons to chapters
             foreach ($validated['chapters'] as $chapterId) {
                 $lessonIds = $validated['lessons'][$chapterId] ?? [];
 
                 if (!empty($lessonIds)) {
-                    // Prepare data for upsert
-                    $lessonData = collect($lessonIds)->map(function ($lessonId) use ($chapterId, $course) {
-                        return [
-                            'course_id'  => $course->id,
-                            'chapter_id' => $chapterId,
-                            'lesson_id'  => $lessonId,
-                            'updated_at' => now(),
-                            'created_at' => now(),
-                        ];
-                    })->toArray();
+                    foreach ($lessonIds as $lessonId) {
+                        // Check if the record exists
+                        $existingRecord = DB::table('chapter_lesson')
+                            ->where('course_id', $course->id)
+                            ->where('chapter_id', $chapterId)
+                            ->where('lesson_id', $lessonId)
+                            ->first();
 
-                    // Upsert lessons for the chapter
-                    DB::table('chapter_lesson')->upsert(
-                        $lessonData,
-                        ['course_id', 'chapter_id', 'lesson_id'], // Composite unique key
-                        ['updated_at'] // Update timestamp on duplicate
-                    );
+                        if ($existingRecord) {
+                            // Update existing record
+                            DB::table('chapter_lesson')
+                                ->where('course_id', $course->id)
+                                ->where('chapter_id', $chapterId)
+                                ->where('lesson_id', $lessonId)
+                                ->update(['updated_at' => now()]);
+                        } else {
+                            // Create new record
+                            DB::table('chapter_lesson')->insert([
+                                'course_id'  => $course->id,
+                                'chapter_id' => $chapterId,
+                                'lesson_id'  => $lessonId,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
                 }
-
-                // Remove any lessons not included in the request for this chapter
-                DB::table('chapter_lesson')
-                    ->where('course_id', $course->id)
-                    ->where('chapter_id', $chapterId)
-                    ->whereNotIn('lesson_id', $lessonIds)
-                    ->delete();
             }
-
-            // Remove any chapters not included in the request
-            $course->chapters()->whereNotIn('chapter_id', $validated['chapters'])->detach();
 
             DB::commit();
 
