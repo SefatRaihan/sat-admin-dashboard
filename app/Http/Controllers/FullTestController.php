@@ -40,7 +40,7 @@ class FullTestController extends Controller
     {
         $exams = Exam::with(['sections', 'questions', 'userAttempt'])
             ->where('status', 'active')
-            ->paginate(12);
+            ->get();
 
 
         $allExamIds = Exam::where('status', 'active')->pluck('id');
@@ -59,7 +59,7 @@ class FullTestController extends Controller
 
         $unattemptedExams = Exam::where('status', 'active')
             ->whereNotIn('id', $attemptedExamIds)
-            ->paginate(12);
+            ->get();
 
         $attemptedExams = $exams->whereIn('id', $attemptedExamIds);
 

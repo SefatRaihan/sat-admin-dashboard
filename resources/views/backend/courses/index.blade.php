@@ -1267,7 +1267,6 @@
                     const lessonContainer = $('.lessonSelectBox');
 
                     $.get('/api/get-chapter', function(data) {
-                        console.log('Chapter data loaded:', data); // Debug
 
                         // Clear existing select2 and re-initialize
                         if (chapterSelect.hasClass('select2-hidden-accessible')) {
@@ -1297,9 +1296,7 @@
                                     `;
                                     $('.lesson').select2();
                                     lessonContainer.append(lessonSelectHTML);
-                                    console.log(`Created lesson select for chapter ${chapterId}`); // Debug
                                 });
-                                console.log('Lesson select elements created:', lessonContainer.html()); // Debug
                             } else {
                                 console.log('No chapters selected, lesson container cleared'); // Debug
                             }
@@ -1673,7 +1670,6 @@
                         // Step 2 & 3: Populate chapters and lessons
                         if (response.chapters && response.chapters.length > 0) {
                             const chapterIds = response.chapters.map(ch => ch.id);
-                            console.log('Selected chapter IDs:', chapterIds); // Debug
                             await selectEditChapter(chapterIds);
 
                             // Wait for DOM to update
@@ -1682,11 +1678,9 @@
                             // Populate lessons for each chapter
                             for (const chapter of response.chapters) {
                                 const lessonIds = chapter.lessons.map(lesson => lesson.id);
-                                console.log(`Populating lessons for chapter ${chapter.id}:`, lessonIds); // Debug
                                 await selectEditLesson(`#lesson_${chapter.id}`, lessonIds);
                             }
                         } else {
-                            console.log('No chapters in course data'); // Debug
                             await selectChapter();
                         }
 
@@ -1723,6 +1717,7 @@
                     }
                 });
             }
+
             async function renderCourseContent() {
                 $('#courseLessonsList').empty();
                 const courseData = await collectCourseDataFromSelections();
