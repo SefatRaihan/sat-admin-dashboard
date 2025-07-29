@@ -15,7 +15,8 @@ return new class extends Migration
             // Primary Key
             $table->id(); // BIGINT Auto-incrementing ID
             $table->uuid('uuid')->unique()->index(); // BIGINT Auto-incrementing ID
-            $table->foreignId('topic_id')->constrained('topics')->onDelete('Set null')->comment('References the topic this question belongs to')->index();
+            // $table->foreignId('topic_id')->constrained('topics')->onDelete('Set null')->comment('References the topic this question belongs to')->index();
+            $table->foreignId('topic_id')->index();
 
             // Audience Selection
             $table->enum('audience', ['High School', 'College', 'Graduation', 'SAT 2'])->comment('Defines the target audience for the question')->index();
