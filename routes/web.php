@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\RoleController;
@@ -131,6 +132,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/student/course/detail/{id}', [StudentController::class, 'studentCourseDetails'])->name('student.course.detail');
     Route::get('/student/video/lesson/{uuid}', [StudentController::class, 'studentVideoLessonDetails'])->name('student.video.lesson.details');
 
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
 });
 
 
