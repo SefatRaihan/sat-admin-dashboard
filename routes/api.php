@@ -23,6 +23,9 @@ use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\FaqItemController;
 use App\Http\Controllers\Api\CatSectionController;
 use App\Http\Controllers\Api\PricingSectionController;
+use App\Http\Controllers\Api\FeatureSliderController;
+use App\Http\Controllers\Api\FeatureSliderItemController;
+use App\Http\Controllers\Api\MixedSectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -177,5 +180,16 @@ Route::get('/cat-section', function () {
 
 Route::get('pricing-sections', [PricingSectionController::class, 'index']);
 Route::post('pricing-sections', [PricingSectionController::class, 'store']);
+
+Route::get('feature-sliders', [FeatureSliderController::class, 'index']);
+Route::post('feature-sliders', [FeatureSliderController::class, 'store']);
+Route::get('feature-sliders/{feature_slider}', [FeatureSliderController::class, 'show']);
+Route::put('feature-sliders/{feature_slider}', [FeatureSliderController::class, 'update']);
+Route::delete('feature-sliders/{feature_slider}', [FeatureSliderController::class, 'destroy']);
+
+// Route::apiResource('feature-slider-items', FeatureSliderItemController::class);
+
+Route::post('/mixed-sections', [MixedSectionController::class, 'storeOrUpdateMultipleMixedSections']);
+Route::get('/mixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
 
 
