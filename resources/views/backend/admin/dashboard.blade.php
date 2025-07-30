@@ -21,7 +21,14 @@
 
             </div>
             <div class="col-md-4">
-                
+                <div class="card p-0 question-section">
+                    <div class="card-header border-bottom pb-1">
+                        <div class="d-flex">
+                            <img src="{{ asset('image/admin-dashboard/question.png') }}" alt="" style="width:20px; height:20px">
+                            <h1 class="ml-1">Question</h1>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -280,14 +287,21 @@
     </div>
 
     @push('css')
-            <style>
+        <style>
+            .question-section h1 {
+                font-size: 16px;
+                font-weight: 500;
+                color: #101828;
+            }
+        </style>
+        <style>
         :root {
             --primary-color: #732067; /* A deep purple */
             --secondary-color: #ff9900; /* An orange for accents */
             --text-color-dark: #101828;
             --text-color-light: #666;
             --background-color: #f4f7f6;
-            --card-background: #fff;
+            --card-background: #EAECF0;
             --border-color: #e0e0e0;
             --success-color: #4CAF50;
             --info-color: #2196F3;

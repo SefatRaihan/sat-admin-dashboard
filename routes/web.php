@@ -24,6 +24,7 @@ use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DrillExamController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\TopicController;
 
 /*
@@ -133,6 +134,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/student/video/lesson/{uuid}', [StudentController::class, 'studentVideoLessonDetails'])->name('student.video.lesson.details');
 
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
+    Route::resource('packages', PackageController::class);
 });
 
 
