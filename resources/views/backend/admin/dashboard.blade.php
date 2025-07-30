@@ -391,15 +391,6 @@
                 --danger-color: #F44336;
             }
 
-            body {
-                font-family: 'Inter', sans-serif;
-                margin: 0;
-                padding: 20px;
-                background-color: var(--background-color);
-                color: var(--text-color-dark);
-                line-height: 1.6;
-            }
-
             .header {
                 grid-column: 1 / -1;
                 display: flex;
