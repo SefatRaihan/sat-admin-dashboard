@@ -11,32 +11,32 @@
         <table class="table table-striped custom-table" style="border: 1px solid #EAECF0">
             <tr>
                 <td style="width: 25%">Discount Code</td>
-                <td class="font-weight-bold" style="width: 25%">: </td>
+                <td class="font-weight-bold" style="width: 25%">: {{ $discount->discount_code }}</td>
 
                 <td style="width: 25%">Discount Type</td>
-                <td class="font-weight-bold" style="width: 25%">: </td>
+                <td class="font-weight-bold" style="width: 25%">: {{ $discount->discount_type }}</td>
             </tr>
 
             <tr>
                 <td style="width: 25%">Discount Amount</td>
-                <td class="font-weight-bold" style="width: 25%">: </td>
+                <td class="font-weight-bold" style="width: 25%">: {{ $discount->discount_amount }}</td>
 
                 <td style="width: 25%">Expiry Date</td>
-                <td class="font-weight-bold" style="width: 25%">: </td>
+                <td class="font-weight-bold" style="width: 25%">: {{ $discount->expiry_date }}</td>
             </tr>
 
             <tr>
                 <td style="width: 25%">Maximum No. of Uses</td>
-                <td class="font-weight-bold" style="width: 25%">: </td>
+                <td class="font-weight-bold" style="width: 25%">: {{ $discount->maximum_no_of_user }}</td>
 
                 <td style="width: 25%">No. Redeemed</td>
-                <td class="font-weight-bold" style="width: 25%">: </td>
+                <td class="font-weight-bold" style="width: 25%">: {{ $discount->no_redeemed }}</td>
             </tr>
         </table>
     </div>
 
     <div class="pl-3">
-        <a href=" class="btn create-btn" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px; color:#fff">Edit Discount</a>
+        <a href="/discounts/{{ $discount->uuid }}/edit" style="background-color:#732066;padding: 7px .875rem !important; font-size:12px; border-radius:8px; color:#fff">Edit Discount</a>
     </div>
 
     <div class="p-3 pb-0" style="padding-bottom: 0px !important; margin-bottom:0px !important">
@@ -215,23 +215,23 @@
                             questionList.addClass('d-none');
                             tableBody.html('<tr><td colspan="3" class="text-center">No topics found.</td></tr>');
                         } else if (response.success) {
-                            questionNullList.addClass('d-none');
-                            questionList.removeClass('d-none');
-                            tableBody.html("");
+                            // questionNullList.addClass('d-none');
+                            // questionList.removeClass('d-none');
+                            // tableBody.html("");
 
                             let rows = '';
-                            $.each(response.data.data, function(index, value) {
-                                rows += `
-                                    <tr>
-                                        <td><input type="checkbox" class="row-checkbox question-row" value="${value.id}"></td>
-                                        <td>${value.name}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.name}</td>
-                                    </tr>`;
-                            });
-                            tableBody.html(rows);
-                            updatePagination(response.data, page);
+                            // $.each(response.data.data, function(index, value) {
+                            //     rows += `
+                            //         <tr>
+                            //             <td><input type="checkbox" class="row-checkbox question-row" value="${value.id}"></td>
+                            //             <td>${value.name}</td>
+                            //             <td>${value.name}</td>
+                            //             <td>${value.name}</td>
+                            //             <td>${value.name}</td>
+                            //         </tr>`;
+                            // });
+                            // tableBody.html(rows);
+                            // updatePagination(response.data, page);
                         } else {
                             console.error("Error: ", response.message);
                             tableBody.html('<tr><td colspan="3" class="text-center">Error loading topics.</td></tr>');

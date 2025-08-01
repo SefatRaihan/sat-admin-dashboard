@@ -23,7 +23,7 @@
 
     <div class="card-header d-flex justify-content-between">
         <div>
-            <input type="text" id="search" class="form-control search_input" style="background-color: #fff" placeholder="Search Discount" style="padding-left: 40px">
+            <input type="text" id="search" class="form-control search_input" style="background-color: #fff; padding-left: 40px;" placeholder="Search Discount" style="padding-left: 40px">
         </div>
 
         <div class="d-flex">
@@ -43,7 +43,7 @@
             <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; border-radius: 12px;">
                 
                 <div class="card-body p-0 m-0 table-responsive">
-                    <!-- Questions Table -->
+                    <!-- Discounts Table -->
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead>
@@ -58,7 +58,7 @@
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="question-table-body">
+                            <tbody id="discount-table-body">
                                 <tr>
                                     <td colspan="9" class="text-center">Loading...</td>
                                 </tr>
@@ -94,8 +94,8 @@
 
     {{-- create modal --}}
     <section>
-        <div class="modal fade" id="questionModal" tabindex="-1" role="dialog"
-            aria-labelledby="questionModalTitle" aria-hidden="true">
+        <div class="modal fade" id="discountModal" tabindex="-1" role="dialog"
+            aria-labelledby="discountModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" style="border-radius: 24px; height:100%">
                     <div style="background: #F9FAFB;  border-bottom:1px solid #D0D5DD ">
@@ -104,13 +104,13 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <h4 class="text-center font-weight-bold question-modal-heading">Create a Topic</h4>
+                        <h4 class="text-center font-weight-bold discount-modal-heading">Create a Topic</h4>
 
                     </div>
-                    <div class="modal-body" style="padding: 10px 40px" id="topic_id" value="">
+                    <div class="modal-body" style="padding: 10px 40px" id="discount_id" value="">
                         <div>
-                            <label for="topicTitle" class="form-label">Topic Title</label>
-                            <input type="text" class="form-control" id="topicTitle" name="topicTitle" required>
+                            <label for="discountTitle" class="form-label">Topic Title</label>
+                            <input type="text" class="form-control" id="discountTitle" name="discountTitle" required>
                         </div>
                     </div>
                     <div class="modal-footer pt-2" style="border-top: 1px solid #D0D5DD">
@@ -120,7 +120,7 @@
                             <div class="d-flex">
                                 <button type="button"
                                     class="btn back-btn btn-outline-secondary cancel mr-2">Cancel</button>
-                                <button type="submit" class="btn save-topic"
+                                <button type="submit" class="btn save-discount"
                                     style="background:#691D5E; color: #EAECF0; border-radius: 8px;">Save</button>
                             </div>
                         </div>
@@ -130,12 +130,12 @@
         </div>
     </section>
 
-    {{-- Question upload modal --}}
+    {{-- Discount upload modal --}}
     <section>
-        <div class="modal fade" id="uploadQuestion" tabindex="-1" role="dialog" aria-labelledby="uploadQuestion"
+        <div class="modal fade" id="uploadDiscount" tabindex="-1" role="dialog" aria-labelledby="uploadDiscount"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content question-create-section" style="border-radius: 24px; height:100%">
+                <div class="modal-content discount-create-section" style="border-radius: 24px; height:100%">
                     <div class="modal-header text-center"
                         style="background-color: #F9FAFB; border-radius: 24px 24px 0px 0px; display: inline-block;">
                         <h3 class="" id="exampleModalLongTitle"><b>Upload CSV</b></h3>
@@ -166,8 +166,8 @@
 
                         </div>
                         <div class="mt-2">
-                            <label for="question-url">Or upload from URL</label>
-                            <input type="text" class="form-control" id="question-url"
+                            <label for="discount-url">Or upload from URL</label>
+                            <input type="text" class="form-control" id="discount-url"
                                 placeholder="Enter Url here" styele="border-radius:8px; border:1px solid #D0D5DD; ">
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                         <button type="button" class="btn btn-outline-dark"
                             style="border: 1px solid #D0D5DD; border-radius: 8px;"
                             data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn save-question"
+                        <button type="button" class="btn save-discount"
                             style="background-color:#A16A99 ;border-radius: 8px; color:#fff">Upload</button>
                     </div>
                 </div>
@@ -184,9 +184,6 @@
     </section>
 
     @push('css')
-        <!-- DataTables -->
-        <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
-
         <style>
             .nav-tabs {
                 border: 1px solid #ddd;
@@ -396,7 +393,7 @@
                 padding-top: 2px;
             }
 
-            .new-question {
+            .new-discount {
                 border: 1px solid #691D5E;
                 background: #FFFFFF;
                 color: #691D5E;
@@ -418,274 +415,190 @@
 
         
         </style>
-
     @endpush
 
     @push('js')
+    <script>
+        $(document).ready(function() {
+            // Initialize variables
+            let currentPage = 1;
+            let perPage = $('#rowsPerPage').val();
+            let searchTimeout;
 
-        <script>
+            // Initial fetch
+            fetchDiscounts(currentPage, perPage);
 
-            $('.show-edit-btn').click(function (e) {
+            // Handle pagination clicks
+            $(document).on('click', '.pagination a', function(e) {
                 e.preventDefault();
-                $('.show-modal-close').trigger('click');
+                let page = $(this).data('page');
+                if (page) {
+                    currentPage = page;
+                    fetchDiscounts(currentPage, perPage);
+                }
             });
 
-            $(".feedback-btn").on("click", function() {
-                $(".feedback-btn").removeClass("active")
-                $(this).addClass("active");
+            // Handle "Rows per page" change
+            $('#rowsPerPage').change(function() {
+                perPage = $(this).val();
+                currentPage = 1; // Reset to first page
+                fetchDiscounts(currentPage, perPage);
             });
 
-            $(document).ready(function() {
-
-                // start datatable code
-                let currentPage = 1;
-                let perPage = $('#rowsPerPage').val();
-
-                fetchQuestions(currentPage, perPage);
-
-                // Handle pagination clicks
-                $(document).on('click', '.pagination a', function(e) {
-                    e.preventDefault();
-                    let page = $(this).data('page');
-                    if (page) {
-                        currentPage = page;
-                        fetchQuestions(currentPage, perPage);
-                    }
-                });
-
-                // Handle "Rows per page" change
-                $('#rowsPerPage').change(function() {
-                    perPage = $(this).val();
-                    fetchQuestions(1, perPage);
-                });
-
-                $('#sortSelect').on('change', function() {
-                    let sortOption = $(this).val();
-                    fetchQuestions(1, perPage, sortOption);
-                });
-
-                //end datatable code
-
-                $(document).on('click', '.edit-btn', show);
-
-                $('.search_input, .multiselect').on('input click', function() {
-                    fetchQuestions();
-                });
-
-                let searchTimeout;
-                $('.search_input').on('input', function() {
-                    clearTimeout(searchTimeout);
-                    searchTimeout = setTimeout(() => {
-                        fetchQuestions(1, $('#rowsPerPage').val());
-                    }, 300); // 300ms debounce
-                });
-
-                // Apply filters button click
-                $('.apply-filter-btn').on('click', function() {
-                    fetchQuestions(1, $('#rowsPerPage').val());
-                });
-
-                // Reset filters button click
-                $('.reset-filter-btn').on('click', function() {
-                    // Reset all filter inputs
-                    $('.search_input').val('');
-                    $('input[name="crated_start_at"]').val('');
-                    $('input[name="crated_end_at"]').val('');
-                    $('.question_search_input').val('');
-
-                    $('input[name="status"][value="All"]').prop('checked', true);
-                    $('.filter-group input:checkbox').prop('checked', false);
-                    $('.custom-checkbox input:checkbox').prop('checked', false);
-                    $('.multiselect').val([]).trigger('change');
-
-
-                    // Fetch with reset filters
-                    fetchQuestions(1, $('#rowsPerPage').val());
-                });
-
+            // Handle sort filter change
+            $('#sortSelect').on('change', function() {
+                let sortOption = $(this).val();
+                currentPage = 1; // Reset to first page
+                fetchDiscounts(currentPage, perPage, sortOption);
             });
 
-            // start datatable code
-            // get all questions
-            function fetchQuestions(page = 1, perPage = 10, sort = 'Latest') {
-                let filters = {
-                    search: $('.search_input').val() || '',
-                    sort: sort, // Include sort parameter
-                };
+            // Handle search input with debounce
+            $('.search_input').on('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentPage = 1; // Reset to first page
+                    fetchDiscounts(currentPage, $('#rowsPerPage').val());
+                }, 300);
+            });
 
-                $.ajax({
-                    url: `/api/topic?page=${page}&per_page=${perPage}`,
-                    type: "GET",
-                    data: filters,
-                    success: function(response) {
-                        let questionList = $('#questionList');
-                        let questionNullList = $('#questionNullList');
-                        let tableBody = $("#question-table-body");
+            // Handle CSV export
+            $('.btn-success').on('click', function() {
+                let search = $('.search_input').val();
+                let sort = $('#sortSelect').val();
+                let url = "{{ route('discount.export') }}?search=" + encodeURIComponent(search) + "&sort=" + encodeURIComponent(sort);
+                window.location.href = url;
+            });
 
-                        if (response.success && response.data.data.length === 0) {
-                            questionNullList.removeClass('d-none');
-                            questionList.addClass('d-none');
-                            tableBody.html('<tr><td colspan="3" class="text-center">No topics found.</td></tr>');
-                        } else if (response.success) {
-                            questionNullList.addClass('d-none');
-                            questionList.removeClass('d-none');
-                            tableBody.html("");
+            // Handle select all checkbox
+            $('#selectAll').on('change', function() {
+                $('.discount-row').prop('checked', this.checked);
+            });
 
-                            let rows = '';
-                            $.each(response.data.data, function(index, value) {
-                                rows += `
-                                    <tr>
-                                        <td><input type="checkbox" class="row-checkbox question-row" value="${value.id}"></td>
-                                        <td>${value.name}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.name}</td>
-                                        <td class="text-center d-flex justify-content-center">
-                                            <div class="d-flex" style="border: 1px solid #ddd; border-radius: 6px; width:114px">
-                                                <a href="" class="btn edit-btn" style="border-right: 1px solid #ddd; border-radius: 0px;"><i class="far fa-edit"></i></a>
-                                                <a href="" class="btn edit-btn"><i class="fas fa-eye"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>`;
-                            });
-                            tableBody.html(rows);
-                            updatePagination(response.data, page);
-                        } else {
-                            console.error("Error: ", response.message);
-                            tableBody.html('<tr><td colspan="3" class="text-center">Error loading topics.</td></tr>');
-                        }
-                    },
-                    error: function(xhr) {
-                        console.error("Error fetching topics:", xhr.responseJSON?.message || "Unknown error");
-                        $("#question-table-body").html('<tr><td colspan="3" class="text-center">Error loading topics.</td></tr>');
-                    }
-                });
-            }
-
-            function updatePagination(paginationData, currentPage) {
-                let totalResults = paginationData.total || 0;
-                let perPage = paginationData.per_page || 10;
-                let totalPages = paginationData.last_page || 1;
-                let start = paginationData.from || 0;
-                let end = paginationData.to || 0;
-
-                $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
-
-                let paginationHtml = '';
-
-                // First & Previous
-                paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                                    <a class="page-link" href="#" data-page="1">«</a>
-                                </li>`;
-                paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                                    <a class="page-link" href="#" data-page="${currentPage - 1}">‹</a>
-                                </li>`;
-
-                // Page Numbers
-                let startPage = Math.max(1, currentPage - 1);
-                let endPage = Math.min(totalPages, currentPage + 1);
-
-                if (currentPage > 2) {
-                    paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`;
-                    if (currentPage > 3) {
-                        paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
-                    }
+            // Handle individual row checkboxes
+            $(document).on('change', '.discount-row', function() {
+                if ($('.discount-row:checked').length === $('.discount-row').length) {
+                    $('#selectAll').prop('checked', true);
+                } else {
+                    $('#selectAll').prop('checked', false);
                 }
+            });
+        });
 
-                for (let i = startPage; i <= endPage; i++) {
-                    paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                                        <a class="page-link" href="#" data-page="${i}">${i}</a>
-                                    </li>`;
-                }
+        // Fetch discounts with search and sort
+        function fetchDiscounts(page = 1, perPage = 10, sort = 'Latest') {
+            let filters = {
+                search: $('.search_input').val() || '',
+                sort: sort,
+                per_page: perPage,
+                page: page
+            };
+            let tableBody = $("#discount-table-body");
 
-                if (currentPage < totalPages - 1) {
-                    if (currentPage < totalPages - 2) {
-                        paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
-                    }
-                    paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
-                }
 
-                // Next & Last
-                paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                                    <a class="page-link" href="#" data-page="${currentPage + 1}">›</a>
-                                </li>`;
-                paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                                    <a class="page-link" href="#" data-page="${totalPages}">»</a>
-                                </li>`;
+            $.ajax({
+                url: "/api/get-discount",
+                type: "GET",
+                data: filters,
+                success: function(response) {
 
-                $('#pagination-links').html(paginationHtml);
-            }
-            // end datatable code
-
-            function formatDate(dateString) {
-                let date = new Date(dateString);
-                let options = { day: '2-digit', month: 'short', year: 'numeric' };
-                return date.toLocaleDateString('en-GB', options); // "24 Mar 2025"
-            }
-
-            function getDifficultyColor(difficulty) {
-                switch (difficulty.toLowerCase()) {
-                    case "easy":
-                        return "badge-easy";
-                    case "medium":
-                        return "badge-medium";
-                    case "hard":
-                        return "badge-hard";
-                    case "very hard":
-                        return "badge-very-hard";
-                    default:
-                        return "bg-secondary text-white";
-                }
-            }
-
-            function destroy() {
-                let selectedQuestions = getSelectedQuestions();
-                if (selectedQuestions.length === 0) {
-                    Swal.fire("Warning", "Please select at least one question.", "warning");
-                    return;
-                }
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "/api/questions-delete",
-                            type: "POST",
-                            data: {
-                                questions: selectedQuestions,
-                                _token: "{{ csrf_token() }}"
-                            },
-                            success: function (response) {
-                                Swal.fire("Deleted!", "Questions deleted successfully.", "success");
-                                fetchQuestions(1);
-                                $('#active-count').text('')
-                                $('#inactive-count').text('')
-                            },
-                            error: function () {
-                                Swal.fire("Error", "Failed to delete questions.", "error");
-                            }
+                    if (response.success && response.data.data.length === 0) {
+                        tableBody.html('<tr><td colspan="8" class="text-center">No discounts found.</td></tr>');
+                    } else if (response.success) {
+                        let rows = '';
+                        $.each(response.data.data, function(index, value) {
+                            rows += `
+                                <tr>
+                                    <td><input type="checkbox" class="row-checkbox discount-row" value="${value.id}"></td>
+                                    <td>${value.discount_code}</td>
+                                    <td>${value.discount_type}</td>
+                                    <td>${value.discount_amount}</td>
+                                    <td>${formatDate(value.expiry_date)}</td>
+                                    <td>${value.maximum_no_of_user}</td>
+                                    <td>${value.no_redeemed || 0}</td>
+                                    <td class="text-center d-flex justify-content-center">
+                                        <div class="d-flex" style="border: 1px solid #ddd; border-radius: 6px; width:114px">
+                                            <a href="/discounts/${value.uuid}/edit" class="btn edit-btn" style="border-right: 1px solid #ddd; border-radius: 0px;"><i class="far fa-edit"></i></a>
+                                            <a href="/discounts/${value.uuid}" class="btn edit-btn"><i class="fas fa-eye"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>`;
                         });
+                        tableBody.html(rows);
+                        updatePagination(response.data, page);
+                    } else {
+                        console.error("Error: ", response.message);
+                        tableBody.html('<tr><td colspan="8" class="text-center">Error loading discounts.</td></tr>');
                     }
-                });
+                },
+                error: function(xhr) {
+                    console.error("Error fetching discounts:", xhr.responseJSON?.message || "Unknown error");
+                    tableBody.html('<tr><td colspan="8" class="text-center">Error loading discounts.</td></tr>');
+                }
+            });
+        }
+
+        // Update pagination links
+        function updatePagination(paginationData, currentPage) {
+            let totalResults = paginationData.total || 0;
+            let perPage = paginationData.per_page || 10;
+            let totalPages = paginationData.last_page || 1;
+            let start = paginationData.from || 0;
+            let end = paginationData.to || 0;
+
+            $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
+
+            let paginationHtml = '';
+
+            // First & Previous
+            paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                                <a class="page-link" href="#" data-page="1">«</a>
+                            </li>`;
+            paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                                <a class="page-link" href="#" data-page="${currentPage - 1}">‹</a>
+                            </li>`;
+
+            // Page Numbers
+            let startPage = Math.max(1, currentPage - 1);
+            let endPage = Math.min(totalPages, currentPage + 1);
+
+            if (currentPage > 2) {
+                paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`;
+                if (currentPage > 3) {
+                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                }
             }
 
-            function getSelectedQuestions() {
-                let selectedQuestions = [];
-                $('.question-row:checked').each(function() {
-                    selectedQuestions.push($(this).val());
-                });
-                return selectedQuestions;
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                                </li>`;
             }
-        </script>
+
+            if (currentPage < totalPages - 1) {
+                if (currentPage < totalPages - 2) {
+                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                }
+                paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
+            }
+
+            // Next & Last
+            paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                                <a class="page-link" href="#" data-page="${currentPage + 1}">›</a>
+                            </li>`;
+            paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                                <a class="page-link" href="#" data-page="${totalPages}">»</a>
+                            </li>`;
+
+            $('#pagination-links').html(paginationHtml);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            let date = new Date(dateString);
+            let options = { day: '2-digit', month: 'short', year: 'numeric' };
+            return date.toLocaleDateString('en-GB', options);
+        }
+    </script>
     @endpush
 
 </x-backend.layouts.master>

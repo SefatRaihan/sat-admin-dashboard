@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique()->index();
             $table->string('package_type');
+            $table->string('audience')->nullable();
             $table->integer('duration_days')->default(0);
             $table->tinyInteger('status')->default(1); // 1: active, 0: inactive
             $table->boolean('highlight_Status')->default(true);
@@ -27,8 +28,11 @@ return new class extends Migration
             $table->text('terms_per_month')->nullable();
             $table->text('other_description')->nullable();
             $table->string('validity')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamp('activated_at')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

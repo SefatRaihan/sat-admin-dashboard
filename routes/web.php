@@ -138,6 +138,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
     Route::resource('packages', PackageController::class);
     Route::resource('discounts', DiscountController::class);
+    Route::get('/discount/export', [DiscountController::class, 'exportCsv'])->name('discount.export');
     Route::resource('referrals', ReferralController::class);
 });
 

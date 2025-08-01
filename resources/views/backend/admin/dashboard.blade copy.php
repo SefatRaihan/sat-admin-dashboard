@@ -3,13 +3,13 @@
         Admin Dashboard
     </x-slot>
 
-    <div class="dashboard-container">
+        <div class="dashboard-container">
         <div class="header">
             <h1>Admin Dashboard</h1>
             <div class="header-controls">
                 <div class="time-frame-toggle">
-                    <button id="pastWeekBtn" class="active">Past Week</button>
-                    <button id="past2WeeksBtn">Past 2 Weeks</button>
+                    <button id="pastWeekBtn" class="active">Past week</button>
+                    <button id="past2WeeksBtn">Past 2 weeks</button>
                     <button id="pastMonthBtn">Past Month</button>
                 </div>
                 <input type="text" id="dateRangePicker" class="date-range" placeholder="Select Date Range">
@@ -18,24 +18,24 @@
 
         <div class="row">
             <div class="col-md-8">
-                <!-- Exam Section -->
                 <div class="card headcard p-0 question-section">
                     <div class="card-header border-bottom pb-1">
                         <div class="d-flex">
                             <img src="{{ asset('image/admin-dashboard/exam.png') }}" alt="" style="height:20px">
                             <h1 class="ml-1">Exam</h1>
                         </div>
-                        <a href="/exams" class="seemore-btn">
+                        <a href="" class="seemore-btn">
                             See More <i class="fas fa-chevron-right"></i>
                         </a>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
+                                <!-- Chart 2 -->
                                 <div class="chart-container" id="chart-container-2" style="height: 245px">
                                     <canvas id="myChart2"></canvas>
                                     <div class="chart-center" id="chart-center-2" style="left:40%; font-size:33px">
-                                        <span id="exam-total">0</span>
+                                        850
                                         <small>Total</small>
                                     </div>
                                 </div>
@@ -45,7 +45,7 @@
                                     <div class="col-md-5">
                                         <div class="card p-3">
                                             <div class="summary-card">
-                                                <h2 class="text-left"> <i class="fas fa-circle mr-2" style="color:#21D3BB"></i> <span id="exams-active">0</span></h2>
+                                                <h2 class="text-left"> <i class="fas fa-circle mr-2" style="color:#21D3BB"></i> 120</h2>
                                                 <p class="text-left">Exams Active</p>
                                             </div>
                                         </div>
@@ -53,7 +53,7 @@
                                     <div class="col-md-7">
                                         <div class="card p-3">
                                             <div class="summary-card">
-                                                <h2 class="text-left"> <i class="fas fa-circle mr-2" style="color:#E65F2B"></i> <span id="exams-inactive">0</span></h2>
+                                                <h2 class="text-left"> <i class="fas fa-circle mr-2" style="color:#E65F2B"></i> 40</h2>
                                                 <p class="text-left">Exams Inactive</p>
                                             </div>
                                         </div>
@@ -63,13 +63,13 @@
                                     <div class="row p-3">
                                         <div class="col-md-6">
                                             <div class="summary-card">
-                                                <h2 id="exams-used">0</h2>
-                                                <p>Exam Used in courses</p>
+                                                <h2>85</h2>
+                                                <p>Exam Used in courses </p>
                                             </div>
                                         </div>
                                         <div class="col-md-6 border-left pl-4">
                                             <div class="summary-card">
-                                                <h2 id="exams-added">0</h2>
+                                                <h2> 40</h2>
                                                 <p>Exams added</p>
                                             </div>
                                         </div>
@@ -79,24 +79,20 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Courses Section -->
                 <div class="card headcard question-section">
                     <div class="header">
                         <div class="d-flex">
                             <img src="{{ asset('image/admin-dashboard/courses.png') }}" alt="" style="height:20px">
                             <h1 class="ml-1" style="font-size: 16px; color:#101828">Courses</h1>
                         </div>
-                        <div class="filters">
-                            <span class="pill active" id="allCoursesFilter" data-filter="all">All Courses</span>
-                            <span id="completedFilter" data-filter="completed"><span class="dot completed"></span>Completed</span>
-                            <span id="inProgressFilter" data-filter="inProgress"><span class="dot inprogress"></span>In Progress</span>
-                        </div>
+                    <div class="filters">
+                        <span class="pill">All Courses</span>
+                        <span><span class="dot completed"></span>Completed</span>
+                        <span><span class="dot inprogress"></span>In Progress</span>
+                    </div>
                     </div>
                     <canvas id="coursesChart" height="300"></canvas>
                 </div>
-
-                <!-- Supervisor Section -->
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card headcard p-0 question-section">
@@ -112,21 +108,19 @@
                             <div class="card-body">
                                 <div class="card">
                                     <div class="summary-card p-3">
-                                        <h2 id="supervisor-total">0</h2>
+                                        <h2>06</h2>
                                         <p>Total Supervisor</p>
                                     </div>
                                 </div>
                                 <div class="card">
                                     <div class="summary-card p-3">
-                                        <h2 id="supervisor-new">0</h2>
+                                        <h2>02</h2>
                                         <p>Newly registered</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Students Section -->
                     <div class="col-md-6">
                         <div class="card headcard p-0 question-section">
                             <div class="card-header border-bottom pb-1">
@@ -141,7 +135,7 @@
                             <div class="card-body">
                                 <div class="card">
                                     <div class="summary-card p-3">
-                                        <h2 id="students-total">0</h2>
+                                        <h2>1200</h2>
                                         <p>Total Students</p>
                                     </div>
                                 </div>
@@ -149,14 +143,14 @@
                                     <div class="row p-3">
                                         <div class="col-md-6">
                                             <div class="summary-card">
-                                                <h2 id="students-new">0</h2>
-                                                <p>Newly registered</p>
+                                                <h2>1200</h2>
+                                                <p>Newly registered  </p>
                                             </div>
                                         </div>
                                         <div class="col-md-6 border-left pl-4">
                                             <div class="summary-card">
-                                                <h2 class="text-left" id="unregistered">0</h2>
-                                                <p class="text-left">Unregistered </p>
+                                                <h2 class="text-left"> 1440</h2>
+                                                <p class="text-left">Total Questions</p>
                                             </div>
                                         </div>
                                     </div>
@@ -166,16 +160,14 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4">
-                <!-- Questions Section -->
                 <div class="card headcard p-0 question-section">
                     <div class="card-header border-bottom pb-1">
                         <div class="d-flex">
                             <img src="{{ asset('image/admin-dashboard/question.png') }}" alt="" style="height:20px">
                             <h1 class="ml-1">Question</h1>
                         </div>
-                        <a href="/question" class="seemore-btn">
+                        <a href="" class="seemore-btn">
                             See More <i class="fas fa-chevron-right"></i>
                         </a>
                     </div>
@@ -184,38 +176,37 @@
                             <div class="row p-3">
                                 <div class="col-md-6">
                                     <div class="summary-card">
-                                        <h2 id="questions-total">0</h2>
+                                        <h2>1440</h2>
                                         <p>Total Questions</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 border-left">
                                     <div class="summary-card">
-                                        <h2 class="text-right"> <i class="fas fa-circle mr-2" style="color:#6CD7A1"></i> <span id="questions-total-right">0</span></h2>
-                                        <p class="text-right">Questions Added</p>
+                                        <h2 class="text-right"> <i class="fas fa-circle mr-2" style="color:#6CD7A1"></i> 1440</h2>
+                                        <p class="text-right">Total Questions</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="progress m-2">
-                                <div class="progress-bar w-0" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
                         <div class="card">
                             <div class="summary-card p-3">
-                                <h2 id="questions-feedback">0</h2>
+                                <h2>1440</h2>
                                 <p>Questions with Feedback</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Video Lessons Section -->
                 <div class="card headcard p-0 question-section">
                     <div class="card-header border-bottom pb-1">
                         <div class="d-flex">
                             <img src="{{ asset('image/admin-dashboard/video.png') }}" alt="" style="height:20px">
                             <h1 class="ml-1">Video Lessons</h1>
                         </div>
-                        <a href="/lessons" class="seemore-btn">
+                        <a href="" class="seemore-btn">
                             See More <i class="fas fa-chevron-right"></i>
                         </a>
                     </div>
@@ -224,25 +215,24 @@
                             <div class="row p-3">
                                 <div class="col-md-6">
                                     <div class="summary-card">
-                                        <h2 id="lessons-total">0</h2>
+                                        <h2>1440</h2>
                                         <p>Total Lessons</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 border-left">
                                     <div class="summary-card">
-                                        <h2 class="text-right"> <i class="fas fa-circle mr-2" style="color:#6CD7A1"></i> <span id="lessons-added">0</span></h2>
-                                        <p class="text-right">Lessons Added</p>
+                                        <h2 class="text-right"> <i class="fas fa-circle mr-2" style="color:#6CD7A1"></i> 1440</h2>
+                                        <p class="text-right">Lessons Addeed</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="progress m-2">
-                                <div class="progress-bar w-0" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Subscriptions Section -->
                 <div class="card headcard p-0 question-section">
                     <div class="card-header border-bottom pb-1">
                         <div class="d-flex">
@@ -256,10 +246,11 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
+                                <!-- Chart 1 -->
                                 <div class="chart-container" id="chart-container-1">
                                     <canvas id="myChart1"></canvas>
                                     <div class="chart-center" id="chart-center-1">
-                                        <span id="subscriptions-total">0</span>
+                                        1200
                                         <small>Total</small>
                                     </div>
                                 </div>
@@ -269,15 +260,15 @@
                                     <div class="summary-card">
                                         <div class="d-flex justify-content-between">
                                             <p><i class="fas fa-circle mr-2" style="color:#6CD7A1"></i> Active</p>
-                                            <p id="subscriptions-active">0</p>
+                                            <p>1000</p>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <p><i class="fas fa-circle mr-2" style="color:#FDB022"></i> Expired</p>
-                                            <p id="subscriptions-expired">0</p>
+                                            <p>80</p>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <p><i class="fas fa-circle mr-2" style="color:#E65F2B"></i> Canceled</p>
-                                            <p id="subscriptions-canceled">0</p>
+                                            <p>20</p>
                                         </div>
                                     </div>
                                 </div>
@@ -288,7 +279,8 @@
             </div>
         </div>
     </div>
-        @push('css')
+
+    @push('css')
         <style>
             .question-section h1 {
                 font-size: 16px;
@@ -447,7 +439,6 @@
             }
 
             .header-controls .date-range {
-                width: 195px;
                 padding: 8px 15px;
                 border: 1px solid var(--border-color) !important;
                 border-radius: 8px;
@@ -869,13 +860,6 @@
                 background-color: rgba(106, 13, 173, 0.1) !important; /* Primary color with transparency */
                 border-color: rgba(106, 13, 173, 0.1) !important;
             }
-            .flatpickr-calendar {
-                display: none;
-            }
-
-            .filters span {
-                cursor: pointer;
-            }
         </style>
     @endpush
 
@@ -883,263 +867,112 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script>
-            // Initialize Charts
-            let chart1, chart2, coursesChart;
-            let coursesData = {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                completed: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                inProgress: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            // Chart 1 Data
+            const data1 = {
+                labels: ['Blue', 'Orange', 'Red'],
+                datasets: [{
+                data: [500, 300, 400],
+                backgroundColor: ['#1abc9c', '#f1c40f', '#e67e22'],
+                borderWidth: 3,
+                cutout: '70%'
+                }]
             };
 
-            // API Fetch Function
-            async function fetchDashboardData(params = '') {
-                try {
-                    const response = await fetch(`/api/dashboard?${params}`);
-                    const data = await response.json();
-
-                    // Update Subscriptions
-                    chart1.data.datasets[0].data = [
-                        data.subscriptions.active || 0,
-                        data.subscriptions.expired || 0,
-                        data.subscriptions.canceled || 0
-                    ];
-                    chart1.update();
-                    document.getElementById('subscriptions-total').textContent = data.subscriptions.total || 0;
-                    document.getElementById('subscriptions-active').textContent = data.subscriptions.active || 0;
-                    document.getElementById('subscriptions-expired').textContent = data.subscriptions.expired || 0;
-                    document.getElementById('subscriptions-canceled').textContent = data.subscriptions.canceled || 0;
-
-                    // Update Exams
-                    chart2.data.datasets[0].data = [
-                        data.exams.active || 0,
-                        data.exams.inactive || 0,
-                        data.exams.used || 0
-                    ];
-                    chart2.update();
-                    document.getElementById('exam-total').textContent = data.exams.total || 0;
-                    document.getElementById('exams-active').textContent = data.exams.active || 0;
-                    document.getElementById('exams-inactive').textContent = data.exams.inactive || 0;
-                    document.getElementById('exams-used').textContent = data.exams.used || 0;
-                    document.getElementById('exams-added').textContent = data.exams.added || 0;
-
-                    // Update Courses
-                    coursesData.completed = data.courses.completed || Array(12).fill(0);
-                    coursesData.inProgress = data.courses.inProgress || Array(12).fill(0);
-                    updateCoursesChart('all');
-
-                    // Update Supervisor
-                    document.getElementById('supervisor-total').textContent = data.supervisor.total || 0;
-                    document.getElementById('supervisor-new').textContent = data.supervisor.new || 0;
-
-                    // Update Students
-                    document.getElementById('students-total').textContent = data.students.total || 0;
-                    document.getElementById('students-new').textContent = data.students.new || 0;
-                    document.getElementById('unregistered').textContent = data.students.unregistered || 0;
-
-                    // Update Questions
-                    document.getElementById('questions-total').textContent = data.questions.total || 0;
-                    document.getElementById('questions-total-right').textContent = data.questions.add || 0;
-                    document.getElementById('questions-feedback').textContent = data.questions.feedback || 0;
-
-                    // Update Video Lessons
-                    document.getElementById('lessons-total').textContent = data.videoLessons.total || 0;
-                    document.getElementById('lessons-added').textContent = data.videoLessons.added || 0;
-
-                    // Update Progress Bars
-                    document.querySelectorAll('.progress-bar').forEach(bar => {
-                        const percentage = data.questions.progress || 0;
-                        bar.style.width = `${percentage}%`;
-                        bar.setAttribute('aria-valuenow', percentage);
-                    });
-                } catch (error) {
-                    console.error('Error fetching dashboard data:', error);
+            const config1 = {
+                type: 'doughnut',
+                data: data1,
+                options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
                 }
-            }
+                },
+            };
 
-            // Subscriptions Chart
-            function initializeChart1() {
-                const ctx1 = document.getElementById('myChart1').getContext('2d');
-                chart1 = new Chart(ctx1, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Active', 'Expired', 'Canceled'],
-                        datasets: [{
-                            data: [0, 0, 0],
-                            backgroundColor: ['#6CD7A1', '#FDB022', '#E65F2B'],
-                            borderWidth: 3,
-                            cutout: '70%'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { enabled: true }
-                        }
-                    }
-                });
-            }
+            new Chart(document.getElementById('myChart1'), config1);
 
-            // Exams Chart
-            function initializeChart2() {
-                const ctx2 = document.getElementById('myChart2').getContext('2d');
-                chart2 = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Active', 'Inactive', 'Used'],
-                        datasets: [{
-                            data: [0, 0, 0],
-                            backgroundColor: ['#21D3BB', '#E65F2B', '#6343C0'],
-                            borderWidth: 3,
-                            cutout: '70%'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { enabled: true }
-                        }
-                    }
-                });
-            }
+            // Chart 2 Data
+            const data2 = {
+                labels: ['Green', 'Yellow', 'Pink'],
+                datasets: [{
+                data: [300, 250, 300],
+                backgroundColor: ['#2ecc71', '#f39c12', '#e84393'],
+                borderWidth: 3,
+                cutout: '70%'
+                }]
+            };
 
-            // Courses Chart
-            function initializeCoursesChart() {
-                const ctx = document.getElementById('coursesChart').getContext('2d');
-                coursesChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: coursesData.labels,
-                        datasets: [
-                            {
-                                label: 'Completed',
-                                data: coursesData.completed,
-                                backgroundColor: '#732067',
-                                borderRadius: 6,
-                            },
-                            {
-                                label: 'In Progress',
-                                data: coursesData.inProgress,
-                                backgroundColor: '#BF98B9',
-                                borderRadius: 6,
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `${context.dataset.label}: ${context.raw}`;
-                                    }
-                                }
-                            },
-                            legend: { display: false }
-                        },
-                        scales: {
-                            x: { stacked: true, grid: { display: false } },
-                            y: { stacked: true, min: 0, max: 100, ticks: { stepSize: 20 } }
-                        }
-                    }
-                });
-            }
-
-            // Update Courses Chart based on filter
-            function updateCoursesChart(filter) {
-                const datasets = [];
-                if (filter === 'all' || filter === 'completed') {
-                    datasets.push({
-                        label: 'Completed',
-                        data: coursesData.completed,
-                        backgroundColor: '#732067',
-                        borderRadius: 6,
-                    });
+            const config2 = {
+                type: 'doughnut',
+                data: data2,
+                options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
                 }
-                if (filter === 'all' || filter === 'inprogress') {
-                    datasets.push({
-                        label: 'In Progress',
-                        data: coursesData.inProgress,
-                        backgroundColor: '#BF98B9',
-                        borderRadius: 6,
-                    });
+                },
+            };
+
+            new Chart(document.getElementById('myChart2'), config2);
+        </script>
+        <script>
+            const ctx = document.getElementById('coursesChart').getContext('2d');
+            const data = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                label: 'Completed',
+                data: [30, 50, 45, 65, 45, 35, 45, 50, 50, 45, 70, 55],
+                backgroundColor: '#732067',
+                borderRadius: 6,
+                },
+                {
+                label: 'In Progress',
+                data: [20, 25, 20, 20, 15, 15, 25, 15, 20, 20, 30, 20],
+                backgroundColor: '#BF98B9',
+                borderRadius: 6,
                 }
+            ]
+            };
 
-                coursesChart.data.datasets = datasets;
-                coursesChart.options.scales.x.stacked = filter === 'all';
-                coursesChart.options.scales.y.stacked = filter === 'all';
-                coursesChart.update();
-
-                // Update active filter styling
-                document.querySelectorAll('.filters span').forEach(span => {
-                    console.log('in');
-                    span.classList.remove('pill'); // Remove pill class from all spans
-                    if (span.id === `${filter}Filter` || (filter === 'all' && span.id === 'allCoursesFilter')) {
-                        span.classList.add('pill'); // Add pill class to the selected filter
+            const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                tooltip: {
+                    callbacks: {
+                    label: function(context) {
+                        return `${context.dataset.label}: ${context.raw}`;
                     }
-                });
-            }
-
-            // Event Listeners
-            document.addEventListener('DOMContentLoaded', () => {
-                initializeChart1();
-                initializeChart2();
-                initializeCoursesChart();
-
-                // Initialize Flatpickr
-                const datePicker = flatpickr('#dateRangePicker', {
-                    mode: 'range',
-                    dateFormat: 'Y-m-d',
-                    onChange: (selectedDates) => {
-                        if (selectedDates.length === 2) {
-                            const params = `custom&start=${selectedDates[0].toISOString()}&end=${selectedDates[1].toISOString()}`;
-                            fetchDashboardData(params);
-                        }
                     }
-                });
+                },
+                legend: {
+                    display: false
+                }
+                },
+                scales: {
+                x: {
+                    stacked: true,
+                    grid: { display: false },
+                },
+                y: {
+                    stacked: true,
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                    stepSize: 20
+                    }
+                }
+                }
+            },
+            };
 
-                // Set default to Past Week
-                const today = new Date();
-                const pastWeekStart = new Date(today);
-                pastWeekStart.setDate(today.getDate() - 6); // 7 days including today
-                datePicker.setDate([pastWeekStart, today]);
-                fetchDashboardData('week');
-
-                // Time Frame Buttons
-                document.querySelectorAll('.time-frame-toggle button').forEach(button => {
-                    button.addEventListener('click', () => {
-                        document.querySelectorAll('.time-frame-toggle button').forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-
-                        const endDate = new Date();
-                        let startDate = new Date();
-                        let params = '';
-
-                        if (button.id === 'pastWeekBtn') {
-                            startDate.setDate(endDate.getDate() - 6);
-                            params = 'week';
-                        } else if (button.id === 'past2WeeksBtn') {
-                            startDate.setDate(endDate.getDate() - 13);
-                            params = 'two_weeks';
-                        } else if (button.id === 'pastMonthBtn') {
-                            startDate.setDate(endDate.getDate() - 29);
-                            params = 'month';
-                        }
-
-                        datePicker.setDate([startDate, endDate]);
-                        fetchDashboardData(params);
-                    });
-                });
-
-                // Courses Filter Buttons
-                document.querySelectorAll('.filters span').forEach(span => {
-                    span.addEventListener('click', () => {
-                        const filter = span.dataset.filter;
-                        updateCoursesChart(filter);
-                    });
-                });
-            });
+            new Chart(ctx, config);
         </script>
     @endpush
+
 </x-backend.layouts.master>

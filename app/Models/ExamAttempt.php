@@ -64,6 +64,11 @@ class ExamAttempt extends Model
         return $this->belongsTo(Exam::class, 'exam_id');
     }
 
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
 
     public function examAttemptQuestions()
     {

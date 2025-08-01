@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Api\ChapterController;
 use App\Http\Controllers\Api\CourseController;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Api\PricingSectionController;
 use App\Http\Controllers\Api\FeatureSliderController;
 use App\Http\Controllers\Api\FeatureSliderItemController;
 use App\Http\Controllers\Api\MixedSectionController;
+use App\Http\Controllers\DiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -192,4 +194,6 @@ Route::delete('feature-sliders/{feature_slider}', [FeatureSliderController::clas
 Route::post('/mixed-sections', [MixedSectionController::class, 'storeOrUpdateMultipleMixedSections']);
 Route::get('/mixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
 
+Route::get('get-discount', [DiscountController::class, 'getDiscounts']);
+Route::get('/dashboard', [AdminDashboardController::class, 'getDashboardData']);
 

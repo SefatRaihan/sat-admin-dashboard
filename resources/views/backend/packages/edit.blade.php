@@ -1,8 +1,10 @@
+
 <x-backend.layouts.master>
-    <form action="{{ route('packages.store') }}" method="POST">
+    <form action="{{ route('packages.update', $package->uuid) }}" method="POST">
         @csrf
+        @method('PUT')
         <div class="border-bottom pt-2">
-            <h4 class="form-header text-center">Add New Package</h4>
+            <h4 class="form-header text-center">Edit Package</h4>
         </div>
 
         <div class="row justify-content-center">
@@ -25,13 +27,13 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="packageType" id="sat1" value="SAT 1" {{ old('packageType', 'SAT 1') === 'SAT 1' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="packageType" id="sat1" value="SAT 1" {{ old('packageType', $package->package_type) === 'SAT 1' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="sat1">SAT 1</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="packageType" id="sat2" value="SAT 2" {{ old('packageType') === 'SAT 2' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="packageType" id="sat2" value="SAT 2" {{ old('packageType', $package->package_type) === 'SAT 2' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="sat2">SAT 2</label>
                                         </div>
                                     </div>
@@ -41,25 +43,25 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group" id="audienceSection" style="display: {{ old('packageType', 'SAT 1') === 'SAT 1' ? 'block' : 'none' }};">
+                        <div class="form-group" id="audienceSection" style="display: {{ old('packageType', $package->package_type) === 'SAT 1' ? 'block' : 'none' }};">
                             <label>Audience</label>
                             <div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="highSchool" value="High School" {{ old('audience') === 'High School' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="audience" id="highSchool" value="High School" {{ old('audience', $package->audience) === 'High School' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="highSchool">High School</label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="college" value="College" {{ old('audience') === 'College' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="audience" id="college" value="College" {{ old('audience', $package->audience) === 'College' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="college">College</label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check custom-radio">
-                                            <input class="form-check-input" type="radio" name="audience" id="graduate" value="Graduate" {{ old('audience') === 'Graduate' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="audience" id="graduate" value="Graduate" {{ old('audience', $package->audience) === 'Graduate' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="graduate">Graduate</label>
                                         </div>
                                     </div>
@@ -73,20 +75,20 @@
                             <div class="d-flex align-content-center">
                                 <label>Package Status</label>
                                 <div class="ml-3">
-                                    <input type="checkbox" class="highlight" name="highlight" id="highlight" {{ old('highlight') ? 'checked' : '' }}>
+                                    <input type="checkbox" class="highlight" name="highlight" id="highlight" {{ old('highlight', $package->highlight_status) ? 'checked' : '' }}>
                                     <label for="highlight">Highlight this package</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="packageStatus" id="active" value="Active" {{ old('packageStatus', 'Active') === 'Active' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="radio" name="packageStatus" id="active" value="Active" {{ old('packageStatus', $package->status ? 'Active' : 'Inactive') === 'Active' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="active">Active</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="packageStatus" id="inactive" value="Inactive" {{ old('packageStatus') === 'Inactive' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="radio" name="packageStatus" id="inactive" value="Inactive" {{ old('packageStatus', $package->status ? 'Active' : 'Inactive') === 'Inactive' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="inactive">Inactive</label>
                                     </div>
                                 </div>
@@ -97,14 +99,14 @@
                         </div>
                         <div class="form-group">
                             <label for="planTitle">Plan Title</label>
-                            <input type="text" class="form-control" id="planTitle" name="planTitle" value="{{ old('planTitle') }}" placeholder="Enter description here">
+                            <input type="text" class="form-control" id="planTitle" name="planTitle" value="{{ old('planTitle', $package->title) }}" placeholder="Enter description here">
                             @error('planTitle')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <input type="text" class="form-control" id="description" name="description" value="{{ old('description') }}" placeholder="Enter description here">
+                            <input type="text" class="form-control" id="description" name="description" value="{{ old('description', $package->description) }}" placeholder="Enter description here">
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -116,10 +118,10 @@
                         <div class="form-group">
                             <label for="promotionalBadge">Promotional Badge</label>
                             <div class="d-flex align-items-center">
-                                <input type="text" class="form-control" id="promotionalBadge" name="promotionalBadge" value="{{ old('promotionalBadge') }}" placeholder="E.g. Save 15%">
+                                <input type="text" class="form-control" id="promotionalBadge" name="promotionalBadge" value="{{ old('promotionalBadge', $package->promotional_badge ? $package->promotional_badge . '%' : '') }}" placeholder="E.g. Save 15%">
                                 <div class="ml-3">
                                     <label class="toggle-switch">
-                                        <input type="checkbox" name="highlight_badge" {{ old('highlight_badge') ? 'checked' : '' }}>
+                                        <input type="checkbox" name="highlight_badge" {{ old('highlight_badge', $package->highlight_badge) ? 'checked' : '' }}>
                                         <span class="slider"></span>
                                     </label>
                                 </div>
@@ -130,14 +132,14 @@
                         </div>
                         <div class="form-group">
                             <label for="pricing">Pricing</label>
-                            <input type="text" class="form-control" id="pricing" name="pricing" value="{{ old('pricing') }}" placeholder="SAR NNNN.NN">
+                            <input type="text" class="form-control" id="pricing" name="pricing" value="{{ old('pricing', $package->price) }}" placeholder="SAR NNNN.NN">
                             @error('pricing')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="pricingTerms">Pricing Terms</label>
-                            <input type="text" class="form-control" id="pricingTerms" name="pricingTerms" value="{{ old('pricingTerms') }}" placeholder="e.g. per user per month">
+                            <input type="text" class="form-control" id="pricingTerms" name="pricingTerms" value="{{ old('pricingTerms', $package->terms_per_month) }}" placeholder="e.g. per user per month">
                             @error('pricingTerms')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -146,37 +148,37 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio" style="background-color: transparent !important; border:none">
-                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="yearly" value="Yearly" {{ old('pricingTermRadio') === 'Yearly' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="yearly" value="Yearly" {{ old('pricingTermRadio', $package->pricing_terms) === 'yearly' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="yearly">Yearly</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio" style="background-color: transparent !important; border:none">
-                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="monthly" value="Monthly" {{ old('pricingTermRadio') === 'Monthly' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="monthly" value="Monthly" {{ old('pricingTermRadio', $package->pricing_terms) === 'monthly' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="monthly">Monthly</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio" style="background-color: transparent !important; border:none">
-                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="threeMonths" value="3-Month" {{ old('pricingTermRadio', '3-Month') === '3-Month' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="threeMonths" value="3-Month" {{ old('pricingTermRadio', $package->pricing_terms) === '3month' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="threeMonths">3-Month</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio" style="background-color: transparent !important; border:none">
-                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="sixMonths" value="6-Month" {{ old('pricingTermRadio') === '6-Month' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="sixMonths" value="6-Month" {{ old('pricingTermRadio', $package->pricing_terms) === '6month' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="sixMonths">6-Month</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-check custom-radio" style="background-color: transparent !important; border:none">
-                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="other" value="Other" {{ old('pricingTermRadio') === 'Other' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="radio" name="pricingTermRadio" id="other" value="Other" {{ old('pricingTermRadio', $package->pricing_terms) === 'others' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="other">Other</label>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <input type="text" class="form-control mt-2" name="other_description" value="{{ old('other_description') }}" placeholder="If other, please describe">
+                                <input type="text" class="form-control mt-2" name="other_description" value="{{ old('other_description', $package->other_description) }}" placeholder="If other, please describe">
                                 @error('other_description')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -187,7 +189,7 @@
                         </div>
                         <div class="form-group mt-2">
                             <label for="validity">Validity (months)</label>
-                            <input type="text" class="form-control" id="validity" name="validity" value="{{ old('validity') }}">
+                            <input type="text" class="form-control" id="validity" name="validity" value="{{ old('validity', $package->validity) }}">
                             @error('validity')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -199,7 +201,7 @@
 
         <div class="d-flex justify-content-end mt-4 border-top p-3">
             <a href="{{ route('packages.index') }}" type="button" class="btn btn-outline-secondary btn-cancel mr-2">Cancel</a>
-            <button type="submit" class="btn btn-primary btn-action">Add New Package</button>
+            <button type="submit" class="btn btn-primary btn-action">Update Package</button>
         </div>
     </form>
 
@@ -362,10 +364,10 @@
                 transition: .4s;
                 border-radius: 50%;
             }
-            input:checked + .slider {
+            .input:checked + .slider {
                 background-color: #079455;
             }
-            input:checked + .slider:before {
+            .input:checked + .slider:before {
                 transform: translateX(20px);
             }
             .text-danger {
@@ -384,7 +386,6 @@
             }
         </style>
     @endpush
-
     @push('js')
         <script>
             document.querySelectorAll('input[name="packageType"]').forEach(function(radio) {
@@ -398,13 +399,12 @@
                         audienceSection.style.display = 'none';
                         audienceInputs.forEach(input => {
                             input.required = false;
-                            input.checked = false; // Clear selection when hidden
+                            input.checked = false;
                         });
                     }
                 });
             });
 
-            // Trigger change event on page load to set initial state
             document.querySelector('input[name="packageType"]:checked').dispatchEvent(new Event('change'));
         </script>
     @endpush

@@ -1,9 +1,10 @@
 <x-backend.layouts.master>
-    <form action="{{ route('discounts.store') }}" method="POST">
+    <form action="{{ route('discounts.update', $discount->uuid) }}" method="POST">
         @csrf
+        @method('PUT')
 
     <div class="border-bottom pt-2 pl-4">
-        <h4 class="form-header text-left">Add Coupon Code</h4>
+        <h4 class="form-header text-left">Edit Coupon Code</h4>
     </div>
 
     <div class="form-section m-4">
@@ -18,13 +19,13 @@
         @endif
         <div class="form-group">
             <label for="discountCode">Discount Code</label>
-            <input type="text" class="form-control" name="discount_code" id="discountCode" value="{{ old('discount_code') }}" placeholder="E.g., EID10">
+            <input type="text" class="form-control" name="discount_code" id="discountCode" value="{{ old('discount_code', $discount->discount_code) }}" placeholder="E.g., EID10">
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="discountAmount">Discount Amount</label>
-                    <input type="text" class="form-control" name="discount_amount" id="discountAmount" value="{{ old('discount_amount') }}" placeholder="E.g., 10">
+                    <input type="text" class="form-control" name="discount_amount" id="discountAmount" value="{{ old('discount_amount', $discount->discount_amount) }}" placeholder="E.g., 10">
                 </div>
             </div>
             <div class="col-md-6">
@@ -40,13 +41,13 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="maximumNoOfUser">Maximum No. of Uses</label>
-                    <input type="text" class="form-control" name="maximum_no_of_user" value="{{ old('maximum_no_of_user') }}" id="maximumNoOfUser" placeholder="E.g., 200">
+                    <input type="text" class="form-control" name="maximum_no_of_user" value="{{ old('maximum_no_of_user', $discount->maximum_no_of_user) }}" id="maximumNoOfUser" placeholder="E.g., 200">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="expiryDate">Expiry Date</label>
-                    <input type="date" class="form-control" name="expiry_date" value="{{ old('expiry_date') }}" id="expiryDate">
+                    <input type="date" class="form-control" name="expiry_date" value="{{ old('expiry_date', \Carbon\Carbon::parse($discount->expiry_date)->format('Y-m-d')) }}" id="expiryDate">
                 </div>
             </div>
         </div>
@@ -55,7 +56,7 @@
     <div class="fixed-bottom border-top p-3 bg-white d-flex justify-content-end" style="left: 272px;">
         <div>
             <a href="/packages" type="button" class="btn btn-outline-secondary btn-cancel mr-2">Cancel</a>
-            <button type="submit" class="btn btn-primary btn-action">Add New Package</button>
+            <button type="submit" class="btn btn-primary btn-action">Update Package</button>
         </div>
     </div>
 

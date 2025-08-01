@@ -73,6 +73,11 @@ class Exam extends Model
         return $this->hasMany(Course::class);
     }
 
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
     /**
      * Scope a query to only include published exams.
      */
