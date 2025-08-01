@@ -17,6 +17,15 @@ use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
+use App\Http\Controllers\Api\TitleSectionController;
+use App\Http\Controllers\Api\FeatureCardController;
+use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\FaqItemController;
+use App\Http\Controllers\Api\CatSectionController;
+use App\Http\Controllers\Api\PricingSectionController;
+use App\Http\Controllers\Api\FeatureSliderController;
+use App\Http\Controllers\Api\FeatureSliderItemController;
+use App\Http\Controllers\Api\MixedSectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,4 +149,47 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::patch('/lessons/{id}/update-status', [LessonController::class, 'updateStatus']);
     Route::post('/upload-file', [LessonController::class, 'uploadFile']);
     Route::get('/courses/mark-complete/{courseId}/{chapterId}/{lessonId}', [CourseController::class, 'markComplete']);
+    Route::get('/courses/lessons/{courseId}/{chapterId}/{lessonId}', [StudentController::class, 'getCourseLessons']);
+    Route::get('/courses/{courseId}/progress', [StudentController::class, 'getCourseProgress']);
+    Route::get('/courses/search', [CourseController::class, 'searchCourses']);
+
+
 });
+
+Route::post('/title-section', [TitleSectionController::class, 'storeOrUpdate']);
+Route::get('/title-section', [TitleSectionController::class, 'show']);
+
+
+Route::get('feature-cards', [FeatureCardController::class, 'index']); // Get all feature cards
+Route::get('feature-cards/{id}', [FeatureCardController::class, 'show']); // Get a single feature card
+Route::post('feature-cards', [FeatureCardController::class, 'store']); // Create a feature card
+Route::post('feature-cards/{id}', [FeatureCardController::class, 'update']); // Update a feature card
+Route::delete('feature-cards/{id}', [FeatureCardController::class, 'destroy']); // Delete a feature card
+
+Route::get('faqs', [FaqController::class, 'index']);
+Route::post('faqs', [FaqController::class, 'store']);
+Route::get('faqs/{id}', [FaqController::class, 'show']);
+Route::put('faqs/{id}', [FaqController::class, 'update']);
+Route::delete('faqs/{id}', [FaqController::class, 'destroy']);
+Route::apiResource('faq-items', FaqItemController::class);
+
+Route::post('/cat-section', [CatSectionController::class, 'storeOrUpdate']);
+Route::get('/cat-section', function () {
+    return \App\Models\CatSection::first();
+});
+
+Route::get('pricing-sections', [PricingSectionController::class, 'index']);
+Route::post('pricing-sections', [PricingSectionController::class, 'store']);
+
+Route::get('feature-sliders', [FeatureSliderController::class, 'index']);
+Route::post('feature-sliders', [FeatureSliderController::class, 'store']);
+Route::get('feature-sliders/{feature_slider}', [FeatureSliderController::class, 'show']);
+Route::put('feature-sliders/{feature_slider}', [FeatureSliderController::class, 'update']);
+Route::delete('feature-sliders/{feature_slider}', [FeatureSliderController::class, 'destroy']);
+
+// Route::apiResource('feature-slider-items', FeatureSliderItemController::class);
+
+Route::post('/mixed-sections', [MixedSectionController::class, 'storeOrUpdateMultipleMixedSections']);
+Route::get('/mixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
+
+

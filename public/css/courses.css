@@ -141,11 +141,19 @@
     }
 
     .chapter-section {
-        margin-bottom: 15px;
         background-color: #fff;
-        border-radius: 25px;
         overflow: hidden; /* For border-radius on children */
         border: 1px solid #eee;
+    }
+
+    .chapter-section:first-child {
+        border-top-left-radius: 25px;
+        border-top-right-radius: 25px;
+    }
+
+    .chapter-section:last-child {
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
     }
 
     .chapter-header {
@@ -213,10 +221,13 @@
     .lesson-item {
         display: flex;
         align-items: center;
-        padding: 12px 20px;
+        padding: 8px 8px;
         cursor: pointer;
         transition: background-color 0.2s ease;
         border-bottom: 1px dashed #eee;
+        margin: 10px;
+        border-radius: 18px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     }
 
     .lesson-item:last-child {
@@ -228,9 +239,14 @@
     }
 
     .lesson-item.active {
-        background-color: #e0e7ff; /* Highlight currently playing lesson */
-        color: #4a67ed;
+        background-color: #691D5E; /* Highlight currently playing lesson */
+        color: #fff;
         font-weight: 500;
+    }
+
+    .lesson-item.active .lesson-item-icon {
+        background-color: #fff; /* Active icon color */
+        color: #691D5E;
     }
 
     .lesson-item-icon {
@@ -238,18 +254,14 @@
         height: 35px;
         min-width: 35px; /* Prevent shrinking */
         background-color: #eff2f7;
-        border-radius: 50%;
+        border-radius: 25%;
         display: flex;
         justify-content: center;
         align-items: center;
         margin-right: 15px;
         font-size: 16px;
-        color: #666;
-    }
-
-    .lesson-item.active .lesson-item-icon {
-        background-color: #4a67ed;
         color: #fff;
+        background-color: #691D5E;
     }
 
     .lesson-item .lesson-details {

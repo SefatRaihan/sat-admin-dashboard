@@ -31,29 +31,35 @@
                     <div class="name">Mubhir Student</div>
                     <div class="role">SAT Student</div>
                 </div>
-                {{-- <div class="progress-info">
+                <div class="progress-info">
                     <div style="display: flex; justify-content: space-between;">
                         <div class="progress-label">In Progress</div>
-                        <div class="progress-percentage">67%</div>
+                        <div class="progress-percentage" id="overall-progress">0%</div>
                     </div>
                     <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 67%;"></div>
+                        <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
                     </div>
-                </div> --}}
+                </div>
             </div>
 
             <div class="course-lessons-list" id="courseLessonsList">
             </div>
             @if(!is_null($course->exam_id))
-                <div class="exam-card">
+                <div class="exam-card mt-2">
                     <div class="exam-info">
-                    <div class="exam-icon"><img src="{{ asset('storage/icon/lock-closed.png') }}" alt=""></div>
+                    <div class="exam-icon lock-exam"><i class="fas fa-lock"></i></div>
+                    <div class="exam-icon unlock-exam d-none"><i class="fas fa-lock-open"></i></div>
                     <div class="exam-title">{{ $exam->title }}</div>
                     </div>
-                    <form action="{{ route('student-exam.start', $exam->id) }}" method="POST">
-                        @csrf
+                    <div class="lock-exam">
                         <button type="submit" class="btn btn-sm start-btn">Start Exam</button>
-                    </form>
+                    </div>
+                    <div class="unlock-exam d-none">
+                        <form action="{{ route('student-exam.start', $exam->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm start-btn">Start Exam</button>
+                        </form>
+                    </div>
                 </div>
             @endif
         </div>
@@ -71,6 +77,7 @@
             const totalDuration = @json($course->total_duration);
 
             $(document).ready(function () {
+                updateOverallProgress();
                 $('#total_duration').text('Duration: ' +secondsToTimeString(totalDuration));
                 const $courseLessonsList = $('#courseLessonsList');
 
@@ -95,6 +102,7 @@
                                     ? `<div class="progress-bar-tiny"><div style="width: ${lesson.progress}%"></div></div><span class="progress-percentage-small">${lesson.progress}%</span>`
                                     : '');
                             // class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}"
+
                             lessonsHtml += `
                                 <div class="lesson-item ${lesson.completed ? 'completed' : ''} ${lesson.progress > 0 && !lesson.completed ? 'in-progress' : ''}" data-lesson-id="${lesson.id}">
                                     <div class="lesson-item-icon">
@@ -178,13 +186,17 @@
                 $(document).on('click', '.lesson-item', selectedVideo);
 
                 function selectedVideo() {
-                    const $lessonItem = $(this).find('.lesson-name');
-                    const lessonId = $lessonItem.data('lesson-id');
-                    const chapterId = $lessonItem.data('chapter-id');
-                    const couseId = '{{ $course->id }}';
-                    const filePath = 'storage/' + $lessonItem.data('lesson-path');
-                    const fileType = $lessonItem.data('lesson-type');
+                    const lessonItem = $(this);
+                    const lessonName = lessonItem.find('.lesson-name');
+                    const lessonStatus = lessonItem.find('.lesson-status'); // Corrected selector
+                    const lessonId = lessonName.data('lesson-id');
+                    const chapterId = lessonName.data('chapter-id');
+                    const courseId = '{{ $course->id }}';
+                    const filePath = 'storage/' + lessonName.data('lesson-path');
+                    const fileType = lessonName.data('lesson-type');
                     const fullUrl = `${appUrl}${filePath}`;
+                    console.log(lessonStatus);
+                
 
                     const isVideo = fileType 
                         ? fileType.toLowerCase() === 'video'
@@ -196,13 +208,15 @@
 
                     // 🔥 Call API to mark lesson as complete
                     $.ajax({
-                        url: `/api/courses/mark-complete/${couseId}/${chapterId}/${lessonId}`,
+                        url: `/api/courses/mark-complete/${courseId}/${chapterId}/${lessonId}`,
                         method: 'get',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
                             console.log(response.message);
+                            lessonStatus.html('<i class="fas fa-check-circle"></i>');
+                            updateOverallProgress();
                             // Optionally update UI here like adding a check icon
                         },
                         error: function(xhr) {
@@ -223,6 +237,30 @@
                 }
 
             });
+
+            function updateOverallProgress() {
+                let courseId = '{{ $course->id }}';
+                $.ajax({
+                    url: `/api/courses/${courseId}/progress`,
+                    method: 'GET',
+                    success: function(response) {
+                        const progress = response.progress;
+                        $('#overall-progress').text(`${progress}%`);
+                        $('#progress-bar').css('width', `${progress}%`);
+
+                        if (progress == 100) {
+                            $('.lock-exam').addClass('d-none');
+                            $('.unlock-exam').removeClass('d-none');
+                        } else {
+                            $('.lock-exam').removeClass('d-none');
+                            $('.unlock-exam').addClass('d-none');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error("Error fetching progress", xhr.responseJSON);
+                    }
+                });
+            }
 
             
 

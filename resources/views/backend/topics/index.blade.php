@@ -540,10 +540,10 @@
                             Swal.fire("Error", "Failed to create topic successfully!", "error");
                         }
 
-                        submitButton.text('Save Question').prop('disabled', false);
+                        submitButton.text('Save').prop('disabled', false);
                     },
                     error: function(error) {
-                        submitButton.text('Save Question').prop('disabled', false);
+                        submitButton.text('Save').prop('disabled', false);
 
                         let errors = error.responseJSON.errors;
                         let errorMessage = "";
@@ -568,97 +568,105 @@
 
             // start datatable code
             // get all questions
-            function fetchQuestions(page = 1, perPage = 10, sortColumn, sortOrder, sort = 'Latest') {
+            function fetchQuestions(page = 1, perPage = 10, sort = 'Latest') {
                 let filters = {
-                    search: $('.search_input').val() || '', // Search input value, default to empty string if undefined
-                    sort: sort,
+                    search: $('.search_input').val() || '',
+                    sort: sort, // Include sort parameter
                 };
 
                 $.ajax({
-                    url: "/api/topic?page=" + page + "&per_page=" + perPage,
+                    url: `/api/topic?page=${page}&per_page=${perPage}`,
                     type: "GET",
                     data: filters,
                     success: function(response) {
-
                         let questionList = $('#questionList');
                         let questionNullList = $('#questionNullList');
                         let tableBody = $("#question-table-body");
 
-                        // console.log(response.data);
-
-
-                        if (response.data.length == 0) {
+                        if (response.success && response.data.data.length === 0) {
                             questionNullList.removeClass('d-none');
                             questionList.addClass('d-none');
-                        } else {
+                            tableBody.html('<tr><td colspan="3" class="text-center">No topics found.</td></tr>');
+                        } else if (response.success) {
                             questionNullList.addClass('d-none');
                             questionList.removeClass('d-none');
                             tableBody.html("");
 
                             let rows = '';
                             $.each(response.data.data, function(index, value) {
-
-                                // <td><span class="badge badge-pill badge-hard">Hard</span><p class="text-center"><span>9/10</span>(70%)</p></td>
-                                rows += `<tr>
-                                    <td><input type="checkbox" class="row-checkbox question-row" value="${value.id}"></td>
-                                    <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${value.id}">${value.name}</td>
-
-                                    <td class="text-center">
-                                         <button data-toggle="modal" data-id="${value.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i>Edit</button>
-                                    </td>
-                                </tr>`;
+                                rows += `
+                                    <tr>
+                                        <td><input type="checkbox" class="row-checkbox question-row" value="${value.id}"></td>
+                                        <td class="openDetailModal text-center" data-toggle="modal" data-target="#detailModalCenter" data-id="${value.id}">${value.name}</td>
+                                        <td class="text-center">
+                                            <button data-toggle="modal" data-id="${value.id}" data-target="#questionModal" class="btn edit-btn"><i class="far fa-edit"></i> Edit</button>
+                                        </td>
+                                    </tr>`;
                             });
                             tableBody.html(rows);
-                            updatePagination(response, page);
+                            updatePagination(response.data, page);
+                        } else {
+                            console.error("Error: ", response.message);
+                            tableBody.html('<tr><td colspan="3" class="text-center">Error loading topics.</td></tr>');
                         }
-
                     },
-                    // error: function() {
-                    //     alert("Error fetching Topic.");
-                    // }
+                    error: function(xhr) {
+                        console.error("Error fetching topics:", xhr.responseJSON?.message || "Unknown error");
+                        $("#question-table-body").html('<tr><td colspan="3" class="text-center">Error loading topics.</td></tr>');
+                    }
                 });
             }
 
-            function updatePagination(response, currentPage) {
-                let totalResults = response.total;
-                let perPage = response.per_page;
-                let totalPages = response.last_page;
-                let start = (response.from || 0);
-                let end = (response.to || 0);
+            function updatePagination(paginationData, currentPage) {
+                let totalResults = paginationData.total || 0;
+                let perPage = paginationData.per_page || 10;
+                let totalPages = paginationData.last_page || 1;
+                let start = paginationData.from || 0;
+                let end = paginationData.to || 0;
 
                 $('#pagination-info').text(`Showing ${start}-${end} out of ${totalResults} results`);
-                $('#total-questions').text(`${totalResults} Questions`);
 
                 let paginationHtml = '';
 
                 // First & Previous
                 paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                                        <a class="page-link" href="#" data-page="1">«</a></li>`;
+                                    <a class="page-link" href="#" data-page="1">«</a>
+                                </li>`;
                 paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                                        <a class="page-link" href="#" data-page="${currentPage - 1}">‹</a></li>`;
+                                    <a class="page-link" href="#" data-page="${currentPage - 1}">‹</a>
+                                </li>`;
 
                 // Page Numbers
+                let startPage = Math.max(1, currentPage - 1);
+                let endPage = Math.min(totalPages, currentPage + 1);
+
                 if (currentPage > 2) {
                     paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`;
-                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                    if (currentPage > 3) {
+                        paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                    }
                 }
 
-                for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages, currentPage + 1); i++) {
+                for (let i = startPage; i <= endPage; i++) {
                     paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                                            <a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+                                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                                    </li>`;
                 }
 
                 if (currentPage < totalPages - 1) {
-                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
-                    paginationHtml +=
-                        `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
+                    if (currentPage < totalPages - 2) {
+                        paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                    }
+                    paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
                 }
 
                 // Next & Last
                 paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                                        <a class="page-link" href="#" data-page="${currentPage + 1}">›</a></li>`;
+                                    <a class="page-link" href="#" data-page="${currentPage + 1}">›</a>
+                                </li>`;
                 paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                                        <a class="page-link" href="#" data-page="${totalPages}">»</a></li>`;
+                                    <a class="page-link" href="#" data-page="${totalPages}">»</a>
+                                </li>`;
 
                 $('#pagination-links').html(paginationHtml);
             }

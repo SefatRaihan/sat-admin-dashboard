@@ -2470,6 +2470,7 @@
                 }
 
                 $.get(`/api/questions/${questionId}`, function(response) {
+
                     $('.question-modal-heading').text('Edit Question');
 
                     // Set values in the modal
@@ -2532,7 +2533,8 @@
 
             function detailModal() {
                 var questionid = $(this).data("id"); // Button er data-id theke Student ID pabo
-
+                console.log('in');
+                
                 $.ajax({
                     url: `/api/questions/${questionid}`, // Backend route jekhane data fetch hobe
                     type: "GET",

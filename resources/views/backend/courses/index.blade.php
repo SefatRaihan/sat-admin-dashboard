@@ -375,13 +375,13 @@
                                 <div class="sidebar2">
                                     <div class="student-profile-card">
                                         <div class="profile-avatar">
-                                            <img src="https://via.placeholder.com/50/4A67ED/FFFFFF?text=MS" alt="Img">
+                                            <img src="{{ asset('image/user-icon.png') }}" alt="Img">
                                         </div>
                                         <div class="profile-info">
                                             <div class="name">Mubhir Student</div>
                                             <div class="role">SAT Student</div>
                                         </div>
-                                        <div class="progress-info">
+                                        {{-- <div class="progress-info">
                                             <div style="display: flex; justify-content: space-between;">
                                                 <div class="progress-label">In Progress</div>
                                                 <div class="progress-percentage">67%</div>
@@ -389,7 +389,7 @@
                                             <div class="progress-bar-container">
                                                 <div class="progress-bar" style="width: 67%;"></div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="course-lessons-list" id="courseLessonsList"></div>
                                 </div>
@@ -1267,7 +1267,6 @@
                     const lessonContainer = $('.lessonSelectBox');
 
                     $.get('/api/get-chapter', function(data) {
-                        console.log('Chapter data loaded:', data); // Debug
 
                         // Clear existing select2 and re-initialize
                         if (chapterSelect.hasClass('select2-hidden-accessible')) {
@@ -1297,9 +1296,8 @@
                                     `;
                                     $('.lesson').select2();
                                     lessonContainer.append(lessonSelectHTML);
-                                    console.log(`Created lesson select for chapter ${chapterId}`); // Debug
+                                    selectLesson('#lesson_' + chapterId);
                                 });
-                                console.log('Lesson select elements created:', lessonContainer.html()); // Debug
                             } else {
                                 console.log('No chapters selected, lesson container cleared'); // Debug
                             }
@@ -1673,7 +1671,6 @@
                         // Step 2 & 3: Populate chapters and lessons
                         if (response.chapters && response.chapters.length > 0) {
                             const chapterIds = response.chapters.map(ch => ch.id);
-                            console.log('Selected chapter IDs:', chapterIds); // Debug
                             await selectEditChapter(chapterIds);
 
                             // Wait for DOM to update
@@ -1682,11 +1679,9 @@
                             // Populate lessons for each chapter
                             for (const chapter of response.chapters) {
                                 const lessonIds = chapter.lessons.map(lesson => lesson.id);
-                                console.log(`Populating lessons for chapter ${chapter.id}:`, lessonIds); // Debug
                                 await selectEditLesson(`#lesson_${chapter.id}`, lessonIds);
                             }
                         } else {
-                            console.log('No chapters in course data'); // Debug
                             await selectChapter();
                         }
 
@@ -1723,6 +1718,7 @@
                     }
                 });
             }
+
             async function renderCourseContent() {
                 $('#courseLessonsList').empty();
                 const courseData = await collectCourseDataFromSelections();
@@ -1740,7 +1736,7 @@
                                 </div>
                                 <div class="lesson-details">
                                     <div class="lesson-name" data-lesson-type="${lesson.type}" data-lesson-id="${lesson.id}" data-lesson-path="${lesson.file_path}">${lesson.name}</div>
-                                    <div class="lesson-duration">${lesson.duration}</div>
+                                    <div class="lesson-duration"><i class="far fa-clock"></i> ${lesson.duration}</div>
                                 </div>
                                 <div class="lesson-status">${statusHtml}</div>
                             </div>
@@ -1757,7 +1753,7 @@
                                     <span>${chapter.title}</span>
                                 </div>
                                 <div class="chapter-meta">
-                                    <span>${chapter.lessonsCount} Lessons</span>
+                                    <span style="width: 58px;">${chapter.lessonsCount} Lessons</span>
                                     <span>${chapter.duration}</span>
                                 </div>
                             </div>
@@ -1792,7 +1788,7 @@
                     const lessonData = await $.get('/api/lessons-by-id', { ids: selectedLessonIds });
                     const lessonObjects = lessonData.map(lesson => ({
                         id: lesson.id,
-                        name: lesson.file_name,
+                        name: lesson.title,
                         file_path: lesson.file_path || 'video',
                         type: lesson.file_type || 'video',
                         duration: lesson.total_length || '00:10:00',
@@ -1879,6 +1875,10 @@
             }
 
             function selectedVideo() {
+                $('.lesson-item').removeClass('active');
+                // Add 'active' to the clicked lesson item
+                $(this).closest('.lesson-item').addClass('active');
+
                 const $lessonItem = $(this);
                 const filePath = 'storage/' + $lessonItem.data('lesson-path');
                 const fileType = $lessonItem.data('lesson-type');

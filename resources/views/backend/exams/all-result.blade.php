@@ -213,17 +213,16 @@
                                         <h5 class="mb-0 p-0"><b><span id="totalResult">0</span> Result</b></h5>
                                     </div>
                                     <div class="delete-btn d-none">
-                                        <button class="btn"><img src="{{ asset('image/icon') }} alt=""></button>
+                                        {{-- <button class="btn"><img src="{{ asset('image/icon') }} alt=""></button>
                                         <button class="btn result-excel-download"><img src="{{ asset('image/icon/download.png') }}" alt=""></button>
                                         <button class="btn text-danger result-delete"><i class="fas fa-trash-alt"></i></button>
                                         <button class="btn text-warning result-deactive">Inactive</button>
-                                        <button class="btn send-notification-btn" data-toggle="modal" data-target="#messageModalCenter" style="background-color:#691D5E; border-radius: 8px; color:#fff"><img src="{{ asset('image/icon/message.png') }}" alt=""> <span class="ml-2">Send Notification</span></button>
+                                        <button class="btn send-notification-btn" data-toggle="modal" data-target="#messageModalCenter" style="background-color:#691D5E; border-radius: 8px; color:#fff"><img src="{{ asset('image/icon/message.png') }}" alt=""> <span class="ml-2">Send Notification</span></button> --}}
                                     </div>
                                 </div>
                             </th>
                         </tr>
                         <tr class="bg-light">
-                            <th><input type="checkbox" id="selectAll"></th>
                             <th>Exam</th>
                             <th>Audience</th>
                             <th>Student</th>
@@ -712,14 +711,14 @@
                 });
             });
 
-            document.getElementById("selectAll").addEventListener("change", function() {
-                let isChecked = this.checked;
-                document.querySelectorAll(".row-checkbox").forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                    checkbox.closest("tr").classList.toggle("selected", isChecked);
-                });
-                toggleDeleteButton();
-            });
+            // document.getElementById("selectAll").addEventListener("change", function() {
+            //     let isChecked = this.checked;
+            //     document.querySelectorAll(".row-checkbox").forEach(checkbox => {
+            //         checkbox.checked = isChecked;
+            //         checkbox.closest("tr").classList.toggle("selected", isChecked);
+            //     });
+            //     toggleDeleteButton();
+            // });
 
             toggleDeleteButton();
         </script>
@@ -840,7 +839,6 @@
                             data.results.data.forEach(result => {
                                 tbody.innerHTML += `
                                     <tr>
-                                        <td><input type="checkbox" class="row-checkbox result-row" value="${result.uuid}"></td>
                                         <td class="openDetailModal" data-uuid="${result.uuid}" data-toggle="modal" data-target="#detailModalCenter">
                                             ${result.exam_name}
                                         </td>
@@ -884,14 +882,14 @@
                                 });
                             });
 
-                            document.getElementById("selectAll").addEventListener("change", function() {
-                                let isChecked = this.checked;
-                                document.querySelectorAll(".row-checkbox").forEach(checkbox => {
-                                    checkbox.checked = isChecked;
-                                    checkbox.closest("tr").classList.toggle("selected", isChecked);
-                                });
-                                toggleDeleteButton();
-                            });
+                            // document.getElementById("selectAll").addEventListener("change", function() {
+                            //     let isChecked = this.checked;
+                            //     document.querySelectorAll(".row-checkbox").forEach(checkbox => {
+                            //         checkbox.checked = isChecked;
+                            //         checkbox.closest("tr").classList.toggle("selected", isChecked);
+                            //     });
+                            //     toggleDeleteButton();
+                            // });
                         }
                     })
                     .catch(error => {
@@ -996,9 +994,9 @@
                     }
                 }
 
-                $(document).on("change", ".row-checkbox, #selectAll", function () {
-                    toggleActionButtons();
-                });
+                // $(document).on("change", ".row-checkbox, #selectAll", function () {
+                //     toggleActionButtons();
+                // });
             });
         </script>
     @endpush

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id(); // BIGINT Auto-incrementing ID
             $table->uuid('uuid')->index(); // BIGINT Auto-incrementing ID
             $table->unsignedBigInteger('exam_question_id')->index()->comment('References the exam question this history belongs to');
-            $table->foreignId('topic_id')->constrained('topics')->onDelete('Set null')->comment('References the topic this question belongs to')->index();
-
+            // $table->foreignId('topic_id')->constrained('topics')->onDelete('Set null')->comment('References the topic this question belongs to')->index();
+            $table->foreignId('topic_id')->index();
             // Audience Selection
             $table->enum('audience', ['High School', 'College', 'Graduation', 'SAT 2'])->comment('Defines the target audience for the question')->index();
 

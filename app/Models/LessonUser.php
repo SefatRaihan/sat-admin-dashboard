@@ -9,4 +9,5 @@ class LessonUser extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    protected $table = 'lesson_user';
 }

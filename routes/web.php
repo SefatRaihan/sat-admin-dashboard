@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\RoleController;
@@ -21,8 +22,11 @@ use App\Http\Controllers\PackageGenerateController;
 use App\Http\Controllers\Api\StudentController as StudentApiController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\DrillExamController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\PackageController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\TopicController;
 
 /*
@@ -131,6 +135,10 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/student/course/detail/{id}', [StudentController::class, 'studentCourseDetails'])->name('student.course.detail');
     Route::get('/student/video/lesson/{uuid}', [StudentController::class, 'studentVideoLessonDetails'])->name('student.video.lesson.details');
 
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
+    Route::resource('packages', PackageController::class);
+    Route::resource('discounts', DiscountController::class);
+    Route::resource('referrals', ReferralController::class);
 });
 
 

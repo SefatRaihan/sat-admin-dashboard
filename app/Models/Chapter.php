@@ -42,4 +42,10 @@ class Chapter extends Model
         return $this->belongsToMany(Lesson::class, 'chapter_lesson');
     }
 
+    public function lessonsByCourse($courseId)
+    {
+        return $this->belongsToMany(Lesson::class, 'chapter_lesson')
+                    ->wherePivot('course_id', $courseId);
+    }
+
 }
