@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Exports\StudentsExport;
 use Illuminate\Support\Facades\DB;
 use App\Models\ExamAttemptQuestion;
+use App\Models\ExamQuestion;
 use App\Models\StudentNotification;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -56,48 +57,62 @@ class StudentController extends Controller
         return view('backend.students.checkout');
     }
 
+    // public function explanation($examAttemptId, $questionId = null)
+    // {
+    //     $examAttempt = ExamAttempt::with(['exam.questions', 'exam.sections'])->findOrFail($examAttemptId);
+    //     $exam = $examAttempt->exam;
+    //     $userId = Auth::id();
+
+    //     if ($examAttempt->user_id !== $userId) {
+    //         abort(403, 'Unauthorized access to exam attempt.');
+    //     }
+
+    //     // Fetch all questions with their attempt details
+    //     $questions = $exam->questions->map(function ($question) use ($examAttempt) {
+    //         $attemptQuestion = ExamAttemptQuestion::where('attempt_id', $examAttempt->id)
+    //             ->where('question_id', $question->id)
+    //             ->first();
+
+    //         return [
+    //             'id' => $question->id,
+    //             'question_title' => $question->question_title,
+    //             'question_description' => $question->question_description,
+    //             'options' => $question->options,
+    //             'correct_answer' => $question->correct_answer,
+    //             'explanation' => $question->explanation,
+    //             'sat_question_type' => $question->sat_question_type,
+    //             'difficulty' => $question->difficulty,
+    //             'is_correct' => $attemptQuestion ? $attemptQuestion->is_correct : false,
+    //             'time_spent' => $attemptQuestion ? $attemptQuestion->time_spent : 0,
+    //             'student_answer' => $attemptQuestion ? $attemptQuestion->student_answer : null,
+    //             'section' => $examAttempt->exam?->section
+    //         ];
+    //     })->groupBy('sat_question_type');
+
+    //     $flatQuestions = $questions->flatten(1)->values();
+
+    //     $metadata = [
+    //         'exam_name' => $exam->name,
+    //         'total_questions' => $exam->questions->count(),
+    //         'total_duration' => $exam->duration,
+    //         'scheduled_at' => $exam->scheduled_at,
+    //     ];
+
+    //     return view('backend.students.explanation', compact('exam', 'questions', 'examAttempt', 'flatQuestions', 'questionId'));
+    // }
+
     public function explanation($examAttemptId, $questionId = null)
     {
-        $examAttempt = ExamAttempt::with(['exam.questions', 'exam.sections'])->findOrFail($examAttemptId);
-        $exam = $examAttempt->exam;
         $userId = Auth::id();
 
-        if ($examAttempt->user_id !== $userId) {
-            abort(403, 'Unauthorized access to exam attempt.');
-        }
+        $examAttempt = ExamAttempt::where('user_id', $userId)->with('exam.sections')->findOrFail($examAttemptId);
+        $exam = $examAttempt->exam;
 
-        // Fetch all questions with their attempt details
-        $questions = $exam->questions->map(function ($question) use ($examAttempt) {
-            $attemptQuestion = ExamAttemptQuestion::where('attempt_id', $examAttempt->id)
-                ->where('question_id', $question->id)
-                ->first();
-
-            return [
-                'id' => $question->id,
-                'question_title' => $question->question_title,
-                'question_description' => $question->question_description,
-                'options' => $question->options,
-                'correct_answer' => $question->correct_answer,
-                'explanation' => $question->explanation,
-                'sat_question_type' => $question->sat_question_type,
-                'difficulty' => $question->difficulty,
-                'is_correct' => $attemptQuestion ? $attemptQuestion->is_correct : false,
-                'time_spent' => $attemptQuestion ? $attemptQuestion->time_spent : 0,
-                'student_answer' => $attemptQuestion ? $attemptQuestion->student_answer : null,
-                'section' => $examAttempt->exam?->section
-            ];
-        })->groupBy('sat_question_type');
-
-        $flatQuestions = $questions->flatten(1)->values();
-
-        $metadata = [
-            'exam_name' => $exam->name,
-            'total_questions' => $exam->questions->count(),
-            'total_duration' => $exam->duration,
-            'scheduled_at' => $exam->scheduled_at,
-        ];
-
-        return view('backend.students.explanation', compact('exam', 'questions', 'examAttempt', 'flatQuestions', 'questionId'));
+        $question = ExamQuestion::findOrFail($questionId);
+        $studentAnswer = $examAttempt->examAttemptQuestions->where('question_id', $questionId)->first()->student_answer;
+        $answer = $question->correct_answer == $studentAnswer ? 'correct' : 'wrong';
+        
+        return view('backend.students.explanation', compact('exam', 'question', 'examAttempt', 'answer', 'studentAnswer'));
     }
 
     public function studentCourse()
@@ -138,7 +153,7 @@ class StudentController extends Controller
             ->where('course_id', $course->id)
             ->join('chapters', 'chapter_lesson.chapter_id', '=', 'chapters.id')
             ->join('lessons', 'chapter_lesson.lesson_id', '=', 'lessons.id')
-            ->select('chapters.id as chapter_id', 'chapters.title as chapter_title', 
+            ->select('chapters.id as chapter_id', 'chapters.title as chapter_title',
                     'lessons.id as lesson_id', 'lessons.file_path as file_path', 'lessons.file_name', 'lessons.file_type', 'lessons.total_length')
             ->get();
 
@@ -169,7 +184,7 @@ class StudentController extends Controller
         {
             $exam = Exam::find($course->exam_id);
         }
-        
+
         return view('backend.students.student_course_details', compact('course', 'chapterLessons', 'groupedChapters', 'exam'));
     }
 

@@ -6,14 +6,14 @@
                     <h5 style="color: #344054;font: Inter;font-size: 20px;font-weight: 600;">{{ $exam->title }}</h5>
                     <div class="heading-summary d-flex justify-content-start">
                         <ul class="p-0 m-0 text-center">
-                            <li id="audience" style="list-style: none">{{ $exam->sections[0]->audience  }}</li>
-                            <li id="total-section">{{ $exam->sections->count() }} sections</li>
-                            <li id="total-question">{{ collect($exam->duration)->flatten(1)->count() }} Questions</li>
+                            <li style="list-style: none">{{ $question->audience  }}</li>
+                            <li>{{ $question->sat_question_type }}</li>
+                            <li>{{ $question->difficulty }}</li>
                         </ul>
                     </div>
                 </div>
            </div>
-           <div class="col-md-9 d-flex justify-content-left align-items-center gap-2">
+           {{-- <div class="col-md-9 d-flex justify-content-left align-items-center gap-2">
               <span id="prevBtn" class="text-center p-1" style="margin-right: 18px; border: 1px solid #ddd; border-radius: 50%; width: 32px; height: 32px; cursor: pointer;"><i class="fas fa-chevron-left text-center"></i></span>
             <div class="header-pagination">
                 @php $flatQuestions = collect($questions)->flatten(1)->values(); @endphp
@@ -30,7 +30,7 @@
                 @endforeach
             </div>
               <span id="nextBtn" class="text-center p-1" style="margin-left: 18px; border: 1px solid #ddd; border-radius: 50%; width: 32px; height: 32px; cursor: pointer;"><i class="fas fa-chevron-right"></i></span>
-           </div>
+           </div> --}}
         </div>
      </div>
      <div class="p-4">
@@ -58,56 +58,67 @@
                     <div class="row p-4">
                         <div class="col-md-6 pl-4 pr-4">
                             <h4><b>Context</b></h4>
-                            <div id="question-context">
-
+                            {{-- @dd($question) --}}
+                            <div>
+                                <p>{{ strip_tags($question->question_description) ?? 'No context provided.' }}</p>
                             </div>
-                            <h4><b>Explanation</b></h4>
-                            <div id="question-explanation" style="padding-bottom:100px">
 
-                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h4><b>Question</b></h4>
                                 </div>
-                                <div class="mr-3" style="color:#344054; font-size: 20px; font-weight: 400;">
-                                    <span class="answered-count">0</span>/<span class="total-questions">0</span>
-                                </div>
                             </div>
                             <div class="question-box">
-                                <p id="question-title" style="margin-top: 8px;"></p>
+                                <p style="margin-top: 8px;">{{ strip_tags($question->question_title) }}</p>
                                 <div class="check-box-field">
                                     <div id="question-option" class="row">
+                                         <div class="col-md-12 mt-2">
+                                            @foreach (json_decode($question->options) as $option)
+                                                @php
+                                                    $class = $question->correct_answer == $studentAnswer
+                                                        ? 'correct-answer'
+                                                        : ($option == $studentAnswer ? 'wrong-answer' : '');
+                                                @endphp
+                                                <div class="form-check pt-2 custom-radio {{ $class }} {{ trim($option) === trim($question->correct_answer) ? 'correct-answer' : '' }}">
+                                                    <input class="form-check-input" type="radio" name="question" id="question_{{ $question->id }}" value="{{ $option }}" {{ $question->correct_answer === $option ? 'checked' : '' }}>
+                                                    <label class="form-check-label" style="padding-top:8px" for="question_{{$question->id}}">
+                                                        {{ $option }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                         </div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p style="border-bottom: 1px solid #ddd; margin-top: 30px;"></p>
-                    <div class="profileTableWrapper ">
-                        <table class="table profileTable">
-                            <thead style="background-color: #F9FAFB">
-                            <tr>
-                                <td style="width: 480px;">Question</td>
-                                <td>Section</td>
-                                <td>Difficulty</td>
-                                <td>Action</td>
-                            </tr>
-                            </thead>
-                            <tbody id="questionTbody">
+                        {{-- <p style="border-bottom: 1px solid #ddd; margin-top: 30px;"></p>
+                        <div class="profileTableWrapper ">
+                            <table class="table profileTable">
+                                <thead style="background-color: #F9FAFB">
+                                <tr>
+                                    <td style="width: 480px;">Question</td>
+                                    <td>Section</td>
+                                    <td>Difficulty</td>
+                                    <td>Action</td>
+                                </tr>
+                                </thead>
+                                <tbody id="questionTbody">
 
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div> --}}
                     <p style="border-bottom: 1px solid #ddd; margin-top: 30px;"></p>
                     <div style="margin-bottom: 30px;">
                         <div class="p-4"
                             style=" border-radius: 10px;border: 1px solid #ddd; min-height: 100vh;width: 100%;">
                             <h4>Explanation</h4>
                             <p style="border-bottom: 1px solid #ddd;width: 100%;margin-top: 20px; text-align: center;"></p>
-                            <div id="explation-data">
-
+                            <div>
+                                {{ strip_tags($question->explanation) ?? 'No explanation provided.' }}
                             </div>
                         </div>
                     </div>
@@ -199,171 +210,7 @@
                 }
             });
 
-            let questions = @json($flatQuestions);
-            let examAttempt = @json($examAttempt);
-            let exam = @json($exam);
-            let currentIndex = 0;
-            let answers = {};
-            let timeTracking = {}; // { [question_id]: seconds }
-            let questionStartTime = Date.now();
-
-            function pad(n) {
-                return n.toString().padStart(2, '0');
-            }
-
-            function updateAnsweredCount() {
-                let answeredCount = Object.keys(answers).length;
-                $('.answered-count').text(answeredCount);
-                $('.total-questions').text(questions.length);
-            }
-
-            function renderQuestion(index, questionId = null) {
-
-                let question = null;
-                if (questionId) {
-                    question = questions.find(q => q.id === questionId);
-                    index = questions.findIndex(q => q.id === questionId);
-                } else {
-                    question = questions[index];
-                }
-
-
-                $('.box').removeClass('active');
-                $(`.question-${question.id}`).addClass('active');
-
-                $('#question-context').html(`
-                    <p>${question.question_description || 'No context provided.'}</p>
-                `);
-                $('#question-explanation').html(`
-                    <p>${question.explanation || 'No explanation provided.'}</p>
-                `);
-
-                let options;
-                if (typeof question.options === 'string') {
-                    options = JSON.parse(question.options);
-                } else {
-                    options = Array.isArray(question.options) ? question.options : Object.values(question.options || {});
-                }
-
-                let selected = answers[question.id] || null;
-                let correctAnswer = question.correct_answer;
-                let studentAnswer = question.student_answer;
-                let wrongAnswerClass = null;
-                if(studentAnswer != correctAnswer) {
-                    wrongAnswerClass = 'wrong-answer';
-                }
-
-
-                $('#question-title').html(`${question.question_title}`);
-                $('#question-option').html(
-                    options.map((opt, i) => `
-                        <div class="col-md-12 mt-2">
-                            <div class="form-check custom-radio ${studentAnswer == opt ? wrongAnswerClass : ''}" onclick="selectOption('question_${question.id}_${i}', '${opt}', ${question.id})">
-                                <input class="form-check-input" type="radio" name="question_${question.id}" id="question_${question.id}_${i}" value="${opt}" ${correctAnswer === opt ? 'checked' : ''}>
-                                <label class="form-check-label" style="padding-top:8px" for="question_${question.id}_${i}">
-                                    ${opt}
-                                </label>
-                            </div>
-                        </div>
-                    `).join('')
-                );
-
-                console.log(question);
-
-
-                $('#explation-data').html(question.explanation);
-                $('#questionTbody').html('');
-                const difficultyClass = {
-                        'easy': 'badge-easy',
-                        'medium': 'badge-medium',
-                        'hard': 'badge-hard',
-                        'very_hard': 'badge-very-hard'
-                    }[question.difficulty.toLowerCase()] || 'badge-default';
-
-                $('#questionTbody').append(`
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <span class="${studentAnswer == correctAnswer ? 'correct-answer' : 'wrong-answer'}">
-                                    ${studentAnswer == correctAnswer ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>'}
-                            </span>
-                            <div>
-                                <p class="p-0 m-0">Question ${++index}</p>
-                                <p><b${question.question_title}</b></p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>${question.section}</td>
-                    <td><span class="badge badge-pill ${difficultyClass}">${question.difficulty.toLowerCase()}</span></td>
-                    <td>
-                        <button type="button" class="btn btn-outline-dark feedback-btn" data-question-id="${question.id}" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
-                    </td>
-                </tr>
-                `);
-
-                $('#prevBtn').toggleClass('d-none', index === 0);
-                $('#nextBtn').toggleClass('d-none', index === questions.length - 1);
-                $('#submitBtn').toggleClass('d-none', index !== questions.length - 1);
-
-                updateAnsweredCount();
-            }
-
-            function selectOption(inputId, option, questionId) {
-                $(`#${inputId}`).prop('checked', true);
-                answers[questionId] = option;
-                $(`.question-${questionId}`).removeClass('incomplete').addClass('completed');
-                updateAnsweredCount();
-            }
-
-            function saveAnswerAndColor(index) {
-                let q = questions[index];
-                let now = Date.now();
-                let timeSpent = Math.floor((now - questionStartTime) / 1000); // in seconds
-                timeTracking[q.id] = (timeTracking[q.id] || 0) + timeSpent;
-
-                // Reset start time for next question
-                questionStartTime = now;
-
-                let selectedOption = $(`input[name="question_${q.id}"]:checked`).val();
-                let boxEl = $(`.question-${q.id}`);
-
-                if (selectedOption) {
-                    answers[q.id] = selectedOption;
-                    boxEl.removeClass('incomplete').addClass('completed');
-                } else {
-                    boxEl.addClass('incomplete');
-                }
-                updateAnsweredCount();
-            }
-
-
             $(document).ready(function () {
-                let questionId = {{ $questionId }};
-
-
-                renderQuestion(currentIndex, questionId);
-
-                $('#nextBtn').on('click', function () {
-                    saveAnswerAndColor(currentIndex);
-                    if (currentIndex < questions.length - 1) {
-                        currentIndex++;
-                        renderQuestion(currentIndex);
-                    }
-                });
-
-                $('#prevBtn').on('click', function () {
-                    saveAnswerAndColor(currentIndex);
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                        renderQuestion(currentIndex);
-                    }
-                });
-
-                $('.box').on('click', function () {
-                    saveAnswerAndColor(currentIndex);
-                    currentIndex = $(this).index('.box');
-                    renderQuestion(currentIndex);
-                });
 
                 $(document).on('click', '.btn.btn-outline-dark.feedback-btn', function() {
                     const questionId = $(this).data('question-id'); // Get from button's data-question-id
@@ -430,8 +277,6 @@
                     $('input[name="feedback"]').prop('checked', false);
                     $('textarea[name="description"]').val('');
                 });
-
-                $('.total-questions').text(questions.length);
             });
         </script>
      @endpush

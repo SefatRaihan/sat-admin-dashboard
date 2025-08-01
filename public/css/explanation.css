@@ -23,6 +23,17 @@
     box-shadow: 0 0 0 2px white, 0 0 0 4px #fa0606;
 }
 
+.correct-answer {
+    background-color: #F0F9FF;
+    border: 1px solid #079455;
+}
+
+.correct-answer.custom-radio .form-check-input + .form-check-label::before {
+    border-color: #079455;
+    background-color: #079455;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #079455;
+}
+
 .box-pagination {
     display: flex;
     justify-content: center;
@@ -33,12 +44,15 @@
 }
 
 .correct-answer {
-    padding: 10px;
     border-radius: 6px;
     border: 1px solid #079455;
     background-color: #ECFDF3;
     margin-right: 6px;
     text-align: center;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
 }
 
 .correct-answer i {
@@ -46,7 +60,6 @@
 }
 
 .wrong-answer {
-    padding: 10px;
     border-radius: 6px;
     border: 1px solid #D92D20;
     background-color: #FEF3F2;

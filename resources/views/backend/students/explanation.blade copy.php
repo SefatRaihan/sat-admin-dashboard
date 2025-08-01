@@ -14,7 +14,7 @@
                 </div>
            </div>
            <div class="col-md-9 d-flex justify-content-left align-items-center gap-2">
-              <span class="text-center p-1" style="margin-right: 18px; border: 1px solid #ddd; border-radius: 50%; width: 32px; height: 32px; cursor: pointer;"><i class="fas fa-chevron-left text-center"></i></span>
+              <span id="prevBtn" class="text-center p-1" style="margin-right: 18px; border: 1px solid #ddd; border-radius: 50%; width: 32px; height: 32px; cursor: pointer;"><i class="fas fa-chevron-left text-center"></i></span>
             <div class="header-pagination">
                 @php $flatQuestions = collect($questions)->flatten(1)->values(); @endphp
 
@@ -29,7 +29,7 @@
                 </div>
                 @endforeach
             </div>
-              <span class="text-center p-1" style="margin-left: 18px; border: 1px solid #ddd; border-radius: 50%; width: 32px; height: 32px; cursor: pointer;"><i class="fas fa-chevron-right"></i></span>
+              <span id="nextBtn" class="text-center p-1" style="margin-left: 18px; border: 1px solid #ddd; border-radius: 50%; width: 32px; height: 32px; cursor: pointer;"><i class="fas fa-chevron-right"></i></span>
            </div>
         </div>
      </div>
@@ -92,30 +92,11 @@
                                 <td style="width: 480px;">Question</td>
                                 <td>Section</td>
                                 <td>Difficulty</td>
-                                <td>Your Time</td>
                                 <td>Action</td>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <span><i class="fas fa-check p-2 text-center" style="color: #079455; background-color: #ECFDF3;margin-right: 8px; border: 1px solid #079455; border-radius: 5px;"></i></span>
-                                        <div>
-                                            <p class="p-0 m-0">Question 1</p>
-                                            <p><b>What type of bond is formed between two oxygen atoms in an O₂
-                                                molecule? What is the chemical formula of water?</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>2</td>
-                                <td><span class="badge badge-pill badge-hard">Hard</span></td>
-                                <td>1 min 32 s</td>
-                                <td>
-                                    <button type="button" class="btn p-1" style="width: 94px; height: 36px; border: 1px solid #D0D5DD; border-radius: 5px;"  data-toggle="modal" data-target="#feedBackModal">Feedback</button>
-                                </td>
-                            </tr>
+                            <tbody id="questionTbody">
+
                             </tbody>
                         </table>
                     </div>
@@ -151,6 +132,8 @@
                 </div>
                 <div class="modal-body text-center feedback-modal">
                     <div class="row">
+                        <input type="hidden" name="question_id" id="question-id">
+
                         <div class="col-md-12 feedback-option mt-2">
                             <div class="form-check custom-radio">
                                 <input class="form-check-input" type="radio" name="feedback" id="" value="The answer choice is incorrect">
@@ -208,6 +191,14 @@
             });
          </script>
          <script>
+
+            // Ensure jQuery AJAX setup includes CSRF token
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             let questions = @json($flatQuestions);
             let examAttempt = @json($examAttempt);
             let exam = @json($exam);
@@ -226,8 +217,16 @@
                 $('.total-questions').text(questions.length);
             }
 
-            function renderQuestion(index) {
-                let question = questions[index];
+            function renderQuestion(index, questionId = null) {
+
+                let question = null;
+                if (questionId) {
+                    question = questions.find(q => q.id === questionId);
+                    index = questions.findIndex(q => q.id === questionId);
+                } else {
+                    question = questions[index];
+                }
+
 
                 $('.box').removeClass('active');
                 $(`.question-${question.id}`).addClass('active');
@@ -247,12 +246,20 @@
                 }
 
                 let selected = answers[question.id] || null;
+                let correctAnswer = question.correct_answer;
+                let studentAnswer = question.student_answer;
+                let wrongAnswerClass = null;
+                if(studentAnswer != correctAnswer) {
+                    wrongAnswerClass = 'wrong-answer';
+                }
+
+
                 $('#question-title').html(`${question.question_title}`);
                 $('#question-option').html(
                     options.map((opt, i) => `
                         <div class="col-md-12 mt-2">
-                            <div class="form-check custom-radio" onclick="selectOption('question_${question.id}_${i}', '${opt}', ${question.id})">
-                                <input class="form-check-input" type="radio" name="question_${question.id}" id="question_${question.id}_${i}" value="${opt}" ${selected === opt ? 'checked' : ''}>
+                            <div class="form-check custom-radio ${studentAnswer == opt ? wrongAnswerClass : ''}" onclick="selectOption('question_${question.id}_${i}', '${opt}', ${question.id})">
+                                <input class="form-check-input" type="radio" name="question_${question.id}" id="question_${question.id}_${i}" value="${opt}" ${correctAnswer === opt ? 'checked' : ''}>
                                 <label class="form-check-label" style="padding-top:8px" for="question_${question.id}_${i}">
                                     ${opt}
                                 </label>
@@ -265,6 +272,34 @@
 
 
                 $('#explation-data').html(question.explanation);
+                $('#questionTbody').html('');
+                const difficultyClass = {
+                        'easy': 'badge-easy',
+                        'medium': 'badge-medium',
+                        'hard': 'badge-hard',
+                        'very_hard': 'badge-very-hard'
+                    }[question.difficulty.toLowerCase()] || 'badge-default';
+
+                $('#questionTbody').append(`
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <span class="${studentAnswer == correctAnswer ? 'correct-answer' : 'wrong-answer'}">
+                                    ${studentAnswer == correctAnswer ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>'}
+                            </span>
+                            <div>
+                                <p class="p-0 m-0">Question ${++index}</p>
+                                <p><b${question.question_title}</b></p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${question.section}</td>
+                    <td><span class="badge badge-pill ${difficultyClass}">${question.difficulty.toLowerCase()}</span></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-dark feedback-btn" data-question-id="${question.id}" style="border: 1px solid #D0D5DD; border-radius: 8px;">Feedback</button>
+                    </td>
+                </tr>
+                `);
 
                 $('#prevBtn').toggleClass('d-none', index === 0);
                 $('#nextBtn').toggleClass('d-none', index === questions.length - 1);
@@ -303,7 +338,10 @@
 
 
             $(document).ready(function () {
-                renderQuestion(currentIndex);
+                let questionId = {{ $questionId }};
+
+
+                renderQuestion(currentIndex, questionId);
 
                 $('#nextBtn').on('click', function () {
                     saveAnswerAndColor(currentIndex);
@@ -325,6 +363,72 @@
                     saveAnswerAndColor(currentIndex);
                     currentIndex = $(this).index('.box');
                     renderQuestion(currentIndex);
+                });
+
+                $(document).on('click', '.btn.btn-outline-dark.feedback-btn', function() {
+                    const questionId = $(this).data('question-id'); // Get from button's data-question-id
+                    if (!questionId) {
+                        Swal.fire('Error','Question ID is missing. Please try again.', 'error');
+                        return;
+                    }
+                    $('#question-id').val(questionId); // Store in input field
+                    $('#feedBackModal').modal('show');
+                });
+
+                // Feedback submit handler
+                $('.feedback-modal .save').on('click', function() {
+                    const $button = $(this);
+                    $button.prop('disabled', true); // Disable button to prevent multiple clicks
+                    const feedbackType = $('input[name="feedback"]:checked').val();
+                    const description = $('textarea[name="description"]').val();
+                    const questionId = $('#question-id').val(); // Get from input field
+                    const examAttemptId = '{{ $examAttempt->id }}';
+
+                    if (!feedbackType) {
+                        Swal.fire( 'Error', 'Please select a feedback type', 'error');
+                        $button.prop('disabled', false);
+                        return;
+                    }
+                    if (!questionId) {
+                        Swal.fire( 'Error', 'Question ID is missing. Please try again.', 'error');
+                        $button.prop('disabled', false);
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/api/feedback',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            question_id: questionId,
+                            feedback_type: feedbackType,
+                            description: description,
+                            exam_attempt_id: examAttemptId
+                        }),
+                        success: function(response) {
+                            $('#feedBackModal').modal('hide');
+                            Swal.fire('Success',response.message, 'success');
+                            $('input[name="feedback"]').prop('checked', false);
+                            $('textarea[name="description"]').val('');
+                            $('#question-id').val(''); // Clear the input
+                        },
+                        error: function(xhr) {
+                            let message = 'Failed to submit feedback. Please try again.';
+                            if (xhr.status === 422) {
+                                message = xhr.responseJSON?.error || message;
+                            }
+                            Swal.fire('Error', message, 'error');
+                        },
+                        complete: function() {
+                            $button.prop('disabled', false); // Re-enable button
+                        }
+                    });
+                });
+
+                // Clear modal when closed
+                $('#feedBackModal').on('hidden.bs.modal', function() {
+                    $('input[name="feedback"]').prop('checked', false);
+                    $('textarea[name="description"]').val('');
                 });
 
                 $('.total-questions').text(questions.length);

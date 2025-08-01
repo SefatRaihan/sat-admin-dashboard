@@ -811,8 +811,7 @@
                         'hard': 'badge-hard',
                         'very_hard': 'badge-very-hard'
                     }[item.question.difficulty.toLowerCase()] || 'badge-default';
-                    console.log(item.is_correct);
-                    
+
                     const row = `
                         <tr>
                             <td width="5%">
