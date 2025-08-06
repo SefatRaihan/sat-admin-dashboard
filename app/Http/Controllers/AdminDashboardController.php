@@ -23,10 +23,10 @@ class AdminDashboardController extends Controller
         'getDashboardData' => 'Get Dashboard Data'
     ];
 
-    public function adminDashboard()
-    {
-        return view('backend.admin.dashboard');
-    }
+    // public function adminDashboard()
+    // {
+    //     return view('backend.admin.dashboard');
+    // }
 
     public function getDashboardData(Request $request)
     {
@@ -118,7 +118,7 @@ class AdminDashboardController extends Controller
             for ($month = 1; $month <= 12; $month++) {
                 $monthStart = Carbon::create($currentYear, $month, 1)->startOfMonth();
                 $monthEnd = Carbon::create($currentYear, $month, 1)->endOfMonth();
-                
+
                 $monthlyCompleted[$month - 1] = CourseUser::where('is_completed', 1)
                     ->whereBetween('updated_at', [$monthStart, $monthEnd])
                     ->count();
@@ -141,15 +141,15 @@ class AdminDashboardController extends Controller
             $response['questions']['total'] = ExamQuestion::count();
             $response['questions']['add'] = ExamQuestion::whereBetween('created_at', [$startDate, $endDate])->count();
             $response['questions']['feedback'] = ExamAttempt::whereHas('feedbacks')->count();
-            $response['questions']['progress'] = ExamQuestion::count() > 0 
-                ? (ExamQuestion::whereBetween('created_at', [$startDate, $endDate])->count() / ExamQuestion::count()) * 100 
+            $response['questions']['progress'] = ExamQuestion::count() > 0
+                ? (ExamQuestion::whereBetween('created_at', [$startDate, $endDate])->count() / ExamQuestion::count()) * 100
                 : 0;
 
             // Video Lessons
             $response['videoLessons']['total'] = Lesson::count();
             $response['videoLessons']['added'] = Lesson::whereBetween('created_at', [$startDate, $endDate])->count();
-            $response['videoLessons']['progress'] = Lesson::count() > 0 
-                ? (Lesson::whereBetween('created_at', [$startDate, $endDate])->count() / Lesson::count()) * 100 
+            $response['videoLessons']['progress'] = Lesson::count() > 0
+                ? (Lesson::whereBetween('created_at', [$startDate, $endDate])->count() / Lesson::count()) * 100
                 : 0;
 
             return response()->json($response);

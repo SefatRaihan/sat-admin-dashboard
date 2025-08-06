@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified', 'check.permission'])->name('dashboard');
+Route::get('/dashboard/financial', [DashboardController::class, 'financialDashboard'])->middleware(['auth', 'verified', 'check.permission'])->name('dashboard.financial');
+
 
 
 Route::middleware(['auth','web', 'check.permission'])->group(function () {
@@ -135,7 +137,7 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     Route::get('/student/course/detail/{id}', [StudentController::class, 'studentCourseDetails'])->name('student.course.detail');
     Route::get('/student/video/lesson/{uuid}', [StudentController::class, 'studentVideoLessonDetails'])->name('student.video.lesson.details');
 
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
+    // Route::get('/', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
     Route::resource('packages', PackageController::class);
     Route::resource('discounts', DiscountController::class);
     Route::get('/discount/export', [DiscountController::class, 'exportCsv'])->name('discount.export');

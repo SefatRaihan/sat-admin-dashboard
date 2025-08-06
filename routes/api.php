@@ -156,6 +156,44 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::get('/courses/search', [CourseController::class, 'searchCourses']);
 
 
+
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/financials', function () {
+            return response()->json([
+                'monthly_subscribers' => ['count' => 500, 'revenue' => 32300],
+                'quarterly_subscribers' => ['count' => 700, 'revenue' => 57800],
+                'half_year_subscribers' => ['count' => 800, 'revenue' => 72600],
+                'yearly_subscribers' => ['count' => 1000, 'revenue' => 98900],
+            ]);
+        });
+
+        Route::get('/subscribers', function () {
+            return response()->json([
+                'total' => 3000,
+                'active' => 2200,
+                'inactive' => 800
+            ]);
+        });
+
+        Route::get('/revenue', function () {
+            return response()->json([
+                'Jan' => 620000,
+                'Feb' => 720000,
+                'Mar' => 630000,
+                'Apr' => 610000,
+                'May' => 620000,
+                'Jun' => 782850,
+                'Jul' => 610000,
+                'Aug' => 620000,
+                'Sep' => 630000,
+                'Oct' => 640000,
+                'Nov' => 645000,
+                'Dec' => 650000,
+            ]);
+        });
+    });
+
+
 });
 
 Route::post('/title-section', [TitleSectionController::class, 'storeOrUpdate']);

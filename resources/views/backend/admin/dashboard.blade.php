@@ -454,7 +454,7 @@
                 background-color: var(--card-background) !important;
                 font-size: 14px;
                 color: var(--text-color-light);
-                height: 48px; 
+                height: 48px;
             }
 
             .headcard {
@@ -857,7 +857,7 @@
             .flatpickr-current-month .flatpickr-month {
                 color: var(--primary-color);
             }
-            .flatpickr-day.selected, 
+            .flatpickr-day.selected,
             .flatpickr-day.selected:hover,
             .flatpickr-day.startRange,
             .flatpickr-day.endRange {
@@ -1073,7 +1073,6 @@
 
                 // Update active filter styling
                 document.querySelectorAll('.filters span').forEach(span => {
-                    console.log('in');
                     span.classList.remove('pill'); // Remove pill class from all spans
                     if (span.id === `${filter}Filter` || (filter === 'all' && span.id === 'allCoursesFilter')) {
                         span.classList.add('pill'); // Add pill class to the selected filter

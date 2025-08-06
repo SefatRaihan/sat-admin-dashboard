@@ -53,4 +53,9 @@ class DashboardController extends Controller
             return view('dashboard');
         }
     }
+
+    public function financialDashboard()
+    {
+        return view('financial-dashboard');
+    }
 }
