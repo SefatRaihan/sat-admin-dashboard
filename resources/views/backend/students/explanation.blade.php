@@ -35,7 +35,7 @@
      </div>
      <div class="p-4">
         <div class="row">
-           <div class="col-md-3" style="border-right: 1px solid #ddd; min-height: 100vh">
+           <div class="col-md-3" style="border-right: 1px solid #ddd; min-height: 100%">
               <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                  <button class="nav-link text-left" id="v-pills-question-context-tab" data-toggle="pill" data-target="#v-pills-question-context" type="button" role="tab" aria-controls="v-pills-question-context" aria-selected="true">
                     <i class="far fa-file-word" style="margin-right: 18px"></i>Question & Context
@@ -93,8 +93,19 @@
                                     </div>
                                 </div>
                             </div>
+                    </div>
+                    <p style="border-bottom: 1px solid #ddd; margin-top: 30px;"></p>
+                    <div style="margin-bottom: 30px;">
+                        <div class="p-4"
+                            style=" border-radius: 10px;border: 1px solid #ddd; min-height: 100%;width: 100%;">
+                            <h4>Explanation</h4>
+                            <p style="border-bottom: 1px solid #ddd;width: 100%;margin-top: 20px; text-align: center;"></p>
+                            <div>
+                                {{ strip_tags($question->explanation) ?? 'No explanation provided.' }}
+                            </div>
                         </div>
                     </div>
+                 </div>
                         {{-- <p style="border-bottom: 1px solid #ddd; margin-top: 30px;"></p>
                         <div class="profileTableWrapper ">
                             <table class="table profileTable">
@@ -111,25 +122,15 @@
                                 </tbody>
                             </table>
                         </div> --}}
-                    <p style="border-bottom: 1px solid #ddd; margin-top: 30px;"></p>
-                    <div style="margin-bottom: 30px;">
-                        <div class="p-4"
-                            style=" border-radius: 10px;border: 1px solid #ddd; min-height: 100vh;width: 100%;">
-                            <h4>Explanation</h4>
-                            <p style="border-bottom: 1px solid #ddd;width: 100%;margin-top: 20px; text-align: center;"></p>
-                            <div>
-                                {{ strip_tags($question->explanation) ?? 'No explanation provided.' }}
-                            </div>
-                        </div>
-                    </div>
+                    
                  </div>
               </div>
 
            </div>
         </div>
         <p style="border-bottom: 1px solid #ddd; "></p>
-        <div style="width: 100%;" class="d-flex text-align-right justify-content-end">
-           <a href="" style="text-decoration: none;color: #521749;"><i class="far fa-flag" style="margin-right: 5px;"></i>Feedback</a>
+        <div style="width: 100%; height: 50px; align-items: center;" class="d-flex text-align-right justify-content-end pr-3 feedback-btn">
+           <button type="button" class="btn" style="text-decoration: none;color: #521749;"><i class="far fa-flag" style="margin-right: 5px;"></i>Feedback</button>
         </div>
      </div>
 
@@ -212,8 +213,8 @@
 
             $(document).ready(function () {
 
-                $(document).on('click', '.btn.btn-outline-dark.feedback-btn', function() {
-                    const questionId = $(this).data('question-id'); // Get from button's data-question-id
+                $(document).on('click', '.feedback-btn', function() {
+                    const questionId = {{ $question->id }}; // Get from button's data-question-id
                     if (!questionId) {
                         Swal.fire('Error','Question ID is missing. Please try again.', 'error');
                         return;
