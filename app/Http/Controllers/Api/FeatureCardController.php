@@ -27,6 +27,7 @@ class FeatureCardController extends Controller
     // Create a new feature card
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validate the incoming request
         $request->validate([
             'title' => 'required|string',
@@ -39,9 +40,10 @@ class FeatureCardController extends Controller
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            // Store the image in 'public/uploads/feature_cards'
-            $imagePath = $request->file('image')->store('uploads/feature_cards', 'public');
+            // Store the image in 'public/uploads/feature_cards' and prefix with "storage/"
+            $imagePath = 'storage/' . $request->file('image')->store('uploads/feature_cards', 'public');
         }
+
 
         // Create the feature card with the uploaded image path
         $featureCard = FeatureCard::create([
@@ -82,7 +84,7 @@ class FeatureCardController extends Controller
             }
 
             // Save new image
-            $data['image'] = $request->file('image')->store('uploads/feature-cards', 'public');
+            $data['image'] = 'storage/' . $request->file('image')->store('uploads/feature-cards', 'public');
         }
 
         $featureCard->update($data);
