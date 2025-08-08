@@ -27,35 +27,43 @@ class FeatureCardController extends Controller
     // Create a new feature card
     public function store(Request $request)
     {
-        // Validate the incoming request
         $request->validate([
-            'title' => 'required|string',
-            'image' => 'required|image', // Ensure that the uploaded file is an image
-            'description' => 'required|string',
-            'alt_text' => 'required|string',
-            'status' => 'nullable|boolean',
-            'serial' => 'nullable|integer',
+            'cards' => 'required|array',
+            'cards.*.title' => 'required|string',
+            'cards.*.image' => 'nullable|image', // image is optional for update
+            'cards.*.description' => 'required|string',
+            'cards.*.alt_text' => 'required|string',
+            'cards.*.status' => 'nullable|boolean',
+            'cards.*.serial' => 'nullable|integer',
+            'cards.*.id' => 'nullable|integer|exists:feature_cards,id',
         ]);
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            // Store the image in 'public/uploads/feature_cards'
-            $imagePath = $request->file('image')->store('uploads/feature_cards', 'public');
+        $savedCards = [];
+
+        foreach ($request->cards as $cardData) {
+
+            // If image is uploaded
+            if (isset($cardData['image']) && $cardData['image'] instanceof \Illuminate\Http\UploadedFile) {
+                $cardData['image'] = 'storage/' . $cardData['image']->store('uploads/feature_cards', 'public');
+            } else {
+                unset($cardData['image']); // don't overwrite image if not provided
+            }
+
+            if (!empty($cardData['id'])) {
+                // Update existing card
+                $featureCard = FeatureCard::find($cardData['id']);
+                $featureCard->update($cardData);
+            } else {
+                // Create new card
+                $featureCard = FeatureCard::create($cardData);
+            }
+
+            $savedCards[] = $featureCard;
         }
 
-        // Create the feature card with the uploaded image path
-        $featureCard = FeatureCard::create([
-            'title' => $request->input('title'),
-            'image' => $imagePath ?? null,  // Save the image path if the image was uploaded
-            'description' => $request->input('description'),
-            'alt_text' => $request->input('alt_text'),
-            'status' => $request->input('status', true), // Default to true if not provided
-            'serial' => $request->input('serial'),
-        ]);
-
-        // Return the created feature card with a successful response
-        return response()->json(new FeatureCardResource($featureCard), 201);
+        return response()->json(FeatureCardResource::collection($savedCards), 201);
     }
+
 
     // Update an existing feature card
     public function update(Request $request, $id)
@@ -82,7 +90,7 @@ class FeatureCardController extends Controller
             }
 
             // Save new image
-            $data['image'] = $request->file('image')->store('uploads/feature-cards', 'public');
+            $data['image'] = 'storage/' . $request->file('image')->store('uploads/feature-cards', 'public');
         }
 
         $featureCard->update($data);

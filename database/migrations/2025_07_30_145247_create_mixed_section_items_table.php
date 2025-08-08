@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('mixed_section_id')->constrained()->onDelete('cascade'); // Foreign key to mixed_sections
             $table->string('image')->nullable(); // Image for items
             $table->string('title')->nullable(); // Title for item
+            $table->string('description')->nullable(); // Title for item
             $table->timestamps();
         });
     }

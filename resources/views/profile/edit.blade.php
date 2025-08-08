@@ -45,7 +45,8 @@
                                     <div class="position-relative d-inline-block">
                                         <!-- Profile Image -->
                                         <label for="profileImage" style="cursor: pointer; position: relative;">
-                                            <img src="{{ $user->profile_image ? asset('uploads/profile_images/' . $user->profile_image) : asset('image/profile.jpeg') }}" 
+                                            {{-- @dd($user->profile_image) --}}
+                                            <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('image/profile.jpeg') }}" 
                                                  alt="Profile Image" 
                                                  style="height: 116px; width:116px; border-radius:50%; object-fit: cover;">
                                             

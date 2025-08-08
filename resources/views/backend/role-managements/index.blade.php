@@ -21,7 +21,7 @@
             <div class="card" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                 <div class="card-header border-bottom d-flex justify-content-between">
                     <div>
-                        <input type="text" class="form-control search__input" placeholder="Search Role">
+                        <input type="text" class="form-control search__input" placeholder="Search Role" style="padding-left: 40px;">
                     </div>
                 </div>
                 <div class="card-body p-0 m-0">

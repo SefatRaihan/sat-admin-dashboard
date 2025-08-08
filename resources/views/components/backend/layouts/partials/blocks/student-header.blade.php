@@ -62,7 +62,7 @@
                     <div class="ml-2 position-relative">
                         <!-- Profile Image -->
                         <div id="profile-icon" style="cursor: pointer;">
-                            <img src="{{ auth()->user()->student->image ? asset('storage/' . auth()->user()->student->image) : asset('image/default-avatar.png') }}" alt="Avatar" style="height: 40px; width:40px; border-radius:50%; object-fit: cover;">
+                            <img src="{{ auth()->user()->student->image ? asset(auth()->user()->student->image) : asset('image/default-avatar.png') }}" alt="Avatar" style="height: 40px; width:40px; border-radius:50%; object-fit: cover;">
                         </div>
 
                         <!-- Profile Dropdown -->

@@ -19,6 +19,7 @@ class MixedSectionController extends Controller
     // Validate incoming request data
     $validated = $request->validate([
         'mixed_sections' => 'required|array',
+        'mixed_sections.*.id' => 'nullable',
         'mixed_sections.*.title' => 'nullable|string',
         'mixed_sections.*.tab_badge_label' => 'nullable|string',
         'mixed_sections.*.subtitle' => 'nullable|string',
@@ -30,11 +31,14 @@ class MixedSectionController extends Controller
         'mixed_sections.*.mixed_section_items' => 'nullable|array',
         'mixed_sections.*.mixed_section_items.*.image' => 'nullable|file|image|max:2048', // Item images
         'mixed_sections.*.mixed_section_items.*.title' => 'nullable|string',
+        'mixed_sections.*.mixed_section_items.*.description' => 'nullable|string',
+        'mixed_sections.*.mixed_section_items.*.id' => 'nullable',
     ]);
 
     DB::transaction(function () use ($validated, $request) {
         foreach ($validated['mixed_sections'] as $index => $sectionData) {
             // Create or update the mixed_section
+            // dd($sectionData);
             $mixedSection = MixedSection::updateOrCreate(
                 ['id' => $sectionData['id'] ?? null], // Update if section ID exists, else create
                 [

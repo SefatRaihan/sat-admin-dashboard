@@ -146,7 +146,7 @@
                             <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab">
                                 <div>
                                     <h4>Appearing Exams</h4>
-                                    <table class="table datatable-basic" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info" style="border: 1px solid #EAECF0">
+                                    <table class="table" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info" style="border: 1px solid #EAECF0">
                                         <thead>
                                             <tr class="bg-light" role="row">
                                                 <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending">Course</th>
@@ -204,7 +204,7 @@
                 </div>
             </div>
             <div class="card-body table-responsive">
-                <table class="table datatable-basic" id="resultsTable" role="grid" aria-describedby="DataTables_Table_0_info">
+                <table class="table" id="resultsTable">
                     <thead>
                         <tr>
                             <th colspan="10">
@@ -524,16 +524,6 @@
                 margin: 0px;
                 border-radius: 0px;
             }
-            .datatable-footer, .datatable-header {
-                padding: 1.25rem 1.25rem 0 1.25rem;
-                margin-left: 17px;
-                margin-right: 17px;
-                margin-bottom: 17px;
-            }
-            .datatable-header {
-                border-bottom: 1px solid #ddd;
-                display: none;
-            }
             .dropzone {
                 position: relative;
                 border: 2px solid rgba(0, 0, 0, 0.125);
@@ -694,7 +684,6 @@
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/plugins/forms/styling/switch.min.js"></script>
-        <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/datatables_basic.js"></script>
         <script src="{{ asset('/ui/backend') }}/global_assets/js/demo_pages/form_multiselect.js"></script>
         <!-- /theme JS files -->
 
