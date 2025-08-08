@@ -175,10 +175,11 @@ Route::put('faqs/{id}', [FaqController::class, 'update']);
 Route::delete('faqs/{id}', [FaqController::class, 'destroy']);
 Route::apiResource('faq-items', FaqItemController::class);
 
-Route::post('/cat-section', [CatSectionController::class, 'storeOrUpdate']);
-Route::get('/cat-section', function () {
+Route::post('/cta-section', [CatSectionController::class, 'storeOrUpdate']);
+Route::get('/cta-section', function () {
     return \App\Models\CatSection::first();
 });
+
 
 Route::get('pricing-sections', [PricingSectionController::class, 'index']);
 Route::post('pricing-sections', [PricingSectionController::class, 'store']);

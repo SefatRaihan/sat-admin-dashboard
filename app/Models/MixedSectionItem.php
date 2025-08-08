@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MixedSectionItem extends Model
 {
-    protected $fillable = ['image', 'title', 'mixed_section_id'];
+    protected $fillable = ['image', 'title','description', 'mixed_section_id'];
 
     // Define the inverse relationship with mixed_sections
     public function section()

@@ -57,13 +57,13 @@ class GeneralController extends Controller
             $general->uuid = Str::uuid();
             $general->title = $request->title;
 
-            // Handle file uploads and store them in the 'images/general' folder
+           // Handle file uploads and store them in the 'images/general' folder
             if ($request->hasFile('logo')) {
-                $general->logo = $request->file('logo')->store('images/general', 'public');;
+                $general->logo = 'storage/' . $request->file('logo')->store('images/general', 'public');
             }
 
             if ($request->hasFile('favicon_icon')) {
-                $general->favicon_icon = $request->file('favicon_icon')->store('images/general', 'public');
+                $general->favicon_icon = 'storage/' . $request->file('favicon_icon')->store('images/general', 'public');
             }
 
             $general->created_by = Auth::id();
@@ -109,17 +109,18 @@ class GeneralController extends Controller
             // Handle file uploads and store them in the 'images/general' folder
             if ($request->hasFile('logo')) {
                 if ($general->logo) {
-                    Storage::delete($general->logo);
+                    Storage::disk('public')->delete(str_replace('storage/', '', $general->logo));
                 }
-                $general->logo = $request->file('logo')->store('images/general', 'public');
+                $general->logo = 'storage/' . $request->file('logo')->store('images/general', 'public');
             }
 
             if ($request->hasFile('favicon_icon')) {
                 if ($general->favicon_icon) {
-                    Storage::delete($general->favicon_icon);
+                    Storage::disk('public')->delete(str_replace('storage/', '', $general->favicon_icon));
                 }
-                $general->favicon_icon = $request->file('favicon_icon')->store('images/general', 'public');
+                $general->favicon_icon = 'storage/' . $request->file('favicon_icon')->store('images/general', 'public');
             }
+
 
             $general->updated_by = Auth::id();
 
