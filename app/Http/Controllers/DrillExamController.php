@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use Illuminate\Support\Str;
 use App\Models\ExamQuestion;
 use Illuminate\Http\Request;
+use App\Models\DrillExamAttempt;
+use Illuminate\Support\Facades\DB;
 use App\Models\ExamAttemptQuestion;
 use Illuminate\Support\Facades\Auth;
+use App\Models\DrillExamAttemptQuestion;
 use Illuminate\Support\Facades\Validator;
 
 class DrillExamController extends Controller
@@ -16,7 +20,7 @@ class DrillExamController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function show()
     {
         $user = Auth::user();
         $student = Student::where('user_id', $user->id)->first();
@@ -38,12 +42,13 @@ class DrillExamController extends Controller
             'question_pool'    => 'required|string',
             'difficulty_level' => 'required|string',
             'total_questions'  => 'required|integer|min:1',
+            'total_duration'   => 'required|integer|min:1',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        
+
         $userAudience = auth()->user()->audience;
         $questions = collect();
 
@@ -112,15 +117,21 @@ class DrillExamController extends Controller
                 break;
         }
 
-        $groupedQuestions = $questions->groupBy(function ($question) {
-            return $question->sat_question_type ?? 'unknown';
-        });
-        
+        // $groupedQuestions = $questions->groupBy(function ($question) {
+        //     return $question->sat_question_type ?? 'unknown';
+        // });
+
         if ($questions->isEmpty()) {
             return response()->json(['message' => 'No questions found for the given criteria.'], 404);
         }
 
-        return view('drill-exam.create', compact('groupedQuestions'));        // return redirect()->route('drill-exam.index')->with('success', 'Exam prepared successfully!');
+        return response()->json([
+            'questions' => $questions,
+            'total_questions' => $questions->count(),
+            'question_type' => $request->question_type,
+            'total_duration' => $request->total_duration,
+            'start_time' => now()
+        ], 200);
     }
 
     /**
@@ -129,11 +140,53 @@ class DrillExamController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function submit(Request $request)
+    public function store(Request $request)
     {
-        // Validate and process the submitted data
-        // ...
+        DB::beginTransaction();
 
-        return redirect()->route('drill-exam.index')->with('success', 'Exam submitted successfully!');
+
+            $responses = collect($request->responses);
+
+            // Count correct answers
+            $correctCount = $responses->where('is_correct', 1)->count();
+            $inCorrectCount = $responses->where('is_correct', 0)->count();
+
+            $answers = collect($request->responses)->mapWithKeys(function ($item) {
+                return [$item['question_id'] => $item['answer']];
+            });
+
+             $attempt = DrillExamAttempt::create([
+                'uuid'           => Str::uuid(),
+                'user_id'        => auth()->id(),
+                'start_time'     => $request->start_time,
+                'remaining_time' => $request->total_duration * 60, // Convert minutes to seconds
+                'exam_name'       => 'DE' . now()->format('ymdHis') . rand(1000, 9999),
+                'answers'         => $answers,
+                'status'          => 'completed',
+                'score'           => $correctCount,
+                'correct_answers' => $correctCount,
+                'wrong_answers'   => $inCorrectCount,
+                'end_time'        => now(),
+            ]);
+
+
+            foreach ($responses as $response) {
+                DrillExamAttemptQuestion::create([
+                    'uuid'           => Str::uuid(),
+                    'attempt_id'     => $attempt->id,
+                    'question_id'    => $response['question_id'],
+                    'student_answer' => $response['answer'],
+                    'is_correct'     => $response['is_correct'],
+                    'time_spent'     => $response['time_spent'] ?? null, // Optional if tracked
+                ]);
+            }
+
+        DB::commit();
+        return response()->json(['msg' => 'Exam submitted successfully!', 'data' => $attempt], 201);
+    }
+
+    public function create()
+    {
+        return view('backend.drill-exam.create');
     }
 }

@@ -13,48 +13,19 @@
             </div> --}}
 
             <div class="header-pagination">
-                @php $flatQuestions = collect($groupedQuestions)->flatten(1)->values(); @endphp
-
-                @foreach ($groupedQuestions as $key => $group)
                 <div class="pagination-1">
-                    @php
-                        $groupColor = 'groupActive'; // Default color
-                        $groupBgColor = 'groupBgActive'; // Default color
-                        if ($key == 'Verbal') {
-                            $groupColor = 'verbalGroupActive';
-                            $groupBgColor = 'verbalBgGroupActive';
-                        } elseif ($key == 'Quant') {
-                            $groupColor = 'quantGroupActive';
-                            $groupBgColor = 'quantBgGroupActive';
-                        } elseif ($key == 'Chemistry') {
-                            $groupColor = 'chemistryGroupActive';
-                            $groupBgColor = 'chemistryBgGroupActive';
-                        } elseif ($key == 'Biology') {
-                            $groupColor = 'biologyGroupActive';
-                            $groupBgColor = 'biologyBgGroupActive';
-                        } elseif ($key == 'Math') {
-                            $groupColor = 'mathGroupActive';
-                            $groupBgColor = 'mathBgGroupActive';
-                        } elseif ($key == 'Physics') {
-                            $groupColor = 'physicsGroupActive';
-                            $groupBgColor = 'physicsBgGroupActive';
-                        }
-                    @endphp
-                    <p class="p-0 m-0 text-center text-capitalize {{ $groupColor }}">{{ $key }}</p>
-                    <div class="box-pagination">
-                        @foreach ($group as $index => $question)
-                            <span class="box question-{{ $question['id'] }}" data-bgColor="{{ $groupBgColor }}" data-question='@json($question)'></span>
-                        @endforeach
+
+                    <p class="topic-title p-0 m-0 text-center text-capitalize"></p>
+                    <div class="box-pagination question-topic">
                     </div>
                 </div>
-                @endforeach
             </div>
 
             <div id="timer-container">
-                <div class="d-none">
+                {{-- <div class="d-none">
                     <input type="number" id="timeInput" placeholder="Enter time in minutes" />
                     <button onclick="startTimer()">Start</button>
-                </div>
+                </div> --}}
                 <div id="clock-wrapper" style="display: flex; align-items: center; gap: 10px;">
                     <i class="fas fa-stopwatch" style="font-size: 20px; "></i>
                     <div id="clock">00:00:00</div>
@@ -172,13 +143,16 @@
 
     {{-- let examAttempt = @json($examAttempt);
     let exam = @json($exam); --}}
+    {{-- let questions = @json($flatQuestions); --}}
     @push('js')
         <script>
-            let questions = @json($flatQuestions);
             let currentIndex = 0;
             let answers = {};
             let timeTracking = {}; // { [question_id]: seconds }
             let questionStartTime = Date.now();
+            let getSessionData = JSON.parse(sessionStorage.getItem('drill_exam_data'))
+            let questions = getSessionData.questions;
+
 
             function pad(n) {
                 return n.toString().padStart(2, '0');
@@ -211,6 +185,61 @@
                 $('.answered-count').text(answeredCount);
                 $('.total-questions').text(questions.length);
             }
+
+            function getGroupBgColor(type) {
+                switch (type?.toLowerCase()) {
+                    case 'verbal':
+                        return {
+                            groupColor: 'verbalGroupActive',
+                            groupBgColor: 'verbalBgGroupActive'
+                        };
+                    case 'quant':
+                        return {
+                            groupColor: 'quantGroupActive',
+                            groupBgColor: 'quantBgGroupActive'
+                        };
+                    case 'chemistry':
+                        return {
+                            groupColor: 'chemistryGroupActive',
+                            groupBgColor: 'chemistryBgGroupActive'
+                        };
+                    case 'biology':
+                        return {
+                            groupColor: 'biologyGroupActive',
+                            groupBgColor: 'biologyBgGroupActive'
+                        };
+                    case 'math':
+                        return {
+                            groupColor: 'mathGroupActive',
+                            groupBgColor: 'mathBgGroupActive'
+                        };
+                    case 'physics':
+                        return {
+                            groupColor: 'physicsGroupActive',
+                            groupBgColor: 'physicsBgGroupActive'
+                        };
+                    default:
+                        return {
+                            groupColor: 'groupActive',
+                            groupBgColor: 'groupBgActive'
+                        };
+                }
+            }
+
+            function renderQuestionBoxes(questions) {
+
+                let { groupColor, groupBgColor } = getGroupBgColor(getSessionData.question_type);
+                $('.topic-title').text(getSessionData.question_type);
+                $('.topic-title').addClass(groupColor);
+
+                let html = '';
+                for (let question of questions) {
+                    html += `<span class="box question-${question.id}" data-bgColor="${groupBgColor}" data-question='${question}'></span>`;
+                }
+
+                $('.question-topic').html(html);
+            }
+
 
             function renderQuestion(index) {
                 let question = questions[index];
@@ -285,51 +314,50 @@
             }
 
 
-            // function submitExam() {
-            //     saveAnswerAndColor(currentIndex);
-            //     let q = questions[currentIndex];
+            function submitExam() {
+                saveAnswerAndColor(currentIndex);
+                let q = questions[currentIndex];
 
-            //     let selectedOption = $(`input[name="question_${q.id}"]:checked`).val();
+                let selectedOption = $(`input[name="question_${q.id}"]:checked`).val();
 
-            //     if (selectedOption) answers[q.id] = selectedOption;
+                if (selectedOption) answers[q.id] = selectedOption;
 
 
-            //     let submissionData = questions.map(q => ({
-            //         question_id: q.id,
-            //         answer: answers[q.id] ?? null,
-            //         is_correct: answers[q.id] === q.correct_answer ? 1 : 0,
-            //         time_spent: timeTracking[q.id] || 0,
-            //     }));
-            //     let examAttemptId = examAttempt.id;
-            //     let examId = exam.id;
-            //     // console.log(submissionData);
-            //     // return false;
+                let submissionData = questions.map(q => ({
+                    question_id: q.id,
+                    answer: answers[q.id] ?? null,
+                    is_correct: answers[q.id] === q.correct_answer ? 1 : 0,
+                    time_spent: timeTracking[q.id] || 0,
+                }));
 
-            //     $.ajax({
-            //         url: '/student-exams/' + examAttemptId,
-            //         type: 'POST',
-            //         data: JSON.stringify({ exam_id: examId, responses: submissionData }),
-            //         contentType: 'application/json',
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //         },
-            //         success: function (response) {
-            //             console.log(response);
+                let startTime = getSessionData.start_time;
+                let totalDuration = getSessionData.total_duration;
 
-            //             // return false;
-            //             Swal.fire("Submitted", "Your exam has been submitted successfully", "success");
-            //             window.location.href = '/result/'+response.data.id;
-            //         },
-            //         error: function (xhr) {
-            //             Swal.fire("Error", "Something Went Wrong!", "error");
-            //             // alert('Error submitting exam: ' + (xhr.responseJSON?.message || 'Unknown error'));
-            //         }
-            //     });
-            // }
+                $.ajax({
+                    url: '/drill-exam/store',
+                    type: 'POST',
+                    data: JSON.stringify({responses: submissionData, start_time: startTime, totalDuration: totalDuration}),
+                    contentType: 'application/json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        sessionStorage.removeItem('drill_exam_data'); // Clear session data after submission
+                        // return false;
+                        Swal.fire("Submitted", "Your exam has been submitted successfully", "success");
+                        window.location.href = '/full-tests';
+                    },
+                    error: function (xhr) {
+                        Swal.fire("Error", "Something Went Wrong!", "error");
+                        // alert('Error submitting exam: ' + (xhr.responseJSON?.message || 'Unknown error'));
+                    }
+                });
+            }
 
 
             $(document).ready(function () {
-                startTimer(exam.duration);
+                renderQuestionBoxes(questions);
+                startTimer(getSessionData.total_duration);
                 renderQuestion(currentIndex);
 
                 $('#nextBtn').on('click', function () {

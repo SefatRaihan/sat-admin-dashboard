@@ -276,16 +276,14 @@
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}"
                 },
-                success: function (response) {
-                    if (response.status === 'ok') {
-                        window.location.href = response.redirect_url;
-                    } else {
-                        alert('Something went wrong. Please try again.');
-                    }
+                success: function (response, textStatus, jqXHR) {
+                    sessionStorage.setItem('drill_exam_data', JSON.stringify(response));
+
+                    // Redirect to another blade page
+                    window.location.href = "/drill-exam/create"; //
                 },
                 error: function (xhr) {
-                    console.log(xhr.responseText);
-                    alert('Server error occurred.');
+                    alert("Error: " + xhr.responseJSON.message ?? "Something went wrong.");
                 }
             });
             }

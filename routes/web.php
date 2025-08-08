@@ -107,9 +107,11 @@ Route::middleware(['auth','web', 'check.permission'])->group(function () {
     })->name('markAsRead');
 
     Route::resource('full-tests', FullTestController::class);
-    Route::get('drill-exam', [DrillExamController::class, 'create'])->name('drill-exam');
+    Route::get('drill-exam', [DrillExamController::class, 'show'])->name('drill-exam');
+    Route::get('drill-exam/create', [DrillExamController::class, 'create'])->name('drill-exam.create');
     Route::post('/drill-exam/prepare', [DrillExamController::class, 'prepare'])->name('drill-exam.prepare');
-    Route::get('/drill-exam/start', [DrillExamController::class, 'start'])->name('drill-exam.start');
+    Route::post('/drill-exam/store', [DrillExamController::class, 'store'])->name('drill-exam.store');
+    // Route::get('/drill-exam/start', [DrillExamController::class, 'start'])->name('drill-exam.start');
     Route::resource('student-exams', StudentExamController::class)->names('student-exams');
     Route::post('student-exams/{id}', [StudentExamController::class, 'update']);
     Route::post('student-exam/start/{examId}', [StudentExamController::class, 'startExam'])->name('student-exam.start');

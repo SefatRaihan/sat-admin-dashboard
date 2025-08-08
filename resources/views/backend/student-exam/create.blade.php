@@ -173,6 +173,8 @@
     @push('js')
         <script>
             let questions = @json($flatQuestions);
+            console.log(questions);
+
             let examAttempt = @json($examAttempt);
             let exam = @json($exam);
             let currentIndex = 0;
