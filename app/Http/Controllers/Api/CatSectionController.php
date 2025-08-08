@@ -11,6 +11,7 @@ class CatSectionController extends Controller
 {
     public function storeOrUpdate(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'title' => 'required|string',
             'subtitle' => 'nullable|string',
@@ -40,7 +41,7 @@ class CatSectionController extends Controller
             }
 
             // Store new image
-            $validated['image'] = $request->file('image')->store('cat-section', 'public');
+            $validated['image'] = 'storage/' . $request->file('image')->store('cta-section', 'public');
         }
 
         if ($catSection) {
@@ -50,7 +51,7 @@ class CatSectionController extends Controller
         }
 
         return response()->json([
-            'message' => 'Cat section saved successfully',
+            'message' => 'Cta section saved successfully',
             'data' => $catSection,
         ], 200);
     }
