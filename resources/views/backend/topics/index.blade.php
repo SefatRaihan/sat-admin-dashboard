@@ -584,9 +584,10 @@
                         let tableBody = $("#question-table-body");
 
                         if (response.success && response.data.data.length === 0) {
-                            questionNullList.removeClass('d-none');
-                            questionList.addClass('d-none');
+                            // questionNullList.removeClass('d-none');
+                            // questionList.addClass('d-none');
                             tableBody.html('<tr><td colspan="3" class="text-center">No topics found.</td></tr>');
+                            updatePagination(response.data, page);
                         } else if (response.success) {
                             questionNullList.addClass('d-none');
                             questionList.removeClass('d-none');
@@ -608,6 +609,7 @@
                         } else {
                             console.error("Error: ", response.message);
                             tableBody.html('<tr><td colspan="3" class="text-center">Error loading topics.</td></tr>');
+                            updatePagination(response.data, page);
                         }
                     },
                     error: function(xhr) {
