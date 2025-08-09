@@ -424,15 +424,19 @@ class CourseController extends Controller
     {
         $user = auth()->user();
         $search = $request->query('search', '');
-
+        $audience = $user->student->audience;
+        $audienceWithDash = str_replace('-', ' ', $audience);
+        
         // 1. All courses with search filter
-        $allCourses = Course::where('audience', $user->student->audience)->when($search, function ($query, $search) {
+        $allCourses = Course::where('audience', 'LIKE', "%{$audience}%")
+        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")->when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%")
                         ->orWhere('description', 'like', "%{$search}%");
         })->latest()->get();
 
         // 2. Completed courses (user-specific) with search filter
-        $completeCourses = Course::where('audience', $user->student->audience)->whereHas('users', function ($query) use ($user) {
+        $completeCourses = Course::where('audience', 'LIKE', "%{$audience}%")
+        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")->whereHas('users', function ($query) use ($user) {
             $query->where('user_id', $user->id)
                 ->where('is_completed', true);
         })->when($search, function ($query, $search) {
@@ -444,7 +448,8 @@ class CourseController extends Controller
 
 
         // 3. Incomplete courses (user-specific) with search filter
-        $incompleteCourses = Course::where('audience', $user->student->audience)->where(function ($query) use ($user, $search) {
+        $incompleteCourses = Course::where('audience', 'LIKE', "%{$audience}%")
+        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")->where(function ($query) use ($user, $search) {
             $query->whereHas('users', function ($q) use ($user) {
                 $q->where('user_id', $user->id)
                 ->where(function ($q2) {

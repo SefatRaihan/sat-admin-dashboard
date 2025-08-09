@@ -119,16 +119,20 @@ class StudentController extends Controller
     public function studentCourse()
     {
         $user = auth()->user();
+        $audience = $user->student->audience;
+        $audienceWithDash = str_replace('-', ' ', $audience);
 
         // 1. All courses from the database (not only enrolled ones)
-        $allCourses = Course::where('audience', $user->student->audience)->latest()->get();
+        $allCourses = Course::where('audience', 'LIKE', "%{$audience}%")
+        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")->latest()->get();
 
         // 2. Courses completed by the user
         $completeCourses = Course::whereHas('users', function ($query) use ($user) {
             $query->where('user_id', $user->id)
                 ->where('is_completed', true);
         })
-        ->where('audience', $user->student->audience)
+        ->where('audience', 'LIKE', "%{$audience}%")
+        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")
         ->latest()->get();
 
         // 3. Courses incomplete for the user
@@ -144,7 +148,8 @@ class StudentController extends Controller
                 $q->where('user_id', $user->id);
             });
         })
-        ->where('audience', $user->student->audience)
+        ->where('audience', 'LIKE', "%{$audience}%")
+        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")
         ->latest()->get();
         $lessons = Lesson::where('file_type', 'Video')->latest()->get();
         return view('backend.students.student_course', compact('allCourses', 'lessons', 'completeCourses', 'incompleteCourses'));
