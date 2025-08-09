@@ -1719,7 +1719,40 @@
                 });
 
 
+                // $(".next-step").click(function() {
+                //     if (currentStep < totalSteps) {
+                //         currentStep++;
+                //         showStep(currentStep);
+                //     }
+                // });
+
                 $(".next-step").click(function() {
+                    if (currentStep === 2) {
+                        // Validation for Step 2: Check if at least 2 options are added
+                        let optionCount = $("#option-container .option-block").length;
+                        if (optionCount < 2) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Validation Error',
+                                text: 'Please add at least 2 options before proceeding.',
+                                confirmButtonText: 'OK'
+                            });
+                            return; // Prevent moving to the next step
+                        }
+                    } else if (currentStep === 3) {
+                        // Validation for Step 3: Check if a right answer is selected
+                        let selectedAnswer = $('input[name="mcq_options"]:checked').val();
+                        if (!selectedAnswer) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Validation Error',
+                                text: 'Please select the right answer before proceeding.',
+                                confirmButtonText: 'OK'
+                            });
+                            return; // Prevent moving to the next step
+                        }
+                    }
+
                     if (currentStep < totalSteps) {
                         currentStep++;
                         showStep(currentStep);
