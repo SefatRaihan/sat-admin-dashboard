@@ -1,4 +1,3 @@
-```blade
 <x-backend.layouts.master>
     <div class="package">
         <div class="d-flex justify-content-between align-items-center mb-4">

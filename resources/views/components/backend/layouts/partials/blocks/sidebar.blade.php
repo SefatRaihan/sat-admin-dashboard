@@ -104,7 +104,9 @@
                         <span>Manage Packages</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <!-- Add submenu items if needed -->
+                        <li class="nav-item"><a href="/packages" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Package</span></a></li>
+                        <li class="nav-item"><a href="/discounts" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Discount</span></a></li>
+                        <li class="nav-item"><a href="/referrals" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Referrals</span></a></li>
                     </ul>
                 </li>
 

@@ -1477,6 +1477,10 @@
                 border: 1px solid #521749 !important;
                 background-color: #F1E9F0 !important;
             }
+
+            td img {
+                height: 60px !important;
+            }
         </style>
     @endpush
 
