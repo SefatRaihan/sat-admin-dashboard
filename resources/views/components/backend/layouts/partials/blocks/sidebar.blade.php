@@ -142,6 +142,13 @@
                         <span>Event Log</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="/dashboard/financial" title="Event Log" class="nav-link legitRipple m-0 ml-2 mr-2">
+                        <i class="fas fa-coins" class="mr-3" style="width: 16px; height: 16px; top:0"></i>
+                        <span>Financial Dashboard</span>
+                    </a>
+                </li>
             </ul>
 
             <ul class="nav nav-sidebar" data-nav-type="accordion" style="">
