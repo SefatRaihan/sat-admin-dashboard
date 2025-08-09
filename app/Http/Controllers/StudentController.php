@@ -126,31 +126,38 @@ class StudentController extends Controller
         $allCourses = Course::where('audience', 'LIKE', "%{$audience}%")
         ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")->latest()->get();
 
-        // 2. Courses completed by the user
+        // 2. Completed courses
         $completeCourses = Course::whereHas('users', function ($query) use ($user) {
             $query->where('user_id', $user->id)
                 ->where('is_completed', true);
         })
-        ->where('audience', 'LIKE', "%{$audience}%")
-        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")
-        ->latest()->get();
-
-        // 3. Courses incomplete for the user
-        $incompleteCourses = Course::where(function ($query) use ($user) {
-            // Courses where user has not completed OR has no record
-            $query->whereHas('users', function ($q) use ($user) {
-                $q->where('user_id', $user->id)
-                ->where(function ($q2) {
-                    $q2->where('is_completed', false)->orWhereNull('is_completed');
-                });
-            })
-            ->orWhereDoesntHave('users', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
-            });
+        ->where(function ($query) use ($audience, $audienceWithDash) {
+            $query->where('audience', 'LIKE', "%{$audience}%")
+                ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%");
         })
-        ->where('audience', 'LIKE', "%{$audience}%")
-        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")
-        ->latest()->get();
+        ->latest()
+        ->get();
+
+        // 3. Incomplete courses
+        $incompleteCourses = Course::where(function ($query) use ($user) {
+            $query->whereHas('users', function ($q) use ($user) {
+                    $q->where('user_id', $user->id)
+                    ->where(function ($q2) {
+                        $q2->where('is_completed', false)
+                            ->orWhereNull('is_completed');
+                    });
+                })
+                ->orWhereDoesntHave('users', function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                });
+        })
+        ->where(function ($query) use ($audience, $audienceWithDash) {
+            $query->where('audience', 'LIKE', "%{$audience}%")
+                ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%");
+        })
+        ->latest()
+        ->get();
+
         $lessons = Lesson::where('file_type', 'Video')->latest()->get();
         return view('backend.students.student_course', compact('allCourses', 'lessons', 'completeCourses', 'incompleteCourses'));
     }
