@@ -1384,6 +1384,10 @@
                 background-color: #6f42c1;
                 border-color: #6f42c1;
             }
+
+            .modal-content img {
+                max-height: 200px !important;
+            }
         </style>
 
         {{-- /* Switch Button Styles */ --}}
