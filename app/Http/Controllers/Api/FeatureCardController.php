@@ -61,7 +61,7 @@ class FeatureCardController extends Controller
             $savedCards[] = $featureCard;
         }
 
-        return response()->json(FeatureCardResource::collection($savedCards), 201);
+        return response()->json(FeatureCard::all(), 201);
     }
 
 
