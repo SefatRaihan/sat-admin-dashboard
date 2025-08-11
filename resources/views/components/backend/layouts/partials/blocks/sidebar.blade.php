@@ -104,7 +104,9 @@
                         <span>Manage Packages</span>
                     </a>
                     <ul class="nav nav-group-sub" data-submenu-title="Authorization">
-                        <!-- Add submenu items if needed -->
+                        <li class="nav-item"><a href="/packages" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Package</span></a></li>
+                        <li class="nav-item"><a href="/discounts" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Discount</span></a></li>
+                        <li class="nav-item"><a href="/referrals" title="" class="nav-link legitRipple m-0 ml-2 mr-2"><span>Referrals</span></a></li>
                     </ul>
                 </li>
 
@@ -138,6 +140,13 @@
                     <a href="/" title="Event Log" class="nav-link legitRipple m-0 ml-2 mr-2">
                         <img src="{{ asset('image/icon/event.png') }}" alt="" class="mr-3" style="width: 16px; height: 16px;">
                         <span>Event Log</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/dashboard/financial" title="Event Log" class="nav-link legitRipple m-0 ml-2 mr-2">
+                        <i class="fas fa-coins" class="mr-3" style="width: 16px; height: 16px; top:0"></i>
+                        <span>Financial Dashboard</span>
                     </a>
                 </li>
             </ul>

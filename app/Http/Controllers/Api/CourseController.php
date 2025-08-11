@@ -424,36 +424,51 @@ class CourseController extends Controller
     {
         $user = auth()->user();
         $search = $request->query('search', '');
+        $audience = $user->student->audience;
+        $audienceWithDash = str_replace('-', ' ', $audience);
 
         // 1. All courses with search filter
-        $allCourses = Course::when($search, function ($query, $search) {
+        $allCourses = Course::where('audience', 'LIKE', "%{$audience}%")
+        ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%")->when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%")
                         ->orWhere('description', 'like', "%{$search}%");
         })->latest()->get();
 
         // 2. Completed courses (user-specific) with search filter
-        $completeCourses = Course::whereHas('users', function ($query) use ($user) {
+        $completeCourses = Course::where(function ($query) use ($audience, $audienceWithDash) {
+            $query->where('audience', 'LIKE', "%{$audience}%")
+                ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%");
+        })
+        ->whereHas('users', function ($query) use ($user) {
             $query->where('user_id', $user->id)
                 ->where('is_completed', true);
-        })->when($search, function ($query, $search) {
+        })
+        ->when($search, function ($query, $search) {
             return $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%");
             });
-        })->latest()->get();
+        })
+        ->latest()
+        ->get();
 
 
         // 3. Incomplete courses (user-specific) with search filter
-        $incompleteCourses = Course::where(function ($query) use ($user, $search) {
+        $incompleteCourses = Course::where(function ($query) use ($audience, $audienceWithDash) {
+            $query->where('audience', 'LIKE', "%{$audience}%")
+                ->orWhere('audience', 'LIKE', "%{$audienceWithDash}%");
+        })
+        ->where(function ($query) use ($user, $search) {
             $query->whereHas('users', function ($q) use ($user) {
-                $q->where('user_id', $user->id)
-                ->where(function ($q2) {
-                    $q2->where('is_completed', false)
-                        ->orWhereNull('is_completed');
+                    $q->where('user_id', $user->id)
+                    ->where(function ($q2) {
+                        $q2->where('is_completed', false)
+                            ->orWhereNull('is_completed');
+                    });
+                })
+                ->orWhereDoesntHave('users', function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
                 });
-            })->orWhereDoesntHave('users', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
-            });
 
             if ($search) {
                 $query->where(function ($q) use ($search) {
@@ -461,7 +476,10 @@ class CourseController extends Controller
                     ->orWhere('description', 'like', "%{$search}%");
                 });
             }
-        })->latest()->get();
+        })
+        ->latest()
+        ->get();
+
 
 
         return response()->json([

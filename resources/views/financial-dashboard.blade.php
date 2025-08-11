@@ -10,22 +10,22 @@
             <h1 class="mb-2 mb-md-0">Financial</h1>
 
             <!-- Right Section: Filters -->
-            <div class="d-flex flex-wrap align-items-center">
+            <div class="d-flex align-items-center mt-3">
                 <!-- Segmented Filters -->
                 <div class="btn-group btn-group-toggle border rounded-pill overflow-hidden mr-3 mb-2" data-toggle="buttons">
-                    <label class="btn active px-4" id="btn-year">
+                    <label class="btn m-0 active" id="btn-year">
                         <input type="radio" name="options" checked autocomplete="off" data-range="year"> Year-to-date
                     </label>
-                    <label class="btn px-4" id="btn-quarter">
+                    <label class="btn m-0" id="btn-quarter">
                         <input type="radio" name="options" autocomplete="off" data-range="quarter"> Past Quarter
                     </label>
-                    <label class="btn px-4" id="btn-month">
+                    <label class="btn m-0" id="btn-month">
                         <input type="radio" name="options" autocomplete="off" data-range="month"> Past Month
                     </label>
                 </div>
 
                 <!-- Date Range & Filter -->
-                <div class="d-flex align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
                     <!-- Date Picker -->
                     <div class="input-group mr-2 mb-2" style="min-width: 240px;">
                         <div class="input-group-prepend">
@@ -37,6 +37,8 @@
                             type="text"
                             id="dateRange"
                             class="form-control border-left-0"
+                            style="
+                                background: #fff !important; border: 1px solid #ddd !important;"
                             readonly
                         />
                     </div>
@@ -44,7 +46,7 @@
                     <!-- Filter Button -->
                     <button
                         type="button"
-                        class="btn btn-outline-secondary mb-2 d-flex align-items-center" style="border: 1px solid #D0D5DD; border-radius: 8px;">
+                        class="btn btn-outline-secondary mb-2 d-flex align-items-center" style="border: 1px solid #D0D5DD; border-radius: 8px; width: 134px;">
                         <img src="{{ asset('image/icon/layer.png') }}" alt="" class="mr-2" style="width: 16px;">
                         Filters
                     </button>
@@ -102,7 +104,47 @@
             .card-body h3{
                 font-weight: bold;
             }
+            .daterangepicker {
+                z-index: 1600 !important;
+            }
 
+            #dateRange {
+                outline: none !important;
+                transition: none !important;
+                cursor: pointer; /* readonly input cursor দেখানোর জন্য */
+            }
+
+            /* input-group এর border clash এড়াতে */
+            .input-group .form-control {
+                background-color: white;
+                border-left: none;
+            }
+
+            /* input-group-prepend এর icon styling */
+            .input-group-prepend .input-group-text {
+                background-color: white;
+                border-right: none;
+            }
+
+            .daterangepicker  {
+                display: none;
+            }
+
+            .daterangepicker  {
+                background: #fff;
+                z-index: 50000 !important;
+                box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+            }
+
+            .drp-buttons {
+                display: flex;
+                padding: 10px;
+            }
+
+            .dashboard-container .active {
+                background-color: #3F1239;
+                color: #fff;
+            }
         </style>
     @endpush
 
@@ -120,6 +162,11 @@
                         format: 'DD/MM/YYYY'
                     }
                 });
+
+                $("#dateRange").on('click', function() {
+                    $(".daterangepicker").css('display', 'block');
+                });
+
 
                 // Handle filter button clicks
                 $('.filter-btn').on('click', function () {
