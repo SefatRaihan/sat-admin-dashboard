@@ -232,101 +232,107 @@
                 background-color: #f4f4f4;
                 font-weight: bold;
             }
+            ::-webkit-scrollbar {
+                display: none;
+            }
         </style>
     @endpush
 
-    @push('js')
-        <script>
-            // Initialize data from Blade
-            const questionDistribution = {
-                allTime: @json($questionDistribution['allTime']),
-                last5: @json($questionDistribution['last5'])
-            };
-            const categories = @json($categories);
-            const weaknessAreas = @json($weaknessAreas);
+@push('js')
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-            // Pie Chart
-            const pieCtx = document.getElementById('questionPieChart').getContext('2d');
-            const questionPieChart = new Chart(pieCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: categories.flatMap(cat => [`${cat} - Correct`, `${cat} - Incorrect`]).slice(0, 4), // Limit to first two categories for pie
-                    datasets: [{
-                        data: [
-                            questionDistribution.allTime[`${categories[0]}_Correct`] ?? 0,
-                            questionDistribution.allTime[`${categories[0]}_Incorrect`] ?? 0,
-                            questionDistribution.allTime[`${categories[1]}_Correct`] ?? 0,
-                            questionDistribution.allTime[`${categories[1]}_Incorrect`] ?? 0
-                        ],
-                        backgroundColor: ['#6c247e', '#c490d1', '#3f8efc', '#90caf9'],
-                    }]
-                },
-                options: {
-                    cutout: '70%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
+    <script>
+        // Initialize data from Blade
+        const questionDistribution = {
+            allTime: @json($questionDistribution['allTime']),
+            last5: @json($questionDistribution['last5'])
+        };
+        const categories = @json($categories);
+        const weaknessAreas = @json($weaknessAreas);
+
+        // Pie Chart
+        const pieCtx = document.getElementById('questionPieChart').getContext('2d');
+        const questionPieChart = new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: categories.flatMap(cat => [`${cat} - Correct`, `${cat} - Incorrect`]).slice(0, 4), // Limit to first two categories for pie
+                datasets: [{
+                    data: [
+                        questionDistribution.allTime[`${categories[0]}_Correct`] ?? 0,
+                        questionDistribution.allTime[`${categories[0]}_Incorrect`] ?? 0,
+                        questionDistribution.allTime[`${categories[1]}_Correct`] ?? 0,
+                        questionDistribution.allTime[`${categories[1]}_Incorrect`] ?? 0
+                    ],
+                    backgroundColor: ['#6c247e', '#c490d1', '#3f8efc', '#90caf9'],
+                }]
+            },
+            options: {
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom'
                     }
                 }
-            });
+            }
+        });
 
-            // Bar Chart
-            const barCtx = document.getElementById('weaknessBarChart').getContext('2d');
-            const weaknessBarChart = new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: weaknessAreas.map(area => area.topic_id ? `${area.name} - ${area.topic_id}` : area.name),
-                    datasets: [{
-                        data: weaknessAreas.map(area => area.incorrect_count ?? 0),
-                        backgroundColor: '#c090f0',
-                        barThickness: 20
-                    }]
+        // Bar Chart
+        const barCtx = document.getElementById('weaknessBarChart').getContext('2d');
+        const weaknessBarChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: weaknessAreas.map(area => area.topic_id ? `${area.name} - ${area.topic_id}` : area.name),
+                datasets: [{
+                    data: weaknessAreas.map(area => area.incorrect_count ?? 0),
+                    backgroundColor: '#c090f0',
+                    barThickness: 20
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
                 },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100
-                        }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
                     }
                 }
-            });
+            }
+        });
 
-            // Toggle All-Time/Last 5
-            const allTimeBtn = document.getElementById('allTimeBtn');
-            const last5Btn = document.getElementById('last5Btn');
-            const allTimeBox = document.getElementById('allTimeBox');
-            const last5Box = document.getElementById('last5Box');
+        // Toggle All-Time/Last 5
+        const allTimeBtn = document.getElementById('allTimeBtn');
+        const last5Btn = document.getElementById('last5Btn');
+        const allTimeBox = document.getElementById('allTimeBox');
+        const last5Box = document.getElementById('last5Box');
 
-            allTimeBtn.addEventListener('click', () => {
-                allTimeBtn.classList.add('active');
-                last5Btn.classList.remove('active');
-                allTimeBox.style.display = 'block';
-                last5Box.style.display = 'none';
-                questionPieChart.data.datasets[0].data = categories.flatMap(cat => [
-                    questionDistribution.allTime[`${cat}_Correct`] ?? 0,
-                    questionDistribution.allTime[`${cat}_Incorrect`] ?? 0
-                ]).slice(0, 4);
-                questionPieChart.update();
-            });
+        allTimeBtn.addEventListener('click', () => {
+            allTimeBtn.classList.add('active');
+            last5Btn.classList.remove('active');
+            allTimeBox.style.display = 'block';
+            last5Box.style.display = 'none';
+            questionPieChart.data.datasets[0].data = categories.flatMap(cat => [
+                questionDistribution.allTime[`${cat}_Correct`] ?? 0,
+                questionDistribution.allTime[`${cat}_Incorrect`] ?? 0
+            ]).slice(0, 4);
+            questionPieChart.update();
+        });
 
-            last5Btn.addEventListener('click', () => {
-                last5Btn.classList.add('active');
-                allTimeBtn.classList.remove('active');
-                allTimeBox.style.display = 'none';
-                last5Box.style.display = 'block';
-                questionPieChart.data.datasets[0].data = categories.flatMap(cat => [
-                    questionDistribution.last5[`${cat}_Correct`] ?? 0,
-                    questionDistribution.last5[`${cat}_Incorrect`] ?? 0
-                ]).slice(0, 4);
-                questionPieChart.update();
-            });
-        </script>
-    @endpush
+        last5Btn.addEventListener('click', () => {
+            last5Btn.classList.add('active');
+            allTimeBtn.classList.remove('active');
+            allTimeBox.style.display = 'none';
+            last5Box.style.display = 'block';
+            questionPieChart.data.datasets[0].data = categories.flatMap(cat => [
+                questionDistribution.last5[`${cat}_Correct`] ?? 0,
+                questionDistribution.last5[`${cat}_Incorrect`] ?? 0
+            ]).slice(0, 4);
+            questionPieChart.update();
+        });
+    </script>
+@endpush
 </x-backend.layouts.student-master>
