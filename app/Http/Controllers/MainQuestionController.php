@@ -183,7 +183,7 @@ class MainQuestionController extends Controller
             'sat_question_type' => ['nullable', Rule::in(['Physics', 'Chemistry', 'Biology', 'Math', 'Verbal', 'Quant'])],
             'options' => 'nullable',
             'correct_answer' => 'required',
-            'difficulty' => ['required', Rule::in(['Easy', 'Medium', 'Hard', 'Very Hard'])],
+            'difficulty' => ['required', Rule::in(['Very Easy', 'Easy', 'Medium', 'Hard', 'Very Hard'])],
             'tags' => 'nullable|array',
             'explanation' => 'nullable',
             'images' => 'nullable|array',

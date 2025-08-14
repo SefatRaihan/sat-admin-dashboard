@@ -235,6 +235,10 @@
                                     <h6><b>Defficulty:</b> All result</h6>
                                 </div>
                                 <div class="form-check custom-checkbox d-flex justify-center">
+                                    <input type="checkbox" class="difficulty" value="Very Easy">
+                                    <label class="form-check-label pl-1"><span class="badge badge-pill badge-very-easy"><b>Very Easy</b></span></label>
+                                </div>
+                                <div class="form-check custom-checkbox d-flex justify-center">
                                     <input type="checkbox" class="difficulty" value="Easy">
                                     <label class="form-check-label pl-1"><span
                                             class="badge badge-pill badge-easy"><b>Easy</b></span></label>
@@ -645,7 +649,7 @@
                         {{-- Placeholder for future steps --}}
                         <div class="step step-2 d-none">
                             <div>
-                                <h5><strong>3. Provide the verbal Context*</strong></h5>
+                                <h5><strong>3. Provide the <span id="context-label"></span> Context*</strong></h5>
                                 <div id="editor-container">
                                     <div class="editor mb-3" id="context"></div>
                                 </div>
@@ -677,6 +681,12 @@
                             </div>
                             <div class="row" style="margin-left: 3px">
                                 <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="very-easy" value="Very Easy">
+                                        <label class="form-check-label" for="very-easy">
+                                            <span class="badge badge-pill badge-very-easy">Very Easy</span>
+                                        </label>
+                                    </div>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="radio" name="difficulty"
                                             id="easy" value="Easy">
@@ -1388,6 +1398,12 @@
             .modal-content img {
                 max-height: 200px !important;
             }
+
+            .badge-very-easy {
+                background-color: #b6f0ff;
+                color: #0a5669;
+                border: 1px solid #17a2b8;
+            }
         </style>
 
         {{-- /* Switch Button Styles */ --}}
@@ -1710,16 +1726,31 @@
 
                 initializeQuill(".editor")
 
-                $(".sat_2").change(function() {
-                    $('#sat_type_1').find('input').prop('checked', false);
-                    $("#sat_type_2").removeClass("d-none");
-                    $("#sat_type_1").addClass("d-none");
+                $('input[name="question_type"]').on('change', function() {
+                    let questionType = $(this).val();
+                    $('#context-label').text(questionType);
                 });
 
+                $('input[name="subjects"]').on('change', function() {
+                    let questionType = $(this).val();
+                    $('#context-label').text(questionType);
+                });
+
+                // SAT 1/SAT 2 পরিবর্তনের সময় কনটেক্সট লেবেল রিসেট
                 $(".sat_1").change(function() {
                     $('#sat_type_2').find('input').prop('checked', false);
                     $("#sat_type_1").removeClass("d-none");
                     $("#sat_type_2").addClass("d-none");
+                    let questionType = $('input[name="question_type"]:checked').val();
+                    $('#context-label').text(questionType);
+                });
+
+                $(".sat_2").change(function() {
+                    $('#sat_type_1').find('input').prop('checked', false);
+                    $("#sat_type_2").removeClass("d-none");
+                    $("#sat_type_1").addClass("d-none");
+                    let questionType = $('input[name="subjects"]:checked').val();
+                    $('#context-label').text(questionType);
                 });
 
 

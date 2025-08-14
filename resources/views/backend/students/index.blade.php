@@ -107,58 +107,57 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="high-school" value="High School">
-                                        <label class="form-check-label" for="high-school">
+                                        <input class="form-check-input check-input" type="checkbox" name="audience[]" id="high-school-create" value="High School">
+                                        <label class="form-check-label" for="high-school-create">
                                             High School
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="college" value="college">
-                                        <label class="form-check-label" for="college">
-                                        College
+                                        <input class="form-check-input check-input" type="checkbox" name="audience[]" id="college-create" value="College">
+                                        <label class="form-check-label" for="college-create">
+                                            College
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="graduate" value="graduate">
-                                        <label class="form-check-label" for="graduate">
+                                        <input class="form-check-input check-input" type="checkbox" name="audience[]" id="graduate-create" value="Graduate">
+                                        <label class="form-check-label" for="graduate-create">
                                             Graduate
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="sat-2" value="sat-2">
-                                        <label class="form-check-label" for="sat-2">
-                                        SAT 2
+                                        <input class="form-check-input check-input" type="checkbox" name="audience[]" id="sat-2-create" value="SAT 2">
+                                        <label class="form-check-label" for="sat-2-create">
+                                            SAT 2
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-12 mt-2">
-                                    <x-input-label for="photo" :value="__('Photo')" />
-                                    {{-- <form action="#" class="dropzone" id="dropzone_single"></form> --}}
-                                    <div class="photosection" ondragover="allowDrop(event)" ondrop="dropImage(event)">
-                                        <!-- Profile Image Preview -->
-                                        <img id="previewImage" src="">
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <x-input-label for="photo" :value="__('Photo')" />
+                                {{-- <form action="#" class="dropzone" id="dropzone_single"></form> --}}
+                                <div class="photosection" ondragover="allowDrop(event)" ondrop="dropImage(event)">
+                                    <!-- Profile Image Preview -->
+                                    <img id="previewImage" src="">
 
-                                        <!-- Upload Area -->
-                                        <label for="profileImage" style="cursor: pointer; position: relative;">
-                                            <div class="upload-icon">
-                                                <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
-                                            </div>
-                                            <h5 style="font-size: 14px;">
-                                                <span style="color: #521749">Click to upload</span>
-                                                <span style="color: #475467"> or drag and drop</span>
-                                            </h5>
-                                        </label>
+                                    <!-- Upload Area -->
+                                    <label for="profileImage" style="cursor: pointer; position: relative;">
+                                        <div class="upload-icon">
+                                            <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
+                                        </div>
+                                        <h5 style="font-size: 14px;">
+                                            <span style="color: #521749">Click to upload</span>
+                                            <span style="color: #475467"> or drag and drop</span>
+                                        </h5>
+                                    </label>
 
-                                        <!-- Hidden File Input -->
-                                        <input type="file" id="profileImage" name="profile_image" accept="image/*" style="display: none;" onchange="previewImage(event)">
-                                    </div>
-
+                                    <!-- Hidden File Input -->
+                                    <input type="file" id="profileImage" name="profile_image" accept="image/*" style="display: none;" onchange="previewImage(event)">
                                 </div>
                             </div>
                         </div>
@@ -242,60 +241,60 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="high-school" value="High School">
-                                        <label class="form-check-label" for="high-school">
+                                        <input class="form-check-input check-input" type="checkbox" name="audience[]" id="high-school-edit" value="High School">
+                                        <label class="form-check-label" for="high-school-edit">
                                             High School
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="college" value="college">
-                                        <label class="form-check-label" for="college">
-                                        College
+                                        <input class="form-check-input check-input" type="checkbox" name="audience[]" id="college-edit" value="College">
+                                        <label class="form-check-label" for="college-edit">
+                                            College
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="graduate" value="graduate">
-                                        <label class="form-check-label" for="graduate">
+                                        <input class="form-check-input check-input" type="checkbox" name="audience[]" id="graduate-edit" value="Graduate">
+                                        <label class="form-check-label" for="graduate-edit">
                                             Graduate
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check custom-radio">
-                                        <input class="form-check-input" type="radio" name="audience" id="sat-2" value="sat-2">
-                                        <label class="form-check-label" for="sat-2">
-                                        SAT 2
+                                        <input class="form-check-input check-input" type="checkbox" name="audience[]" id="sat-2-edit" value="SAT 2">
+                                        <label class="form-check-label" for="sat-2-edit">
+                                            SAT 2
                                         </label>
                                     </div>
-                                </div>
-                                <div class="col-md-12 mt-2">
-                                    <x-input-label for="photo" :value="__('Photo')" />
-                                    {{-- <form action="#" class="dropzone" id="dropzone_single"></form> --}}
-                                    <div class="editPhotosection" ondragover="editAllowDrop(event)" ondrop="editDropImage(event)">
-                                        <!-- Profile Image Preview -->
-                                        <img id="editPreviewImage" src="">
-
-                                        <!-- Upload Area -->
-                                        <label for="editProfileImage" style="cursor: pointer; position: relative;">
-                                            <div class="upload-icon">
-                                                <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
-                                            </div>
-                                            <h5 style="font-size: 14px;">
-                                                <span style="color: #521749">Click to upload</span>
-                                                <span style="color: #475467"> or drag and drop</span>
-                                            </h5>
-                                        </label>
-
-                                        <!-- Hidden File Input -->
-                                        <input type="file" id="editProfileImage" name="profile_image" accept="image/*" style="display: none;" onchange="editPreviewImage(event)">
-                                    </div>
-
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                            <x-input-label for="photo" :value="__('Photo')" />
+                            {{-- <form action="#" class="dropzone" id="dropzone_single"></form> --}}
+                            <div class="editPhotosection" ondragover="editAllowDrop(event)" ondrop="editDropImage(event)">
+                                <!-- Profile Image Preview -->
+                                <img id="editPreviewImage" src="">
+
+                                <!-- Upload Area -->
+                                <label for="editProfileImage" style="cursor: pointer; position: relative;">
+                                    <div class="upload-icon">
+                                        <img src="{{ asset('image/icon/image-upload.png') }}" alt="Upload Icon" style="width: 16.67px; height: 15px;">
+                                    </div>
+                                    <h5 style="font-size: 14px;">
+                                        <span style="color: #521749">Click to upload</span>
+                                        <span style="color: #475467"> or drag and drop</span>
+                                    </h5>
+                                </label>
+
+                                <!-- Hidden File Input -->
+                                <input type="file" id="editProfileImage" name="profile_image" accept="image/*" style="display: none;" onchange="editPreviewImage(event)">
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -795,7 +794,7 @@
                 align-items: center;
                 padding-left: 46px;
                 cursor: pointer;
-                transition: all 0.3s ease;
+                /* transition: all 0.3s ease; */
             }
 
             /* Change background and border when checked */
@@ -842,7 +841,7 @@
                 border: 2px solid #D0D5DD;
                 border-radius: 50%;
                 background-color: #fff;
-                transition: all 0.3s ease;
+                /* transition: all 0.3s ease; */
             }
 
             /* Custom radio circle when checked */
@@ -857,13 +856,13 @@
                 position: absolute;
                 left: -30px;
                 top: 50%;
-                transform: translateY(-50%);
+                /* transform: translateY(-50%); */
                 width: 18px;
                 height: 18px;
                 border: 2px solid #D0D5DD;
                 border-radius: 50%;
                 background-color: #fff;
-                transition: all 0.3s ease;
+                /* transition: all 0.3s ease; */
             }
 
             /* Custom radio circle when checked */
@@ -885,6 +884,12 @@
             .custom-radio:has(.form-check-input:checked) {
                 background-color: #F1E9F0; /* Light purple */
                 border-color: #A16A99; /* Darker purple */
+            }
+
+            .custom-radio:has(.check-input:checked) {
+                background-color: #F1E9F0; /* Light purple */
+                border-color: #A16A99; /* Darker purple */
+                padding-left: 18px;
             }
 
             .multiselect-native-select {
@@ -1155,7 +1160,7 @@
             input:checked + .slider:before {
                 -webkit-transform: translateX(26px);
                 -ms-transform: translateX(26px);
-                transform: translateX(26px);
+                /* transform: translateX(26px); */
             }
 
             /* Rounded sliders */
@@ -1568,8 +1573,22 @@
                     const duration = $('.student-create-section').find('select[name="duration"]').val();
                     const password = $('.student-create-section').find('input[name="password"]').val();
                     const confirmPassword = $('.student-create-section').find('input[name="confirm_password"]').val();
-                    const audience = $('.student-create-section').find('input[name="audience"]:checked').val();
                     const photo = $('.student-create-section').find('#profileImage')[0].files ? $('#profileImage')[0].files[0] : null;
+
+                    const audience = $('.student-create-section')
+                    .find('input[name="audience[]"]:checked')
+                    .map(function () {
+                        return $(this).val();
+                    }).get();
+
+
+                    
+
+                    audience.forEach(function (aud) {
+                        formData.append('audience[]', aud);
+                    });
+
+
 
                     // Validate required fields
                     if (!name || !email || !phone || !gender || !dob || !password || !confirmPassword || !audience || !package || !duration) {
@@ -1584,7 +1603,9 @@
                         if (!dob) missingFields.push('Date of Birth');
                         if (!password) missingFields.push('Password');
                         if (!confirmPassword) missingFields.push('Confirm Password');
-                        if (!audience) missingFields.push('Audience');
+                        if (audience.length === 0) {
+                            missingFields.push('Audience');
+                        }
 
                         Swal.fire({
                             icon: 'warning',
@@ -1615,7 +1636,6 @@
                     formData.append('date_of_birth', dob);
                     formData.append('password', password);
                     formData.append('password_confirmation', confirmPassword);
-                    formData.append('audience', audience);
                     formData.append('package', package);
                     formData.append('duration', duration);
 
@@ -1689,7 +1709,7 @@
                     let uuid = $(this).data("uuid");
 
                     $.ajax({
-                        url: "/api/students/" + uuid,  // Adjust the route as per your Laravel API
+                        url: "/api/students/" + uuid,
                         type: "GET",
                         success: function (response) {
                             // Populate modal fields with fetched data
@@ -1702,8 +1722,14 @@
                             // Set gender radio button
                             $('.student-edit-section').find("input[name='gender'][value='" + response.data.gender + "']").prop("checked", true);
 
-                            // Set audience radio button
-                            $('.student-edit-section').find("input[name='audience'][value='" + response.data.audience + "']").prop("checked", true);
+                            // Set audience checkboxes
+                            $('.student-edit-section').find("input[name='audience[]']").prop("checked", false); // Reset all checkboxes
+                            if (response.data.audience) {
+                                let audiences = response.data.audience.split(', ');
+                                audiences.forEach(function(audience) {
+                                    $('.student-edit-section').find("input[name='audience[]'][value='" + audience + "']").prop("checked", true);
+                                });
+                            }
 
                             // Set package and duration dropdowns
                             $('.student-edit-section').find("select[name='package']").val(response.data.package);
@@ -1736,8 +1762,19 @@
                     const dob = $('.student-edit-section').find('input[name="date_of_birth"]').val();
                     const package = $('.student-edit-section').find('select[name="package"]').val();
                     const duration = $('.student-edit-section').find('select[name="duration"]').val();
-                    const audience = $('.student-edit-section').find('input[name="audience"]:checked').val();
                     const photo = $('#editProfileImage')[0].files ? $('#editProfileImage')[0].files[0] : null;
+
+                    const audience = $('.student-edit-section')
+                        .find('input[name="audience[]"]:checked')
+                        .map(function () {
+                            return $(this).val();
+                        }).get();
+
+                        audience.forEach(function (aud) {
+                            formData.append('audience[]', aud);
+                        });
+
+
 
                     // Validate required fields
                     if (!name || !email || !phone || !gender || !dob || !audience || !package || !duration) {
@@ -1750,7 +1787,9 @@
                         if (!package) missingFields.push('Package');
                         if (!duration) missingFields.push('Duration');
                         if (!dob) missingFields.push('Date of Birth');
-                        if (!audience) missingFields.push('Audience');
+                        if (audience.length === 0) {
+                            missingFields.push('Audience');
+                        }
 
                         Swal.fire({
                             icon: 'warning',
@@ -1768,7 +1807,6 @@
                     formData.append('phone', phone);
                     formData.append('gender', gender);
                     formData.append('date_of_birth', dob);
-                    formData.append('audience', audience);
                     formData.append('package', package);
                     formData.append('duration', duration);
 
