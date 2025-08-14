@@ -325,13 +325,6 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         try {
-            StudentHistory::create([
-                'student_uuid' => $student->uuid,
-                'field' => 'status',
-                'old_value' => $student->status,
-                'new_value' => 'deleted',
-                'changed_by' => Auth::id(),
-            ]);
             $student->audiences()->detach();
             $student->user()->delete();
             $student->delete();
