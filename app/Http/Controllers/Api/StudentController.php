@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\Student;
 use App\Models\Audience;
 use App\Models\ExamAttempt;
-use App\Models\StudentHistory;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\StudentsExport;
@@ -344,18 +343,6 @@ class StudentController extends Controller
     {
         try {
             $students = Student::whereIn('uuid', $request->students)->get();
-            foreach ($students as $student) {
-                StudentHistory::create([
-                    'student_uuid' => $student->uuid,
-                    'field' => 'status',
-                    'old_value' => $student->status,
-                    'new_value' => 'deleted',
-                    'changed_by' => Auth::id(),
-                ]);
-                $student->audiences()->detach();
-                $student->user()->delete();
-                $student->delete();
-            }
             return response()->json([
                 'status' => true,
                 'message' => 'Students deleted successfully'
@@ -373,13 +360,6 @@ class StudentController extends Controller
         try {
             $students = Student::whereIn('uuid', $request->students)->get();
             foreach ($students as $student) {
-                StudentHistory::create([
-                    'student_uuid' => $student->uuid,
-                    'field' => 'status',
-                    'old_value' => $student->status,
-                    'new_value' => 'inactive',
-                    'changed_by' => Auth::id(),
-                ]);
                 $student->status = 'inactive';
                 $student->save();
             }
@@ -423,18 +403,6 @@ class StudentController extends Controller
                     'date' => $request->date,
                     'time' => $request->time,
                 ]);
-                StudentHistory::create([
-                    'student_uuid' => $studentId,
-                    'field' => 'notification',
-                    'old_value' => null,
-                    'new_value' => json_encode([
-                        'title' => $request->title,
-                        'description' => $request->description,
-                        'date' => $request->date,
-                        'time' => $request->time,
-                    ]),
-                    'changed_by' => Auth::id(),
-                ]);
             }
             return response()->json([
                 'status' => 'success',
@@ -461,13 +429,6 @@ class StudentController extends Controller
     {
         try {
             $student = Student::where('uuid', $request->uuid)->firstOrFail();
-            StudentHistory::create([
-                'student_uuid' => $student->uuid,
-                'field' => 'status',
-                'old_value' => $student->status,
-                'new_value' => $request->status,
-                'changed_by' => Auth::id(),
-            ]);
             $student->status = $request->status;
             $student->save();
 
@@ -491,10 +452,6 @@ class StudentController extends Controller
                 'message' => 'Student not found'
             ], 404);
         }
-
-        $histories = StudentHistory::where('student_uuid', $student->uuid)
-            ->orderBy('created_at', $request->input('sortOrder', 'desc'))
-            ->paginate($request->input('per_page', 10));
 
         $histories->getCollection()->transform(function ($history) {
             if ($history->field === 'audience' || $history->field === 'notification') {
