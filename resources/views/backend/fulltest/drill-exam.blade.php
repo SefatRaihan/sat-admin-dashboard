@@ -13,7 +13,7 @@
                         <div class="row">
                             @forEach($data as $key => $value)
                                 <div class="col-md-4">
-                                    <div class="form-check custom-radio">
+                                    <div class="form-check custom-radio mb-2">
                                         <input class="form-check-input" type="radio" name="question_type" id="{{ $key }}" value="{{ $key }}"  {{ $loop->first ? 'checked' : '' }}>
                                         <label class="form-check-label" for="{{ $key }}">
                                             {{ $value }}
