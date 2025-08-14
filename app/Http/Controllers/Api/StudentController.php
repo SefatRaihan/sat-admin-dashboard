@@ -343,6 +343,11 @@ class StudentController extends Controller
     {
         try {
             $students = Student::whereIn('uuid', $request->students)->get();
+            foreach ($students as $student) {
+                $student->audiences()->detach();
+                $student->user()->delete();
+                $student->delete();
+            }
             return response()->json([
                 'status' => true,
                 'message' => 'Students deleted successfully'
