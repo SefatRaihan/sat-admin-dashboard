@@ -24,15 +24,21 @@ class DrillExamController extends Controller
     {
         $user = Auth::user();
         $student = Student::where('user_id', $user->id)->first();
+
         $data = [];
-        if ($student->audience == 'High School' || $student->audience == 'college' || $student->audience == 'graduate') {
+
+        // Load related audiences
+        $audienceNames = $student->audiences->pluck('audience')->toArray();
+
+        if (in_array('High School', $audienceNames) || in_array('College', $audienceNames) || in_array('Graduate', $audienceNames)) {
             $data = ['verbal' => 'Verbal', 'quanti' => 'Quant', 'mixed' => 'Mixed'];
-        } else if ($student->audience == 'sat-2') {
-            $data = ['physics' => 'Physics', 'chemistry' => 'Chemistry',  'maths' => 'Maths', 'biology' => 'Biology'];
+        } elseif (in_array('SAT 2', $audienceNames)) {
+            $data = ['physics' => 'Physics', 'chemistry' => 'Chemistry', 'maths' => 'Maths', 'biology' => 'Biology'];
         }
 
         return view('backend.fulltest.drill-exam', compact('data'));
     }
+
 
 
     public function prepare(Request $request)
