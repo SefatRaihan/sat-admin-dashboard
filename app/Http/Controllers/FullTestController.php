@@ -192,7 +192,6 @@ class FullTestController extends Controller
     {
         $examAttempt = ExamAttempt::completed()
                         ->where('id', $attemptId)
-                        ->where('user_id', $userId)
                         ->firstOrFail();
 
         $examAttemptQuestions = $examAttempt->examAttemptQuestions()->with(['question'])->get();
@@ -220,6 +219,7 @@ class FullTestController extends Controller
         };
 
         // Exam LeadBoard
+
         $leadBoard =  ExamAttempt::completed()
                 ->where('exam_id', $examAttempt->exam_id)
                 ->where('correct_answers', '>', 0)
@@ -241,7 +241,7 @@ class FullTestController extends Controller
                         'time' => sprintf("%d:%02d", $minutes, $seconds),
                         'submitted_at' => $attempt->end_time,
                         'profile_image' => $attempt->user->student->image
-                                ? Storage::disk('public')->url($attempt->user->student->image)
+                                ? $attempt->user->student->image
                                 : asset('images/default-avatar.png'),
                     ];
                 });

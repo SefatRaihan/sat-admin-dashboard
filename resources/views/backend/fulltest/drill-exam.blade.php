@@ -45,6 +45,14 @@
                             </div>
                             <div class="col-md-6 mt-2">
                                 <div class="form-check custom-radio">
+                                    <input class="form-check-input" type="radio" name="question_pool" id="correct" value="correct">
+                                    <label class="form-check-label" for="correct">
+                                        Correct
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="form-check custom-radio">
                                     <input class="form-check-input" type="radio" name="question_pool" id="incorrect" value="incorrect">
                                     <label class="form-check-label" for="incorrect">
                                         Incorrect
@@ -58,7 +66,13 @@
                         <label for="">3. Question difficulty level</label>
                         <div class="d-flex">
                             <div class="form-check custom-radio" style="border: none; background: transparent;">
-                                <input class="form-check-input" type="radio" name="question_difficulty_level" id="easy" value="easy" checked>
+                                <input class="form-check-input" type="radio" name="question_difficulty_level" id="very-easy" value="Very Easy" checked>
+                                <label class="form-check-label" for="very-easy">
+                                    <span class="badge badge-pill badge-very-easy">Very Easy</span>
+                                </label>
+                            </div>
+                            <div class="form-check custom-radio" style="border: none; background: transparent;">
+                                <input class="form-check-input" type="radio" name="question_difficulty_level" id="easy" value="easy">
                                 <label class="form-check-label" for="easy">
                                     <span class="badge badge-pill badge-easy">Easy</span>
                                 </label>
@@ -105,6 +119,12 @@
 
     @push('css')
     <style>
+
+        .badge-very-easy {
+            background-color: #b6f0ff;
+            color: #0a5669;
+            border: 1px solid #17a2b8;
+        }
 
         .content {
             background-color: #FCFAFF;

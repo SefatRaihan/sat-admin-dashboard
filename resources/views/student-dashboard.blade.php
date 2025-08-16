@@ -235,6 +235,10 @@
             ::-webkit-scrollbar {
                 display: none;
             }
+
+            p img {
+                width: 100% !important;
+            }
         </style>
     @endpush
 

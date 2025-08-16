@@ -13,25 +13,25 @@
 }
 
 .wrong-answer {
-    background-color: #F0F9FF;
-    border: 1px solid #fa0606;
+    background-color: #F0F9FF !important;
+    border: 1px solid #fa0606 !important;
 }
 
 .wrong-answer.custom-radio .form-check-input + .form-check-label::before {
-    border-color: #fa0606;
-    background-color: #fa0606;
-    box-shadow: 0 0 0 2px white, 0 0 0 4px #fa0606;
+    border-color: #fa0606 !important;
+    background-color: #fa0606 !important;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #fa0606 !important;
 }
 
 .correct-answer {
-    background-color: #F0F9FF;
-    border: 1px solid #079455;
+    background-color: #F0F9FF !important;
+    border: 1px solid #079455 !important;
 }
 
 .correct-answer.custom-radio .form-check-input + .form-check-label::before {
-    border-color: #079455;
-    background-color: #079455;
-    box-shadow: 0 0 0 2px white, 0 0 0 4px #079455;
+    border-color: #079455 !important;
+    background-color: #079455 !important;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #079455 !important;
 }
 
 .box-pagination {
@@ -61,8 +61,8 @@
 
 .wrong-answer {
     border-radius: 6px;
-    border: 1px solid #D92D20;
-    background-color: #FEF3F2;
+    border: 1px solid #D92D20 !important;
+    background-color: #FEF3F2 !important;
     margin-right: 6px;
     text-align: center;
 }

@@ -86,6 +86,26 @@ class DrillExamController extends Controller
                     ->take($request->total_questions)
                     ->get();
                 break;
+                
+            case 'correct':
+            // Step 1: All correct question IDs for the user
+            $correctIds = ExamAttemptQuestion::whereHas('attempt', function ($query) {
+                    $query->where('user_id', auth()->id());
+                })
+                ->where('is_correct', 1)
+                ->pluck('question_id')
+                ->unique();
+
+            $questions = ExamQuestion::whereIn('id', $correctIds)
+                        ->when($request->question_type === 'mixed', function ($query) use ($userAudience) {
+                            $query->where('audience', $userAudience);
+                        }, function ($query) use ($request) {
+                            $query->where('sat_question_type', $request->question_type);
+                        })
+                        ->where('difficulty', $request->difficulty_level)
+                        ->take($request->total_questions)
+                        ->get();
+            break;
 
             case 'incorrect':
                 // Step 1: All incorrect question IDs for the user

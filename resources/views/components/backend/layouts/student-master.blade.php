@@ -202,6 +202,11 @@
         .content-wrapper {
             overflow: hidden;
         }
+
+        p img {
+            width: 100% !important;
+            border-radius: 8px !important;
+        }
     </style>
     <!-- Tagify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">

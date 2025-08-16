@@ -59,8 +59,9 @@
                         <div class="col-md-6 pl-4 pr-4">
                             <h4><b>Context</b></h4>
                             {{-- @dd($question) --}}
+                            {{-- @dd($studentAnswer) --}}
                             <div>
-                                <p>{{ strip_tags($question->question_description) ?? 'No context provided.' }}</p>
+                                <p>{!! $question->question_description ?? 'No context provided.' !!}</p>
                             </div>
 
                         </div>
@@ -71,23 +72,36 @@
                                 </div>
                             </div>
                             <div class="question-box">
-                                <p style="margin-top: 8px;">{{ strip_tags($question->question_title) }}</p>
+                                <p style="margin-top: 8px;">{!! $question->question_title ?? 'No question title provided.' !!}</p>
                                 <div class="check-box-field">
                                     <div id="question-option" class="row">
                                          <div class="col-md-12 mt-2">
                                             @foreach (json_decode($question->options) as $option)
                                                 @php
-                                                    $class = $question->correct_answer == $studentAnswer
-                                                        ? 'correct-answer'
-                                                        : ($option == $studentAnswer ? 'wrong-answer' : '');
+                                                    if ($option == $question->correct_answer) {
+                                                        // Always mark the correct option
+                                                        $class = 'correct-answer';
+                                                    } elseif ($option == $studentAnswer && $studentAnswer != $question->correct_answer) {
+                                                        // Mark wrong answer only if studentAnswer is wrong
+                                                        $class = 'wrong-answer';
+                                                    } else {
+                                                        $class = '';
+                                                    }
                                                 @endphp
-                                                <div class="form-check pt-2 custom-radio {{ $class }} {{ trim($option) === trim($question->correct_answer) ? 'correct-answer' : '' }}">
-                                                    <input class="form-check-input" type="radio" name="question" id="question_{{ $question->id }}" value="{{ $option }}" {{ $question->correct_answer === $option ? 'checked' : '' }}>
-                                                    <label class="form-check-label" style="padding-top:8px" for="question_{{$question->id}}">
+
+                                                <div class="form-check pt-2 custom-radio {{ $class }}">
+                                                    <input class="form-check-input" type="radio" 
+                                                        name="question" 
+                                                        id="question_{{ $question->id }}_{{ $loop->index }}" 
+                                                        value="{{ $option }}" 
+                                                        {{ $studentAnswer === $option ? 'checked' : '' }}>
+                                                        
+                                                    <label class="form-check-label" style="padding-top:8px" for="question_{{ $question->id }}_{{ $loop->index }}">
                                                         {{ $option }}
                                                     </label>
                                                 </div>
                                             @endforeach
+
                                          </div>
                                     </div>
                                     </div>
@@ -101,7 +115,8 @@
                             <h4>Explanation</h4>
                             <p style="border-bottom: 1px solid #ddd;width: 100%;margin-top: 20px; text-align: center;"></p>
                             <div>
-                                {{ strip_tags($question->explanation) ?? 'No explanation provided.' }}
+                                {!! $question->explanation ?? 'No explanation provided.' !!}
+
                             </div>
                         </div>
                     </div>
@@ -128,8 +143,7 @@
 
            </div>
         </div>
-        <p style="border-bottom: 1px solid #ddd; "></p>
-        <div style="width: 100%; height: 50px; align-items: center;" class="d-flex text-align-right justify-content-end pr-3 feedback-btn">
+        <div style="width: 100%; height: 50px; align-items: center; bottom: 0; position: fixed; border-top: 1px solid #ddd; background-color: #fff;" class="d-flex text-align-right justify-content-end pr-3 feedback-btn">
            <button type="button" class="btn" style="text-decoration: none;color: #521749;"><i class="far fa-flag" style="margin-right: 5px;"></i>Feedback</button>
         </div>
      </div>
