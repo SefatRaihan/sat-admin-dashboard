@@ -30,4 +30,10 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function audiences()
+    {
+        return $this->belongsToMany(Audience::class, 'audience_student', 'student_uuid', 'audience', 'uuid', 'audience')
+                    ->withTimestamps();
+    }
 }

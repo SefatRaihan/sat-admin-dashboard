@@ -466,6 +466,10 @@
             }
         </style>
         <style>
+            p img {
+                width: 100%;
+            }
+            
             .floating-sidebar {
                 position: fixed;
                 top: 0;

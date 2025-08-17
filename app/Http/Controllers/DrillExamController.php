@@ -24,15 +24,21 @@ class DrillExamController extends Controller
     {
         $user = Auth::user();
         $student = Student::where('user_id', $user->id)->first();
+
         $data = [];
-        if ($student->audience == 'High School' || $student->audience == 'college' || $student->audience == 'graduate') {
+
+        // Load related audiences
+        $audienceNames = $student->audiences->pluck('audience')->toArray();
+
+        if (in_array('High School', $audienceNames) || in_array('College', $audienceNames) || in_array('Graduate', $audienceNames)) {
             $data = ['verbal' => 'Verbal', 'quanti' => 'Quant', 'mixed' => 'Mixed'];
-        } else if ($student->audience == 'sat-2') {
-            $data = ['physics' => 'Physics', 'chemistry' => 'Chemistry',  'maths' => 'Maths', 'biology' => 'Biology'];
+        } elseif (in_array('SAT 2', $audienceNames)) {
+            $data = ['physics' => 'Physics', 'chemistry' => 'Chemistry', 'maths' => 'Maths', 'biology' => 'Biology'];
         }
 
         return view('backend.fulltest.drill-exam', compact('data'));
     }
+
 
 
     public function prepare(Request $request)
@@ -80,6 +86,26 @@ class DrillExamController extends Controller
                     ->take($request->total_questions)
                     ->get();
                 break;
+                
+            case 'correct':
+            // Step 1: All correct question IDs for the user
+            $correctIds = ExamAttemptQuestion::whereHas('attempt', function ($query) {
+                    $query->where('user_id', auth()->id());
+                })
+                ->where('is_correct', 1)
+                ->pluck('question_id')
+                ->unique();
+
+            $questions = ExamQuestion::whereIn('id', $correctIds)
+                        ->when($request->question_type === 'mixed', function ($query) use ($userAudience) {
+                            $query->where('audience', $userAudience);
+                        }, function ($query) use ($request) {
+                            $query->where('sat_question_type', $request->question_type);
+                        })
+                        ->where('difficulty', $request->difficulty_level)
+                        ->take($request->total_questions)
+                        ->get();
+            break;
 
             case 'incorrect':
                 // Step 1: All incorrect question IDs for the user

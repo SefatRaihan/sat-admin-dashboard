@@ -6,6 +6,7 @@ use App\Models\Exam;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Audience;
 use App\Models\ExamAttempt;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -13,7 +14,6 @@ use App\Exports\StudentsExport;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use App\Models\StudentNotification;
-
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Lesson;
@@ -27,16 +27,6 @@ use Illuminate\Support\Facades\Notification;
 
 class StudentController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Response status code
-    |--------------------------------------------------------------------------
-    | 201 response with created data
-    | 200 update/list/show/delete
-    | 204 deleted response with no content
-    | 500 internal server or db error
-    */
-
     public static $visiblePermissions = [
         'index' => 'List',
         'store' => 'Save',
@@ -54,14 +44,9 @@ class StudentController extends Controller
         'getCourseProgress' => 'Get Course Progress',
     ];
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function index(Request $request)
     {
-        $query = Student::query();
+        $query = Student::query()->with('audiences');
 
         // Search filter
         if ($request->filled('search')) {
@@ -82,12 +67,21 @@ class StudentController extends Controller
         if ($request->filled('audience_type')) {
             $audiences = explode(',', $request->audience_type);
             if (in_array('All-SAT-2', $audiences)) {
-                $query->orWhere('audience', 'sat-2');
+                $query->whereHas('audiences', function ($q) {
+                    $q->where('audience', 'SAT 2');
+                });
             }
-
             if (in_array('All-SAT-1', $audiences)) {
-                $query->orWhereIn('audience', ['High School', 'graduate', 'college']);
+                $query->whereHas('audiences', function ($q) {
+                    $q->whereIn('audience', ['High School', 'College', 'Graduate']);
+                });
             }
+            $query->whereHas('audiences', function ($q) use ($audiences) {
+                $validAudiences = array_intersect($audiences, ['High School', 'College', 'Graduate', 'SAT 2']);
+                if (!empty($validAudiences)) {
+                    $q->whereIn('audience', $validAudiences);
+                }
+            });
         }
 
         // Package filter
@@ -117,17 +111,15 @@ class StudentController extends Controller
         $students = $query->latest()->paginate($request->input('per_page', 10));
 
         $students->getCollection()->transform(function ($student) {
+            $student->audience = $student->audiences->pluck('audience')->implode(', ');
             $student->photo_url = $student->image
                 ? asset('storage/' . $student->image)
-                : asset('image/default-avatar.png'); // Fallback Image
-
-            // Add status switch component
+                : asset('image/default-avatar.png');
             $student->status_switch = view('components.backend.layouts.elements.switch', [
                 'name' => "status_{$student->id}",
                 'data-uuid' => "{$student->uuid}",
                 'checked' => $student->status == 'active' ? 1 : 0,
             ])->render();
-
             return $student;
         });
 
@@ -137,16 +129,8 @@ class StudentController extends Controller
             'students' => $students,
             'totalStudent' => $totalStudent
         ]);
-
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -155,7 +139,8 @@ class StudentController extends Controller
             'gender' => 'required|in:male,female',
             'date_of_birth' => 'required|date',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'audience' => 'required|string',
+            'audience' => 'required|array',
+            'audience.*' => 'in:High School,College,Graduate,SAT 2',
             'package' => 'required|string',
             'duration' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -169,7 +154,7 @@ class StudentController extends Controller
             ], 422);
         }
 
-        DB::beginTransaction(); // Start Transaction
+        DB::beginTransaction();
 
         try {
             $photoPath = null;
@@ -182,59 +167,54 @@ class StudentController extends Controller
 
             // Create User
             $user = User::create([
-                'uuid'              => Str::uuid(),
-                'first_name'        => $request->name,
-                'last_name'         => null,
-                'full_name'         => $request->name,
-                'email'             => $request->email,
-                'phone'             => $request->phone,
-                'password'          => Hash::make($request->password),
-                'active_role_id'    => $role->id,
-                'is_active'         => true,
-                'ip_address'        => $ipAddress,
-                'last_login'        => now(),
-                'profile_image'     => $photoPath,
+                'uuid' => Str::uuid(),
+                'first_name' => $request->name,
+                'last_name' => null,
+                'full_name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+                'active_role_id' => $role->id,
+                'is_active' => true,
+                'ip_address' => $ipAddress,
+                'last_login' => now(),
+                'profile_image' => $photoPath,
             ]);
 
             $latestStudent = Student::latest('id')->first();
-
-            if ($latestStudent && preg_match('/SID(\d+)/', $latestStudent->student_code, $matches)) {
-                $nextCoded = (int)$matches[1] + 1; // Extract numeric part and increment
-            } else {
-                $nextCoded = 1; // Start from 1 if no student exists
-            }
-
-            // Format student_code as SID0001, SID0002, etc.
+            $nextCoded = $latestStudent && preg_match('/SID(\d+)/', $latestStudent->student_code, $matches)
+                ? (int)$matches[1] + 1
+                : 1;
             $studentCode = 'SID' . str_pad($nextCoded, 4, '0', STR_PAD_LEFT);
-
 
             // Create Student
             $student = Student::create([
-                'uuid'          => Str::uuid(),
-                'student_code'  => $studentCode,
-                'user_id'       => $user->id,
-                'name'          => $request->name,
-                'email'         => $request->email,
-                'phone'         => $request->phone,
-                'gender'        => $request->gender,
+                'uuid' => Str::uuid(),
+                'student_code' => $studentCode,
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'gender' => $request->gender,
                 'date_of_birth' => $request->date_of_birth,
-                'package'       => $request->package,
-                'duration'      => $request->duration,
-                'audience'      => $request->audience,
-                'image'         => $photoPath,
+                'package' => $request->package,
+                'duration' => $request->duration,
+                'image' => $photoPath,
+                'created_by' => Auth::id(),
             ]);
 
-            DB::commit(); // Commit Transaction
+            // Attach audiences
+            $student->audiences()->attach($request->audience);
+
+            DB::commit();
 
             return response()->json([
                 'status' => true,
                 'message' => __('Successfully Created'),
                 'data' => $student
             ], 201);
-
         } catch (\Exception | QueryException $e) {
-            DB::rollBack(); // Rollback on Error
-
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
@@ -242,38 +222,31 @@ class StudentController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Student  $student
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function show(Student $student)
     {
-         return response()->json([
+        $student->load('audiences', 'histories');
+        $student->audience = $student->audiences->pluck('audience')->implode(', ');
+        return response()->json([
             'status' => true,
             'data' => $student
-         ], 200);
+        ], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\Request  $request
-     * @param  \App\Models\Student  $student
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function update(Request $request, $uuid)
     {
+        $student = Student::where('uuid', $uuid)->firstOrFail();
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'gender' => 'required|in:male,female',
             'date_of_birth' => 'required|date',
-            'audience' => 'required|string',
+            'audience' => 'required|array',
+            'audience.*' => 'in:High School,College,Graduate,SAT 2',
             'package' => 'required|string',
             'duration' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $student->user_id],
         ]);
 
         if ($validator->fails()) {
@@ -283,41 +256,64 @@ class StudentController extends Controller
             ], 422);
         }
 
-        DB::beginTransaction(); // Start Transaction
+        DB::beginTransaction();
 
         try {
-            $student = Student::where('uuid', $uuid)->first();
-
-            $photoPath = null;
+            $photoPath = $student->image;
             if ($request->hasFile('photo')) {
                 $photoPath = $request->file('photo')->store('student_photos', 'public');
-            } else {
-                $photoPath = $student->image;
             }
 
+            // Log changes
+            $changes = [];
+            $fields = ['name', 'email', 'phone', 'gender', 'date_of_birth', 'package', 'duration'];
+            foreach ($fields as $field) {
+                if ($request->$field !== $student->$field) {
+                    $changes[] = [
+                        'student_uuid' => $student->uuid,
+                        'field' => $field,
+                        'old_value' => $student->$field,
+                        'new_value' => $request->$field,
+                        'changed_by' => Auth::id(),
+                    ];
+                }
+            }
+
+            // Update student
             $student->update([
-                'name'          => $request->name,
-                'email'         => $request->email,
-                'phone'         => $request->phone,
-                'gender'        => $request->gender,
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'gender' => $request->gender,
                 'date_of_birth' => $request->date_of_birth,
-                'package'       => $request->package,
-                'duration'      => $request->duration,
-                'audience'      => $request->audience,
-                'image'         => $photoPath
+                'package' => $request->package,
+                'duration' => $request->duration,
+                'image' => $photoPath,
+                'updated_by' => Auth::id(),
             ]);
 
-            DB::commit(); // Commit Transaction
+            // Update user
+            $user = $student->user;
+            $user->update([
+                'first_name' => $request->name,
+                'full_name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'profile_image' => $photoPath,
+            ]);
 
-            //handle relationship update
+            // Sync audiences
+            $student->audiences()->sync($request->audience);
+
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => __('Successfully Updated'),
                 'data' => $student
             ], 200);
         } catch (\Exception | QueryException $e) {
-            DB::rollBack(); // Rollback on Error
-
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
@@ -325,16 +321,11 @@ class StudentController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Student  $student
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function destroy(Student $student)
     {
         try {
-
+            $student->audiences()->detach();
+            $student->user()->delete();
             $student->delete();
 
             return response()->json([
@@ -342,7 +333,7 @@ class StudentController extends Controller
                 'message' => __('Successfully Deleted')
             ], 200);
         } catch (\Exception | QueryException $e) {
-             return response()->json([
+            return response()->json([
                 'error' => config('app.env') == 'production' ? __('Somethings Went Wrong') : $e->getMessage()
             ], 500);
         }
@@ -350,24 +341,44 @@ class StudentController extends Controller
 
     public function delete(Request $request)
     {
-        Student::whereIn('uuid', $request->students)->delete();
-        return response()->json(['message' => 'Students deleted successfully']);
+        try {
+            $students = Student::whereIn('uuid', $request->students)->get();
+            foreach ($students as $student) {
+                $student->audiences()->detach();
+                $student->user()->delete();
+                $student->delete();
+            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Students deleted successfully'
+            ]);
+        } catch (\Exception | QueryException $e) {
+            return response()->json([
+                'status' => false,
+                'error' => config('app.env') == 'production' ? __('Somethings Went Wrong') : $e->getMessage()
+            ], 500);
+        }
     }
 
     public function deactivate(Request $request)
     {
-        Student::whereIn('uuid', $request->students)->update(['status' => 'inactive']);
-        return response()->json(['message' => 'Students deactivated successfully']);
+        try {
+            $students = Student::whereIn('uuid', $request->students)->get();
+            foreach ($students as $student) {
+                $student->status = 'inactive';
+                $student->save();
+            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Students deactivated successfully'
+            ]);
+        } catch (\Exception | QueryException $e) {
+            return response()->json([
+                'status' => false,
+                'error' => config('app.env') == 'production' ? __('Somethings Went Wrong') : $e->getMessage()
+            ], 500);
+        }
     }
-
-    // public function sendNotification(Request $request)
-    // {
-    //     $students = Student::whereIn('uuid', $request->students)->get();
-    //     foreach ($students as $student) {
-    //         Notification::send($student, new StudentNotification("New notification"));
-    //     }
-    //     return response()->json(['message' => 'Notification sent successfully']);
-    // }
 
     public function sendNotification(Request $request)
     {
@@ -387,27 +398,31 @@ class StudentController extends Controller
             ], 422);
         }
 
-        // Multiple students-এর জন্য নোটিফিকেশন তৈরি করা হবে
-        foreach ($request->students as $studentId) {
-            StudentNotification::create([
-                'uuid'        => Str::uuid(),
-                'student_id'  => $studentId,
-                'title'       => $request->title,
-                'description' => $request->description,
-                'date'        => $request->date,
-                'time'        => $request->time,
+        try {
+            foreach ($request->students as $studentId) {
+                StudentNotification::create([
+                    'uuid' => Str::uuid(),
+                    'student_id' => $studentId,
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'date' => $request->date,
+                    'time' => $request->time,
+                ]);
+            }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Notification sent successfully!',
             ]);
+        } catch (\Exception | QueryException $e) {
+            return response()->json([
+                'status' => 'error',
+                'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Notification sent successfully!',
-        ]);
     }
 
     public function exportExcel($students)
     {
-
         if (empty($students)) {
             return response()->json(['error' => 'No students selected'], 400);
         }
@@ -417,121 +432,50 @@ class StudentController extends Controller
 
     public function updateStatus(Request $request)
     {
-        $student = Student::where('uuid', $request->uuid)->first();
+        try {
+            $student = Student::where('uuid', $request->uuid)->firstOrFail();
+            $student->status = $request->status;
+            $student->save();
 
-        if (!$student) {
-            return response()->json(['success' => false, 'message' => 'Student not found']);
+            return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+        } catch (\Exception | QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => config('app.env') == 'production' ? __('Something Went Wrong') : $e->getMessage()
+            ], 500);
         }
-
-        $student->status = $request->status;
-        $student->save();
-
-        return response()->json(['success' => true, 'message' => 'Status updated successfully']);
     }
-
 
     public function history(Request $request)
     {
         $userId = Auth::id();
+        $student = Student::where('user_id', $userId)->first();
 
-        // Base query for exam attempts
-        $examAttempts = ExamAttempt::whereNotNull('exam_attempts.status')
-            ->where('exam_attempts.user_id', $userId)
-            ->join('exams', 'exam_attempts.exam_id', '=', 'exams.id')
-            ->with('exam.questions')
-            ->select(
-                'exam_attempts.score',
-                'exam_attempts.start_time',
-                'exams.title',
-                'exams.scheduled_at',
-                'exams.section',
-                'exams.duration',
-                'exams.id as exam_id'
-            );
-
-        // Apply date filters based on exam_attempts start_time and end_time
-        if ($request->has('crated_start_at') && $request->input('crated_start_at')) {
-            $examAttempts->where('exam_attempts.start_time', '>=', $request->input('crated_start_at'));
+        if (!$student) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Student not found'
+            ], 404);
         }
 
-        if ($request->has('crated_end_at') && $request->input('crated_end_at')) {
-            $examAttempts->where('exam_attempts.end_time', '<=', $request->input('crated_end_at'));
-        }
-
-        // Apply section filter based on sections.title (hasMany relationship with exams)
-        if ($request->has('sectionSearch') && $request->input('sectionSearch')) {
-            $examAttempts->whereHas('exam.sections', function ($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->input('sectionSearch') . '%');
-            });
-        }
-
-        // Apply question filter based on questions.question_title (via exam_attempt_questions)
-        if ($request->has('questionSearch') && $request->input('questionSearch')) {
-            $examAttempts->whereHas('examAttemptQuestions.question', function ($query) use ($request) {
-                $query->where('question_title', 'like', '%' . $request->input('questionSearch') . '%');
-            });
-        }
-
-        // Apply correct percentage filter
-        if ($request->has('correct_percentage') && $request->input('correct_percentage')) {
-            $examAttempts->where('exam_attempts.score', '>=', $request->input('correct_percentage'));
-        }
-
-        // Apply duration filter
-        if ($request->has('duration') && is_array($request->input('duration'))) {
-            $duration = $request->input('duration');
-            if (isset($duration['min']) && $duration['min']) {
-                $examAttempts->where('exams.duration', '>=', $duration['min']);
+        $histories->getCollection()->transform(function ($history) {
+            if ($history->field === 'audience' || $history->field === 'notification') {
+                $history->old_value = $history->old_value ? json_decode($history->old_value, true) : null;
+                $history->new_value = $history->new_value ? json_decode($history->new_value, true) : null;
             }
-            if (isset($duration['max']) && $duration['max']) {
-                $examAttempts->where('exams.duration', '<=', $duration['max']);
-            }
-        }
-
-        // Apply sorting
-        $sortColumn = $request->input('sortColumn', 'exam_attempts.start_time');
-        $sortOrder = $request->input('sortOrder', 'desc');
-        $examAttempts->orderBy($sortColumn, $sortOrder);
-
-        // Get exam IDs
-        $examIds = $examAttempts->pluck('exam_id')->unique();
-
-        // Fetch exams with pagination
-        $exams = Exam::whereIn('id', $examIds)
-            ->withCount([
-                'questions',
-                'examAttempts as unique_user_attempts_count' => function ($q) {
-                    $q->select(DB::raw('COUNT(DISTINCT user_id)'));
-                }
-            ])
-            ->paginate($request->input('per_page', 10));
-
-        // Map the data
-        $data = $exams->getCollection()->map(function ($exam) use ($userId) {
-            $userAttempt = $exam->examAttempts()->where('user_id', $userId)->first();
-
-            return [
-                'score'                 => $exam->questions_count > 0 ? round(($userAttempt->score / $exam->questions_count) * 100, 2) : 0,
-                'start_time'            => $userAttempt->start_time ?? null,
-                'exam_id'               => $exam->id,
-                'title'                 => $exam->title,
-                'scheduled_at'          => $exam->scheduled_at,
-                'section'               => $exam->section,
-                'duration'              => $exam->duration,
-                'total_questions'       => $exam->questions_count,
-                'total_user_attempts'   => $exam->unique_user_attempts_count,
-            ];
+            return $history;
         });
 
         return response()->json([
-            'data' => $data,
+            'status' => 'success',
+            'data' => $histories->items(),
             'meta' => [
-                'current_page' => $exams->currentPage(),
-                'last_page'    => $exams->lastPage(),
-                'per_page'     => $exams->perPage(),
-                'total'        => $exams->total(),
-                'from'         => $exams->firstItem(),
-                'to'           => $exams->lastItem(),
+                'current_page' => $histories->currentPage(),
+                'last_page' => $histories->lastPage(),
+                'per_page' => $histories->perPage(),
+                'total' => $histories->total(),
+                'from' => $histories->firstItem(),
+                'to' => $histories->lastItem(),
             ]
         ]);
     }

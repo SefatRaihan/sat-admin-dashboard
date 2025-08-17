@@ -34,7 +34,7 @@ return new class extends Migration
             $table->enum('question_type', ['MCQ', 'Fill-in-the-Blank', 'Paragraph'])->default('MCQ')->index();
             $table->json('options')->nullable()->comment('Stores possible answers for MCQs');
             $table->string('correct_answer', 255);
-            $table->enum('difficulty', ['Easy', 'Medium', 'Hard', 'Very Hard'])->default('Medium')->index();
+            $table->enum('difficulty', ['Very Easy', 'Easy', 'Medium', 'Hard', 'Very Hard'])->default('Medium')->index();
             $table->json('tags')->nullable()->comment('Tags for categorization');
             $table->longText('explanation')->nullable();
             $table->integer('version_number')->default(1)->comment('Tracks updates to questions');

@@ -761,13 +761,23 @@
                 // Fill leaderboard (clear existing first)
                 const leaderboardList = $('#detailsModelCenter .list-group').empty();
 
-                if(data.leadBoard && data.leadBoard.length) {
+                if (data.leadBoard && data.leadBoard.length) {
                     leaderboardList.append(`<li class="list-group-item" style="color: #101828">Leaderboard</li>`);
                     data.leadBoard.forEach(function(item, idx) {
+                        // Base URL (Blade থেকে domain আনা)
+                        let baseUrl = "{{ url('') }}"; 
+                        let profileImage = item.profile_image 
+                            ? `${baseUrl}/${item.profile_image}` 
+                            : `{{ asset('image/default-avatar.png') }}`;
+
                         leaderboardList.append(`
-                            <li class="list-group-item d-flex align-items-center leaderboard-item ${idx === 0 ? 'auto-click' : ''}" style="cursor: pointer;" data-user-id="${item.user_id}" data-exam-id="${ data.examAttempt.exam_id }">
+                            <li class="list-group-item d-flex align-items-center leaderboard-item ${idx === 0 ? 'auto-click' : ''}" 
+                                style="cursor: pointer;" 
+                                data-user-id="${item.user_id}" 
+                                data-exam-id="${data.examAttempt.exam_id}">
+                                
                                 <span class="mr-3">${idx + 1}</span>
-                                <img src="${item.profile_image}" class="rounded-circle me-3" alt="Avatar">
+                                <img src="${profileImage}" class="rounded-circle me-3" alt="Avatar">
                                 <div>
                                     <p class="p-0 m-0">${item.user_name}</p>
                                     <p>${item.score}%</p>
@@ -798,7 +808,7 @@
                 let attemptId = $(this).data('id');
 
                 $.ajax({
-                    url: `/view-details/${attemptId}/`,
+                    url: `/view-details/${attemptId}`,
                     method: 'GET',
                     success: function(response) {
                         console.log(response, 'hhhh');

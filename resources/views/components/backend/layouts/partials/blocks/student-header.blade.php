@@ -155,3 +155,17 @@
         initDropdowns();
     });
 </script>
+<script>
+    // Current page URL path
+    const currentPath = window.location.pathname;
+
+    // All nav links
+    document.querySelectorAll('.student-navbar .nav-link').forEach(link => {
+        // যদি href এর path currentPath এর সাথে মিলে যায় তাহলে active করব
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+</script>

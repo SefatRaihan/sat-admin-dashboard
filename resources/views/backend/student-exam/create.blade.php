@@ -4,7 +4,7 @@
             <div class="header-content">
                 <h5 style="color: #344054;font: Inter;font-size: 20px;font-weight: 600;">{{ $exam->title }}</h5>
                 <div class="heading-summary d-flex justify-content-center">
-                    <ul class="p-0 m-0 text-center">
+                    <ul class="p-0 m-0" style="width: 300px">
                         <li id="audience" style="list-style: none">{{ $exam->sections[0]->audience  }}</li>
                         <li id="total-section">{{ $exam->sections->count() }} sections</li>
                         <li id="total-question">{{ collect($exam->duration)->flatten(1)->count() }} Questions</li>
@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        <div class="row p-4">
+        <div class="row p-4" style="margin-bottom: 69px;">
             <div class="col-md-6 pl-4 pr-4">
                 <h4><b>Context</b></h4>
                 <div class="card p-2" style="border-radius: 25px">

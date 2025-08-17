@@ -506,6 +506,10 @@
                 border-bottom: 1px solid #D0D5DD;
             }
 
+            p img {
+                width: 100%;
+            }
+
             .floating-sidebar.open {
                 right: 0;
             }
