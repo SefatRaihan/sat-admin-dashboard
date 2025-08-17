@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\CourseCreate;
 use App\Models\Exam;
 use App\Models\Course;
 use App\Models\Lesson;
@@ -143,7 +144,8 @@ class CourseController extends Controller
                 }
             }
 
-
+            CourseCreate::dispatch(Course::find($course->id));
+            dd('hi');
             DB::commit();
 
             return response()->json([
