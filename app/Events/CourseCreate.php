@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CourseCreate
+class CourseCreate implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -33,7 +33,8 @@ class CourseCreate
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('course'),
+            // new PrivateChannel('course'),
+            new Channel('course'),
         ];
     }
 }

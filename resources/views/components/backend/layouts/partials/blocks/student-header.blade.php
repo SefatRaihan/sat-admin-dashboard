@@ -35,27 +35,13 @@
                     </div>
 
                     <!-- Notification Badge -->
-                    @if(auth()->user()->unreadNotifications->count() > 0)
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ auth()->user()->unreadNotifications->count() }}
-                        </span>
-                    @endif
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger counter">
+                    </span>
 
                     <!-- Notification Dropdown -->
                     <ul id="notification-dropdown" class="position-absolute mt-2 bg-white shadow p-2 rounded d-none"
                         style="width: 250px; right: 0; z-index:100; margin-top: 64px !important;">
-                        @if(auth()->user()->unreadNotifications->count() > 0)
-                            @foreach(auth()->user()->unreadNotifications as $notification)
-                                <li class="border-bottom" style="list-style-type: none">
-                                    <a class="dropdown-item d-flex justify-content-between align-items-center p-2 hover:bg-gray-100"
-                                        href="{{ route('markAsRead', $notification->id) }}">
-                                        <span class="notification-message text-dark">{{ $notification->data['message'] }}</span>
-                                    </a>
-                                </li>
-                            @endforeach
-                        @else
-                            <li style="list-style-type: none"><a class="dropdown-item p-2 text-gray-500" href="#">No new notifications</a></li>
-                        @endif
+                      
                     </ul>
 
                     <!-- Profile Image and Dropdown -->
@@ -108,6 +94,17 @@
         font-weight: 700;
         color: #000;
     }
+    .notification-message {
+        display: block;        /* ensures the span takes full width */
+        white-space: normal;   /* allow wrapping */
+        word-wrap: break-word; /* break long words if needed */
+    }
+    .notification-item,
+    .dropdown-item {
+        height: auto;          /* important */
+        min-height: 50px;      /* optional, ensures spacing */
+    }
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -168,4 +165,77 @@
             link.classList.remove('active');
         }
     });
+</script>
+ <script>
+
+    // Run once DOM is fully ready
+    $(document).ready(function () {
+        // Initial fetch
+        fetchNotifications();
+
+        // Fetch every 5 seconds
+        // setInterval(fetchNotifications, 10000);
+
+        // Notification click -> mark as read
+        $(document).on('click', '.notification-item', function () {
+            const id = $(this).data('id');
+
+            $.ajax({
+                url: `/api/notifications/${id}/read`,
+                type: 'patch',
+                 headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function () {
+                    fetchNotifications();
+                },
+                error: function () {
+                    console.error("Failed to mark notification as read.");
+                }
+            });
+        });
+    });
+
+    // Fetch notifications from API
+    function fetchNotifications() {
+        $.get('/api/notifications', function (data) {
+            const dropdown = $('#notification-dropdown');
+            dropdown.empty();
+
+            if (data.length > 0) {
+                data.forEach(function (notification) {
+                    dropdown.append(`
+                        <li class="border-bottom notification-item" data-id="${notification.id}" style="list-style-type: none; cursor:pointer;">
+                            <a class="dropdown-item d-flex justify-content-between align-items-center p-2 hover:bg-gray-100">
+                                <span class="notification-message text-dark">${notification.data.message}</span>
+                            </a>
+                        </li>
+                    `);
+                });
+            } else {
+                dropdown.append(`
+                    <li style="list-style-type: none">
+                        <a class="dropdown-item p-2 text-gray-500" href="#">No new notifications</a>
+                    </li>
+                `);
+            }
+
+            // Update badge
+            updateNotificationBadge(data.length);
+        });
+    }
+
+    // Update badge count
+    function updateNotificationBadge(count) {
+        let badge = $('.position-absolute.badge.bg-danger');
+        if (count > 0) {
+            if (badge.length) {
+                badge.text(count);
+            } else {
+                $('.counter').text(count);
+            }
+        } else {
+            badge.remove();
+        }
+    }
 </script>

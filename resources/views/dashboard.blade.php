@@ -1140,5 +1140,24 @@
                 });
             });
         </script>
+         <script>
+            $(document).ready(function() {
+                fetchNotifications();
+                // setInterval(fetchNotifications, 5000); // Fetch notifications every 5 seconds
+            });
+            function fetchNotifications() {
+                
+                $.get('/api/notifications', function(data) {
+                    $('#notifications-list').empty();
+                    console.log(data, 'hiefdj');
+                    data.forEach(function(notification) {
+                        
+                        $('#notifications-list').append(
+                            `<li>${notification.data.message} - <small>${notification.created_at}</small></li>`
+                        );
+                    });
+                });
+            } 
+        </script>
     @endpush
 </x-backend.layouts.master>

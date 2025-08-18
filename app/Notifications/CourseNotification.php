@@ -29,7 +29,7 @@ class CourseNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database', 'broadcast'];
+        return ['database'];
     }
 
     /**
@@ -45,7 +45,19 @@ class CourseNotification extends Notification
 
     public function toDatabase($notifiable)
     {
-        return [$this->course, ['message' => 'Course has been created']];
+        $unreadNotificationCount = $notifiable->notifications()
+                            ->whereNull('read_at')
+                            ->count();
+        return [
+                'course_id'    => $this->course->id,
+                'code'         => $this->course->code,
+                'title'        => $this->course->title,
+                'message'      => "The course \"{$this->course->title}\" has been added to the course catalog.",
+                'title'        => $this->course->title,
+                'status'       => $this->course->status,
+                'created_at'   => $this->course->created_at->toDateTimeString(),
+                'total_unread' => $unreadNotificationCount,
+        ];
     }
 
     /**
@@ -55,26 +67,37 @@ class CourseNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $unreadNotificationCount = $notifiable->notifications()
+                            ->whereNull('read_at')
+                            ->count();
         return [
-            //
+                'course_id'    => $this->course->id,
+                'code'         => $this->course->code,
+                'title'        => $this->course->title,
+                'message'      => "A new course '{$this->course->title}' has been created.",
+                'title'        => $this->course->title,
+                'status'       => $this->course->status,
+                'created_at'   => $this->course->created_at->toDateTimeString(),
+                'total_unread' => $unreadNotificationCount,
         ];
     }
 
-    public function toBroadcast($notifiable)
-    {
-        $unreadNotificationCount = $notifiable->notifications()
-                                    ->whereNull('read_at')
-                                    ->count();
-        return new BroadcastMessage([
-            // 'data' => [
-            //     'ticket_id'           => $this->ticket->id,
-            //     'tracking_id'         => $this->ticket->tracking_id,
-            //     'message'             => "A new ticket '{$this->ticket->problem_description}' has been created.",
-            //     'problem_description' => $this->ticket->problem_description,
-            //     'status'              => $this->ticket->status,
-            //     'created_at'          => $this->ticket->created_at->toDateTimeString(),
-            //     'total_unread'        => $unreadNotificationCount,
-            // ],
-        ]);
-    }
+    // public function toBroadcast($notifiable)
+    // {
+    //     $unreadNotificationCount = $notifiable->notifications()
+    //                                 ->whereNull('read_at')
+    //                                 ->count();
+    //     return new BroadcastMessage([
+    //         'data' => [
+    //             'ticket_id'    => $this->course->id,
+    //             'code'         => $this->course->code,
+    //             'title'        => $this->course->title,
+    //             'message'      => "A new ticket '{$this->course->title}' has been created.",
+    //             'title'        => $this->course->title,
+    //             'status'       => $this->course->status,
+    //             'created_at'   => $this->course->created_at->toDateTimeString(),
+    //             'total_unread' => $unreadNotificationCount,
+    //         ],
+    //     ]);
+    // }
 }

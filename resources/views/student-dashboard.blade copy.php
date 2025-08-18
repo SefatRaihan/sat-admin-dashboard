@@ -175,6 +175,8 @@
 
     @push('js')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+       
+
         <script>
             const allTimeBtn = document.getElementById('allTimeBtn');
             const last5Btn = document.getElementById('last5Btn');

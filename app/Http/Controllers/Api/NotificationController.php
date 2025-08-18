@@ -45,6 +45,24 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notification deleted successfully']);
     }
 
+    public function getUserNotifications(Request $request)
+    {
+        $user = $request->user(); // logged-in user
+
+        // Latest notifications for this user
+        $notifications = $user->unreadNotifications()->latest()->take(10)->get();
+
+        return response()->json($notifications);
+    }
+
+    public function markAsRead(Request $request, $id)
+    {
+        $request->user()->notifications()->where('id', $id)->first()?->markAsRead();
+        return response()->json(['status' => 'success']);
+        // return redirect()->back()->with('status', 'Notification marked as read successfully');
+    }
+
+
 
     //another methods
 }

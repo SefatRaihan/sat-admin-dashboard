@@ -245,7 +245,6 @@
 @push('js')
     <!-- Include Chart.js from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
         // Initialize data from Blade
         const questionDistribution = {

@@ -25,27 +25,27 @@
                         </div>
 
                         <!-- Notification Badge -->
-                        @if(auth()->user()->unreadNotifications->count() > 0)
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{-- @if(auth()->user()->unreadNotifications->count() > 0) --}}
+                            {{-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 {{ auth()->user()->unreadNotifications->count() }}
-                            </span>
-                        @endif
+                            </span> --}}
+                        {{-- @endif --}}
 
                         <!-- Notification Dropdown -->
                         <ul id="notification-dropdown" class="position-absolute mt-2 bg-white shadow p-2 rounded d-none"
                             style="width: 250px; right: 0; z-index:100">
-                            @if(auth()->user()->unreadNotifications->count() > 0)
-                                @foreach(auth()->user()->unreadNotifications as $notification)
-                                    <li class="border-bottom" style="list-style-type: none">
+                            {{-- @if(auth()->user()->unreadNotifications->count() > 0)
+                                @foreach(auth()->user()->unreadNotifications as $notification) --}}
+                                    {{-- <li class="border-bottom" style="list-style-type: none">
                                         <a class="dropdown-item d-flex justify-content-between align-items-center p-2 hover:bg-gray-100"
                                             href="{{ route('markAsRead', $notification->id) }}">
                                             <span class="notification-message text-dark">{{ $notification->data['message'] }}</span>
                                         </a>
-                                    </li>
-                                @endforeach
-                            @else
-                                <li style="list-style-type: none"><a class="dropdown-item p-2 text-gray-500" href="#">No new notifications</a></li>
-                            @endif
+                                    </li> --}}
+                                {{-- @endforeach
+                            @else --}}
+                                {{-- <li style="list-style-type: none"><a class="dropdown-item p-2 text-gray-500" href="#">No new notifications</a></li> --}}
+                            {{-- @endif --}}
                         </ul>
                     </div>
 
@@ -54,25 +54,99 @@
 
         </div>
     </div>
-
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let notificationIcon = document.getElementById("notification-icon");
-            let notificationDropdown = document.getElementById("notification-dropdown");
+        // CSRF setup for POST requests
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
 
-            // Notification icon এ click করলে dropdown show/hide হবে
-            notificationIcon.addEventListener("click", function (event) {
-                event.stopPropagation();
-                notificationDropdown.classList.toggle("d-none");
+        // Run once DOM is fully ready
+        $(document).ready(function () {
+            // Initial fetch
+            fetchNotifications();
+
+            // Fetch every 5 seconds
+            setInterval(fetchNotifications, 5000);
+
+            // Notification click -> mark as read
+            $(document).on('click', '.notification-item', function () {
+                const id = $(this).data('id');
+
+                $.ajax({
+                    url: `/api/notifications/${id}/read`,
+                    type: 'patch',
+                    success: function () {
+                        fetchNotifications();
+                    },
+                    error: function () {
+                        console.error("Failed to mark notification as read.");
+                    }
+                });
             });
 
-            // Body-তে click করলে dropdown hide হবে
-            document.addEventListener("click", function (event) {
-                if (!notificationDropdown.contains(event.target) && !notificationIcon.contains(event.target)) {
-                    notificationDropdown.classList.add("d-none");
+            // Toggle dropdown
+            $('#notification-icon').on('click', function (event) {
+                event.stopPropagation();
+                $('#notification-dropdown').toggleClass('d-none');
+            });
+
+            // Hide dropdown on body click
+            $(document).on('click', function (event) {
+                if (!$(event.target).closest('#notification-dropdown, #notification-icon').length) {
+                    $('#notification-dropdown').addClass('d-none');
                 }
             });
         });
+
+        // Fetch notifications from API
+        function fetchNotifications() {
+            $.get('/api/notifications', function (data) {
+                const dropdown = $('#notification-dropdown');
+                dropdown.empty();
+
+                if (data.length > 0) {
+                    data.forEach(function (notification) {
+                        dropdown.append(`
+                            <li class="border-bottom notification-item" data-id="${notification.id}" style="list-style-type: none; cursor:pointer;">
+                                <a class="dropdown-item d-flex justify-content-between align-items-center p-2 hover:bg-gray-100">
+                                    <span class="notification-message text-dark">${notification.data.message}</span>
+                                </a>
+                            </li>
+                        `);
+                    });
+                } else {
+                    dropdown.append(`
+                        <li style="list-style-type: none">
+                            <a class="dropdown-item p-2 text-gray-500" href="#">No new notifications</a>
+                        </li>
+                    `);
+                }
+
+                // Update badge
+                updateNotificationBadge(data.length);
+            });
+        }
+
+        // Update badge count
+        function updateNotificationBadge(count) {
+            let badge = $('.position-absolute.badge.bg-danger');
+            if (count > 0) {
+                if (badge.length) {
+                    badge.text(count);
+                } else {
+                    $('#notification-icon').append(`
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            ${count}
+                        </span>
+                    `);
+                }
+            } else {
+                badge.remove();
+            }
+        }
     </script>
+
 
 </x-slot>

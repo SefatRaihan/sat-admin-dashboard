@@ -77,6 +77,11 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
     Route::post('course/{id}/update', [CourseController::class, 'update']);
     Route::post('courses-delete', [CourseController::class, 'courseDelete']);
 
+    Route::get('/notifications', [NotificationController::class, 'getUserNotifications']);
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    // Route::get('/notifications/mark-as-read/{id}', )->name('markAsRead');
+    // Route::post('/notifications/delete', [NotificationController::class, 'delete']);
+
     /*
     |--------------------------------------------------------------------------
     | API Routes for Questions
@@ -235,4 +240,6 @@ Route::get('/mixed-sections', [MixedSectionController::class, 'getAllMixedSectio
 
 Route::get('get-discount', [DiscountController::class, 'getDiscounts']);
 Route::get('/dashboard', [AdminDashboardController::class, 'getDashboardData']);
+
+
 
