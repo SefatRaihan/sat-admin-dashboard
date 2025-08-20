@@ -28,6 +28,13 @@ use App\Http\Controllers\Api\FeatureSliderItemController;
 use App\Http\Controllers\Api\MixedSectionController;
 use App\Http\Controllers\Api\Cms\ContactUsTitleSectionController;
 use App\Http\Controllers\Api\Cms\ContactUsWhySectionController;
+use App\Http\Controllers\Api\Cms\AboutUsTitleSectionController;
+use App\Http\Controllers\Api\Cms\AboutUsMissionStatementController;
+use App\Http\Controllers\Api\Cms\AboutUsWhySectionController;
+use App\Http\Controllers\Api\Cms\AboutUsWhySectionItemController;
+use App\Http\Controllers\Api\Cms\AboutUsFaqController;
+use App\Http\Controllers\Api\Cms\AboutUsFaqItemController;
+use App\Http\Controllers\Api\Cms\AboutUsCtaSectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -199,5 +206,31 @@ Route::get('/amixed-sections', [MixedSectionController::class, 'getAllMixedSecti
 Route::post('/contact-us-title-section', [ContactUsTitleSectionController::class, 'storeOrUpdate']);
 Route::get('/contact-us-title-section', [ContactUsTitleSectionController::class, 'show']);
 
-Route::get('contact-us-why-section', [ContactUsWhySectionController::class, 'show']);
-Route::post('contact-us-why-section', [ContactUsWhySectionController::class, 'storeOrUpdate']);
+Route::post('/about-us-title-section', [AboutUsTitleSectionController::class, 'storeOrUpdate']);
+Route::get('/about-us-title-section', [AboutUsTitleSectionController::class, 'show']);
+
+Route::get('/contact-us-why-section', [ContactUsWhySectionController::class, 'show']);
+Route::post('/contact-us-why-section', [ContactUsWhySectionController::class, 'storeOrUpdate']);
+
+Route::get('/about-us-mission', [AboutUsMissionStatementController::class, 'show']);
+Route::post('/about-us-mission', [AboutUsMissionStatementController::class, 'storeOrUpdate']);
+
+Route::get('about-us-why-sections', [AboutUsWhySectionController::class, 'index']);
+Route::post('about-us-why-sections', [AboutUsWhySectionController::class, 'store']);
+Route::get('about-us-why-sections/{id}', [AboutUsWhySectionController::class, 'show']);
+Route::put('about-us-why-sections/{id}', [AboutUsWhySectionController::class, 'update']);
+Route::delete('about-us-why-sections/{id}', [AboutUsWhySectionController::class, 'destroy']);
+
+Route::apiResource('about-us-why-section-items', AboutUsWhySectionItemController::class);
+
+Route::get('about-us-faqs', [AboutUsFaqController::class, 'index']);
+Route::post('about-us-faqs', [AboutUsFaqController::class, 'store']);
+Route::get('about-us-faqs/{id}', [AboutUsFaqController::class, 'show']);
+Route::put('about-us-faqs/{id}', [AboutUsFaqController::class, 'update']);
+Route::delete('about-us-faqs/{id}', [AboutUsFaqController::class, 'destroy']);
+Route::apiResource('about-us-faq-items', AboutUsFaqItemController::class);
+
+Route::post('/about-us-cta-section', [AboutUsCtaSectionController::class, 'storeOrUpdate']);
+Route::get('/about-us-cta-section', function () {
+    return \App\Models\AboutUsCtaSection::first();
+});
