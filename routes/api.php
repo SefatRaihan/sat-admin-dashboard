@@ -289,3 +289,8 @@ Route::post('/about-us-cta-section', [AboutUsCtaSectionController::class, 'store
 Route::get('/about-us-cta-section', function () {
     return \App\Models\AboutUsCtaSection::first();
 });
+
+//for test
+Route::get('/about-us-cta-sectionssss', function () {
+    return \App\Models\AboutUsCtaSection::first();
+});
