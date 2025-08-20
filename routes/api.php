@@ -192,5 +192,6 @@ Route::delete('feature-sliders/{feature_slider}', [FeatureSliderController::clas
 
 Route::post('/mixed-sections', [MixedSectionController::class, 'storeOrUpdateMultipleMixedSections']);
 Route::get('/mixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
+Route::get('/amixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
 
 
