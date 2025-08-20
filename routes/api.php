@@ -21,7 +21,6 @@ use App\Http\Controllers\Api\CatSectionController;
 use App\Http\Controllers\Api\SupervisorController;
 use App\Http\Controllers\Api\ExamSectionController;
 use App\Http\Controllers\Api\FeatureCardController;
-use App\Http\Controllers\Api\MixedSectionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\TitleSectionController;
 use App\Http\Controllers\Api\FeatureSliderController;
@@ -29,6 +28,16 @@ use App\Http\Controllers\Api\PricingSectionController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
 use App\Http\Controllers\Api\FeatureSliderItemController;
+use App\Http\Controllers\Api\MixedSectionController;
+use App\Http\Controllers\Api\Cms\ContactUsTitleSectionController;
+use App\Http\Controllers\Api\Cms\ContactUsWhySectionController;
+use App\Http\Controllers\Api\Cms\AboutUsTitleSectionController;
+use App\Http\Controllers\Api\Cms\AboutUsMissionStatementController;
+use App\Http\Controllers\Api\Cms\AboutUsWhySectionController;
+use App\Http\Controllers\Api\Cms\AboutUsWhySectionItemController;
+use App\Http\Controllers\Api\Cms\AboutUsFaqController;
+use App\Http\Controllers\Api\Cms\AboutUsFaqItemController;
+use App\Http\Controllers\Api\Cms\AboutUsCtaSectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -239,13 +248,44 @@ Route::delete('feature-sliders/{feature_slider}', [FeatureSliderController::clas
 
 Route::post('/mixed-sections', [MixedSectionController::class, 'storeOrUpdateMultipleMixedSections']);
 Route::get('/mixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
+Route::get('/amixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
 
 Route::get('get-discount', [DiscountController::class, 'getDiscounts']);
 Route::get('/dashboard', [AdminDashboardController::class, 'getDashboardData']);
 
 
+Route::post('/contact-us-title-section', [ContactUsTitleSectionController::class, 'storeOrUpdate']);
+Route::get('/contact-us-title-section', [ContactUsTitleSectionController::class, 'show']);
 
     Route::get('/checkout', [PaymentController::class, 'checkout'])->name('tap.checkout');
     Route::post('/tap/pay', [PaymentController::class, 'createCharge'])->name('tap.pay');
     Route::get('/tap/callback', [PaymentController::class, 'callback'])->name('tap.callback'); // shopper redirect
     Route::post('/tap/webhook', [PaymentController::class, 'webhook'])->name('tap.webhook');
+Route::post('/about-us-title-section', [AboutUsTitleSectionController::class, 'storeOrUpdate']);
+Route::get('/about-us-title-section', [AboutUsTitleSectionController::class, 'show']);
+
+Route::get('/contact-us-why-section', [ContactUsWhySectionController::class, 'show']);
+Route::post('/contact-us-why-section', [ContactUsWhySectionController::class, 'storeOrUpdate']);
+
+Route::get('/about-us-mission', [AboutUsMissionStatementController::class, 'show']);
+Route::post('/about-us-mission', [AboutUsMissionStatementController::class, 'storeOrUpdate']);
+
+Route::get('about-us-why-sections', [AboutUsWhySectionController::class, 'index']);
+Route::post('about-us-why-sections', [AboutUsWhySectionController::class, 'store']);
+Route::get('about-us-why-sections/{id}', [AboutUsWhySectionController::class, 'show']);
+Route::put('about-us-why-sections/{id}', [AboutUsWhySectionController::class, 'update']);
+Route::delete('about-us-why-sections/{id}', [AboutUsWhySectionController::class, 'destroy']);
+
+Route::apiResource('about-us-why-section-items', AboutUsWhySectionItemController::class);
+
+Route::get('about-us-faqs', [AboutUsFaqController::class, 'index']);
+Route::post('about-us-faqs', [AboutUsFaqController::class, 'store']);
+Route::get('about-us-faqs/{id}', [AboutUsFaqController::class, 'show']);
+Route::put('about-us-faqs/{id}', [AboutUsFaqController::class, 'update']);
+Route::delete('about-us-faqs/{id}', [AboutUsFaqController::class, 'destroy']);
+Route::apiResource('about-us-faq-items', AboutUsFaqItemController::class);
+
+Route::post('/about-us-cta-section', [AboutUsCtaSectionController::class, 'storeOrUpdate']);
+Route::get('/about-us-cta-section', function () {
+    return \App\Models\AboutUsCtaSection::first();
+});
