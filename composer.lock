@@ -4,8 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "693b4cea7901e7800eeec03eed007449",
+    "content-hash": "ee097101f25e2e1c3e7a30bb233c802e",
     "packages": [
+        {
+            "name": "4jawalycom/sms-gateway-4jawaly",
+            "version": "1.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/4jawalycom/sms-gateway-4jawaly.git",
+                "reference": "2c3512d9d4b4ffb95dda2ce059775e8c627ba455"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/4jawalycom/sms-gateway-4jawaly/zipball/2c3512d9d4b4ffb95dda2ce059775e8c627ba455",
+                "reference": "2c3512d9d4b4ffb95dda2ce059775e8c627ba455",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0",
+                "php": "^7.4|^8.0|^8.1|^8.2|^8.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Jawalycom\\SMSGateway4Jawaly\\SMSGatewayServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jawalycom\\SMSGateway4Jawaly\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "4jawaly",
+                    "email": "info@4jawaly.com"
+                }
+            ],
+            "description": "A Laravel SMS Gateway Package for Jawaly SMS Services",
+            "support": {
+                "issues": "https://github.com/4jawalycom/sms-gateway-4jawaly/issues",
+                "source": "https://github.com/4jawalycom/sms-gateway-4jawaly/tree/v1.2.6"
+            },
+            "time": "2025-02-06T06:25:09+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.12.3",
@@ -9548,7 +9596,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,

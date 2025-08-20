@@ -1,33 +1,34 @@
 <?php
 
-use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\Api\ChapterController;
-use App\Http\Controllers\Api\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ExamController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\ChapterController;
+use App\Http\Controllers\Api\FaqItemController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\MainQuestionController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Api\CatSectionController;
 use App\Http\Controllers\Api\SupervisorController;
 use App\Http\Controllers\Api\ExamSectionController;
-use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\FeatureCardController;
+use App\Http\Controllers\Api\MixedSectionController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\TitleSectionController;
+use App\Http\Controllers\Api\FeatureSliderController;
+use App\Http\Controllers\Api\PricingSectionController;
 use App\Http\Controllers\Api\RoleManagementController;
 use App\Http\Controllers\Api\RoleNavItemApiController;
-use App\Http\Controllers\Api\TitleSectionController;
-use App\Http\Controllers\Api\FeatureCardController;
-use App\Http\Controllers\Api\FaqController;
-use App\Http\Controllers\Api\FaqItemController;
-use App\Http\Controllers\Api\CatSectionController;
-use App\Http\Controllers\Api\PricingSectionController;
-use App\Http\Controllers\Api\FeatureSliderController;
 use App\Http\Controllers\Api\FeatureSliderItemController;
-use App\Http\Controllers\Api\MixedSectionController;
-use App\Http\Controllers\DiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -162,6 +163,7 @@ Route::group(['as' => 'api.', 'middleware' => ['auth', 'web', 'check.permission'
 
 
 
+
     Route::prefix('dashboard')->group(function () {
         Route::get('/financials', function () {
             return response()->json([
@@ -243,3 +245,7 @@ Route::get('/dashboard', [AdminDashboardController::class, 'getDashboardData']);
 
 
 
+    Route::get('/checkout', [PaymentController::class, 'checkout'])->name('tap.checkout');
+    Route::post('/tap/pay', [PaymentController::class, 'createCharge'])->name('tap.pay');
+    Route::get('/tap/callback', [PaymentController::class, 'callback'])->name('tap.callback'); // shopper redirect
+    Route::post('/tap/webhook', [PaymentController::class, 'webhook'])->name('tap.webhook');

@@ -29,7 +29,7 @@ class CourseNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'sms'];
     }
 
     /**
@@ -100,4 +100,8 @@ class CourseNotification extends Notification
     //         ],
     //     ]);
     // }
+    public function toSms($notifiable): string
+    {
+        return "New course created: {$this->course->title}";
+    }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-use App\Notifications\SendCustomNotification;
-// use App\Services\SmsService;
 use App\Models\Notification;
+use App\Services\SmsService;
+// use App\Services\SmsService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Notifications\SendCustomNotification;
 
 class NotificationController extends Controller
 {
@@ -19,12 +21,12 @@ class NotificationController extends Controller
         'destroy' => 'Delete',
     ];
 
-    // protected $smsService;
+    protected $smsService;
 
-    // public function __construct(SmsService $smsService)
-    // {
-    //     $this->smsService = $smsService;
-    // }
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
 
     public function index()
     {
@@ -39,7 +41,7 @@ class NotificationController extends Controller
 
     public function sendNotification(Request $request)
     {
-        try{
+        try {
             $request->validate([
                 'description' => 'required|string',
                 'category' => 'required|string|in:all-members,active-users,inactive-users,blocked-users,unblocked-users,supervisors',
@@ -53,7 +55,7 @@ class NotificationController extends Controller
             }
 
             return redirect()->route('notification.index')->with('success', 'Notifications sent successfully!');
-        }catch(QueryException $e){
+        } catch (QueryException $e) {
             dd($e->getMessage());
             return redirect()->back()->withInput()->withErrors($e->getMessage());
         }
@@ -61,7 +63,8 @@ class NotificationController extends Controller
 
     public function sendSms(Request $request)
     {
-        try{
+
+        try {
             $request->validate([
                 'description' => 'required|string|max:160',
                 'category' => 'required|string|in:all-members,active-users,inactive-users,blocked-users,unblocked-users,supervisors',
@@ -70,19 +73,17 @@ class NotificationController extends Controller
             $users = $this->getUsersByCategory($request->category);
             $message = $request->description;
 
-            foreach ($users as $user) {
-                if ($user->phone_number) { // Assuming users have a phone_number column
-                    try {
-                        $this->smsService->send($user->phone_number, $message);
-                    } catch (\Exception $e) {
-                        \Log::error('SMS sending failed: ' . $e->getMessage());
-                        return redirect()->back()->with('error', 'Failed to send SMS to some users.');
-                    }
-                }
+            $numbers = $users->pluck('phone')->toArray();
+
+            try {
+                $this->smsService->sendSMS($message, $numbers, 'Mubhir');
+            } catch (\Exception $e) {
+                Log::error('SMS sending failed: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Failed to send SMS to some users.');
             }
 
             return redirect()->route('notification.index')->with('success', 'SMS sent successfully!');
-        }catch(QueryException $e){
+        } catch (QueryException $e) {
             dd($e->getMessage());
             return redirect()->back()->withInput()->withErrors($e->getMessage());
         }
