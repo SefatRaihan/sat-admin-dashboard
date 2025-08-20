@@ -29,7 +29,7 @@ jobs:
             cd /var/www/html/sat-admin-dashboard
             git pull origin main --rebase
             composer update --no-dev --optimize-autoloader
-            php artisan migrate
+            php artisan migrate --force
             php artisan config:clear
             php artisan cache:clear
             php artisan optimize:clear
