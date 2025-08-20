@@ -291,6 +291,7 @@ Route::get('/about-us-cta-section', function () {
 });
 
 //for test
-Route::get('/about-us-cta-sectionssss', function () {
-    return \App\Models\AboutUsCtaSection::first();
+Route::get('/about-us-cta', function () {
+    return "hello sefat";
+
 });
