@@ -28,6 +28,8 @@ use App\Http\Controllers\Api\FeatureSliderController;
 use App\Http\Controllers\Api\FeatureSliderItemController;
 use App\Http\Controllers\Api\MixedSectionController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\Api\Cms\ContactUsTitleSectionController;
+use App\Http\Controllers\Api\Cms\ContactUsWhySectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -237,9 +239,14 @@ Route::delete('feature-sliders/{feature_slider}', [FeatureSliderController::clas
 
 Route::post('/mixed-sections', [MixedSectionController::class, 'storeOrUpdateMultipleMixedSections']);
 Route::get('/mixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
+Route::get('/amixed-sections', [MixedSectionController::class, 'getAllMixedSections']);
 
 Route::get('get-discount', [DiscountController::class, 'getDiscounts']);
 Route::get('/dashboard', [AdminDashboardController::class, 'getDashboardData']);
 
 
+Route::post('/contact-us-title-section', [ContactUsTitleSectionController::class, 'storeOrUpdate']);
+Route::get('/contact-us-title-section', [ContactUsTitleSectionController::class, 'show']);
 
+Route::get('contact-us-why-section', [ContactUsWhySectionController::class, 'show']);
+Route::post('contact-us-why-section', [ContactUsWhySectionController::class, 'storeOrUpdate']);
