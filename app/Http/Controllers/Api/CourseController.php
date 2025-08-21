@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\CourseCreate;
 use App\Models\Exam;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Chapter;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCourseRequest;
-use App\Http\Requests\UpdateCourseRequest;
 use App\Models\LessonUser;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Events\CourseCreate;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreCourseRequest;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\UpdateCourseRequest;
 
 class CourseController extends Controller
 {
@@ -35,6 +35,7 @@ class CourseController extends Controller
         'searchCourses' => 'Search Courses',
     ];
 
+   
     /**
      * Display a listing of the resource.
      */
@@ -145,7 +146,7 @@ class CourseController extends Controller
             }
 
             CourseCreate::dispatch(Course::find($course->id));
-            
+            dd('hi');
             DB::commit();
 
             return response()->json([

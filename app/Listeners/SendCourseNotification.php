@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Models\User;
 use App\Models\Student;
 use App\Events\CourseCreate;
+use App\Services\SmsService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Notifications\CourseNotification;
@@ -16,10 +17,13 @@ class SendCourseNotification implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct()
+    protected $smsService;
+
+    public function __construct(SmsService $smsService)
     {
-        //
+        $this->smsService = $smsService;
     }
+
 
     /**
      * Handle the event.
@@ -34,7 +38,10 @@ class SendCourseNotification implements ShouldQueue
             })
             ->whereHas('user') // make sure they have user relation
             ->get();
+        // $numbers = $students->pluck('phone')->toArray();
+            // dd();
 
+        // $this->smsService->sendSMS($message, $numbers, 'Mubhir');
 
         // Notify all students User
         Notification::send(
