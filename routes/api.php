@@ -49,6 +49,12 @@ use App\Http\Controllers\Api\Cms\ReferralWhySectionController;
 use App\Http\Controllers\Api\Cms\ReferralHowSectionController;
 use App\Http\Controllers\Api\Cms\ReferralStepSectionController;
 
+
+use App\Http\Controllers\Api\Cms\HomeTitleSectionController;
+use App\Http\Controllers\Api\Cms\HomeCtaSectionController;
+use App\Http\Controllers\Api\Cms\HomeFaqController;
+use App\Http\Controllers\Api\Cms\HomePricingSectionController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -349,3 +355,25 @@ Route::put('referral-step-sections/{id}', [ReferralStepSectionController::class,
 Route::delete('referral-step-sections/{id}', [ReferralStepSectionController::class, 'destroy']);
 
 // Route::apiResource('referral-step-section-items', ReferralStepSectionItemController::class);
+
+Route::post('/home-title-section', [HomeTitleSectionController::class, 'storeOrUpdate']);
+Route::get('/home-title-section', [HomeTitleSectionController::class, 'show']);
+
+
+Route::post('/home-cta-section', [HomeCtaSectionController::class, 'storeOrUpdate']);
+Route::get('/home-cta-section', function () {
+    return \App\Models\HomeCtaSection::first();
+});
+
+
+Route::get('home-faqs', [HomeFaqController::class, 'index']);
+Route::post('home-faqs', [HomeFaqController::class, 'store']);
+Route::get('home-faqs/{id}', [HomeFaqController::class, 'show']);
+Route::put('home-faqs/{id}', [HomeFaqController::class, 'update']);
+Route::delete('home-faqs/{id}', [HomeFaqController::class, 'destroy']);
+
+// Route::apiResource('home-faq-items', HomeFaqItemController::class);
+
+Route::get('home-pricing-sections', [HomePricingSectionController::class, 'index']);
+Route::post('home-pricing-sections', [HomePricingSectionController::class, 'store']);
+
