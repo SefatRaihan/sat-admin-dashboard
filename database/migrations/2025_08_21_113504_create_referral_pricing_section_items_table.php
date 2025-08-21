@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('referral_pricing_section_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('referral_pricing_section_id')->constrained()->onDelete('cascade');
+            $table->foreignId('referral_pricing_section_id');
             $table->string('plan_title');
             $table->string('promotional_badge')->nullable();
             $table->boolean('promotional_badge_status')->default(false);
