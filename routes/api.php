@@ -26,8 +26,10 @@ use App\Http\Controllers\Api\PricingSectionController;
 use App\Http\Controllers\Api\FeatureSliderController;
 use App\Http\Controllers\Api\FeatureSliderItemController;
 use App\Http\Controllers\Api\MixedSectionController;
+
 use App\Http\Controllers\Api\Cms\ContactUsTitleSectionController;
 use App\Http\Controllers\Api\Cms\ContactUsWhySectionController;
+
 use App\Http\Controllers\Api\Cms\AboutUsTitleSectionController;
 use App\Http\Controllers\Api\Cms\AboutUsMissionStatementController;
 use App\Http\Controllers\Api\Cms\AboutUsWhySectionController;
@@ -35,6 +37,15 @@ use App\Http\Controllers\Api\Cms\AboutUsWhySectionItemController;
 use App\Http\Controllers\Api\Cms\AboutUsFaqController;
 use App\Http\Controllers\Api\Cms\AboutUsFaqItemController;
 use App\Http\Controllers\Api\Cms\AboutUsCtaSectionController;
+use App\Http\Controllers\Api\Cms\AboutUsFounderStatementController;
+
+use App\Http\Controllers\Api\Cms\ReferralTitleSectionController;
+use App\Http\Controllers\Api\Cms\ReferralPricingSectionController;
+use App\Http\Controllers\Api\Cms\ReferralFaqController;
+use App\Http\Controllers\Api\Cms\ReferralCtaSectionController;
+use App\Http\Controllers\Api\Cms\ReferralWhySectionController;
+use App\Http\Controllers\Api\Cms\ReferralHowSectionController;
+use App\Http\Controllers\Api\Cms\ReferralStepSectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -234,3 +245,53 @@ Route::post('/about-us-cta-section', [AboutUsCtaSectionController::class, 'store
 Route::get('/about-us-cta-section', function () {
     return \App\Models\AboutUsCtaSection::first();
 });
+
+Route::get('/about-us-founder-statement', [AboutUsFounderStatementController::class, 'index']);
+Route::post('/about-us-founder-statement', [AboutUsFounderStatementController::class, 'storeOrUpdate']);
+
+
+
+Route::post('/referral-title-section', [ReferralTitleSectionController::class, 'storeOrUpdate']);
+Route::get('/referral-title-section', [ReferralTitleSectionController::class, 'show']);
+
+Route::get('referral-pricing-sections', [ReferralPricingSectionController::class, 'index']);
+Route::post('referral-pricing-sections', [ReferralPricingSectionController::class, 'store']);
+
+Route::get('referral-faqs', [ReferralFaqController::class, 'index']);
+Route::post('referral-faqs', [ReferralFaqController::class, 'store']);
+Route::get('referral-faqs/{id}', [ReferralFaqController::class, 'show']);
+Route::put('referral-faqs/{id}', [ReferralFaqController::class, 'update']);
+Route::delete('referral-faqs/{id}', [ReferralFaqController::class, 'destroy']);
+
+Route::post('/referral-cta-section', [ReferralCtaSectionController::class, 'storeOrUpdate']);
+Route::get('/referral-cta-section', function () {
+    return \App\Models\ReferralCtaSection::first();
+});
+
+Route::get('referral-why-sections', [ReferralWhySectionController::class, 'index']);
+Route::post('referral-why-sections', [ReferralWhySectionController::class, 'store']);
+Route::get('referral-why-sections/{id}', [ReferralWhySectionController::class, 'show']);
+Route::put('referral-why-sections/{id}', [ReferralWhySectionController::class, 'update']);
+Route::delete('referral-why-sections/{id}', [ReferralWhySectionController::class, 'destroy']);
+
+// Route::apiResource('referral-why-section-items', ReferralWhySectionItemController::class);
+
+
+// Referral How Sections
+Route::get('referral-how-sections', [ReferralHowSectionController::class, 'index']);
+Route::post('referral-how-sections', [ReferralHowSectionController::class, 'store']);
+Route::get('referral-how-sections/{id}', [ReferralHowSectionController::class, 'show']);
+Route::put('referral-how-sections/{id}', [ReferralHowSectionController::class, 'update']);
+Route::delete('referral-how-sections/{id}', [ReferralHowSectionController::class, 'destroy']);
+
+// Route::apiResource('referral-how-section-items', ReferralHowSectionItemController::class);
+
+
+// Referral Step Sections
+Route::get('referral-step-sections', [ReferralStepSectionController::class, 'index']);
+Route::post('referral-step-sections', [ReferralStepSectionController::class, 'store']);
+Route::get('referral-step-sections/{id}', [ReferralStepSectionController::class, 'show']);
+Route::put('referral-step-sections/{id}', [ReferralStepSectionController::class, 'update']);
+Route::delete('referral-step-sections/{id}', [ReferralStepSectionController::class, 'destroy']);
+
+// Route::apiResource('referral-step-section-items', ReferralStepSectionItemController::class);
