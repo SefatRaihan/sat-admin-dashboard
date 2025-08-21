@@ -24,9 +24,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/html/sat-admin-dashboard/
+            cd /var/www/html/sat-admin-dashboard
             git pull origin main --rebase
-            composer update --no-dev --optimize-autoloader
+            composer install --no-dev --optimize-autoloader
             php artisan migrate --force
             php artisan config:clear
             php artisan cache:clear
