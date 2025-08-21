@@ -12,6 +12,8 @@ class ReferralPricingSection extends Model
 
     public function items()
     {
-        return $this->hasMany(ReferralPricingSectionItem::class);
+        // return $this->hasMany(ReferralPricingSectionItem::class);
+        return $this->hasMany(ReferralPricingSectionItem::class, 'pricing_section_id');
+
     }
 }
