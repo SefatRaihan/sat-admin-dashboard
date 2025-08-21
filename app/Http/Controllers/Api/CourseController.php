@@ -146,7 +146,7 @@ class CourseController extends Controller
             }
 
             CourseCreate::dispatch(Course::find($course->id));
-            dd('hi');
+            // dd('hi');
             DB::commit();
 
             return response()->json([

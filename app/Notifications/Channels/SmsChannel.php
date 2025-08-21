@@ -11,12 +11,21 @@ class SmsChannel
 
     public function send($notifiable, Notification $notification): void
     {
-        $phone = $notifiable->routeNotificationFor('sms');
 
-        if (! $phone) return;
+        if(! method_exists($notification, 'toSms'))
+        {
+            return;
+        }
+        
+        $message = $notification->toSms($notifiable);
+        $to = method_exists($notifiable, 'routeNotificationForSms') ? 
+                    $notifiable->routeNotificationForSms($notification) : 
+                    ($notifiable->phone ?? nul);
+
+        if (! $to || ! $message) return;
 
         $message = $notification->toSms($notifiable);
 
-        $this->sms->sendSMS($message, [$phone], 'Mubhir');
+        $this->sms->sendSMS($message, $to, 'Mubhir');
     }
 }

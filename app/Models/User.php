@@ -85,4 +85,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Course::class)->withTimestamps()->withPivot('is_completed', 'completed_at');
     }
 
+    public function routeNotificationForSms($notification): ?string
+    {
+        return $this->phone;
+    }
+
 }

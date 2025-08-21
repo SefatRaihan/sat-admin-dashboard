@@ -3,7 +3,9 @@
 namespace App\Notifications;
 
 use App\Models\Course;
+use App\Notifications\Channels\SmsChannel;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -29,7 +31,7 @@ class CourseNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'sms'];
+        return ['database', 'mail', SmsChannel::class];
     }
 
     /**
@@ -38,8 +40,10 @@ class CourseNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
+                    ->subject("New Course Created: {$this->course->title}")
+                    ->greeting("Hello {$notifiable->name},")
+                    ->line("A new course \"{$this->course->title}\" has been added to the catalog.")
+                    ->action('View Course', url("/courses/{$this->course->id}"))
                     ->line('Thank you for using our application!');
     }
 
@@ -102,6 +106,9 @@ class CourseNotification extends Notification
     // }
     public function toSms($notifiable): string
     {
-        return "New course created: {$this->course->title}";
+        $courseUrl = URL::route('student.course.detail', $this->course->id);
+
+        // If route() returns a signed or long URL you want to shorten, use a shortener service.
+        return "New course: {$this->course->title}.\n{$courseUrl}";
     }
 }
