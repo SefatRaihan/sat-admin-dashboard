@@ -104,6 +104,7 @@ class CourseNotification extends Notification
     //         ],
     //     ]);
     // }
+
     public function toSms($notifiable): string
     {
         $courseUrl = URL::route('student.course.detail', $this->course->id);

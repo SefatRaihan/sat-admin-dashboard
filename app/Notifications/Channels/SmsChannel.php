@@ -16,11 +16,11 @@ class SmsChannel
         {
             return;
         }
-        
+
         $message = $notification->toSms($notifiable);
-        $to = method_exists($notifiable, 'routeNotificationForSms') ? 
-                    $notifiable->routeNotificationForSms($notification) : 
-                    ($notifiable->phone ?? nul);
+        $to = method_exists($notifiable, 'routeNotificationForSms') ?
+                    $notifiable->routeNotificationForSms($notification) :
+                    ($notifiable->phone ?? null);
 
         if (! $to || ! $message) return;
 
