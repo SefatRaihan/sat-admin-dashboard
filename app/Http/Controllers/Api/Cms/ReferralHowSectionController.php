@@ -24,6 +24,7 @@ class ReferralHowSectionController extends Controller
             'items' => 'required|array',
             'items.*.icon' => 'nullable|string',
             'items.*.title' => 'required|string',
+            'items.*.alt_text' => 'required|string',
             'items.*.description' => 'required|string',
         ]);
 
